@@ -1,40 +1,86 @@
-import { NavLink } from 'react-router-dom';
-import './sidebar.css';
+import { NavLink } from "react-router-dom";
+import "./sidebar.css";
 
+import LogoIcon from "./assets/logo.svg";
+import ConversasIcon from "./assets/chat.svg";
+import AtendenteIcon from "./assets/atendentes.svg";
+import AgenteIcon from "./assets/bot.svg";
+import ConexaoIcon from "./assets/conexao.svg";
+import ConfigIcon from "./assets/config.svg";
+import AjudaIcon from "./assets/ajuda.svg";
+import LogoutIcon from "./assets/logout.svg";
 
 const Sidebar = () => {
   const user = {
-    name: 'Wilmar Filho',
-    email: 'ofthieguiiiii28@gmail.com', // Cuidado ao expor e-mails diretamente
-    avatarUrl: 'https://via.placeholder.com/40' // URL do avatar
+    name: "Wilmar Filho",
+    email: "oftheguizo32@gmail.com", // Cuidado ao expor e-mails diretamente
+    avatarUrl: "https://avatars.githubusercontent.com/u/103720085?v=4", // URL do avatar
   };
+
+  const MenuItem = ({
+    to,
+    children,
+  }: {
+    to: string;
+    children: React.ReactNode;
+  }) => (
+    <NavLink to={to}>
+      {({ isActive }) => (
+        <div className={`${isActive ? "active-link" : ""}`}>{children}</div>
+      )}
+    </NavLink>
+  );
 
   return (
     <div className="sidebar">
-      <div className="logo">NKW FLOW</div>
-      <nav className="menu-principal">
-        <NavLink to="/conversas" className={({ isActive }) => isActive ? 'active-link' : ''}>Conversas</NavLink>
-        <NavLink to="/atendentes" className={({ isActive }) => isActive ? 'active-link' : ''}>Atendentes</NavLink>
-        <NavLink to="/agentes" className={({ isActive }) => isActive ? 'active-link' : ''}>Agentes</NavLink>
-        <NavLink to="/conexoes" className={({ isActive }) => isActive ? 'active-link' : ''}>Conexões</NavLink>
-      </nav>
-      <div className="suporte-menu">
-        <p>Suporte</p>
-        <NavLink to="/configuracoes" className={({ isActive }) => isActive ? 'active-link' : ''}>Configurações</NavLink>
-        <NavLink to="/ajuda" className={({ isActive }) => isActive ? 'active-link' : ''}>Ajuda</NavLink>
+      <div className="logo">
+        <LogoIcon />
       </div>
-      <div className="user-info">
-        <img src={user.avatarUrl} alt={user.name} className="user-avatar" />
+
+      <nav className="menu-principal">
+        <p>Menu Principal</p>
+        <MenuItem to="/conversas">
+          {" "}
+          <ConversasIcon /> Conversas
+        </MenuItem>
+        <MenuItem to="/atendentes">
+          {" "}
+          <AtendenteIcon /> Atendentes
+        </MenuItem>
+        <MenuItem to="/agentes">
+          {" "}
+          <AgenteIcon /> Agentes
+        </MenuItem>
+        <MenuItem to="/conexoes">
+          {" "}
+          <ConexaoIcon /> Conexões
+        </MenuItem>
+      </nav>
+
+      <nav className="suporte-menu">
+        <p>Suporte</p>
+        <MenuItem to="/configuracoes">
+          {" "}
+          <ConfigIcon /> Configuracoes
+        </MenuItem>
+        <MenuItem to="/ajuda">
+          {" "}
+          <AjudaIcon /> Ajuda
+        </MenuItem>
+      </nav>
+
+      <div className="user-menu">
         <div>
-          <p className="user-name">{user.name}</p>
-          <p className="user-email">{user.email}</p>
+          <img src={user.avatarUrl} alt={user.name} className="user-avatar" />
+          <div className="user-info">
+            <p className="user-name">{user.name}</p>
+            <p className="user-email">{user.email}</p>
+          </div>
         </div>
-        {/* Ícone de logout ou configurações do usuário aqui */}
+        <LogoutIcon />
       </div>
     </div>
   );
 };
-
-
 
 export default Sidebar;

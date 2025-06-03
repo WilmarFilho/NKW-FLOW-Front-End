@@ -6,6 +6,7 @@ import AgentesPage from './pages/AgentesPage';
 import ConexoesPage from './pages/ConexoesPage';
 import ConfiguracoesPage from './pages/ConfiguracoesPage';
 import AjudaPage from './pages/AjudaPage';
+import './main.css'
 
 function App() {
   return (

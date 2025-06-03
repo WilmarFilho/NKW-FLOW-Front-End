@@ -1,0 +1,94 @@
+:root {
+  --font-main: 'K2D', 'sans-serif';
+  --font-secundaria: 'Jost', 'sans-serif';
+  --color-main: #1B214A;
+  --color-secundaria: #52F2B8;
+}
+
+/* Remove margens e preenchimentos padrão de todos os elementos principais */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit; /* Garante que as fontes sejam herdadas */
+  vertical-align: baseline;
+}
+
+/* Define box-sizing para border-box para todos os elementos
+   Isso torna o dimensionamento de elementos mais intuitivo */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Elementos HTML5 de display-role para navegadores mais antigos */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+
+/* Força a altura da linha para 1 para o corpo */
+body {
+  line-height: 1;
+}
+
+/* Remove estilos de lista padrão */
+ol, ul {
+  list-style: none;
+}
+
+/* Garante que citações e aspas sejam renderizadas corretamente */
+blockquote, q {
+  quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+
+/* Remove bordas colapsadas em tabelas */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* Opcional: Reset básico para formulários (pode ser mais específico conforme a necessidade) */
+input, button, textarea, select {
+  font: inherit;
+  margin: 0; /* Alguns navegadores adicionam margens a inputs */
+}
+
+/* Opcional: Reset para links para remover a decoração padrão */
+a {
+  text-decoration: none;
+  color: inherit; /* Faz com que os links herdem a cor do texto pai */
+}
+
+/* Opcional: Melhorias na acessibilidade do foco */
+:focus {
+  outline: 2px solid transparent; /* Remove o outline padrão */
+  /* Considere adicionar um outline customizado e visível para acessibilidade */
+  /* Ex: outline: 2px solid blue; */
+}
+
+/* Opcional: Garante que imagens e mídias sejam responsivas por padrão */
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}

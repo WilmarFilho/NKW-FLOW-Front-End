@@ -1,6 +1,10 @@
 .layout-container {
+  padding: 16px 0;
   display: flex;
   height: 100vh;
-  background-color: #1e1e2f; /* Cor de fundo escura similar à imagem */
-  color: #e0e0e0; /* Cor de texto clara */
+  background-image: url('./assets/bg.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: #1e1e2f; 
+  color: #e0e0e0; 
 }
