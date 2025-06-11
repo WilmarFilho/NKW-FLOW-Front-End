@@ -1,0 +1,12 @@
+.attendant-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #2a2e45;
+  font-size: 14px;
+  color: #fff;
+}
+
+.attendant-row .email {
+  color: #8a8fa3;
+}

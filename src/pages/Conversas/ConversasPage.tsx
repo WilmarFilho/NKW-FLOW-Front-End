@@ -1,9 +1,9 @@
 import React from 'react';
-import SearchBar from '../components/Searchbar/SearchBar';
-import Tag from '../components/Tag/Tag';
-import ContactListItem from '../components/ContactListItem/ContactListItem';
-import MessageBubble from '../components/MessageBubble/MessageBubble';
-import MessageInput from '../components/MessageInput/MessageInput';
+import SearchBar from '../../components/Searchbar/Searchbar';
+import Tag from '../../components/Tag/Tag';
+import ContactListItem from '../../components/ContactListItem/ContactListItem';
+import MessageBubble from '../../components/MessageBubble/MessageBubble';
+import MessageInput from '../../components/MessageInput/MessageInput';
 import './conversas.css'
 
 
