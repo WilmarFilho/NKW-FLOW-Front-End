@@ -1,5 +1,6 @@
 .message-input {
   display: flex;
+  font-family: var(--font-secundaria);
   background-color: #1d213a;
   border-radius: 30px;
   padding: 12px 20px;

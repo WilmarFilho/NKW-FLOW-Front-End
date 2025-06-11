@@ -5,10 +5,11 @@
   margin: 8px;
   color: #ffffff;
   font-size: 14px;
+  font-family: var(--font-secundaria);
 }
 
 .bubble.me {
-  background-color: #00f5c3;
+  background-color: #52f2b73a;
   color: #000;
   align-self: flex-end;
   border-bottom-right-radius: 0;
