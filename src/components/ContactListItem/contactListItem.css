@@ -1,0 +1,26 @@
+.contact-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+  gap: 12px;
+  border-bottom: 1px solid #2a2e45;
+  cursor: pointer;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.contact-texts strong {
+  display: block;
+  font-size: 14px;
+  color: #ffffff;
+}
+
+.contact-texts p {
+  font-size: 12px;
+  color: #aaa;
+  margin: 2px 0 0;
+}

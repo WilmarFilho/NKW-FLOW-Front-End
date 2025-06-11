@@ -1,0 +1,21 @@
+.bubble {
+  max-width: 60%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  margin: 8px;
+  color: #ffffff;
+  font-size: 14px;
+}
+
+.bubble.me {
+  background-color: #00f5c3;
+  color: #000;
+  align-self: flex-end;
+  border-bottom-right-radius: 0;
+}
+
+.bubble.other {
+  background-color: #1d213a;
+  align-self: flex-start;
+  border-bottom-left-radius: 0;
+}

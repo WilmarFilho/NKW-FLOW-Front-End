@@ -1,0 +1,20 @@
+.tag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #07070756;
+  color: #aaa;
+  width: 80px !important; 
+  padding: 16px 0;
+  flex-shrink: 0; 
+  flex-grow: 0;
+  border-radius: 12px;
+  font-size: 16px;
+  font-family: var(--font-secundaria);
+  cursor: pointer;
+}
+
+.tag.active {
+  background-color: #52f2b73a;
+  color: #ffffff;
+}
