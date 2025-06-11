@@ -1,7 +1,6 @@
 .agents-container {
   flex: 1;
   padding: 40px;
-  background-color: #0d0f1a;
   color: #ffffff;
   display: flex;
   flex-direction: column;
