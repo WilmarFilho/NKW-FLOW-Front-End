@@ -1,0 +1,26 @@
+.agents-container {
+  flex: 1;
+  padding: 40px;
+  background-color: #0d0f1a;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  font-family: 'Inter', sans-serif;
+}
+
+.agents-header h2 {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.agents-header p {
+  font-size: 14px;
+  color: #aaa;
+}
+
+.agents-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}

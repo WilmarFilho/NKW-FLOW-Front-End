@@ -7,7 +7,7 @@ import MessageInput from '../../components/MessageInput/MessageInput';
 import './conversas.css'
 
 
-const ConversationsPage: React.FC = () => {
+const ConversasPage: React.FC = () => {
   return (
     <div className="conversations-container">
       <div className="left-panel">
@@ -45,4 +45,4 @@ const ConversationsPage: React.FC = () => {
   );
 };
 
-export default ConversationsPage;
+export default ConversasPage;

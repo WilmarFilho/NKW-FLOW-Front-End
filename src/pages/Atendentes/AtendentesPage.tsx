@@ -1,8 +1,8 @@
 import React from "react";
-import AttendantRow from "../../components/AtendentesRow/atendentesRow";
+import AttendantRow from "../../components/AtendentesRow/AtendentesRow";
 import "./atendentes.css";
 
-const AttendantsPage: React.FC = () => {
+const AtendentesPage: React.FC = () => {
   const attendants = [
     { name: "Wilmar Filho", email: "Email do atendente" },
     { name: "Wilmar Filho", email: "Email do atendente" },
@@ -33,4 +33,4 @@ const AttendantsPage: React.FC = () => {
   );
 };
 
-export default AttendantsPage;
+export default AtendentesPage;

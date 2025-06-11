@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout/Layout';
 import ConversasPage from './pages/Conversas/ConversasPage';
 import AtendentesPage from './pages/Atendentes/AtendentesPage';
-import AgentesPage from './pages/AgentesPage';
+import AgentesPage from './pages/Agentes/AgentesPage';
 import ConexoesPage from './pages/ConexoesPage';
 import ConfiguracoesPage from './pages/ConfiguracoesPage';
 import AjudaPage from './pages/AjudaPage';
