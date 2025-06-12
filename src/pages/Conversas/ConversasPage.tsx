@@ -1,9 +1,9 @@
 import React from 'react';
-import SearchBar from '../../components/Conversas/Searchbar';
-import Tag from '../../components/Conversas/Tag';
-import ContactListItem from '../../components/Conversas/ContactListItem';
-import MessageBubble from '../../components/Conversas/MessageBubble';
-import MessageInput from '../../components/Conversas/MessageInput';
+import SearchBar from '../../components/Conversas/SearchBar/Searchbar';
+import Tag from '../../components/Conversas/Tags/Tag';
+import ContactListItem from '../../components/Conversas/ContactList/ContactListItem';
+import MessageBubble from '../../components/Conversas/MessageBubble/MessageBubble';
+import MessageInput from '../../components/Conversas/MessageInput/MessageInput';
 import './conversas.css'
 
 
@@ -23,7 +23,7 @@ const ConversasPage: React.FC = () => {
               key={i}
               name="Contato Teste"
               message="Última mensagem da conversa"
-              avatar="https://i.pravatar.cc/150?img=3"
+              avatar="https://i.pravatar.cc/150?img=1"
             />
           ))}
         </div>

@@ -1,5 +1,5 @@
 import React from "react";
-import AgentCard from "../../components/Agentes/AgentCard";
+import AgentCard from "../../components/Agentes/AgentCard/AgentCard";
 import "./agentesPage.css";
 
 const AgentesPage: React.FC = () => {
@@ -8,9 +8,9 @@ const AgentesPage: React.FC = () => {
     <div className="agents-container">
       <div className="agents-header">
         <h2>Vejas seus agentes disponíveis</h2>
-        <p>
+        <h3>
           Para contratar mais agentes entre em contato.
-        </p>
+        </h3>
       </div>
 
       <div className="agents-list">

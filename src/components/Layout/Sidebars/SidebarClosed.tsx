@@ -2,11 +2,11 @@ import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import "./sidebarclosed.css";
 
-import ConversasIcon from "./assets/chat.svg";
-import AtendenteIcon from "./assets/atendentes.svg";
-import AgenteIcon from "./assets/bot.svg";
-import ConexaoIcon from "./assets/conexao.svg";
-import ExpandIcon from "./assets/expand.svg";
+import ConversasIcon from "../assets/chat.svg";
+import AtendenteIcon from "../assets/atendentes.svg";
+import AgenteIcon from "../assets/bot.svg";
+import ConexaoIcon from "../assets/conexao.svg";
+import ExpandIcon from "../assets/expand.svg";
 
 const SidebarClosed = () => {
   const MenuItem = ({

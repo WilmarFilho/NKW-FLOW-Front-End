@@ -1,8 +1,7 @@
 import React from "react";
-import AttendantRow from "../../components/Atendentes/AtendentesRow";
-import Button from "../../components/Gerais/Button"
+import GenericTable from "../../components/Gerais/Tables/GenericTable";
+import Button from "../../components/Gerais/Buttons/Button";
 import "./atendentes.css";
-
 
 const AtendentesPage: React.FC = () => {
   const attendants = [
@@ -14,23 +13,21 @@ const AtendentesPage: React.FC = () => {
     <div className="attendants-container">
       <div className="attendants-header">
         <h2>Veja seus atendentes humanos cadastrados</h2>
-        <p>Veja e cadastre seus atendentes aqui.</p>
+        <h3>Veja e cadastre seus atendentes aqui.</h3>
       </div>
 
-      <div className="attendants-table">
-        <div className="attendants-header-row">
-          <span>Nome</span>
-          <span>Email</span>
-        </div>
+      <GenericTable
+        columns={["Nome", "Email"]}
+        data={attendants}
+        renderRow={(attendant, i) => (
+          <div className="attendant-row" key={i}>
+            <div>{attendant.name}</div>
+            <div className="email">{attendant.email}</div>
+          </div>
+        )}
+      />
 
-        {attendants.map((attendant, idx) => (
-          <AttendantRow key={idx} {...attendant} />
-        ))}
-      </div>
-
-      <div className="button-wrapper">
-        <Button label="Adicionar Atendente" />
-      </div>
+      <Button label="Adicionar Atendente" />
     </div>
   );
 };

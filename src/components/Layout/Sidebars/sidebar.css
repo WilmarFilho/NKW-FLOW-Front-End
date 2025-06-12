@@ -101,24 +101,6 @@
   color: #ffffffa8;
 }
 
-.content-area {
-  flex-grow: 1;
-  padding: 80px; /* Espaçamento interno da área de conteúdo */
-  overflow-y: auto; /* Para rolagem se o conteúdo for grande */
-}
-
-.content-area h1 {
-  font-size: 28px;
-  color: #ffffff;
-  margin-bottom: 10px;
-}
-
-.content-area p {
-  font-size: 16px;
-  color: #c0c0d8;
-  line-height: 1.6;
-}
-
 /* === Breakpoint 1: Telas Grandes (ex: Laptops Maiores) === */
 @media (max-width: 1299.98px) {
   .sidebar {
@@ -152,12 +134,6 @@
   }
   .user-menu svg {
     width: 50%;
-  }
-  .content-area {
-    padding: 25px;
-  }
-  .content-area h1 {
-    font-size: 24px;
   }
 }
 
@@ -201,12 +177,6 @@
   .user-menu svg {
     width: 50%;
   }
-  .content-area {
-    padding: 25px;
-  }
-  .content-area h1 {
-    font-size: 24px;
-  }
 }
 
 /* === Breakpoint 3: Tablets em Paisagem / Desktops Pequenos === */
@@ -241,12 +211,6 @@
   }
   .user-menu svg {
     width: 50%;
-  }
-  .content-area {
-    padding: 25px;
-  }
-  .content-area h1 {
-    font-size: 24px;
   }
 }
 
@@ -304,12 +268,6 @@
   .user-menu svg {
     width: 75%;
   }
-  .content-area {
-    padding: 25px;
-  }
-  .content-area h1 {
-    font-size: 24px;
-  }
 }
 
 /* === Breakpoint 5: Smartphones === */
@@ -352,11 +310,5 @@
   }
   .user-menu svg {
     width: 60%;
-  }
-  .content-area {
-    padding: 25px;
-  }
-  .content-area h1 {
-    font-size: 24px;
   }
 }

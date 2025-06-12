@@ -1,3 +1,8 @@
+.wrapper-button {
+  display: flex;
+  justify-content: end;
+}
+
 .add-button {
   background-color: #52F2B8;
   color: #202020;

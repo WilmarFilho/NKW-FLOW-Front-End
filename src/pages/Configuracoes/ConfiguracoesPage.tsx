@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import TabsHeader from '../../components/Configuracoes/TabsHeader';
-import SettingsContent from '../../components/Configuracoes/SettingsContent';
+import TabsHeader from '../../components/Configuracoes/TabsHeader/TabsHeader';
+import SettingsContent from '../../components/Configuracoes/SettingsContent/SettingsContent';
 import './configuracoes.css';
 
 const tabs = ['Conta', 'Segurança', 'Notificações', 'Preferências'];

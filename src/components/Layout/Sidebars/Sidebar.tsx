@@ -2,15 +2,15 @@ import { NavLink } from "react-router-dom";
 import { useState, useEffect } from "react";
 import "./sidebar.css";
 
-import LogoIcon from "./assets/logo.svg";
-import ConversasIcon from "./assets/chat.svg";
-import AtendenteIcon from "./assets/atendentes.svg";
-import AgenteIcon from "./assets/bot.svg";
-import ConexaoIcon from "./assets/conexao.svg";
-import ConfigIcon from "./assets/config.svg";
-import AjudaIcon from "./assets/ajuda.svg";
-import ExpandIcon from "./assets/expand.svg";
-import LogoutIcon from "./assets/logout.svg";
+import LogoIcon from "../assets/logo.svg";
+import ConversasIcon from "../assets/chat.svg";
+import AtendenteIcon from "../assets/atendentes.svg";
+import AgenteIcon from "../assets/bot.svg";
+import ConexaoIcon from "../assets/conexao.svg";
+import ConfigIcon from "../assets/config.svg";
+import AjudaIcon from "../assets/ajuda.svg";
+import ExpandIcon from "../assets/expand.svg";
+import LogoutIcon from "../assets/logout.svg";
 
 const Sidebar = () => {
   const user = {
