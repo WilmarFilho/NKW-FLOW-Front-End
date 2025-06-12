@@ -44,7 +44,7 @@ const ConversasPage: React.FC = () => {
 
       <div className="right-panel">
         <div className="messages">
-          {[...Array(5)].map((_, i) => (
+          {[...Array(10)].map((_, i) => (
             <MessageBubble
               key={i}
               text="Última mensagem da conversa"
