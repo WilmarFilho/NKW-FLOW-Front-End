@@ -1,0 +1,20 @@
+.chat-input-wrapper  {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border-radius: 30px;
+  width: 100%;
+  padding: 20px;
+  background-color: var(--color-main);
+}
+.chat-input-wrapper input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: none;
+}
+.chat-input-wrapper button {
+  border: none;
+  outline: none;
+  background: none;
+}

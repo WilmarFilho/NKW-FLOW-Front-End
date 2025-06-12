@@ -1,19 +1,32 @@
-import React from 'react';
-import SearchBar from '../../components/Conversas/SearchBar/Searchbar';
-import Tag from '../../components/Conversas/Tags/Tag';
-import ContactListItem from '../../components/Conversas/ContactList/ContactListItem';
-import MessageBubble from '../../components/Conversas/MessageBubble/MessageBubble';
-import MessageInput from '../../components/Conversas/MessageInput/MessageInput';
-import './conversas.css'
-
+import React from "react";
+import SearchBar from "../../components/Conversas/SearchBar/Searchbar";
+import Tag from "../../components/Conversas/Tags/Tag";
+import ContactListItem from "../../components/Conversas/ContactList/ContactListItem";
+import MessageBubble from "../../components/Conversas/MessageBubble/MessageBubble";
+import ChatInput from "../../components/Gerais/Inputs/ChatInput";
+import "./conversas.css";
 
 const ConversasPage: React.FC = () => {
+  
+  const handleUserSend = () => {
+    console.log("oi");
+  };
+
   return (
     <div className="conversations-container">
       <div className="left-panel">
         <SearchBar />
         <div className="tags">
-          {['Tag 1', 'Tag 1', 'Tag 1', 'Tag 1', 'Tag 1', 'Tag 1', 'Tag 1', 'Tag 1'].map((t, i) => (
+          {[
+            "Tag 1",
+            "Tag 1",
+            "Tag 1",
+            "Tag 1",
+            "Tag 1",
+            "Tag 1",
+            "Tag 1",
+            "Tag 1",
+          ].map((t, i) => (
             <Tag key={i} label={t} active={i === 0} />
           ))}
         </div>
@@ -35,11 +48,14 @@ const ConversasPage: React.FC = () => {
             <MessageBubble
               key={i}
               text="Última mensagem da conversa"
-              sender={i % 2 === 0 ? 'me' : 'other'}
+              sender={i % 2 === 0 ? "me" : "other"}
             />
           ))}
         </div>
-        <MessageInput />
+        <ChatInput
+          placeholder="Pergunte qualquer coisa"
+          onSend={handleUserSend}
+        />
       </div>
     </div>
   );

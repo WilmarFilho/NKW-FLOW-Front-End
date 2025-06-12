@@ -1,19 +1,24 @@
 .help-wrapper {
   display: flex;
   flex-direction: column;
-  height: 100%;
-  padding: 20px 40px;
+  height: 80vh;
+  gap: 40px;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
 }
 
 .help-chat {
-  flex: 1;
-  background-color: #10132a;
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-main);
   border-radius: 20px;
-  padding: 24px;
+  padding: 32px 24px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  scrollbar-width: none;
 }
 
 .help-message {
@@ -25,36 +30,11 @@
 }
 
 .help-message.bot {
-  background-color: #1a1f3d;
+  background-color: #52f2b724;
   align-self: flex-start;
 }
 
 .help-message.user {
-  background-color: #23294b;
+  background-color: #52f2b769;
   align-self: flex-end;
-}
-
-.help-input-wrapper {
-  display: flex;
-  align-items: center;
-  margin-top: 20px;
-  background-color: #1a1f3d;
-  border-radius: 30px;
-  padding: 10px 20px;
-}
-
-.help-input-wrapper input {
-  flex: 1;
-  background: none;
-  border: none;
-  outline: none;
-  font-size: 1rem;
-  color: #d6d6e0;
-}
-
-.help-input-wrapper button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  margin-left: 10px;
 }
