@@ -4,8 +4,8 @@ import ConversasPage from './pages/Conversas/ConversasPage';
 import AtendentesPage from './pages/Atendentes/AtendentesPage';
 import AgentesPage from './pages/Agentes/AgentesPage';
 import ConexoesPage from './pages/Conexao/ConexoesPage';
-import ConfiguracoesPage from './pages/ConfiguracoesPage';
-import AjudaPage from './pages/AjudaPage';
+import ConfiguracoesPage from './pages/Configuracoes/ConfiguracoesPage';
+import AjudaPage from './pages/Ajuda/AjudaPage';
 import './main.css'
 
 function App() {

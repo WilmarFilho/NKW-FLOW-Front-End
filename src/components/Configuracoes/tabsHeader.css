@@ -1,0 +1,21 @@
+.tabs-header {
+  display: flex;
+  gap: 24px;
+  background-color: #1c1f3b;
+  padding: 12px 20px;
+  border-radius: 16px;
+}
+.tab-item {
+  color: #c7c7d4;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s;
+}
+.tab-item.active {
+  background: #0fffc0;
+  color: #0f0f0f;
+}

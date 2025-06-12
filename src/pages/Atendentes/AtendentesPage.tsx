@@ -1,6 +1,8 @@
 import React from "react";
-import AttendantRow from "../../components/AtendentesRow/AtendentesRow";
+import AttendantRow from "../../components/Atendentes/AtendentesRow";
+import Button from "../../components/Gerais/Button"
 import "./atendentes.css";
+
 
 const AtendentesPage: React.FC = () => {
   const attendants = [
@@ -27,7 +29,7 @@ const AtendentesPage: React.FC = () => {
       </div>
 
       <div className="button-wrapper">
-        <button className="add-attendant">Adicionar Atendente</button>
+        <Button label="Adicionar Atendente" />
       </div>
     </div>
   );

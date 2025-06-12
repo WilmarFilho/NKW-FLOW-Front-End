@@ -103,7 +103,7 @@
 
 .content-area {
   flex-grow: 1;
-  padding: 40px; /* Espaçamento interno da área de conteúdo */
+  padding: 80px; /* Espaçamento interno da área de conteúdo */
   overflow-y: auto; /* Para rolagem se o conteúdo for grande */
 }
 

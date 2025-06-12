@@ -1,0 +1,60 @@
+.help-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 20px 40px;
+}
+
+.help-chat {
+  flex: 1;
+  background-color: #10132a;
+  border-radius: 20px;
+  padding: 24px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.help-message {
+  max-width: 60%;
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  color: #c5c5d2;
+}
+
+.help-message.bot {
+  background-color: #1a1f3d;
+  align-self: flex-start;
+}
+
+.help-message.user {
+  background-color: #23294b;
+  align-self: flex-end;
+}
+
+.help-input-wrapper {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  background-color: #1a1f3d;
+  border-radius: 30px;
+  padding: 10px 20px;
+}
+
+.help-input-wrapper input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  color: #d6d6e0;
+}
+
+.help-input-wrapper button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 10px;
+}

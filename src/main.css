@@ -1,8 +1,12 @@
 :root {
   --font-main: 'K2D', 'sans-serif';
   --font-secundaria: 'Jost', 'sans-serif';
-  --color-main: #1B214A;
+  --color-main: #1b214aae;
   --color-secundaria: #52F2B8;
+}
+
+* {
+  font-family: var(--font-secundaria);
 }
 
 /* Remove margens e preenchimentos padrão de todos os elementos principais */

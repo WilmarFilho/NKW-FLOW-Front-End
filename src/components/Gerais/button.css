@@ -1,0 +1,13 @@
+.add-button {
+  background-color: #52F2B8;
+  color: #202020;
+  padding: 10px 40px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  transition: 1s;
+}
+
+.add-button:hover {
+  background-color: #00c69f;
+}

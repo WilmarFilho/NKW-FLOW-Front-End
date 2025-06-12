@@ -9,9 +9,7 @@ interface AgentCardProps {
 const AgentCard: React.FC<AgentCardProps> = ({ name, description }) => {
   return (
     <div className="agent-card">
-      <div className="agent-card-header">
-        <h3>{name}</h3>
-      </div>
+      <h3>{name}</h3>
       <p className="description">{description}</p>
     </div>
   );

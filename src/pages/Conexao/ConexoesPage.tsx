@@ -1,7 +1,7 @@
 import ConnectionTable from '../../components/Conexoes/ConexoesTable';
 import './conexoes.css';
 
-export default function ConnectionsPage() {
+export default function ConexoesPage() {
   return (
     <div className="connections-container">
       

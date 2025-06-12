@@ -1,36 +1,43 @@
 .attendants-container {
   flex: 1;
-  padding: 40px;
-  color: #ffffff;
   display: flex;
   flex-direction: column;
   gap: 32px;
-  font-family: 'Inter', sans-serif;
+}
+
+.attendants-header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .attendants-header h2 {
-  font-size: 24px;
-  margin-bottom: 8px;
+  font-size: 40px;
+  font-family: var(--font-main);
 }
 
 .attendants-header p {
-  font-size: 14px;
-  color: #aaa;
+  font-size: 24px;
+  color: #ffffff98;
 }
 
 .attendants-table {
-  background-color: #13162b;
+  background-color: var(--color-main);
   border-radius: 12px;
-  padding: 24px;
+  padding: 72px 48px;
 }
 
 .attendants-header-row {
   display: flex;
-  justify-content: space-between;
-  font-weight: bold;
-  border-bottom: 1px solid #2a2e45;
+  justify-content: start;
+  border-bottom: 1px solid #ffffff82;
   padding-bottom: 12px;
   margin-bottom: 12px;
+}
+
+.attendants-header-row  span{
+  display: inline-block;
+  min-width: 200px;
 }
 
 .button-wrapper {
@@ -38,17 +45,3 @@
   justify-content: flex-end;
 }
 
-.add-attendant {
-  background-color: #00f5c3;
-  color: #000;
-  padding: 10px 20px;
-  border-radius: 20px;
-  font-weight: bold;
-  border: none;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.add-attendant:hover {
-  background-color: #00ddb0;
-}
