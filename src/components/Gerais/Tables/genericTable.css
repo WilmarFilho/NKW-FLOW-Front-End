@@ -41,6 +41,7 @@
   font-size: 0.8rem;
   justify-content: center;
   display: flex;
+  cursor: pointer;
 }
 .status-chip.active {
   background-color: #55ffc9;

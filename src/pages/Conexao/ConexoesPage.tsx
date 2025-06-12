@@ -3,8 +3,8 @@ import GenericTable from "../../components/Gerais/Tables/GenericTable";
 import "./conexoes.css";
 
 const connections = [
-  { name: "Wilmar Filho", number: "64992434104", agent: "AA", status: true },
-  { name: "Wilmar Filho", number: "64992434104", agent: "VV", status: true },
+  { name: "Wilmar Filho", number: "64992434104", agent: "Recepcionista", status: true },
+  { name: "Wilmar Filho", number: "64992434104", agent: "Vendedor", status: true },
 ];
 
 export default function ConexoesPage() {
