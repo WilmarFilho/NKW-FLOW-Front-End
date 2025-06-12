@@ -1,0 +1,23 @@
+.connection-row span {
+  color: #d6d6e0;
+}
+.agent-select {
+  cursor: pointer;
+  opacity: 0.7;
+  text-decoration: underline;
+}
+.status-chip {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  text-align: center;
+  width: max-content;
+}
+.status-chip.active {
+  background-color: #55ffc9;
+  color: #0f0f0f;
+}
+.status-chip.inactive {
+  background-color: #ff5555;
+  color: #fff;
+}

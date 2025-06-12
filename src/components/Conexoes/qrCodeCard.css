@@ -1,0 +1,16 @@
+.qrcode-card {
+  background: #1c1f3b;
+  padding: 30px;
+  border-radius: 16px;
+  text-align: center;
+  font-size: 1.1rem;
+  color: #55ffc9;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+.qrcode-card img {
+  width: 150px;
+  height: 150px;
+}
