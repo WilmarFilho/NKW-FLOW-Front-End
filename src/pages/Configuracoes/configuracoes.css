@@ -6,3 +6,11 @@
   color: #d6d6e0;
   height: 100%;
 }
+
+
+/* === Breakpoint 3: Tablets em Paisagem / Desktops Pequenos === */
+@media (max-width: 991.98px) {
+ .settings-container {
+  padding: 0;
+ }
+}

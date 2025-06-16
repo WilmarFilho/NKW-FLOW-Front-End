@@ -11,7 +11,7 @@
   margin-bottom: 12px;
   border-bottom: 1px solid #ffffff82;
 }
-.table-header div, 
+.table-header div,
 .connection-row div,
 .attendant-row div {
   flex-grow: 1;
@@ -50,4 +50,39 @@
 .status-chip.inactive {
   background-color: #ff5555;
   color: #fff;
+}
+
+/* === Breakpoint 3: Tablets em Paisagem / Desktops Pequenos === */
+@media (max-width: 1038.98px) {
+  .table-header div,
+  .connection-row div,
+  .attendant-row div {
+    width: 150px;
+  }
+  .generic-table {
+    padding: 60px 24px;
+  }
+}
+
+/* === Breakpoint 4: Tablets em Retrato === */
+@media (max-width: 767.98px) {
+  .table-header {
+    overflow: hidden;
+    overflow-x: auto;
+  }
+  .table-header,
+  .connection-row,
+  .attendant-row {
+    overflow: hidden;
+    overflow-x: auto;
+    gap: 24px;
+    scrollbar-width: none;
+  }
+  .generic-table {
+    padding: 40px 24px;
+  }
+}
+
+/* === Breakpoint 5: Smartphones === */
+@media (max-width: 599.98px) {
 }

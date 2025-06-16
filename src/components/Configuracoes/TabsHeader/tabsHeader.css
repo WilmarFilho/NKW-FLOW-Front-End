@@ -19,3 +19,18 @@
   background: #0fffc0;
   color: #0f0f0f;
 }
+
+/* === Breakpoint 4: Tablets em Retrato === */
+@media (max-width: 767.98px) {
+  .tabs-header {
+    gap: 0;
+  }
+}
+
+/* === Breakpoint 5: Smartphones === */
+@media (max-width: 599.98px) {
+  .tabs-header {
+    overflow: hidden;
+    overflow-x: auto;
+  }
+}

@@ -2,10 +2,10 @@
   padding: 0;
   display: flex;
   height: 100vh;
-  background-image: url('./assets/bg.png');
+  background-image: url("./assets/bg.png");
   background-size: cover;
   background-repeat: no-repeat;
-  background-color: #1e1e2f; 
+  background-color: #1e1e2f;
 }
 
 .content-area {
@@ -17,23 +17,23 @@
 .content-area > :first-child > :first-child {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 
-.content-area > :first-child > :first-child h2{
+.content-area > :first-child > :first-child h2 {
   font-family: var(--font-main);
   font-size: 40px;
 }
 
-.content-area > :first-child > :first-child h3{
+.content-area > :first-child > :first-child h3 {
   font-size: 24px;
-  opacity: .8;
+  opacity: 0.8;
 }
 
 /* === Breakpoint 1: Telas Grandes (ex: Laptops Maiores) === */
 @media (max-width: 1299.98px) {
   .content-area {
-    padding: 80px;
+    padding: 50px;
   }
 }
 
@@ -41,6 +41,13 @@
 @media (max-width: 1199.98px) {
   .content-area {
     padding: 25px;
+  }
+  .content-area > :first-child > :first-child h2 {
+    font-size: 32px;
+  }
+
+  .content-area > :first-child > :first-child h3 {
+    font-size: 20px;
   }
 }
 
@@ -55,6 +62,14 @@
 @media (max-width: 767.98px) {
   .content-area {
     padding: 25px;
+    width: 80%;
+  }
+  .content-area > :first-child > :first-child h2 {
+    font-size: 26px;
+  }
+
+  .content-area > :first-child > :first-child h3 {
+    font-size: 18px;
   }
 }
 

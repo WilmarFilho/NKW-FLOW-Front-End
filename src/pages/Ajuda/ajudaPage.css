@@ -38,3 +38,20 @@
   background-color: #52f2b769;
   align-self: flex-end;
 }
+
+
+
+
+/* === Breakpoint 2: Desktops Padrão === */
+@media (max-width: 1199.98px) {
+  .help-wrapper {
+    height: 90vh;
+  }
+}
+
+/* === Breakpoint 4: Tablets em Retrato === */
+@media (max-width: 767.98px) {
+  .help-message {
+    max-width: 80%;
+  }
+}
