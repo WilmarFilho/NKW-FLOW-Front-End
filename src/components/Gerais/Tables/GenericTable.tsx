@@ -3,7 +3,7 @@ import "./genericTable.css"
 interface GenericTableProps<T> {
   columns: string[];
   data: T[];
-  renderRow: (item: T, index: number) => React.ReactNode;
+  renderRow: (item: T, index: number) => React.ReactNode; 
 }
 
 function GenericTable<T>({ columns, data, renderRow }: GenericTableProps<T>) {

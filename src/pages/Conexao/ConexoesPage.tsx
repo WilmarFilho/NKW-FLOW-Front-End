@@ -1,21 +1,33 @@
+import { connectionsState, addConnectionModalState } from '../../state/atom';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import Button from "../../components/Gerais/Buttons/Button";
+import AddConnectionModal from "../../components/Conexoes/AddConnectionModal";
 import GenericTable from "../../components/Gerais/Tables/GenericTable";
+import type { Connection } from "../../types/connection";
 import "./conexoes.css";
-
-const connections = [
-  { name: "Wilmar Filho", number: "64992434104", agent: "Recepcionista", status: true },
-  { name: "Wilmar Filho", number: "64992434104", agent: "Vendedor", status: true },
-];
+import ConnectionStatusManager from '../../components/Conexoes/ConnectionStatusManager';
 
 export default function ConexoesPage() {
+
+  const connections = useRecoilValue(connectionsState);
+  const setModalState = useSetRecoilState(addConnectionModalState);
+  const { isOpen } = useRecoilValue(addConnectionModalState);
+
+  const handleOpenModal = (): void => {
+    setModalState({ isOpen: true });
+  };
+
   return (
     <div className="connections-container">
+
+      <ConnectionStatusManager /> 
+      
       <div className="connections-header">
-        <h2>Vejo suas conexões</h2>
-        <h3>Verifique as conexões atuais, adicione ou desative …</h3>
+        <h2>Suas conexões</h2>
+        <h3>Verifique as conexões atuais, adicione ou desative…</h3>
       </div>
 
-      <GenericTable
+      <GenericTable<Connection>
         columns={["Nome", "Número", "Agente", "Status"]}
         data={connections}
         renderRow={(conn, i) => (
@@ -32,7 +44,12 @@ export default function ConexoesPage() {
         )}
       />
 
-      <Button label="Adicionar Conexão" />
+      <div className="button-container">
+        <Button label="Adicionar Conexão" onClick={handleOpenModal} />
+      </div>
+
+      {isOpen && <AddConnectionModal />}
+
     </div>
   );
 }
