@@ -1,8 +1,26 @@
 import React from "react";
 import AgentCard from "../../components/Agentes/AgentCard/AgentCard";
+import { useAgents } from "../../hooks/useAgents";
 import "./agentesPage.css";
 
 const AgentesPage: React.FC = () => {
+
+  /*const { agents, loading, error } = useAgents();
+
+  if (loading) {
+    return <div className="feedback-message">Carregando agentes...</div>;
+  }
+
+  if (error) {
+    return <div className="feedback-message error">Erro ao carregar: {error}</div>;
+  }*/
+
+  const agents = [
+
+    {id: 2, 'nome' : 'Wilmar Filho', 'descricao': 'teste'},
+    {id: 2, 'nome' : 'Wilmar Filho', 'descricao': 'teste'}
+
+  ]
 
   return (
     <div className="agents-container">
@@ -14,20 +32,16 @@ const AgentesPage: React.FC = () => {
       </div>
 
       <div className="agents-list">
-        <AgentCard
-          name="Wilmar Bot"
-          description="O Wilmar Bot é um agente de atendimento automatizado desenvolvido para responder dúvidas frequentes e otimizar o tempo da sua equipe."
-        />
 
-        <AgentCard
-          name="Wilmar Bot"
-          description="O Wilmar Bot é um agente de atendimento automatizado desenvolvido para responder dúvidas frequentes e otimizar o tempo da sua equipe."
-        />
+        {agents.map((agent) => (
+          <AgentCard
+            key={agent.id} 
+            name={agent.nome}
+            description={agent.descricao}
+            
+          />
+        ))}
 
-        <AgentCard
-          name="Wilmar Bot"
-          description="O Wilmar Bot é um agente de atendimento automatizado desenvolvido para responder dúvidas frequentes e otimizar o tempo da sua equipe."
-        />
       </div>
     </div>
   );

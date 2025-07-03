@@ -1,6 +1,7 @@
 import { atom } from 'recoil';
 import type { Connection } from '../types/connection';
 import type { Attendant } from '../types/attendant';
+import type { Agent } from '../types/agent';
 
 // Estado das conexões WhatsApp
 export const connectionsState = atom<Connection[]>({
@@ -17,5 +18,11 @@ export const addConnectionModalState = atom({
 // Estado dos atendentes humanos
 export const attendantsState = atom<Attendant[]>({
   key: 'attendantsState',
+  default: [],
+});
+
+// Estado dos agents IA
+export const agentsState = atom<Agent[]>({
+  key: 'agentsState',
   default: [],
 });

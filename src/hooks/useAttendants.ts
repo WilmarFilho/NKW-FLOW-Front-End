@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { attendantsState } from '../state/atom';
+import { apiConfig } from '../config/api';
 import type { Attendant, AttendantInput } from '../types/attendant';
-
-const API_BASE_URL = 'http://localhost:3000/api'; 
 
 /**
  * Busca todos os atendentes na API.
  */
 const fetchAttendantsFromAPI = async (): Promise<Attendant[]> => {
-  const response = await fetch(`${API_BASE_URL}/atendentes`);
+  const response = await fetch(`${apiConfig.node}/atendentes`);
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({ message: 'Erro desconhecido no servidor' }));
     throw new Error(errorData.message || 'Falha ao buscar os atendentes');
@@ -21,7 +20,7 @@ const fetchAttendantsFromAPI = async (): Promise<Attendant[]> => {
  * Cria um novo atendente na API.
  */
 const createAttendantInAPI = async (data: AttendantInput): Promise<Attendant> => {
-  const response = await fetch(`${API_BASE_URL}/atendentes`, {
+  const response = await fetch(`${apiConfig.node}/atendentes`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -39,7 +38,7 @@ const createAttendantInAPI = async (data: AttendantInput): Promise<Attendant> =>
  * Deleta um atendente da API pelo seu ID.
  */
 const deleteAttendantFromAPI = async (id: number): Promise<void> => {
-  const response = await fetch(`${API_BASE_URL}/atendentes/${id}`, {
+  const response = await fetch(`${apiConfig.node}/atendentes/${id}`, {
     method: 'DELETE',
   });
   if (!response.ok) {

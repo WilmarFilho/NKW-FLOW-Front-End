@@ -6,8 +6,19 @@ import GenericTable from "../../components/Gerais/Tables/GenericTable";
 import type { Connection } from "../../types/connection";
 import "./conexoes.css";
 import ConnectionStatusManager from '../../components/Conexoes/ConnectionStatusManager';
+import { useConnections } from '../../hooks/useConnections';
 
 export default function ConexoesPage() {
+
+  //const { connections, loading, error } = useConnections();
+
+  /*if (loading) {
+    return <div><h2>Carregando conexões...</h2></div>;
+  }*/
+
+  /*if (error) {
+    return <div><h2>Erro ao carregar: {error}</h2></div>;
+  }*/
 
   const connections = useRecoilValue(connectionsState);
   const setModalState = useSetRecoilState(addConnectionModalState);
