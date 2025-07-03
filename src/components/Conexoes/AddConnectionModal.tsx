@@ -1,28 +1,13 @@
 import { useEffect, useState } from "react";
 import type { FormEvent, ChangeEvent, JSX } from "react";
-import { useSetRecoilState } from 'recoil';
-import { connectionsState, addConnectionModalState } from '../../state/atom'; // Corrigido para 'atoms' (plural), se for o caso
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { connectionsState, addConnectionModalState } from '../../state/atom';
 import type { Connection } from "../../types/connection";
-import "./addConnectionModal.css";
+import Modal from "../Gerais/Modal/Modal";
 
-// O sub-componente Modal não muda.
-interface ModalProps {
-  children: React.ReactNode;
-  onClose: () => void;
-}
-const Modal = ({ children, onClose }: ModalProps): JSX.Element => (
-  <div className="modal-backdrop">
-    <div className="modal-content">
-      <button className="modal-close-button" onClick={onClose}>X</button>
-      {children}
-    </div>
-  </div>
-);
-
-// Removidas as props e interfaces antigas. O componente é autossuficiente.
-export default function AddConnectionModal(): JSX.Element {
+export default function AddConnectionModal(): JSX.Element | null {
+  const [modalState, setModalState] = useRecoilState(addConnectionModalState);
   const setConnections = useSetRecoilState(connectionsState);
-  const setModalState = useSetRecoilState(addConnectionModalState);
 
   const [step, setStep] = useState<1 | 2>(1);
   const [formData, setFormData] = useState({ name: "", agent: "Recepcionista" });
@@ -32,8 +17,15 @@ export default function AddConnectionModal(): JSX.Element {
 
   const handleClose = () => {
     setModalState({ isOpen: false });
+    setStep(1);
+    setQrCode(null);
+    setError('');
   };
 
+  if (!modalState.isOpen) {
+    return null;
+  }
+  
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
     const { id, value } = e.target;
     setFormData(prev => ({ ...prev, [id]: value }));
@@ -43,7 +35,6 @@ export default function AddConnectionModal(): JSX.Element {
     e.preventDefault();
     const sessionName = `${formData.name.toLowerCase().replace(/\s/g, '_')}_${Date.now()}`;
     setInstanceName(sessionName);
-    
     try {
       const res = await fetch('http://localhost:5678/webhook/create-session', {
         method: 'POST',
@@ -60,14 +51,11 @@ export default function AddConnectionModal(): JSX.Element {
   };
 
   useEffect(() => {
-    if (step !== 2 || !instanceName) return;
-
+    if (!modalState.isOpen || step !== 2 || !instanceName) return;
     const eventSource = new EventSource(`http://192.168.208.1:5679/webhook/events/${instanceName}`);
-
     eventSource.onmessage = (event) => {
       const eventData: any = JSON.parse(event.data);
       if (eventData.event === 'connection.update' && eventData.state === 'open') {
-        console.log(eventData)
         const newConnection: Connection = {
           name: formData.name,
           agent: formData.agent,
@@ -76,27 +64,25 @@ export default function AddConnectionModal(): JSX.Element {
           instanceName: instanceName,
         };
         setConnections((current) => [...current, newConnection]);
-        setModalState({ isOpen: false });
+        handleClose();
         eventSource.close();
       }
     };
-
     eventSource.onerror = () => {
       setError("Erro de comunicação com o servidor de eventos.");
       eventSource.close();
     };
-
-    return () => {
-      console.log('Limpando e fechando conexão SSE do modal.');
-      eventSource.close();
-    };
-  }, [step, instanceName, formData, setConnections, setModalState]);
+    return () => eventSource.close();
+  }, [step, instanceName, formData, setConnections, modalState.isOpen]);
 
   return (
-    <Modal onClose={handleClose}>
+    <Modal 
+      isOpen={modalState.isOpen} 
+      onClose={handleClose}
+      title={step === 1 ? "Adicionar Nova Conexão" : "Conecte seu WhatsApp"}
+    >
       {step === 1 && (
         <form onSubmit={handleStartSession} className="connection-form">
-          <h2>Adicionar Nova Conexão</h2>
           <p>Preencha os dados para gerar o QR Code.</p>
           <div className="form-group">
             <label htmlFor="name">Nome da Conexão</label>
@@ -116,7 +102,6 @@ export default function AddConnectionModal(): JSX.Element {
 
       {step === 2 && (
         <div className="qr-code-step">
-          <h2>Conecte seu WhatsApp</h2>
           <p>Abra o WhatsApp em seu celular, vá em Aparelhos Conectados e escaneie o código abaixo.</p>
           {qrCode && <img src={qrCode} alt="QR Code para conectar no WhatsApp" />}
           {error && <p className="error-text">{error}</p>}

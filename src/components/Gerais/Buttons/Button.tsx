@@ -4,7 +4,7 @@ import "./button.css";
 // Interface para as propriedades do botão
 interface ButtonProps {
   label: string;
-  onClick: () => void;
+  onClick: () => void | null;
 }
 
 export default function Button({ label, onClick }: ButtonProps): JSX.Element {
