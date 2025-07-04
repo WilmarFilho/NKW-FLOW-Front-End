@@ -2,6 +2,7 @@ import { atom } from 'recoil';
 import type { Connection } from '../types/connection';
 import type { Attendant } from '../types/attendant';
 import type { Agent } from '../types/agent';
+import type { MessagesHelpChat, HelpChat } from '../types/helpChat';
 
 // Estado das conexões WhatsApp
 export const connectionsState = atom<Connection[]>({
@@ -24,5 +25,11 @@ export const attendantsState = atom<Attendant[]>({
 // Estado dos agents IA
 export const agentsState = atom<Agent[]>({
   key: 'agentsState',
+  default: [],
+});
+
+// Chat da Pagina de Ajuda
+export const helpChatState = atom<HelpChat[]>({
+  key: "helpChatState",
   default: [],
 });

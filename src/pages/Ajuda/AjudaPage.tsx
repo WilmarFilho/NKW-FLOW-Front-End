@@ -1,28 +1,12 @@
-import { useState } from 'react';
 import './ajudaPage.css';
 import ChatInput from '../../components/Gerais/Inputs/ChatInput';
-
-type Message = {
-  from: 'user' | 'bot';
-  text: string;
-};
+import { useRecoilValue } from "recoil";
+import { helpChatState } from '../../state/atom';
+import { useSendHelpMessage } from '../../hooks/useSendHelpMessage';
 
 export default function AjudaPage() {
-  const [messages, setMessages] = useState<Message[]>([
-    { from: 'bot', text: 'Olá! Como posso te ajudar hoje?' },
-  ]);
-
-  const handleUserSend = (msg: string) => {
-    const userMessage: Message = { from: 'user', text: msg };
-    setMessages((prev) => [...prev, userMessage]);
-
-    setTimeout(() => {
-      setMessages((prev) => [
-        ...prev,
-        { from: 'bot', text: 'Estou analisando sua dúvida...' },
-      ]);
-    }, 800);
-  };
+  const messages = useRecoilValue(helpChatState);
+  const { sendMessage } = useSendHelpMessage();
 
   return (
     <div className="help-wrapper">
@@ -32,12 +16,12 @@ export default function AjudaPage() {
             key={idx}
             className={`help-message ${msg.from === 'user' ? 'user' : 'bot'}`}
           >
-            {msg.text}
+            {msg.content.text}
           </div>
         ))}
       </div>
 
-      <ChatInput placeholder="Pergunte qualquer coisa" onSend={handleUserSend} />
+      <ChatInput placeholder="Pergunte qualquer coisa" onSend={sendMessage} />
       
     </div>
   );
