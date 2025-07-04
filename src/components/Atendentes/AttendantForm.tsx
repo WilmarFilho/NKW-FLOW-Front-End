@@ -1,8 +1,6 @@
-// src/components/Atendentes/AttendantForm.tsx
-
 import { useState } from 'react';
 import type { AttendantInput } from '../../types/attendant';
-import './attendantForm.css'; // Usaremos um CSS específico para o formulário
+import './attendantForm.css'; 
 
 interface AttendantFormProps {
   onSave: (data: AttendantInput) => Promise<void>; // Recebe a função de salvar

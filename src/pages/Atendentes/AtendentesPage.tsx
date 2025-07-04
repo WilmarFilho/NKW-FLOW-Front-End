@@ -9,8 +9,16 @@ import AttendantForm from '../../components/Atendentes/AttendantForm';
 import './atendentes.css';
 
 export default function AtendentesPage() {
-  const { attendants, loading, addAttendant, removeAttendant } = useAttendants();
+  const { attendants, loading, error, addAttendant, removeAttendant } = useAttendants();
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  if (loading) {
+    return <div className="feedback-message">Carregando atendentes...</div>;
+  }
+
+  if (error) {
+    return <div className="feedback-message error">Erro ao carregar: {error}</div>;
+  }
 
   const handleDelete = async (id: number) => {
     if (window.confirm('Tem certeza que deseja excluir este atendente?')) {
@@ -33,22 +41,6 @@ export default function AtendentesPage() {
     }
   };
 
-  const renderAttendantRow = (attendant: Attendant) => (
-    <div className="table-row" key={attendant.id}>
-      <div>{attendant.id}</div>
-      <div>{attendant.nome}</div>
-      <div>{attendant.email}</div>
-      <div>{attendant.ativo ? 'Ativo' : 'Inativo'}</div>
-      <div>
-        <button className="delete-button" onClick={() => handleDelete(attendant.id)}>Excluir</button>
-      </div>
-    </div>
-  );
-
-  if (loading) {
-    return <div className="atendentes-container"><h2>Carregando atendentes...</h2></div>;
-  }
-
   return (
     <div className="connections-container">
 
@@ -58,9 +50,18 @@ export default function AtendentesPage() {
       </div>
 
       <GenericTable<Attendant>
-        columns={['ID', 'Nome', 'Email', 'Status', 'Ações']}
+        columns={["Nome", "Email", "Status", "Ações"]}
         data={attendants}
-        renderRow={renderAttendantRow}
+        renderRow={(conn, i) => (
+          <div className="connection-row" key={i}>
+            <div>{conn.nome}</div>
+            <div>{conn.email}</div>
+            <div className="agent-select">{conn.ativo}</div>
+            <div>
+              <button className="delete-button" onClick={() => handleDelete(conn.id)}>Excluir</button>
+            </div>
+          </div>
+        )}
       />
 
       <div className="button-container">

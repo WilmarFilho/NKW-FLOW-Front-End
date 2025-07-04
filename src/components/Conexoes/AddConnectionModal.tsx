@@ -1,83 +1,31 @@
-import { useEffect, useState } from "react";
-import type { FormEvent, ChangeEvent, JSX } from "react";
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { connectionsState, addConnectionModalState } from '../../state/atom';
-import type { Connection } from "../../types/connection";
+// src/components/Modais/AddConnectionModal.tsx
+import type { JSX } from "react";
+import { useRecoilState } from 'recoil';
+import { addConnectionModalState } from '../../state/atom';
 import Modal from "../Gerais/Modal/Modal";
+import { useAddConnection } from '../../hooks/useAddConnection';
 
 export default function AddConnectionModal(): JSX.Element | null {
   const [modalState, setModalState] = useRecoilState(addConnectionModalState);
-  const setConnections = useSetRecoilState(connectionsState);
-
-  const [step, setStep] = useState<1 | 2>(1);
-  const [formData, setFormData] = useState({ name: "", agent: "Recepcionista" });
-  const [qrCode, setQrCode] = useState<string | null>(null);
-  const [instanceName, setInstanceName] = useState<string>('');
-  const [error, setError] = useState<string>('');
 
   const handleClose = () => {
     setModalState({ isOpen: false });
-    setStep(1);
-    setQrCode(null);
-    setError('');
   };
 
-  if (!modalState.isOpen) {
-    return null;
-  }
-  
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
-    const { id, value } = e.target;
-    setFormData(prev => ({ ...prev, [id]: value }));
-  }
+  const {
+    step,
+    qrCode,
+    formData,
+    error,
+    handleInputChange,
+    handleStartSession
+  } = useAddConnection(handleClose);
 
-  const handleStartSession = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
-    e.preventDefault();
-    const sessionName = `${formData.name.toLowerCase().replace(/\s/g, '_')}_${Date.now()}`;
-    setInstanceName(sessionName);
-    try {
-      const res = await fetch('http://localhost:5678/webhook/create-session', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ session: sessionName })
-      });
-      if (!res.ok) throw new Error("Falha ao criar a sessão no backend.");
-      const data = await res.json();
-      setQrCode(data.qr_code);
-      setStep(2);
-    } catch (err) {
-      setError("Não foi possível iniciar a conexão. Verifique o backend.");
-    }
-  };
-
-  useEffect(() => {
-    if (!modalState.isOpen || step !== 2 || !instanceName) return;
-    const eventSource = new EventSource(`http://192.168.208.1:5679/webhook/events/${instanceName}`);
-    eventSource.onmessage = (event) => {
-      const eventData: any = JSON.parse(event.data);
-      if (eventData.event === 'connection.update' && eventData.state === 'open') {
-        const newConnection: Connection = {
-          name: formData.name,
-          agent: formData.agent,
-          number: eventData.wuid.split('@')[0],
-          status: true,
-          instanceName: instanceName,
-        };
-        setConnections((current) => [...current, newConnection]);
-        handleClose();
-        eventSource.close();
-      }
-    };
-    eventSource.onerror = () => {
-      setError("Erro de comunicação com o servidor de eventos.");
-      eventSource.close();
-    };
-    return () => eventSource.close();
-  }, [step, instanceName, formData, setConnections, modalState.isOpen]);
+  if (!modalState.isOpen) return null;
 
   return (
-    <Modal 
-      isOpen={modalState.isOpen} 
+    <Modal
+      isOpen={modalState.isOpen}
       onClose={handleClose}
       title={step === 1 ? "Adicionar Nova Conexão" : "Conecte seu WhatsApp"}
     >
@@ -86,7 +34,7 @@ export default function AddConnectionModal(): JSX.Element | null {
           <p>Preencha os dados para gerar o QR Code.</p>
           <div className="form-group">
             <label htmlFor="name">Nome da Conexão</label>
-            <input id="name" type="text" value={formData.name} onChange={handleInputChange} placeholder="Ex: WhatsApp da Loja" required/>
+            <input id="name" type="text" value={formData.name} onChange={handleInputChange} placeholder="Ex: WhatsApp da Loja" required />
           </div>
           <div className="form-group">
             <label htmlFor="agent">Agente IA</label>

@@ -5,7 +5,7 @@ import "./agentesPage.css";
 
 const AgentesPage: React.FC = () => {
 
-  /*const { agents, loading, error } = useAgents();
+  const { agents, loading, error } = useAgents();
 
   if (loading) {
     return <div className="feedback-message">Carregando agentes...</div>;
@@ -13,14 +13,7 @@ const AgentesPage: React.FC = () => {
 
   if (error) {
     return <div className="feedback-message error">Erro ao carregar: {error}</div>;
-  }*/
-
-  const agents = [
-
-    {id: 2, 'nome' : 'Wilmar Filho', 'descricao': 'teste'},
-    {id: 2, 'nome' : 'Wilmar Filho', 'descricao': 'teste'}
-
-  ]
+  }
 
   return (
     <div className="agents-container">

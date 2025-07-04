@@ -1,7 +1,8 @@
 export interface Connection {
-  name: string;
-  number: string;
-  agent: string;
+  id: number;
+  nome: string;
+  numero: string;
+  agente: string;
   status: boolean;
   instanceName: string;
 }
