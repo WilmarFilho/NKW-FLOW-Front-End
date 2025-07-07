@@ -2,7 +2,7 @@ import { atom } from 'recoil';
 import type { Connection } from '../types/connection';
 import type { Attendant } from '../types/attendant';
 import type { Agent } from '../types/agent';
-import type { MessagesHelpChat, HelpChat } from '../types/helpChat';
+import type { HelpChat } from '../types/helpChat';
 
 // Estado das conexões WhatsApp
 export const connectionsState = atom<Connection[]>({

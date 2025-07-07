@@ -3,6 +3,7 @@ import { useSetRecoilState } from "recoil";
 import { helpChatState } from "../state/atom";
 import type { HelpChat } from "../types/helpChat";
 import axios from "axios";
+import { apiConfig } from '../config/api';
 
 export function useSendHelpMessage() {
   const [error, setError] = useState<string | null>(null);
@@ -18,7 +19,7 @@ export function useSendHelpMessage() {
     setError(null);
 
     try {
-      const { data } = await axios.post("/api/help/chat", {
+      const { data } = await axios.post(`${apiConfig.node}/api/help/chat`, {
         message: text,
       });
 

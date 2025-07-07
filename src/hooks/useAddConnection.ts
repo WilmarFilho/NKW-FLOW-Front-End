@@ -44,9 +44,10 @@ export const useAddConnection = (onClose: () => void) => {
       const eventData: any = JSON.parse(event.data);
       if (eventData.event === 'connection.update' && eventData.state === 'open') {
         const newConnection: Connection = {
-          name: formData.name,
-          agent: formData.agent,
-          number: eventData.wuid.split('@')[0],
+          id: 1,
+          nome: formData.name,
+          agente: formData.agent,
+          numero: eventData.wuid.split('@')[0],
           status: true,
           instanceName,
         };
