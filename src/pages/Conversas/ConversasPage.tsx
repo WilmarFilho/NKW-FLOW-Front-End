@@ -1,15 +1,15 @@
-import React from "react";
-import SearchBar from "../../components/Conversas/SearchBar/Searchbar";
-import Tag from "../../components/Conversas/Tags/Tag";
-import ContactListItem from "../../components/Conversas/ContactList/ContactListItem";
-import MessageBubble from "../../components/Conversas/MessageBubble/MessageBubble";
-import ChatInput from "../../components/Gerais/Inputs/ChatInput";
-import "./conversas.css";
+import React from 'react';
+import SearchBar from '../../components/Conversas/SearchBar/Searchbar';
+import Tag from '../../components/Conversas/Tags/Tag';
+import ContactListItem from '../../components/Conversas/ContactList/ContactListItem';
+import MessageBubble from '../../components/Conversas/MessageBubble/MessageBubble';
+import ChatInput from '../../components/Gerais/Inputs/ChatInput';
+import './conversas.css';
 
 const ConversasPage: React.FC = () => {
   
   const handleUserSend = () => {
-    console.log("oi");
+    console.log('oi');
   };
 
   return (
@@ -18,14 +18,9 @@ const ConversasPage: React.FC = () => {
         <SearchBar />
         <div className="tags">
           {[
-            "Tag 1",
-            "Tag 1",
-            "Tag 1",
-            "Tag 1",
-            "Tag 1",
-            "Tag 1",
-            "Tag 1",
-            "Tag 1",
+            'Vendedor',
+            'Recepcionista',
+
           ].map((t, i) => (
             <Tag key={i} label={t} active={i === 0} />
           ))}
@@ -48,7 +43,7 @@ const ConversasPage: React.FC = () => {
             <MessageBubble
               key={i}
               text="Última mensagem da conversa"
-              sender={i % 2 === 0 ? "me" : "other"}
+              sender={i % 2 === 0 ? 'me' : 'other'}
             />
           ))}
         </div>

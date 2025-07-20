@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
-import { agentsState } from '../state/atom';
+//import { useRecoilState } from 'recoil';
+//import { agentsState } from '../state/atom';
 import type { Contact, Message } from '../types/conversation';
 import { apiConfig } from '../config/api';
 
@@ -54,7 +54,7 @@ export const useConversations = () => {
                 setError(null);
             })
             .catch(err => {
-                console.error("Falha ao buscar conversas:", err);
+                console.error('Falha ao buscar conversas:', err);
                 setError(err.message);
                 setConversations([]);
             })

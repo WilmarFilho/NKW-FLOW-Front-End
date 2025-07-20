@@ -1,5 +1,5 @@
-import React from "react";
-import "./agentCard.css";
+import React from 'react';
+import './agentCard.css';
 
 interface AgentCardProps {
   name: string;

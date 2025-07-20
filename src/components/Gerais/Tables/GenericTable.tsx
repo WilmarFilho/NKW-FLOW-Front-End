@@ -1,4 +1,4 @@
-import "./genericTable.css"
+import './genericTable.css'
 
 interface GenericTableProps<T> {
   columns: string[];

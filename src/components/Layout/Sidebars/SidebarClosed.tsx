@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
-import "./sidebarclosed.css";
+import { useState, useEffect } from 'react';
+import { NavLink } from 'react-router-dom';
+import './sidebarclosed.css';
 
-import ConversasIcon from "../assets/chat.svg";
-import AtendenteIcon from "../assets/atendentes.svg";
-import AgenteIcon from "../assets/bot.svg";
-import ConexaoIcon from "../assets/conexao.svg";
-import ExpandIcon from "../assets/expand.svg";
+import ConversasIcon from '../assets/chat.svg';
+import AtendenteIcon from '../assets/atendentes.svg';
+import AgenteIcon from '../assets/bot.svg';
+import ConexaoIcon from '../assets/conexao.svg';
+import ExpandIcon from '../assets/expand.svg';
 
 const SidebarClosed = () => {
   const MenuItem = ({
@@ -18,7 +18,7 @@ const SidebarClosed = () => {
   }) => (
     <NavLink to={to}>
       {({ isActive }) => (
-        <div className={` MenuItem ${isActive ? "active-link" : ""} `}>
+        <div className={` MenuItem ${isActive ? 'active-link' : ''} `}>
           {children}
         </div>
       )}
@@ -32,15 +32,15 @@ const SidebarClosed = () => {
   };
 
   useEffect(() => {
-    const sidebarElement = document.querySelector(".sidebar");
-    const sidebarClosedElement = document.querySelector(".sidebarclosed");
+    const sidebarElement = document.querySelector('.sidebar');
+    const sidebarClosedElement = document.querySelector('.sidebarclosed');
     if (sidebarElement) {
       if (isSidebarOpen) {
-        sidebarElement.classList.add("sidebar-is-open");
-        sidebarClosedElement?.classList.add("sidebarclosed-is-open");
+        sidebarElement.classList.add('sidebar-is-open');
+        sidebarClosedElement?.classList.add('sidebarclosed-is-open');
       } else {
-        sidebarElement.classList.remove("sidebar-is-open");
-        sidebarClosedElement?.classList.remove("sidebarclosed-is-open");
+        sidebarElement.classList.remove('sidebar-is-open');
+        sidebarClosedElement?.classList.remove('sidebarclosed-is-open');
       }
     }
   }, [isSidebarOpen]);

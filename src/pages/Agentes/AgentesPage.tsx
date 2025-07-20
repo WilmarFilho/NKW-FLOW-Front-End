@@ -1,7 +1,7 @@
-import React from "react";
-import AgentCard from "../../components/Agentes/AgentCard/AgentCard";
-import { useAgents } from "../../hooks/useAgents";
-import "./agentesPage.css";
+import React from 'react';
+import AgentCard from '../../components/Agentes/AgentCard/AgentCard';
+import { useAgents } from '../../hooks/useAgents';
+import './agentesPage.css';
 
 const AgentesPage: React.FC = () => {
 

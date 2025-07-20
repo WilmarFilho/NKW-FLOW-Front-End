@@ -1,24 +1,24 @@
-import { NavLink, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { useAuth } from "../../../hooks/useAuth";
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useAuth } from '../../../hooks/useAuth';
 
-import "./sidebar.css";
+import './sidebar.css';
 
-import LogoIcon from "../assets/logo.svg";
-import ConversasIcon from "../assets/chat.svg";
-import AtendenteIcon from "../assets/atendentes.svg";
-import AgenteIcon from "../assets/bot.svg";
-import ConexaoIcon from "../assets/conexao.svg";
-import ConfigIcon from "../assets/config.svg";
-import AjudaIcon from "../assets/ajuda.svg";
-import ExpandIcon from "../assets/expand.svg";
-import LogoutIcon from "../assets/logout.svg";
+import LogoIcon from '../assets/logo.svg';
+import ConversasIcon from '../assets/chat.svg';
+import AtendenteIcon from '../assets/atendentes.svg';
+import AgenteIcon from '../assets/bot.svg';
+import ConexaoIcon from '../assets/conexao.svg';
+import ConfigIcon from '../assets/config.svg';
+import AjudaIcon from '../assets/ajuda.svg';
+import ExpandIcon from '../assets/expand.svg';
+import LogoutIcon from '../assets/logout.svg';
 
 const Sidebar = () => {
   const user = {
-    name: "Wilmar Filho",
-    email: "oftheguizo32@gmail.com", // Cuidado ao expor e-mails diretamente
-    avatarUrl: "https://avatars.githubusercontent.com/u/103720085?v=4", // URL do avatar
+    name: 'Wilmar Filho',
+    email: 'oftheguizo32@gmail.com', // Cuidado ao expor e-mails diretamente
+    avatarUrl: 'https://avatars.githubusercontent.com/u/103720085?v=4', // URL do avatar
   };
 
   const navigate = useNavigate();
@@ -26,7 +26,7 @@ const Sidebar = () => {
 
   const handleLogout = () => {
     logout();
-    navigate("/login");
+    navigate('/login');
   };
 
 
@@ -37,15 +37,15 @@ const Sidebar = () => {
   };
 
   useEffect(() => {
-    const sidebarElement = document.querySelector(".sidebar");
-    const sidebarClosedElement = document.querySelector(".sidebarclosed");
+    const sidebarElement = document.querySelector('.sidebar');
+    const sidebarClosedElement = document.querySelector('.sidebarclosed');
     if (sidebarElement) {
       if (isSidebarOpen) {
-        sidebarElement.classList.add("sidebar-is-open");
-        sidebarClosedElement?.classList.add("sidebarclosed-is-open");
+        sidebarElement.classList.add('sidebar-is-open');
+        sidebarClosedElement?.classList.add('sidebarclosed-is-open');
       } else {
-        sidebarElement.classList.remove("sidebar-is-open");
-        sidebarClosedElement?.classList.remove("sidebarclosed-is-open");
+        sidebarElement.classList.remove('sidebar-is-open');
+        sidebarClosedElement?.classList.remove('sidebarclosed-is-open');
       }
     }
   }, [isSidebarOpen]);
@@ -59,7 +59,7 @@ const Sidebar = () => {
   }) => (
     <NavLink to={to}>
       {({ isActive }) => (
-        <div className={` MenuItem ${isActive ? "active-link" : ""} `}>
+        <div className={` MenuItem ${isActive ? 'active-link' : ''} `}>
           {children}
         </div>
       )}
@@ -91,11 +91,11 @@ const Sidebar = () => {
       <nav className="suporte-menu">
         <h4>Suporte</h4>
         <MenuItem to="/configuracoes">
-          {" "}
+          {' '}
           <ConfigIcon /> Configuracoes
         </MenuItem>
         <MenuItem to="/ajuda">
-          {" "}
+          {' '}
           <AjudaIcon /> Ajuda
         </MenuItem>
       </nav>

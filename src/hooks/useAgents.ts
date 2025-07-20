@@ -41,7 +41,7 @@ export const useAgents = () => {
                 setError(null);
             })
             .catch(err => {
-                console.error("Falha ao buscar conexões:", err);
+                console.error('Falha ao buscar conexões:', err);
                 setError(err.message);
                 setAgents([]);
             })

@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { useSetRecoilState } from "recoil";
-import { helpChatState } from "../state/atom";
-import type { HelpChat } from "../types/helpChat";
-import axios from "axios";
+import { useState } from 'react';
+import { useSetRecoilState } from 'recoil';
+import { helpChatState } from '../state/atom';
+import type { HelpChat } from '../types/helpChat';
+import axios from 'axios';
 import { apiConfig } from '../config/api';
 
 export function useSendHelpMessage() {
@@ -11,7 +11,7 @@ export function useSendHelpMessage() {
 
   const sendMessage = async (text: string) => {
     const userMessage: HelpChat = {
-      from: "user",
+      from: 'user',
       content: { text },
     };
 
@@ -24,13 +24,13 @@ export function useSendHelpMessage() {
       });
 
       const systemMessage: HelpChat = {
-        from: "system",
+        from: 'system',
         content: { text: data.reply },
       };
 
       setMessages(prev => [...prev, systemMessage]);
-    } catch (err: any) {
-      setError(err.message || "Erro ao enviar mensagem.");
+    } catch (err) {
+      setError('Erro ao enviar mensagem.' + err);
     } 
   };
 

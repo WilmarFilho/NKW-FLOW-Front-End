@@ -66,7 +66,7 @@ export const useAttendants = () => {
         setError(null);
       })
       .catch(err => {
-        console.error("Falha ao buscar atendentes:", err);
+        console.error('Falha ao buscar atendentes:', err);
         setError(err.message);
       })
       .finally(() => {
@@ -80,8 +80,8 @@ export const useAttendants = () => {
       const newAttendant = await createAttendantInAPI(attendantData);
       setAttendants(current => [...current, newAttendant]);
       return newAttendant;
-    } catch (err: any) {
-      console.error("Falha ao criar atendente:", err);
+    } catch (err) {
+      console.error('Falha ao criar atendente:', err);
       // Lança o erro para que o componente possa tratá-lo (ex: mostrar um alerta)
       throw err;
     }
@@ -92,8 +92,8 @@ export const useAttendants = () => {
     try {
       await deleteAttendantFromAPI(id);
       setAttendants(current => current.filter(a => a.id !== id));
-    } catch (err: any) {
-      console.error("Falha ao deletar atendente:", err);
+    } catch (err) {
+      console.error('Falha ao deletar atendente:', err);
       throw err;
     }
   };

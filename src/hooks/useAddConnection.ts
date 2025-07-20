@@ -4,6 +4,13 @@ import { connectionsState } from '../state/atom';
 import type { Connection } from '../types/connection';
 import { apiConfig } from '../config/api';
 
+// Defina este tipo, por exemplo, logo abaixo dos seus imports
+interface ConnectionUpdatePayload {
+  event: 'connection.update';
+  state: 'open' | 'connecting' | 'closed'; // Seja específico nos valores possíveis
+  wuid: string;
+}
+
 export const useAddConnection = (onClose: () => void) => {
   const setConnections = useSetRecoilState(connectionsState);
   const [step, setStep] = useState<1 | 2>(1);
@@ -27,12 +34,12 @@ export const useAddConnection = (onClose: () => void) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ session: sessionName })
       });
-      if (!res.ok) throw new Error("Falha ao criar a sessão.");
+      if (!res.ok) throw new Error('Falha ao criar a sessão.');
       const data = await res.json();
       setQrCode(data.qr_code);
       setStep(2);
     } catch (err) {
-      setError("Não foi possível iniciar a conexão. Verifique o backend.");
+      setError('Não foi possível iniciar a conexão. Verifique o backend:  ' + err);
     }
   };
 
@@ -41,8 +48,18 @@ export const useAddConnection = (onClose: () => void) => {
     const eventSource = new EventSource(`${apiConfig.node}/webhook/events/${instanceName}`);
 
     eventSource.onmessage = (event) => {
-      const eventData: any = JSON.parse(event.data);
-      if (eventData.event === 'connection.update' && eventData.state === 'open') {
+      // 1. Faça o parse do JSON sem tipo por enquanto
+      const parsedData = JSON.parse(event.data);
+
+      // 2. Verifique se o evento é o que você espera
+      if (
+        parsedData &&
+        parsedData.event === 'connection.update' &&
+        parsedData.state === 'open'
+      ) {
+        // 3. Agora que você tem certeza, pode tratá-lo como o tipo correto
+        const eventData = parsedData as ConnectionUpdatePayload;
+
         const newConnection: Connection = {
           id: 1,
           nome: formData.name,

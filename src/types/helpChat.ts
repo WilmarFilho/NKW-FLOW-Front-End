@@ -3,6 +3,6 @@ export interface MessagesHelpChat {
 }
 
 export interface HelpChat {
-  from: "user" | "system";
+  from: 'user' | 'system';
   content: MessagesHelpChat;
 }

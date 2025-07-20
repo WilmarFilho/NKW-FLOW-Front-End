@@ -25,7 +25,7 @@ export default function AtendentesPage() {
       try {
         await removeAttendant(id);
       } catch (error) {
-        alert('Não foi possível excluir o atendente.');
+        alert('Não foi possível excluir o atendente.' + error);
       }
     }
   };
@@ -50,7 +50,7 @@ export default function AtendentesPage() {
       </div>
 
       <GenericTable<Attendant>
-        columns={["Nome", "Email", "Status", "Ações"]}
+        columns={['Nome', 'Email', 'Status', 'Ações']}
         data={attendants}
         renderRow={(conn, i) => (
           <div className="connection-row" key={i}>

@@ -1,5 +1,5 @@
-import type { JSX } from "react";
-import "./button.css";
+import type { JSX } from 'react';
+import './button.css';
 
 // Interface para as propriedades do botão
 interface ButtonProps {

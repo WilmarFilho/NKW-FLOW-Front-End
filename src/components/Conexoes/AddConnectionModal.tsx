@@ -1,8 +1,8 @@
 // src/components/Modais/AddConnectionModal.tsx
-import type { JSX } from "react";
+import type { JSX } from 'react';
 import { useRecoilState } from 'recoil';
 import { addConnectionModalState } from '../../state/atom';
-import Modal from "../Gerais/Modal/Modal";
+import Modal from '../Gerais/Modal/Modal';
 import { useAddConnection } from '../../hooks/useAddConnection';
 
 export default function AddConnectionModal(): JSX.Element | null {
@@ -27,7 +27,7 @@ export default function AddConnectionModal(): JSX.Element | null {
     <Modal
       isOpen={modalState.isOpen}
       onClose={handleClose}
-      title={step === 1 ? "Adicionar Nova Conexão" : "Conecte seu WhatsApp"}
+      title={step === 1 ? 'Adicionar Nova Conexão' : 'Conecte seu WhatsApp'}
     >
       {step === 1 && (
         <form onSubmit={handleStartSession} className="connection-form">

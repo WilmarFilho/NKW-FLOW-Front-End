@@ -1,10 +1,10 @@
 import { addConnectionModalState } from '../../state/atom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import Button from "../../components/Gerais/Buttons/Button";
-import AddConnectionModal from "../../components/Conexoes/AddConnectionModal";
-import GenericTable from "../../components/Gerais/Tables/GenericTable";
-import type { Connection } from "../../types/connection";
-import "./conexoes.css";
+import Button from '../../components/Gerais/Buttons/Button';
+import AddConnectionModal from '../../components/Conexoes/AddConnectionModal';
+import GenericTable from '../../components/Gerais/Tables/GenericTable';
+import type { Connection } from '../../types/connection';
+import './conexoes.css';
 import { useConnectionsComStatus } from '../../hooks/useConnectionsComStatus';
 
 export default function ConexoesPage() {
@@ -36,7 +36,7 @@ export default function ConexoesPage() {
       </div>
 
       <GenericTable<Connection>
-        columns={["Nome", "Número", "Agente", "Status"]}
+        columns={['Nome', 'Número', 'Agente', 'Status']}
         data={connections}
         renderRow={(conn, i) => (
           <div className="connection-row" key={i}>
@@ -44,9 +44,9 @@ export default function ConexoesPage() {
             <div>{conn.numero}</div>
             <div className="agent-select">{conn.agente}</div>
             <div
-              className={`status-chip ${conn.status ? "active" : "inactive"}`}
+              className={`status-chip ${conn.status ? 'active' : 'inactive'}`}
             >
-              {conn.status ? "Ativado" : "Desativado"}
+              {conn.status ? 'Ativado' : 'Desativado'}
             </div>
           </div>
         )}

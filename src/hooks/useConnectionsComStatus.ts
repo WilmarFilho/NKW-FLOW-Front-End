@@ -31,7 +31,7 @@ export const useConnectionsComStatus = () => {
         setError(null);
       })
       .catch((err) => {
-        console.error("Falha ao buscar conexões:", err);
+        console.error('Falha ao buscar conexões:', err);
         setError(err.message);
         setConnections([]);
       })
