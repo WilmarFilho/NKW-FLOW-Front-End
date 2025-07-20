@@ -4,9 +4,11 @@ import { useRecoilState } from 'recoil';
 import { addConnectionModalState } from '../../state/atom';
 import Modal from '../Gerais/Modal/Modal';
 import { useAddConnection } from '../../hooks/useAddConnection';
+import { useAgents } from '../../hooks/useAgents';
 
 export default function AddConnectionModal(): JSX.Element | null {
   const [modalState, setModalState] = useRecoilState(addConnectionModalState);
+  const { agents, loading: isLoadingAgents, error: agentsError } = useAgents();
 
   const handleClose = () => {
     setModalState({ isOpen: false });
@@ -38,10 +40,21 @@ export default function AddConnectionModal(): JSX.Element | null {
           </div>
           <div className="form-group">
             <label htmlFor="agent">Agente IA</label>
-            <select id="agent" value={formData.agent} onChange={handleInputChange}>
-              <option>Recepcionista</option>
-              <option>Vendedor</option>
-              <option>Suporte</option>
+            {/* 3. ATUALIZE O SELECT PARA SER DINÂMICO */}
+            <select id='agent' value={formData.agent} onChange={handleInputChange} disabled={isLoadingAgents}>
+              {isLoadingAgents && <option>Carregando agentes...</option>}
+              {agentsError && <option>Erro ao carregar agentes</option>}
+              {!isLoadingAgents && !agentsError && (
+                <>
+                  {/* É uma boa prática ter uma opção default */}
+                  <option value="" disabled>Selecione um agente</option>
+                  {agents.map((agent) => (
+                    <option key={agent.id} value={agent.tipo_de_agente}>
+                      {agent.tipo_de_agente}
+                    </option>
+                  ))}
+                </>
+              )}
             </select>
           </div>
           <button type="submit" className="submit-button">Gerar QR Code</button>

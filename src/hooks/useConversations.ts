@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 //import { useRecoilState } from 'recoil';
 //import { agentsState } from '../state/atom';
-import type { Contact, Message } from '../types/conversation';
+import type { Chat } from '../types/chats';
+import type { Message } from '../types/message';
 import { apiConfig } from '../config/api';
 
 /**
  * Busca todas as conversas ativas na API.
  */
-const fetchConversationsFromAPI = async (): Promise<Contact[]> => {
+const fetchConversationsFromAPI = async (): Promise<Chat[]> => {
     const response = await fetch(`${apiConfig.node}/conversations`);
     
     if (!response.ok) {
@@ -33,7 +34,7 @@ const fetchMessagesFromAPI = async (conversationId: string): Promise<Message[]> 
 };
 
 export const useConversations = () => {
-    const [conversations, setConversations] = useState<Contact[]>([]);
+    const [conversations, setConversations] = useState<Chat[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [selectedConversation, setSelectedConversation] = useState<string | null>(null);

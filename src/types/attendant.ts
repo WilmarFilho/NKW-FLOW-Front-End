@@ -1,9 +1,8 @@
 export interface Attendant {
-  id: number;
-  nome: string;
-  email: string;
-  ativo: boolean;
-  criado_em?: string;
+  id: string;
+  status: boolean;
+  user_id: string;
+  user_admin_id: string;
 }
 
 export interface AttendantInput {

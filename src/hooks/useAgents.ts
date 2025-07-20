@@ -8,13 +8,14 @@ import { apiConfig } from '../config/api';
  * Busca todas as conexões ativas na API.
  */
 const fetchAgentsFromAPI = async (): Promise<Agent[]> => {
-    const response = await fetch(`${apiConfig.node}/agentes`);
+    const response = await fetch(`${apiConfig.node}/agents`);
 
     if (!response.ok) {
         const errorData = await response.json().catch(() => ({ message: 'Erro desconhecido no servidor' }));
         throw new Error(errorData.message || 'Falha ao buscar os agentes');
     }
-    return response.json();
+    const data = await response.json();
+    return data;
 };
 
 

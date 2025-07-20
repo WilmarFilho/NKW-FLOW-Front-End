@@ -7,6 +7,8 @@ const AgentesPage: React.FC = () => {
 
   const { agents, loading, error } = useAgents();
 
+  
+
   if (loading) {
     return <div className="feedback-message">Carregando agentes...</div>;
   }
@@ -27,13 +29,15 @@ const AgentesPage: React.FC = () => {
       <div className="agents-list">
 
         {agents.map((agent) => (
+          
           <AgentCard
             key={agent.id} 
-            name={agent.nome}
+            name={agent.tipo_de_agente}
             description={agent.descricao}
             
           />
-        ))}
+          
+        )) }
 
       </div>
     </div>

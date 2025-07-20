@@ -1,8 +1,9 @@
 export interface Connection {
-  id: number;
+  id: string;
+  user_id: string;
   nome: string;
   numero: string;
-  agente: string;
+  agente_id: string;
   status: boolean;
-  instanceName: string;
+  ultima_atualizacao: string;
 }
