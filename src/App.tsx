@@ -1,36 +1,54 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-//Layout
+import { RecoilRoot } from 'recoil';
+
 import Layout from './components/Layout/Layout';
-//Paginas
+import { ProtectedRoute, PublicRoute } from './routes/ProtectedRoute';
+
 import ConversasPage from './pages/Conversas/ConversasPage';
 import AtendentesPage from './pages/Atendentes/AtendentesPage';
 import AgentesPage from './pages/Agentes/AgentesPage';
 import ConexoesPage from './pages/Conexao/ConexoesPage';
 import ConfiguracoesPage from './pages/Configuracoes/ConfiguracoesPage';
 import AjudaPage from './pages/Ajuda/AjudaPage';
-//Estilo
-import './main.css'
+import LoginPage from './pages/login';
+
+import './main.css';
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        
-        <Route path="/" element={<Layout />}>
-          {/* Rota padrão (index) para / será ConexoesPage */}
-          <Route index element={<Navigate to="/conexoes" replace />} />
-          <Route path="conversas" element={<ConversasPage />} />
-          <Route path="atendentes" element={<AtendentesPage />} />
-          <Route path="agentes" element={<AgentesPage />} />
-          <Route path="conexoes" element={<ConexoesPage />} />
-          <Route path="configuracoes" element={<ConfiguracoesPage />} />
-          <Route path="ajuda" element={<AjudaPage />} />
-        </Route>
+    <RecoilRoot>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path="/login"
+            element={
+              <PublicRoute>
+                <LoginPage />
+              </PublicRoute>
+            }
+          />
 
-        <Route path="*" element={<Navigate to="/conexoes" replace />} />
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Layout />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<Navigate to="/conexoes" replace />} />
+            <Route path="conversas" element={<ConversasPage />} />
+            <Route path="atendentes" element={<AtendentesPage />} />
+            <Route path="agentes" element={<AgentesPage />} />
+            <Route path="conexoes" element={<ConexoesPage />} />
+            <Route path="configuracoes" element={<ConfiguracoesPage />} />
+            <Route path="ajuda" element={<AjudaPage />} />
+          </Route>
 
-      </Routes>
-    </BrowserRouter>
+          <Route path="*" element={<Navigate to="/login" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </RecoilRoot>
   );
 }
 

@@ -33,3 +33,18 @@ export const helpChatState = atom<HelpChat[]>({
   key: "helpChatState",
   default: [],
 });
+
+// Autenticação
+
+export const authTokenState = atom<string | null>({
+  key: 'authTokenState',
+  default: localStorage.getItem('token'),
+  effects: [
+    ({ onSet }) => {
+      onSet((token) => {
+        if (token) localStorage.setItem('token', token);
+        else localStorage.removeItem('token');
+      });
+    },
+  ],
+});
