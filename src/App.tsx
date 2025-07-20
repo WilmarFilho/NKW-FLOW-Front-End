@@ -10,7 +10,7 @@ import AgentesPage from './pages/Agentes/AgentesPage';
 import ConexoesPage from './pages/Conexao/ConexoesPage';
 import ConfiguracoesPage from './pages/Configuracoes/ConfiguracoesPage';
 import AjudaPage from './pages/Ajuda/AjudaPage';
-import LoginPage from './pages/login';
+import LoginPage from './pages/Login/Login';
 
 import './main.css';
 

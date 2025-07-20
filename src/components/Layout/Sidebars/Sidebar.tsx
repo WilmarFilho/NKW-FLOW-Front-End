@@ -1,5 +1,7 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useAuth } from "../../../hooks/useAuth";
+
 import "./sidebar.css";
 
 import LogoIcon from "../assets/logo.svg";
@@ -18,6 +20,15 @@ const Sidebar = () => {
     email: "oftheguizo32@gmail.com", // Cuidado ao expor e-mails diretamente
     avatarUrl: "https://avatars.githubusercontent.com/u/103720085?v=4", // URL do avatar
   };
+
+  const navigate = useNavigate();
+  const { logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -102,9 +113,10 @@ const Sidebar = () => {
           <div className="MenuItem" onClick={toggleSidebar}>
             <ExpandIcon />
           </div>
-          <MenuItem to="/">
+          <div className="MenuItem" onClick={handleLogout}>
             <LogoutIcon />
-          </MenuItem>
+          </div>
+          
         </div>
       </div>
     </div>
