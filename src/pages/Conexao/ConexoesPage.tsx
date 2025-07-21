@@ -42,7 +42,7 @@ export default function ConexoesPage() {
           <div className="connection-row" key={i}>
             <div>{conn.nome}</div>
             <div>{conn.numero}</div>
-            <div className="agent-select">{conn.agente}</div>
+             <div className="agent-select">{conn.agente.tipo_de_agente}</div>
             <div
               className={`status-chip ${conn.status ? 'active' : 'inactive'}`}
             >

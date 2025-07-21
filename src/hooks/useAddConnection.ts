@@ -7,6 +7,7 @@ import { apiConfig } from '../config/api';
 // Defina este tipo, por exemplo, logo abaixo dos seus imports
 interface ConnectionUpdatePayload {
   event: 'connection.update';
+  connection: Connection;
   state: 'open' | 'connecting' | 'closed'; // Seja específico nos valores possíveis
   wuid: string;
 }
@@ -14,27 +15,36 @@ interface ConnectionUpdatePayload {
 export const useAddConnection = (onClose: () => void) => {
   const setConnections = useSetRecoilState(connectionsState);
   const [step, setStep] = useState<1 | 2>(1);
-  const [formData, setFormData] = useState({ name: '', agent: 'Recepcionista' });
+  const [formData, setFormData] = useState({ nome: '', agent: '' });
   const [qrCode, setQrCode] = useState<string | null>(null);
-  const [instanceName, setInstanceName] = useState<string>('');
   const [error, setError] = useState<string>('');
+  const [connectionName, setConnectionName] = useState<string>('');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { id, value } = e.target;
     setFormData((prev) => ({ ...prev, [id]: value }));
+
+    setConnectionName(formData.nome + 'SENHA');
   };
 
   const handleStartSession = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const sessionName = `${formData.name.toLowerCase().replace(/\s/g, '_')}_${Date.now()}`;
-    setInstanceName(sessionName);
+    
     try {
-      const res = await fetch(`${apiConfig.node}/connections/create`, {
+      const res = await fetch(`${apiConfig.node}/connections`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ session: sessionName })
+        body: JSON.stringify({
+          user_id: 'b9fc3360-78d3-43fd-b819-fce3173d1fc8',
+          nome: connectionName,
+          status: false,
+          agente_id: formData.agent,
+        })
+
       });
+      
       if (!res.ok) throw new Error('Falha ao criar a sessão.');
+      
       const data = await res.json();
       setQrCode(data.qr_code);
       setStep(2);
@@ -44,8 +54,8 @@ export const useAddConnection = (onClose: () => void) => {
   };
 
   useEffect(() => {
-    if (step !== 2 || !instanceName) return;
-    const eventSource = new EventSource(`${apiConfig.node}/webhook/events/${instanceName}`);
+    if (step !== 2 || !connectionName) return;
+    const eventSource = new EventSource(`${apiConfig.node}/connections/webhook/events/${connectionName}`);
 
     eventSource.onmessage = (event) => {
       // 1. Faça o parse do JSON sem tipo por enquanto
@@ -58,16 +68,10 @@ export const useAddConnection = (onClose: () => void) => {
         parsedData.state === 'open'
       ) {
         // 3. Agora que você tem certeza, pode tratá-lo como o tipo correto
+        console.log(parsedData)
         const eventData = parsedData as ConnectionUpdatePayload;
+        const newConnection = eventData.connection;
 
-        const newConnection: Connection = {
-          id: 1,
-          nome: formData.name,
-          agente: formData.agent,
-          numero: eventData.wuid.split('@')[0],
-          status: true,
-          instanceName,
-        };
         setConnections((prev) => [...prev, newConnection]);
         onClose();
         eventSource.close();
@@ -80,7 +84,7 @@ export const useAddConnection = (onClose: () => void) => {
     };
 
     return () => eventSource.close();
-  }, [step, instanceName, formData, setConnections, onClose]);
+  }, [step, connectionName, formData, setConnections, onClose]);
 
   return {
     step,

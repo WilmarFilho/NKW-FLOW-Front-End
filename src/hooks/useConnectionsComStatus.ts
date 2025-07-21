@@ -40,41 +40,42 @@ export const useConnectionsComStatus = () => {
 
   // --- 2. Gerenciar listeners SSE em tempo real ---
   useEffect(() => {
-    const currentInstances = new Set(connections.map(c => c.instanceName));
+    const currentInstances = new Set(connections.map(c => c.nome));
 
     connections.forEach(conn => {
-      if (!activeListeners.current.has(conn.instanceName)) {
-        console.log(`[Monitor] Criando listener para ${conn.instanceName}`);
-        const eventSource = new EventSource(`${apiConfig.node}/webhook/events/${conn.instanceName}`);
+      if (!activeListeners.current.has(conn.nome)) {
+        console.log(`[Monitor] Criando listener para ${conn.nome}`);
+        const eventSource = new EventSource(`${apiConfig.node}/connections/webhook/events/${conn.nome}`);
 
         eventSource.onmessage = (event) => {
           const eventData = JSON.parse(event.data);
           if (eventData.event === 'connection.update') {
             const isConnected = eventData.state === 'open';
+            console.log(eventData)
             if (!isConnected) {
-              console.log(`[Monitor] ${conn.instanceName} desconectado. Atualizando lista.`);
-              setConnections(prev => prev.filter(c => c.instanceName !== conn.instanceName));
+              console.log(`[Monitor] ${conn.nome} desconectado. Atualizando lista.`);
+              setConnections(prev => prev.filter(c => c.nome !== conn.nome));
             }
           }
         };
 
         eventSource.onerror = () => {
-          console.warn(`[Monitor] Erro no SSE de ${conn.instanceName}. Removendo.`);
-          setConnections(prev => prev.filter(c => c.instanceName !== conn.instanceName));
+          console.warn(`[Monitor] Erro no SSE de ${conn.nome}. Removendo.`);
+          setConnections(prev => prev.filter(c => c.nome !== conn.nome));
           eventSource.close();
-          activeListeners.current.delete(conn.instanceName);
+          activeListeners.current.delete(conn.nome);
         };
 
-        activeListeners.current.set(conn.instanceName, eventSource);
+        activeListeners.current.set(conn.nome, eventSource);
       }
     });
 
     // Encerrar listeners antigos
-    activeListeners.current.forEach((es, instanceName) => {
-      if (!currentInstances.has(instanceName)) {
-        console.log(`[Monitor] Encerrando listener de ${instanceName}`);
+    activeListeners.current.forEach((es, nome) => {
+      if (!currentInstances.has(nome)) {
+        console.log(`[Monitor] Encerrando listener de ${nome}`);
         es.close();
-        activeListeners.current.delete(instanceName);
+        activeListeners.current.delete(nome);
       }
     });
 

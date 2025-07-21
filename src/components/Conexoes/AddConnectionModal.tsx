@@ -36,7 +36,7 @@ export default function AddConnectionModal(): JSX.Element | null {
           <p>Preencha os dados para gerar o QR Code.</p>
           <div className="form-group">
             <label htmlFor="name">Nome da Conexão</label>
-            <input id="name" type="text" value={formData.name} onChange={handleInputChange} placeholder="Ex: WhatsApp da Loja" required />
+            <input id="nome" type="text" value={formData.nome} onChange={handleInputChange} placeholder="Ex: WhatsApp da Loja" required />
           </div>
           <div className="form-group">
             <label htmlFor="agent">Agente IA</label>
@@ -47,9 +47,9 @@ export default function AddConnectionModal(): JSX.Element | null {
               {!isLoadingAgents && !agentsError && (
                 <>
                   {/* É uma boa prática ter uma opção default */}
-                  <option value="" disabled>Selecione um agente</option>
+                  <option value="" >Selecione um agente</option>
                   {agents.map((agent) => (
-                    <option key={agent.id} value={agent.tipo_de_agente}>
+                    <option key={agent.id} value={agent.id}>
                       {agent.tipo_de_agente}
                     </option>
                   ))}

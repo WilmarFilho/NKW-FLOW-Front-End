@@ -20,7 +20,7 @@ export default function AtendentesPage() {
     return <div className="feedback-message error">Erro ao carregar: {error}</div>;
   }
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: string) => {
     if (window.confirm('Tem certeza que deseja excluir este atendente?')) {
       try {
         await removeAttendant(id);
@@ -54,9 +54,9 @@ export default function AtendentesPage() {
         data={attendants}
         renderRow={(conn, i) => (
           <div className="connection-row" key={i}>
-            <div>{conn.nome}</div>
-            <div>{conn.email}</div>
-            <div className="agent-select">{conn.ativo}</div>
+            <div>{conn.user.nome}</div>
+            <div>{conn.user.email}</div>
+            <div>{conn.status ? 'Ativo' : 'Inativo'}</div>
             <div>
               <button className="delete-button" onClick={() => handleDelete(conn.id)}>Excluir</button>
             </div>
