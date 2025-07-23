@@ -5,11 +5,12 @@ interface ContactListItemProps {
   name: string;
   message: string;
   avatar: string;
+  onClick: () => void;
 }
 
-const ContactListItem: React.FC<ContactListItemProps> = ({ name, message, avatar }) => {
+const ContactListItem: React.FC<ContactListItemProps> = ({ name, message, avatar, onClick }) => {
   return (
-    <div className="contact-item">
+    <div onClick={onClick} className="contact-item">
       <img src={avatar} alt={name} className="avatar" />
       <div className="contact-texts">
         <strong>{name}</strong>
