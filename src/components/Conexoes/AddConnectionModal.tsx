@@ -1,4 +1,3 @@
-// src/components/Modais/AddConnectionModal.tsx
 import type { JSX } from 'react';
 import { useRecoilState } from 'recoil';
 import { addConnectionModalState } from '../../state/atom';

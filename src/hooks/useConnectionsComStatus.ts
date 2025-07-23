@@ -1,4 +1,3 @@
-// src/hooks/useConnectionsComStatus.ts
 import { useEffect, useRef, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { connectionsState } from '../state/atom';

@@ -4,9 +4,6 @@ import { agentsState } from '../state/atom';
 import type { Agent } from '../types/agent';
 import { apiConfig } from '../config/api';
 
-/**
- * Busca todas as conexões ativas na API.
- */
 const fetchAgentsFromAPI = async (): Promise<Agent[]> => {
     const response = await fetch(`${apiConfig.node}/agents`);
 
@@ -18,18 +15,13 @@ const fetchAgentsFromAPI = async (): Promise<Agent[]> => {
     return data;
 };
 
-
-// =======================================================
-// Hook Personalizado (Apenas para consulta)
-// =======================================================
-
 export const useAgents = () => {
     const [agents, setAgents] = useRecoilState(agentsState);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        // Evita buscar novamente se o estado já tiver sido populado
+        
         if (agents.length > 0) {
             setLoading(false);
             return;
@@ -49,10 +41,9 @@ export const useAgents = () => {
             .finally(() => {
                 setLoading(false);
             });
-        // A dependência [setConnections] garante que isso rode apenas uma vez.
+        
     }, [setAgents, agents.length]);
 
-    // Retorna apenas os dados e os estados, sem funções de modificação.
     return {
         agents,
         loading,

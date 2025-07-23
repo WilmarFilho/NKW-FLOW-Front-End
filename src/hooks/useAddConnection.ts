@@ -4,11 +4,10 @@ import { connectionsState } from '../state/atom';
 import type { Connection } from '../types/connection';
 import { apiConfig } from '../config/api';
 
-// Defina este tipo, por exemplo, logo abaixo dos seus imports
 interface ConnectionUpdatePayload {
   event: 'connection.update';
   connection: Connection;
-  state: 'open' | 'connecting' | 'closed'; // Seja específico nos valores possíveis
+  state: 'open' | 'connecting' | 'closed'; 
   wuid: string;
 }
 
@@ -23,7 +22,6 @@ export const useAddConnection = (onClose: () => void) => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { id, value } = e.target;
     setFormData((prev) => ({ ...prev, [id]: value }));
-
     setConnectionName(formData.nome + 'SENHA');
   };
 
@@ -58,7 +56,8 @@ export const useAddConnection = (onClose: () => void) => {
     const eventSource = new EventSource(`${apiConfig.node}/connections/webhook/events/${connectionName}`);
 
     eventSource.onmessage = (event) => {
-      // 1. Faça o parse do JSON sem tipo por enquanto
+
+      // 1. Parse do JSON sem tipo por enquanto
       const parsedData = JSON.parse(event.data);
 
       // 2. Verifique se o evento é o que você espera
@@ -67,7 +66,6 @@ export const useAddConnection = (onClose: () => void) => {
         parsedData.event === 'connection.update' &&
         parsedData.state === 'open'
       ) {
-        // 3. Agora que você tem certeza, pode tratá-lo como o tipo correto
         console.log(parsedData)
         const eventData = parsedData as ConnectionUpdatePayload;
         const newConnection = eventData.connection;

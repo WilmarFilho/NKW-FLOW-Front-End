@@ -33,11 +33,10 @@ export default function AtendentesPage() {
   const handleSaveAttendant = async (data: AttendantInput) => {
     try {
       await addAttendant(data);
-      setIsModalOpen(false); // Fecha o modal em caso de sucesso
+      setIsModalOpen(false); 
     } catch (error) {
       alert('Não foi possível cadastrar o atendente.');
-      // Não fechamos o modal para o usuário poder corrigir os dados
-      throw error; // Propaga o erro para o formulário saber que falhou
+      throw error; 
     }
   };
 
