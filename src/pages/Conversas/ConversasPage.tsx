@@ -4,7 +4,8 @@ import Tag from '../../components/Conversas/Tags/Tag';
 import ContactListItem from '../../components/Conversas/ContactList/ContactListItem';
 import MessageBubble from '../../components/Conversas/MessageBubble/MessageBubble';
 import ChatInput from '../../components/Gerais/Inputs/ChatInput';
-import useConversations from '../../hooks/useConversations';
+import useChats from '../../hooks/useChats';
+import useMessages from '../../hooks/useMessages';
 import './conversas.css';
 import { Chat } from '../../types/chats';
 import { Message } from '../../types/message';
@@ -22,15 +23,14 @@ const ConversasPage: React.FC = () => {
         numero_destino: activeChat.connection.numero,
         mensagem: text
       });
-
     } catch (err) {
       console.error('Erro ao enviar', err);
     }
   };
 
   const [activeChat, setActiveChat] = React.useState<Chat | null>(null);
-
-  const { conversations } = useConversations('b9fc3360-78d3-43fd-b819-fce3173d1fc8');
+  const { chats } = useChats('b9fc3360-78d3-43fd-b819-fce3173d1fc8');
+  const { messages } = useMessages(activeChat?.id || null);
 
 
 
@@ -51,7 +51,7 @@ const ConversasPage: React.FC = () => {
         </div>
         <div className="contacts-list">
 
-          {conversations.map((chat) => {
+          {chats.map((chat) => {
             const isActive = activeChat?.id === chat.id;
 
             return (
@@ -59,7 +59,7 @@ const ConversasPage: React.FC = () => {
                 classname={isActive ? 'contact-item active-contact' : 'contact-item'}
                 key={chat.id}
                 name={chat.contato_nome}
-                message={chat.messages[chat.messages.length - 1]?.mensagem}
+                message='oi'
                 avatar="https://i.pravatar.cc/150"
                 onClick={() => setActiveChat(chat)}
               />
@@ -77,7 +77,7 @@ const ConversasPage: React.FC = () => {
 
           <ContactListItem
             classname='contact-item'
-            key='A'
+            key='SA'
             name='Daniel Valadares'
             message='Vocês vende oque?'
             avatar="https://i.pravatar.cc/150"
@@ -86,7 +86,7 @@ const ConversasPage: React.FC = () => {
 
           <ContactListItem
             classname='contact-item'
-            key='A'
+            key='AQ'
             name='Daniel Valadares'
             message='Vocês vende oque?'
             avatar="https://i.pravatar.cc/150"
@@ -95,7 +95,7 @@ const ConversasPage: React.FC = () => {
 
           <ContactListItem
             classname='contact-item'
-            key='A'
+            key='CCA'
             name='Daniel Valadares'
             message='Vocês vende oque?'
             avatar="https://i.pravatar.cc/150"
@@ -110,7 +110,7 @@ const ConversasPage: React.FC = () => {
       <div className="right-panel">
         <div className="messages">
           {activeChat ? (
-            activeChat.messages.map((msg: Message, index: number) => (
+            messages.map((msg: Message, index: number) => (
               <MessageBubble
                 key={index}
                 text={msg.mensagem}

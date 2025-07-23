@@ -1,5 +1,4 @@
 import { Connection } from './connection';
-import { Message } from './message';
 
 export interface Chat {
   id: string;
@@ -10,7 +9,6 @@ export interface Chat {
   foto_perfil?: string;
   ultima_atualizacao: string;
   connection: Connection;
-  messages: Message[];
 }
 
 
