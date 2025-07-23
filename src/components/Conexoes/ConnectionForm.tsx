@@ -28,11 +28,10 @@ export default function AddConnectionModal(): JSX.Element | null {
     <Modal
       isOpen={modalState.isOpen}
       onClose={handleClose}
-      title={step === 1 ? 'Adicionar Nova Conexão' : 'Conecte seu WhatsApp'}
+      title={step === 1 ? 'Preencha para gerar o QR Code' : 'Conecte seu WhatsApp'}
     >
       {step === 1 && (
         <form onSubmit={handleStartSession} className="connection-form">
-          <p>Preencha os dados para gerar o QR Code.</p>
           <div className="form-group">
             <label htmlFor="name">Nome da Conexão</label>
             <input id="nome" type="text" value={formData.nome} onChange={handleInputChange} placeholder="Ex: WhatsApp da Loja" required />

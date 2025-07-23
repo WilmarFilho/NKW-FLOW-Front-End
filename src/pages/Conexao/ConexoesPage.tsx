@@ -1,7 +1,7 @@
 import { addConnectionModalState } from '../../state/atom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import Button from '../../components/Gerais/Buttons/Button';
-import AddConnectionModal from '../../components/Conexoes/AddConnectionModal';
+import ConnectionForm from '../../components/Conexoes/ConnectionForm';
 import GenericTable from '../../components/Gerais/Tables/GenericTable';
 import type { Connection } from '../../types/connection';
 import './conexoes.css';
@@ -59,7 +59,7 @@ export default function ConexoesPage() {
 
 
 
-      {isOpen && <AddConnectionModal />}
+      {isOpen && <ConnectionForm />}
 
     </div>
   );

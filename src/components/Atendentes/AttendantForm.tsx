@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import type { AttendantInput } from '../../types/attendant';
-import './attendantForm.css'; 
 
 interface AttendantFormProps {
   onSave: (data: AttendantInput) => Promise<void>; // Recebe a função de salvar
@@ -45,10 +44,9 @@ export default function AttendantForm({ onSave, onClose }: AttendantFormProps) {
         <input id="senha" type="password" placeholder="Mínimo 6 caracteres" value={formData.senha} onChange={handleInputChange} required />
       </div>
       <div className="form-actions">
-        <button type="button" onClick={onClose} className="cancel-button">Cancelar</button>
-        <button type="submit" className="save-button" disabled={isSubmitting}>
-          {isSubmitting ? 'Salvando...' : 'Salvar'}
-        </button>
+        <button type="submit" className="submit-button">{isSubmitting ? 'Salvando...' : 'Salvar'}</button>
+        
+        
       </div>
     </form>
   );
