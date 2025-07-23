@@ -32,6 +32,8 @@ const ConversasPage: React.FC = () => {
 
   const { conversations } = useConversations('b9fc3360-78d3-43fd-b819-fce3173d1fc8');
 
+
+
   return (
     <div className="conversations-container">
       <div className="left-panel">
@@ -44,19 +46,64 @@ const ConversasPage: React.FC = () => {
             'Juridico',
 
           ].map((t, i) => (
-            <Tag key={i} label={t} active={i === 0} />
+            <Tag key={i} label={t} active={false} />
           ))}
         </div>
         <div className="contacts-list">
-          {conversations.map((chat) => (
-            <ContactListItem
-              key={chat.id}
-              name={chat.contato_nome}
-              message={chat.messages[chat.messages.length - 1]?.mensagem}
-              avatar="https://i.pravatar.cc/150"
-              onClick={() => setActiveChat(chat)}
-            />
-          ))}
+
+          {conversations.map((chat) => {
+            const isActive = activeChat?.id === chat.id;
+
+            return (
+              <ContactListItem
+                classname={isActive ? 'contact-item active-contact' : 'contact-item'}
+                key={chat.id}
+                name={chat.contato_nome}
+                message={chat.messages[chat.messages.length - 1]?.mensagem}
+                avatar="https://i.pravatar.cc/150"
+                onClick={() => setActiveChat(chat)}
+              />
+            );
+          })}
+
+          <ContactListItem
+            classname='contact-item'
+            key='A'
+            name='Daniel Valadares'
+            message='Vocês vende oque?'
+            avatar="https://i.pravatar.cc/150"
+            onClick={() => console.log('oi')}
+          />
+
+          <ContactListItem
+            classname='contact-item'
+            key='A'
+            name='Daniel Valadares'
+            message='Vocês vende oque?'
+            avatar="https://i.pravatar.cc/150"
+            onClick={() => console.log('oi')}
+          />
+
+          <ContactListItem
+            classname='contact-item'
+            key='A'
+            name='Daniel Valadares'
+            message='Vocês vende oque?'
+            avatar="https://i.pravatar.cc/150"
+            onClick={() => console.log('oi')}
+          />
+
+          <ContactListItem
+            classname='contact-item'
+            key='A'
+            name='Daniel Valadares'
+            message='Vocês vende oque?'
+            avatar="https://i.pravatar.cc/150"
+            onClick={() => console.log('oi')}
+          />
+
+
+
         </div>
       </div>
 

@@ -33,10 +33,10 @@ export default function AtendentesPage() {
   const handleSaveAttendant = async (data: AttendantInput) => {
     try {
       await addAttendant(data);
-      setIsModalOpen(false); 
+      setIsModalOpen(false);
     } catch (error) {
       alert('Não foi possível cadastrar o atendente.');
-      throw error; 
+      throw error;
     }
   };
 
@@ -44,8 +44,14 @@ export default function AtendentesPage() {
     <div className="connections-container">
 
       <div className="connections-header">
-        <h2>Seus atendentes</h2>
-        <h3>Verifique seus atendentes atuais, adicione ou desative…</h3>
+        <div>
+          <h2>Seus atendentes</h2>
+          <h3>Verifique seus atendentes atuais, adicione ou desative…</h3>
+        </div>
+
+        <Button label="Adicionar Atendente" onClick={() => setIsModalOpen(true)} />
+
+
       </div>
 
       <GenericTable<Attendant>
@@ -63,9 +69,7 @@ export default function AtendentesPage() {
         )}
       />
 
-      <div className="button-container">
-        <Button label="Adicionar Atendente" onClick={() => setIsModalOpen(true)} />
-      </div>
+
 
       <Modal
         isOpen={isModalOpen}

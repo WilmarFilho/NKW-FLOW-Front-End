@@ -2,6 +2,12 @@
   display: flex;
   gap: 32px;
   flex-direction: column;
+  height: 100%;
+}
+.connections-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 

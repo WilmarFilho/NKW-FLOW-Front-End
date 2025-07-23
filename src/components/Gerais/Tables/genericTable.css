@@ -5,28 +5,31 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  height: 100%;
 }
+
+.table-header,
+.connection-row,
+.attendant-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr; /* N colunas fixas */
+  align-items: center;
+  height: 50px;
+  gap: 12px;
+}
+
+.table-header div,
+.connection-row div,
+.attendant-row div {
+  text-align: start;
+}
+
 .table-header {
   padding-bottom: 12px;
   margin-bottom: 12px;
   border-bottom: 1px solid #ffffff82;
 }
-.table-header div,
-.connection-row div,
-.attendant-row div {
-  flex-grow: 1;
-  max-width: 150px;
-  min-width: 100px;
-  text-align: start;
-}
-.table-header,
-.connection-row,
-.attendant-row {
-  display: flex;
-  height: 50px;
-  justify-content: start;
-  align-items: center;
-}
+
 .attendant-row .email {
   color: #8a8fa3;
 }

@@ -11,8 +11,8 @@ export default function ConexoesPage() {
 
   const { connections, loading, error } = useConnectionsComStatus();
   const setModalState = useSetRecoilState(addConnectionModalState);
-  const { isOpen } = useRecoilValue(addConnectionModalState); 
-  
+  const { isOpen } = useRecoilValue(addConnectionModalState);
+
   if (loading) {
     return <div><h2>Carregando conexões...</h2></div>;
   }
@@ -28,11 +28,16 @@ export default function ConexoesPage() {
   return (
     <div className="connections-container">
 
-      
-      
+
+
       <div className="connections-header">
-        <h2>Suas conexões</h2>
-        <h3>Verifique as conexões atuais, adicione ou desative…</h3>
+        <div>
+          <h2>Suas conexões</h2>
+          <h3>Verifique as conexões atuais, adicione ou desative…</h3>
+        </div>
+        
+          <Button label="Adicionar Conexão" onClick={handleOpenModal} />
+        
       </div>
 
       <GenericTable<Connection>
@@ -42,7 +47,7 @@ export default function ConexoesPage() {
           <div className="connection-row" key={i}>
             <div>{conn.nome}</div>
             <div>{conn.numero}</div>
-             <div className="agent-select">{conn.agente.tipo_de_agente}</div>
+            <div className="agent-select">{conn.agente.tipo_de_agente}</div>
             <div
               className={`status-chip ${conn.status ? 'active' : 'inactive'}`}
             >
@@ -52,9 +57,7 @@ export default function ConexoesPage() {
         )}
       />
 
-      <div className="button-container">
-        <Button label="Adicionar Conexão" onClick={handleOpenModal} />
-      </div>
+
 
       {isOpen && <AddConnectionModal />}
 

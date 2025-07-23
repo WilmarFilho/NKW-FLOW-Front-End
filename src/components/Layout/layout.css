@@ -26,18 +26,18 @@
   overflow-y: auto; /* Para rolagem se o conteúdo for grande */
 }
 
-.content-area > :first-child > :first-child {
+.content-area > div> :first-child > :first-child {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.content-area > :first-child > :first-child h2 {
+.content-area > div > :first-child > :first-child h2 {
   font-family: var(--font-main);
   font-size: 40px;
 }
 
-.content-area > :first-child > :first-child h3 {
+.content-area > div > :first-child > :first-child h3 {
   font-size: 24px;
   opacity: 0.8;
 }

@@ -13,8 +13,11 @@ export default function AjudaPage() {
     <div className="help-container">
 
       <div className="ajuda-header">
-        <h2>Página de Ajuda</h2>
-        <h3>Pergunte qualquer coisa que estiver com dúvidas sobre o NKW FLOW.</h3>
+        <div>
+          <h2>Página de Ajuda</h2>
+          <h3>Pergunte qualquer coisa que estiver com dúvidas sobre o NKW FLOW.</h3>
+        </div>
+
       </div>
 
       <div className="help-chat">

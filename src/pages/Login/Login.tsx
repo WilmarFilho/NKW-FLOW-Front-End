@@ -19,8 +19,12 @@ const LoginPage = () => {
   return (
     <div className="login-container">
       <div className="login-box">
-        <LogoIcon />
-        
+
+        <div className='wrapperLogo'>
+          <LogoIcon />
+        </div>
+
+
         <input
           type="email"
           value={email}
@@ -33,7 +37,7 @@ const LoginPage = () => {
           onChange={(e) => setSenha(e.target.value)}
           placeholder="Senha"
         />
-        
+
         <button onClick={handleLogin}>Entrar</button>
       </div>
     </div>

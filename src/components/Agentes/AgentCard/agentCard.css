@@ -1,10 +1,18 @@
 .agent-card {
   background-color: var(--color-main);
   border-radius: 12px;
-  padding: 24px;
+  padding: 50px 24px;
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
+  text-align: center;
   gap: 12px;
+}
+
+.agent-card h4 {
+  font-size: 22px;
+  font-family: var(--font-main);
 }
 
 .description {

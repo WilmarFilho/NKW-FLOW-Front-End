@@ -1,7 +1,7 @@
 .contact-item {
   display: flex;
   align-items: center;
-  padding: 10px 0;
+  padding: 10px 12px;
   gap: 12px;
   border-radius: 10px;
   cursor: pointer;
@@ -11,6 +11,10 @@
   width: 60px;
   height: 60px;
   border-radius: 50%;
+}
+
+.active-contact {
+  background-color: var(--color-background-input);
 }
 
 .contact-texts {

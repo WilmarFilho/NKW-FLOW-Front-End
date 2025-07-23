@@ -20,3 +20,6 @@ function GenericTable<T>({ columns, data, renderRow }: GenericTableProps<T>) {
 }
 
 export default GenericTable;
+
+
+

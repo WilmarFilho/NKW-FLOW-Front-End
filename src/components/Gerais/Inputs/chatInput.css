@@ -5,7 +5,7 @@
   border-radius: 15px;
   width: 100%;
   padding: 20px;
-  background-color: var(--color-background-input);
+  background-color: var(--color-background);
 }
 .chat-input-wrapper input {
   width: 100%;
