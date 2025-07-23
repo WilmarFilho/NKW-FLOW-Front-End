@@ -1,8 +1,10 @@
 :root {
   --font-main: 'K2D', 'sans-serif';
   --font-secundaria: 'Jost', 'sans-serif';
-  --color-main: #1b214aae;
+  --color-main: #1b214a90;
   --color-secundaria: #52F2B8;
+  --color-background: rgba(255, 255, 255, 0.1);
+  --color-background-input: #07070777;
 }
 
 * {

@@ -1,5 +1,4 @@
 .settings-container {
-  padding: 30px;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -8,9 +7,3 @@
 }
 
 
-/* === Breakpoint 3: Tablets em Paisagem / Desktops Pequenos === */
-@media (max-width: 991.98px) {
- .settings-container {
-  padding: 0;
- }
-}

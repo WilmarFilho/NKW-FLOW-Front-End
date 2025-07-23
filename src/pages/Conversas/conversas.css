@@ -10,11 +10,15 @@
   border-radius: 20px;
   width: 30%;
   height: 100%;
-  padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  background-color: var(--color-main);
+  background: var(--color-background); /* transparência */
+  backdrop-filter: blur(3px); /* efeito blur */
+  -webkit-backdrop-filter: blur(10px); /* suporte Safari */
+  border: 1px solid rgba(255, 255, 255, 0.1); /* borda suave */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* sombra leve */
+  padding: 1rem;
   
 }
 
@@ -47,7 +51,8 @@
   flex-direction: column;
   justify-content: space-between;
   padding: 20px;
-  background-color: var(--color-main);
+  background: var(--color-background); 
+  backdrop-filter: blur(3px);
   border-radius: 20px;
 }
 

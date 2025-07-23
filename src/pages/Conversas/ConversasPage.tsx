@@ -40,6 +40,8 @@ const ConversasPage: React.FC = () => {
           {[
             'Vendedor',
             'Recepcionista',
+            'Comercial',
+            'Juridico',
 
           ].map((t, i) => (
             <Tag key={i} label={t} active={i === 0} />

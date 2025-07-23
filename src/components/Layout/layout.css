@@ -16,13 +16,13 @@
 .border {
   width: 100%;
   background-color: #1b214add;
-  height: 96%;
+  height: 95%;
   border-radius: 100px;
 }
 
 .content-area {
   width: 80%;
-  padding: 80px; /* Espaçamento interno da área de conteúdo */
+  padding: 20px 40px; /* Espaçamento interno da área de conteúdo */
   overflow-y: auto; /* Para rolagem se o conteúdo for grande */
 }
 

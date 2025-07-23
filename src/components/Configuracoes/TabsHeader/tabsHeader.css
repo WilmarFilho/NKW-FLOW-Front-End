@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: row !important;
   gap: 24px;
-  background-color: var(--color-main);
+  background-color: var(--color-background-input );
   padding: 12px 20px;
   border-radius: 16px;
 }
@@ -13,7 +13,7 @@
   cursor: pointer;
   display: flex;
   align-items: center;
-  transition: background 0.2s;
+  transition: 0.2s;
 }
 .tab-item.active {
   background: #0fffc0;
