@@ -14,6 +14,8 @@ const Layout = () => {
 
       <Sidebar />
 
+      <div className='wrapper-border'><div className='border'></div></div>
+
       <main className="content-area">
         <Outlet />
       </main>
