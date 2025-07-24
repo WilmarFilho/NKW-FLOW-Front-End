@@ -65,7 +65,7 @@
   flex-direction: row;
 }
 
-.column-links > div:nth-child(1) {
+.column-links>div:nth-child(1) {
   display: none;
 }
 
@@ -106,33 +106,40 @@
     width: 300px;
     padding: 24px;
   }
+
   .box-logo {
     padding-right: 40px;
     margin-bottom: 15px;
   }
+
   .MenuItem {
     gap: 8px;
     padding: 10px 10px;
     border-radius: 14px;
     font-size: 18px;
   }
+
   .principal-menu h4,
   .suporte-menu h4 {
     font-size: 18px;
     padding-bottom: 12px;
   }
+
   .user-avatar {
     width: 50px;
     height: 50px;
   }
+
   .user-name {
     font-size: 20px;
   }
+
   .user-email {
     font-size: 12px;
   }
+
   .user-menu svg {
-    width: 50%;
+    display: none;
   }
 }
 
@@ -141,38 +148,47 @@
   .sidebar {
     width: 280px;
   }
+
   .box-logo {
     padding-right: 40px;
     margin-bottom: 15px;
   }
+
   .MenuItem {
     gap: 8px;
     padding: 10px 10px;
     border-radius: 14px;
     font-size: 18px;
   }
+
   .principal-menu h4,
   .suporte-menu h4 {
     font-size: 18px;
     padding-bottom: 12px;
   }
+
   .user-avatar {
     width: 50px;
     height: 50px;
   }
+
   .user-name {
     font-size: 20px;
   }
+
   .user-email {
     font-size: 12px;
   }
+
   .user-menu {
     flex-direction: column;
     align-items: start;
   }
+
   .column-links a:nth-child(2) {
     display: none;
   }
+
   .user-menu svg {
     width: 50%;
   }
@@ -181,36 +197,71 @@
 /* === Breakpoint 3: Tablets em Paisagem / Desktops Pequenos === */
 @media (max-width: 991.98px) {
   .sidebar {
+    height: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 5;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.70);
+    backdrop-filter: blur(10px);
+    transform: translateX(-200%);
+    /* Escondido por padrão */
+    opacity: 0;
     width: 260px;
-    padding: 18px;
+    border-radius: 0 20px 20px 0;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
   }
+
+  .sidebar.sidebar-is-open {
+    transform: translateX(0);
+    opacity: 1;
+    transition-delay: 0s, 0s, 0s;
+  }
+
   .box-logo {
     padding-right: 0px;
     margin-bottom: 0px;
   }
+
   .MenuItem {
     padding: 8px 8px;
     border-radius: 10px;
     font-size: 16px;
   }
+
   .principal-menu h4,
   .suporte-menu h4 {
     font-size: 16px;
     padding-bottom: 8px;
   }
+
   .user-avatar {
     width: 40px;
     height: 40px;
   }
+
   .user-name {
     font-size: 16px;
   }
+
   .user-email {
     font-size: 12px;
   }
-  .user-menu svg {
-    width: 50%;
+
+  .column-links>div:nth-child(1) {
+    display: block;
   }
+
+  .user-menu {
+    gap: 12px;
+  }
+
+  .user-menu svg {
+    display: block;
+    width: 75%;
+  }
+
+  
 }
 
 /* === Breakpoint 4: Tablets em Retrato === */
@@ -220,9 +271,10 @@
     position: fixed;
     top: 0;
     left: 0;
-    background-color: rgba(0, 0, 0, 0.40);
+    background-color: rgba(0, 0, 0, 0.70);
     backdrop-filter: blur(10px);
-    transform: translateX(-200%); /* Escondido por padrão */
+    transform: translateX(-200%);
+    /* Escondido por padrão */
     opacity: 0;
     width: 260px;
     border-radius: 0 20px 20px 0;
@@ -238,33 +290,42 @@
   .box-logo {
     padding-right: 50px;
   }
+
   .MenuItem {
     padding: 8px 8px;
     border-radius: 10px;
     font-size: 14px;
   }
+
   .principal-menu h4,
   .suporte-menu h4 {
     font-size: 15px;
     padding-bottom: 4px;
   }
+
   .user-avatar {
     width: 40px;
     height: 40px;
   }
+
   .user-name {
     font-size: 14px;
   }
+
   .user-email {
     font-size: 12px;
   }
-  .column-links > div:nth-child(1) {
+
+  .column-links>div:nth-child(1) {
     display: block;
   }
+
   .user-menu {
     gap: 12px;
   }
+
   .user-menu svg {
+    display: block;
     width: 75%;
   }
 }
@@ -284,29 +345,36 @@
   .box-logo {
     padding-right: 50px;
   }
+
   .MenuItem {
     padding: 8px 8px;
     border-radius: 10px;
     font-size: 14px;
   }
+
   .principal-menu h4,
   .suporte-menu h4 {
     font-size: 15px;
     padding-bottom: 4px;
   }
+
   .user-avatar {
     width: 40px;
     height: 40px;
   }
+
   .user-name {
     font-size: 14px;
   }
+
   .user-email {
     font-size: 12px;
   }
+
   .user-menu {
     gap: 12px;
   }
+
   .user-menu svg {
     width: 60%;
   }

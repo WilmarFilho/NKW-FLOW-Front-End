@@ -12,7 +12,7 @@ export default function useMessages(chatId: string | null) {
     const fetchMessages = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`${apiConfig.node}/messages/`);
+        const res = await fetch(`${apiConfig.node}/messages/chat/${chatId}`);
         if (!res.ok) throw new Error('Erro ao buscar mensagens');
         const data = await res.json();
         setMessages(data);

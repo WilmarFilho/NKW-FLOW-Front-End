@@ -9,6 +9,7 @@ import useMessages from '../../hooks/useMessages';
 import './conversas.css';
 import { Chat } from '../../types/chats';
 import { Message } from '../../types/message';
+import { apiConfig } from '../../config/api';
 import axios from 'axios';
 
 const ConversasPage: React.FC = () => {
@@ -32,12 +33,21 @@ const ConversasPage: React.FC = () => {
   const { chats } = useChats('b9fc3360-78d3-43fd-b819-fce3173d1fc8');
   const { messages } = useMessages(activeChat?.id || null);
 
+  const [searchQuery, setSearchQuery] = React.useState('');
+
+  const filteredChats = chats.filter((chat) => {
+    const lowerQuery = searchQuery.toLowerCase();
+    return (
+      chat.contato_nome?.toLowerCase().includes(lowerQuery) ||
+      chat.connection?.numero?.includes(lowerQuery)
+    );
+  });
 
 
   return (
     <div className="conversations-container">
       <div className="left-panel">
-        <SearchBar />
+        <SearchBar onSearch={setSearchQuery} />
         <div className="tags">
           {[
             'Vendedor',
@@ -51,9 +61,8 @@ const ConversasPage: React.FC = () => {
         </div>
         <div className="contacts-list">
 
-          {chats.map((chat) => {
+          {filteredChats.map((chat) => {
             const isActive = activeChat?.id === chat.id;
-
             return (
               <ContactListItem
                 classname={isActive ? 'contact-item active-contact' : 'contact-item'}
@@ -66,41 +75,6 @@ const ConversasPage: React.FC = () => {
             );
           })}
 
-          <ContactListItem
-            classname='contact-item'
-            key='A'
-            name='Daniel Valadares'
-            message='Vocês vende oque?'
-            avatar="https://i.pravatar.cc/150"
-            onClick={() => console.log('oi')}
-          />
-
-          <ContactListItem
-            classname='contact-item'
-            key='SA'
-            name='Daniel Valadares'
-            message='Vocês vende oque?'
-            avatar="https://i.pravatar.cc/150"
-            onClick={() => console.log('oi')}
-          />
-
-          <ContactListItem
-            classname='contact-item'
-            key='AQ'
-            name='Daniel Valadares'
-            message='Vocês vende oque?'
-            avatar="https://i.pravatar.cc/150"
-            onClick={() => console.log('oi')}
-          />
-
-          <ContactListItem
-            classname='contact-item'
-            key='CCA'
-            name='Daniel Valadares'
-            message='Vocês vende oque?'
-            avatar="https://i.pravatar.cc/150"
-            onClick={() => console.log('oi')}
-          />
 
 
 
@@ -121,10 +95,36 @@ const ConversasPage: React.FC = () => {
             <p style={{ padding: '1rem' }}>Selecione uma conversa</p>
           )}
         </div>
-        <ChatInput
-          placeholder="Digite uma mensagem"
-          onSend={handleUserSend}
-        />
+
+
+        <div className='box-chat-input'>
+
+          <ChatInput
+            placeholder="Digite uma mensagem"
+            onSend={handleUserSend}
+          />
+
+          {activeChat && (
+            <button
+              onClick={async () => {
+                try {
+                  const response = await axios.put(`${apiConfig.node}/chats/${activeChat.id}`, {
+                    ...activeChat,
+                    ia_ativa: !activeChat.ia_ativa,
+                  });
+                  setActiveChat(response.data[0]); // supabase retorna array
+                } catch (err) {
+                  console.error('Erro ao alternar IA:', err);
+                }
+              }}
+              className="toggle-ia-btn"
+            >
+              {activeChat.ia_ativa ? 'Desativar IA' : 'Ativar IA'}
+            </button>
+          )}
+
+        </div>
+
       </div>
     </div>
   );

@@ -13,7 +13,7 @@ export default function AtendentesPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   if (loading) {
-    return <div className="feedback-message">Carregando atendentes...</div>;
+    return '';
   }
 
   if (error) {

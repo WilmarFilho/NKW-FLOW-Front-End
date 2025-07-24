@@ -14,7 +14,7 @@ export default function ConexoesPage() {
   const { isOpen } = useRecoilValue(addConnectionModalState);
 
   if (loading) {
-    return <div><h2>Carregando conexões...</h2></div>;
+    return '';
   }
 
   if (error) {
@@ -39,7 +39,7 @@ export default function ConexoesPage() {
           <Button label="Adicionar Conexão" onClick={handleOpenModal} />
         
       </div>
-
+      
       <GenericTable<Connection>
         columns={['Nome', 'Número', 'Agente', 'Status']}
         data={connections}

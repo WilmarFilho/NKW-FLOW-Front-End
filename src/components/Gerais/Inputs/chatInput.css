@@ -1,4 +1,4 @@
-.chat-input-wrapper  {
+.chat-input-wrapper {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -7,14 +7,42 @@
   padding: 20px;
   background-color: var(--color-background);
 }
+
 .chat-input-wrapper input {
   width: 100%;
   border: none;
   outline: none;
   background: none;
 }
+
 .chat-input-wrapper button {
   border: none;
   outline: none;
   background: none;
+}
+
+.box-chat-input {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+}
+
+.toggle-ia-btn {
+  background-color: var(--color-background);
+  border-radius: 15px;
+  border: none;
+  min-width: 125px;
+}
+
+
+
+@media (max-width: 599.98px) {
+  .box-chat-input {
+    flex-direction: column;
+  }
+
+  .toggle-ia-btn {
+    min-width: none;
+    height: 40px;
+  }
 }

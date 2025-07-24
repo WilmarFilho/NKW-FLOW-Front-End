@@ -3,7 +3,7 @@
 }
 
 /* Aqui o sidebar pode começar a se preparar para ser alternável ou já ser */
-@media (max-width: 767.98px) {
+@media (max-width: 991.98px) {
   .sidebarclosed {
     display: flex;
     width: 20%;
@@ -15,7 +15,7 @@
   .sidebarclosed-is-open {
     opacity: 0;
     z-index: 10;
-    transition: 1s;
+    transition: .3s;
   }
 
   .menu-principal-closed {

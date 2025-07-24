@@ -12,7 +12,7 @@
 .connection-row,
 .attendant-row {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr; /* N colunas fixas */
+  grid-template-columns: repeat(4, 1fr);
   align-items: center;
   height: 50px;
   gap: 12px;
@@ -33,11 +33,13 @@
 .attendant-row .email {
   color: #8a8fa3;
 }
+
 .agent-select {
   cursor: pointer;
   opacity: 0.7;
   text-decoration: underline;
 }
+
 .status-chip {
   padding: 6px 12px;
   border-radius: 20px;
@@ -46,10 +48,12 @@
   display: flex;
   cursor: pointer;
 }
+
 .status-chip.active {
   background-color: #55ffc9;
   color: #0f0f0f;
 }
+
 .status-chip.inactive {
   background-color: #ff5555;
   color: #fff;
@@ -72,37 +76,43 @@
   color: white;
 }
 
-/* === Breakpoint 3: Tablets em Paisagem / Desktops Pequenos === */
-@media (max-width: 1038.98px) {
-  .table-header div,
-  .connection-row div,
-  .attendant-row div {
-    width: 150px;
-  }
+/* Responsividade */
+@media (max-width: 991.98px) {
   .generic-table {
-    padding: 60px 24px;
+    background-color: unset;
+    align-items: start;
+    padding: 16px 0;
   }
-}
 
-/* === Breakpoint 4: Tablets em Retrato === */
-@media (max-width: 767.98px) {
   .table-header {
-    overflow: hidden;
-    overflow-x: auto;
+    display: none;
   }
-  .table-header,
+
   .connection-row,
   .attendant-row {
-    overflow: hidden;
-    overflow-x: auto;
-    gap: 24px;
-    scrollbar-width: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    height: fit-content;
+    padding: 16px;
+    border-radius: 12px;
+    background-color: var(--color-main);
   }
-  .generic-table {
-    padding: 40px 24px;
-  }
-}
 
-/* === Breakpoint 5: Smartphones === */
-@media (max-width: 599.98px) {
+  .status-chip.active {
+    padding: 8px 80px;
+  }
+
+  .status-chip.inactive {
+    padding: 8px 80px;
+  }
+
+  .connection-row div,
+  .attendant-row div {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    font-size: 0.9rem;
+  }
 }

@@ -8,6 +8,7 @@
   color: #202020;
   padding: 10px 40px;
   border-radius: 20px;
+  height: 80px;
   border: none;
   cursor: pointer;
   transition: 1s;
@@ -18,11 +19,21 @@
 }
 
 
+
+/* === Breakpoint 3: Tablets em Paisagem / Desktops Pequenos === */
+@media (max-width: 1199.98px) {
+  .add-button {
+    height: 60px;
+  }
+}
+
+
 /* === Breakpoint 3: Tablets em Paisagem / Desktops Pequenos === */
 @media (max-width: 991.98px) {
   .wrapper-button {
     justify-content: start;
   }
+
   .add-button {
     font-size: 14px;
   }

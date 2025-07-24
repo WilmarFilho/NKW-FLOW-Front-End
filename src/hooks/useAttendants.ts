@@ -56,7 +56,7 @@ const createAttendantInAPI = async (data: AttendantInput, adminId: string): Prom
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         user_id: createdUser[0].id,       
-        user_admin_id: adminId,   
+        user_admin_id: '0523e7bd-314c-43c1-abaa-98b789c644e6',   
         status: true,                  
       }),
     });
