@@ -3,6 +3,7 @@ import AgentCard from '../../components/Agentes/AgentCard/AgentCard';
 import { useAgents } from '../../hooks/useAgents';
 import './agentesPage.css';
 import Button from '../../components/Gerais/Buttons/Button';
+import { motion } from 'framer-motion';
 
 const AgentesPage: React.FC = () => {
 
@@ -20,7 +21,17 @@ const AgentesPage: React.FC = () => {
 
   return (
     <div className="agents-container">
-      <div className="agents-header">
+
+      <motion.div
+        initial={{ opacity: 0, y: 0 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
+        className="agents-header"
+
+
+      >
+
+
         <div>
           <h2>Vejas seus agentes disponíveis</h2>
           <h3>
@@ -30,10 +41,18 @@ const AgentesPage: React.FC = () => {
 
         <Button label='Entre em Contato' />
 
-      </div>
 
-      <div className="agents-list">
 
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 0 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
+        className="agents-list"
+
+
+      >
         {agents.map((agent) => (
 
           <AgentCard
@@ -46,7 +65,9 @@ const AgentesPage: React.FC = () => {
 
         ))}
 
-      </div>
+
+      </motion.div>
+
     </div>
   );
 };

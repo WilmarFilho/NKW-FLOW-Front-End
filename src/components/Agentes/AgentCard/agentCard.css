@@ -8,6 +8,13 @@
   flex-direction: column;
   text-align: center;
   gap: 12px;
+  transition: .4s;
+  cursor: pointer;
+}
+
+.agent-card:hover {
+  transform: scale(.9);
+  transition: .4s;
 }
 
 .agent-card h4 {

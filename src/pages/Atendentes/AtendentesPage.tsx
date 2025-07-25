@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import type { Attendant, AttendantInput } from '../../types/attendant';
 import { useAttendants } from '../../hooks/useAttendants';
 import GenericTable from '../../components/Gerais/Tables/GenericTable';
@@ -7,6 +8,10 @@ import Modal from '../../components/Gerais/Modal/Modal';
 import AttendantForm from '../../components/Atendentes/AttendantForm';
 
 import './atendentes.css';
+
+import ArrowUp from './assets/arrow-circle.svg';
+import XCheck from './assets/x-circle.svg';
+
 
 export default function AtendentesPage() {
   const { attendants, loading, error, addAttendant, removeAttendant } = useAttendants();
@@ -43,31 +48,58 @@ export default function AtendentesPage() {
   return (
     <div className="connections-container">
 
-      <div className="connections-header">
-        <div>
-          <h2>Seus atendentes</h2>
-          <h3>Verifique seus atendentes atuais, adicione ou desative…</h3>
-        </div>
-
-        <Button label="Adicionar Atendente" onClick={() => setIsModalOpen(true)} />
 
 
-      </div>
+      <motion.div
+        initial={{ opacity: 0, y: 0 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
+        className="connections-header"
 
-      <GenericTable<Attendant>
-        columns={['Nome', 'Email', 'Status', 'Ações']}
-        data={attendants}
-        renderRow={(conn, i) => (
-          <div className="connection-row" key={i}>
-            <div>{conn.user.nome}</div>
-            <div>{conn.user.email}</div>
-            <div>{conn.status ? 'Ativo' : 'Inativo'}</div>
-            <div>
-              <button className="delete-button" onClick={() => handleDelete(conn.id)}>Excluir</button>
-            </div>
+
+      >
+
+        
+          <div>
+            <h2>Seus atendentes</h2>
+            <h3>Verifique seus atendentes atuais, adicione ou desative…</h3>
           </div>
-        )}
-      />
+
+          <Button label="Adicionar Atendente" onClick={() => setIsModalOpen(true)} />
+
+
+        
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 0 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
+        className="generic-table"
+
+
+      >
+        <GenericTable<Attendant>
+          columns={['Nome', 'Email', 'Status', 'Ações']}
+          data={attendants}
+          renderRow={(conn, i) => (
+            <div className="connection-row" key={i}>
+              <div>{conn.user.nome}</div>
+              <div>{conn.user.email}</div>
+              <div
+                className={`status-chip ${conn.status ? 'active' : 'inactive'}`}
+              >
+                {conn.status ? 'Ativado' : 'Desativado'}
+              </div>
+              <div className='box-icons-table'>
+                <button className="edit-button" ><ArrowUp  /></button>
+                <button className="delete-button" onClick={() => handleDelete(conn.id)}><XCheck  /></button>
+              </div>
+            </div>
+          )}
+        />
+      </motion.div>
+
 
 
 

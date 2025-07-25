@@ -4,3 +4,8 @@
   flex-direction: column;
   gap: 32px;
 }
+
+.box-icons-table {
+  display: flex;
+  gap: 12px;
+}

@@ -14,8 +14,24 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   align-items: center;
-  height: 50px;
   gap: 12px;
+  margin-bottom: 10px;
+}
+
+.connection-row,
+.attendant-row {
+  background-color: var(--color-background);
+  padding: 10px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: .2s;
+}
+
+
+.connection-row:hover,
+.attendant-row:hover {
+  background-color: var(--color-background-input);
+  transition: .2s;
 }
 
 .table-header div,
@@ -25,9 +41,9 @@
 }
 
 .table-header {
-  padding-bottom: 12px;
-  margin-bottom: 12px;
-  border-bottom: 1px solid #ffffff82;
+  padding: 0px 0px 18px 0px;
+  font-family: var(--font-main);
+  font-size: 1.6em;
 }
 
 .attendant-row .email {
@@ -50,30 +66,61 @@
 }
 
 .status-chip.active {
-  background-color: #55ffc9;
-  color: #0f0f0f;
+  background-color: var(--color-secundaria);
+  color: white;
+  width: fit-content;
+  padding: 10px 32px;
+  font-size: .8em;
 }
 
 .status-chip.inactive {
   background-color: #ff5555;
+  width: fit-content;
   color: #fff;
+  padding: 10px 32px;
+  font-size: .8em;
 }
 
 .delete-button {
-  font-family: var(--font-secundaria);
   background-color: white;
   color: black;
   border-radius: 16px;
   outline: none;
   border: none;
-  padding: 10px 32px;
+  padding: 4px 8px;
   transition: .6s;
   cursor: pointer;
 }
 
 .delete-button:hover {
-  background-color: #ff5555;
-  color: white;
+  transition: .6s;
+  background-color: rgb(126, 0, 0);
+}
+
+.delete-button:hover svg {
+  transition: .6s;
+  fill: white;
+}
+
+.edit-button {
+  background-color: white;
+  color: black;
+  border-radius: 16px;
+  outline: none;
+  border: none;
+  padding: 4px 8px;
+  transition: .6s;
+  cursor: pointer;
+}
+
+.edit-button:hover  {
+  transition: .6s;
+  background-color: var(--color-secundaria);
+}
+
+.edit-button:hover svg  {
+  transition: .6s;
+  fill: white;
 }
 
 /* Responsividade */

@@ -41,7 +41,7 @@
   gap: 8px;
   overflow-y: auto;
   scrollbar-width: none;
-  margin-top: 32px;
+  margin-top: 50px;
 }
 
 /* Esconde a barra em navegadores WebKit */

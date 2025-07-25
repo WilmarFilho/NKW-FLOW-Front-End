@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import './chatInput.css';
+import { motion } from 'framer-motion';
 
 type ChatInputProps = {
   placeholder?: string;
-  onSend: (message: string) => void ;
+  onSend: (message: string) => void;
 };
 
 const ChatInput: React.FC<ChatInputProps> = ({ placeholder = 'Digite sua mensagem...', onSend }) => {
@@ -21,7 +22,15 @@ const ChatInput: React.FC<ChatInputProps> = ({ placeholder = 'Digite sua mensage
   };
 
   return (
-    <div className="chat-input-wrapper">
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
+      className="chat-input-wrapper"
+
+
+    >
+
       <input
         type="text"
         placeholder={placeholder}
@@ -35,7 +44,9 @@ const ChatInput: React.FC<ChatInputProps> = ({ placeholder = 'Digite sua mensage
           <path d="M22 2L15 22L11 13L2 9L22 2Z" />
         </svg>
       </button>
-    </div>
+
+    </motion.div>
+
   );
 };
 

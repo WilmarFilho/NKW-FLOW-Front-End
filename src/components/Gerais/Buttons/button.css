@@ -4,18 +4,20 @@
 }
 
 .add-button {
-  background-color: #52F2B8;
-  color: #202020;
+  background-color: var(--color-secundaria);
+  color: white;
   padding: 10px 40px;
   border-radius: 20px;
   height: 80px;
   border: none;
   cursor: pointer;
-  transition: 1s;
+  transition: .6s;
 }
 
 .add-button:hover {
+  transform: scale(.93);
   background-color: white;
+  color: black;
 }
 
 

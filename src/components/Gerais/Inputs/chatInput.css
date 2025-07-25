@@ -32,7 +32,14 @@
   border-radius: 15px;
   border: none;
   min-width: 125px;
+  cursor: pointer;
 }
+
+.toggle-ia-btn:hover {
+  background-color: var(--color-secundaria);
+  transition: .5s;
+}
+
 
 
 

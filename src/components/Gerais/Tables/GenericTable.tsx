@@ -8,7 +8,7 @@ interface GenericTableProps<T> {
 
 function GenericTable<T>({ columns, data, renderRow }: GenericTableProps<T>) {
   return (
-    <div className="generic-table">
+    <div >
       <div className="table-header">
         {columns.map((col, i) => (
           <div key={i}>{col}</div>
