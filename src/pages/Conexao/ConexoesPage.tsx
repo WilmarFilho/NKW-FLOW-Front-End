@@ -5,13 +5,14 @@ import ConnectionForm from '../../components/Conexoes/ConnectionForm';
 import GenericTable from '../../components/Gerais/Tables/GenericTable';
 import type { Connection } from '../../types/connection';
 import './conexoes.css';
-import { useConnectionsComStatus } from '../../hooks/useConnectionsComStatus';
 import { motion } from 'framer-motion';
 import { NavLink } from 'react-router-dom';
+import { useConnections } from '../../hooks/useConnections';
 
 export default function ConexoesPage() {
 
-  const { connections, loading, error } = useConnectionsComStatus();
+  const { connections, loading, error } = useConnections();
+  
   const setModalState = useSetRecoilState(addConnectionModalState);
   const { isOpen } = useRecoilValue(addConnectionModalState);
 
@@ -63,7 +64,7 @@ export default function ConexoesPage() {
           data={connections}
           renderRow={(conn, i) => (
             <div className="connection-row" key={i}>
-              <div>{conn.nome}</div>
+              <div>{conn.nome.split('_')[0]}</div>
               <div>{conn.numero}</div>
               <NavLink to="/agentes"><div className="agent-select">{conn.agente.tipo_de_agente}</div></NavLink>
               <div

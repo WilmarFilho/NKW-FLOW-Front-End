@@ -12,7 +12,7 @@ import './conversas.css'
 
 const ConversasPage: React.FC = () => {
   const [activeChat, setActiveChat] = React.useState<Chat | null>(null);
-  const { chats } = useChats('b9fc3360-78d3-43fd-b819-fce3173d1fc8');
+  const { chats } = useChats('0523e7bd-314c-43c1-abaa-98b789c644e6');
   const { messages } = useMessages(activeChat?.id || null);
   const [searchQuery, setSearchQuery] = React.useState('');
 

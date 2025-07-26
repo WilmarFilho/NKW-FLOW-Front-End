@@ -3,10 +3,24 @@ import type { Connection } from '../types/connection';
 import type { Attendant } from '../types/attendant';
 import type { Agent } from '../types/agent';
 import type { HelpChat } from '../types/helpChat';
+import { Chat } from '../types/chats';
+import { Message } from '../types/message';
 
 // Estado das conexões WhatsApp
 export const connectionsState = atom<Connection[]>({
   key: 'connectionsState',
+  default: [],
+});
+
+// Estado dos chats WhatsApp
+export const chatsState = atom<Chat[]>({
+  key: 'chatsState',
+  default: [],
+});
+
+// Estado das mensagens WhatsApp
+export const messagesState = atom<Message[]>({
+  key: 'messagesState',
   default: [],
 });
 

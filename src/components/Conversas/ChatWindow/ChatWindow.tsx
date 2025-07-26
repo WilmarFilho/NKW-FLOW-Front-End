@@ -29,9 +29,9 @@ const ChatWindow = ({ activeChat, messages, setActiveChat, onSendMessage }: Prop
         >
             <div className="messages">
                 {activeChat ? (
-                    messages.map((msg, index) => (
+                    messages.map((msg) => (
                         <MessageBubble
-                            key={index}
+                            key={msg.id}
                             text={msg.mensagem}
                             sender={msg.remetente === 'cliente' ? 'me' : 'other'}
                         />

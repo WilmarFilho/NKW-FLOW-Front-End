@@ -5,6 +5,7 @@ import Modal from '../Gerais/Modal/Modal';
 import { useAddConnection } from '../../hooks/useAddConnection';
 import { useAgents } from '../../hooks/useAgents';
 
+
 export default function AddConnectionModal(): JSX.Element | null {
   const [modalState, setModalState] = useRecoilState(addConnectionModalState);
   const { agents, loading: isLoadingAgents, error: agentsError } = useAgents();
