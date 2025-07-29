@@ -8,11 +8,12 @@ import './conexoes.css';
 import { motion } from 'framer-motion';
 import { NavLink } from 'react-router-dom';
 import { useConnections } from '../../hooks/useConnections';
+import XCheck from './assets/x-circle.svg';
 
 export default function ConexoesPage() {
 
-  const { connections, loading, error } = useConnections();
-  
+  const { connections, loading, error, removeConnection } = useConnections();
+
   const setModalState = useSetRecoilState(addConnectionModalState);
   const { isOpen } = useRecoilValue(addConnectionModalState);
 
@@ -26,6 +27,16 @@ export default function ConexoesPage() {
 
   const handleOpenModal = (): void => {
     setModalState({ isOpen: true });
+  };
+
+  const handleDelete = async (id: string, nome: string) => {
+    if (window.confirm('Tem certeza que deseja excluir esta conexão?')) {
+      try {
+        await removeConnection(id, nome);
+      } catch (error) {
+        alert('Não foi possível excluir a connection.' + error);
+      }
+    }
   };
 
   return (
@@ -48,7 +59,7 @@ export default function ConexoesPage() {
 
         <Button label="Adicionar Conexão" onClick={handleOpenModal} />
       </motion.div>
-      
+
       <motion.div
         initial={{ opacity: 0, y: 0 }}
         animate={{ opacity: 1, y: 0 }}
@@ -67,11 +78,17 @@ export default function ConexoesPage() {
               <div>{conn.nome.split('_')[0]}</div>
               <div>{conn.numero}</div>
               <NavLink to="/agentes"><div className="agent-select">{conn.agente.tipo_de_agente}</div></NavLink>
-              <div
-                className={`status-chip ${conn.status ? 'active' : 'inactive'}`}
-              >
-                {conn.status ? 'Ativado' : 'Desativado'}
+              <div className='column-action-conex'>
+                <div
+                  className={`status-chip ${conn.status ? 'active' : 'inactive'}`}
+                >
+                  {conn.status ? 'Ativado' : 'Desativado'}
+
+                </div>
+                <button className="delete-button" onClick={() => handleDelete(conn.id, conn.nome)}><XCheck /></button>
               </div>
+
+              
             </div>
           )}
         />

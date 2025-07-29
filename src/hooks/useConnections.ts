@@ -4,6 +4,16 @@ import { connectionsState } from '../state/atom';
 import { apiConfig } from '../config/api';
 import type { Connection } from '../types/connection';
 
+const deleteConnectionFromAPI = async (id: string, nome: string): Promise<void> => {
+  const response = await fetch(`${apiConfig.node}/connections/${id}/${nome}`, {
+    method: 'DELETE',
+  });
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({ message: 'Erro desconhecido no servidor' }));
+    throw new Error(errorData.message || 'Falha ao deletar a conexão');
+  }
+};
+
 export const useConnections = () => {
   const [connections, setConnections] = useRecoilState(connectionsState);
   const [loading, setLoading] = useState(true);
@@ -34,5 +44,15 @@ export const useConnections = () => {
     carregarConexoes();
   }, [setConnections]);
 
-  return { connections, loading, error };
+  const removeConnection = async (id: string, nome: string) => {
+    try {
+      await deleteConnectionFromAPI(id, nome);
+      setConnections(current => current.filter(a => a.id !== id));
+    } catch (err) {
+      console.error('Falha ao deletar conex:', err);
+      throw err;
+    }
+  };
+
+  return { connections, loading, error, removeConnection };
 };

@@ -13,6 +13,10 @@
   align-items: center;
 }
 
+.column-action-conex {
+  display: flex;
+  gap: 12px;
+}
 
 
 
