@@ -2,13 +2,13 @@ import type { JSX } from 'react';
 import { useRecoilState } from 'recoil';
 import { addConnectionModalState } from '../../state/atom';
 import Modal from '../Gerais/Modal/Modal';
-import { useAddConnection } from '../../hooks/useAddConnection';
-import { useAgents } from '../../hooks/useAgents';
+import { useAddConnection } from '../../hooks/connections/useAddConnection';
+import { useAgents } from '../../hooks/agents/useAgents';
 
 
 export default function AddConnectionModal(): JSX.Element | null {
   const [modalState, setModalState] = useRecoilState(addConnectionModalState);
-  const { agents, loading: isLoadingAgents, error: agentsError } = useAgents();
+  const { agents } = useAgents();
 
   const handleClose = () => {
     setModalState({ isOpen: false });
@@ -18,7 +18,6 @@ export default function AddConnectionModal(): JSX.Element | null {
     step,
     qrCode,
     formData,
-    error,
     handleInputChange,
     handleStartSession
   } = useAddConnection(handleClose);
@@ -40,10 +39,8 @@ export default function AddConnectionModal(): JSX.Element | null {
           <div className="form-group">
             <label htmlFor="agent">Agente IA</label>
             {/* 3. ATUALIZE O SELECT PARA SER DINÂMICO */}
-            <select id='agent' value={formData.agent} onChange={handleInputChange} disabled={isLoadingAgents}>
-              {isLoadingAgents && <option>Carregando agentes...</option>}
-              {agentsError && <option>Erro ao carregar agentes</option>}
-              {!isLoadingAgents && !agentsError && (
+            <select id='agent' value={formData.agent} onChange={handleInputChange}>
+              {agents && (
                 <>
                   {/* É uma boa prática ter uma opção default */}
                   <option value="" >Selecione um agente</option>
@@ -64,7 +61,6 @@ export default function AddConnectionModal(): JSX.Element | null {
         <div className="qr-code-step">
           <p>Abra o WhatsApp em seu celular, vá em Aparelhos Conectados e escaneie o código abaixo.</p>
           {qrCode && <img src={qrCode} alt="QR Code para conectar no WhatsApp" />}
-          {error && <p className="error-text">{error}</p>}
         </div>
       )}
     </Modal>

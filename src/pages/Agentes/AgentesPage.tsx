@@ -1,24 +1,14 @@
 import React from 'react';
 import AgentCard from '../../components/Agentes/AgentCard/AgentCard';
-import { useAgents } from '../../hooks/useAgents';
+import { useAgents } from '../../hooks/agents/useAgents';
 import './agentesPage.css';
 import Button from '../../components/Gerais/Buttons/Button';
 import { motion } from 'framer-motion';
 
 const AgentesPage: React.FC = () => {
 
-  const { agents, loading, error } = useAgents();
-
-
-
-  if (loading) {
-    return '';
-  }
-
-  if (error) {
-    return <div className="feedback-message error">Erro ao carregar: {error}</div>;
-  }
-
+  const { agents } = useAgents();
+  
   return (
     <div className="agents-container">
 

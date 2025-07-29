@@ -7,24 +7,16 @@ import type { Connection } from '../../types/connection';
 import './conexoes.css';
 import { motion } from 'framer-motion';
 import { NavLink } from 'react-router-dom';
-import { useConnections } from '../../hooks/useConnections';
+import { useConnections } from '../../hooks/connections/useConnections';
 import XCheck from './assets/x-circle.svg';
 import ArrowUp from './assets/arrow-circle.svg';
 
 export default function ConexoesPage() {
 
-  const { connections, loading, error, removeConnection } = useConnections();
+  const { connections, removeConnection } = useConnections();
 
   const setModalState = useSetRecoilState(addConnectionModalState);
   const { isOpen } = useRecoilValue(addConnectionModalState);
-
-  if (loading) {
-    return '';
-  }
-
-  if (error) {
-    return <div><h2>Erro ao carregar: {error}</h2></div>;
-  }
 
   const handleOpenModal = (): void => {
     setModalState({ isOpen: true });

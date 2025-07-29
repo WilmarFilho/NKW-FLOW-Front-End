@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import type { Attendant, AttendantInput } from '../../types/attendant';
-import { useAttendants } from '../../hooks/useAttendants';
+import { useAttendants } from '../../hooks/attendants/useAttendants';
 import GenericTable from '../../components/Gerais/Tables/GenericTable';
 import Button from '../../components/Gerais/Buttons/Button';
 import Modal from '../../components/Gerais/Modal/Modal';
@@ -14,17 +14,9 @@ import XCheck from './assets/x-circle.svg';
 
 
 export default function AtendentesPage() {
-  const { attendants, loading, error, addAttendant, removeAttendant } = useAttendants();
+  const { attendants, addAttendant, removeAttendant } = useAttendants();
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  if (loading) {
-    return '';
-  }
-
-  if (error) {
-    return <div className="feedback-message error">Erro ao carregar: {error}</div>;
-  }
-
+  
   const handleDelete = async (id: string) => {
     if (window.confirm('Tem certeza que deseja excluir este atendente?')) {
       try {
