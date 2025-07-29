@@ -19,4 +19,6 @@ export interface AttendantInput {
   nome: string;
   email: string;
   senha: string;
+  status: boolean;
+  user_id: string;
 }

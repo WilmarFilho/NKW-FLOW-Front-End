@@ -6,10 +6,20 @@ import type { AttendantInput } from '../../types/attendant';
 interface AttendantFormProps {
   onSave: (data: AttendantInput) => Promise<void>; // Recebe a função de salvar
   onClose: () => void;
+  initialData: Partial<AttendantInput> | null;
+  editMode?: boolean;
 }
 
-export default function AttendantForm({ onSave, onClose }: AttendantFormProps) {
-  const [formData, setFormData] = useState<AttendantInput>({ nome: '', email: '', senha: '' });
+export default function AttendantForm({ onSave, onClose, initialData, editMode }: AttendantFormProps) {
+
+  const [formData, setFormData] = useState<AttendantInput>({
+    nome: initialData?.nome || '',
+    email: initialData?.email || '',
+    senha: '', // nunca mostra senha anterior
+    status: initialData?.status ?? true,
+    user_id: initialData?.user_id ?? '',
+  });
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,7 +31,7 @@ export default function AttendantForm({ onSave, onClose }: AttendantFormProps) {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      await onSave(formData); 
+      await onSave(formData);
       onClose()
     } catch (error) {
       console.error('Erro no formulário:', error);
@@ -44,8 +54,29 @@ export default function AttendantForm({ onSave, onClose }: AttendantFormProps) {
         <label htmlFor="senha">Senha</label>
         <input id="senha" type="password" placeholder="Mínimo 6 caracteres" value={formData.senha} onChange={handleInputChange} required />
       </div>
+      {editMode && (
+        <div className="form-group">
+          <label htmlFor="status">Status</label>
+          <select
+            id="status"
+            value={formData.status ? 'ativo' : 'inativo'}
+            onChange={(e) =>
+              setFormData(prev => ({
+                ...prev,
+                status: e.target.value === 'ativo',
+              }))
+            }
+          >
+            <option value="ativo">Ativo</option>
+            <option value="inativo">Desativado</option>
+          </select>
+        </div>
+      )}
+
       <div className="form-actions">
-        <button type="submit" className="submit-button">{isSubmitting ? 'Salvando...' : 'Salvar'}</button>
+        <button type="submit" className="submit-button">
+          {isSubmitting ? 'Salvando...' : editMode ? 'Atualizar' : 'Salvar'}
+        </button>
       </div>
     </form>
   );

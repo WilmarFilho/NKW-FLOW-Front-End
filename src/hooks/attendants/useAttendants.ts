@@ -10,7 +10,7 @@ import { useApi } from '../useApi';
 
 export const useAttendants = () => {
   const [attendants, setAttendants] = useRecoilState(attendantsState);
-  const { get, post, del } = useApi<Attendant[]>();
+  const { get, post, del, put } = useApi<Attendant[]>();
   const { data: createdAttendantData, post: createAttendantApi } = useApi<Attendant[]>();
 
   const fetchAttendants = async () => {
@@ -72,10 +72,44 @@ export const useAttendants = () => {
     }
   };
 
+  const editAttendant = async (
+    attendantId: string,
+    userId: string | null,
+    updatedData: {
+      nome?: string;
+      email?: string;
+      senha?: string;
+      status?: boolean;
+    }
+  ) => {
+    try {
+      // Atualiza o usuário
+      await put(`/users/${userId}`, {
+        nome: updatedData.nome,
+        email: updatedData.email,
+        senha_hash: updatedData.senha,
+        status: updatedData.status,
+      });
+
+      // Atualiza o atendente apenas se houver mudança no status
+      if (updatedData.status !== undefined) {
+        await put(`/attendants/${attendantId}`, {
+          status: updatedData.status,
+        });
+      }
+      await fetchAttendants();
+    } catch (err) {
+      console.error('Falha ao editar atendente:', err);
+      throw err;
+    }
+  };
+
+
   return {
     attendants,
     addAttendant,
     removeAttendant,
+    editAttendant,
   };
 };
 
