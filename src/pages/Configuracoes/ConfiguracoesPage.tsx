@@ -1,6 +1,9 @@
+// Libbs
 import { useState } from 'react';
+// Components
 import TabsHeader from '../../components/Configuracoes/TabsHeader/TabsHeader';
 import SettingsContent from '../../components/Configuracoes/SettingsContent/SettingsContent';
+// Css
 import './configuracoes.css';
 
 const tabs = ['Conta', 'Segurança', 'Notificações', 'Preferências'];

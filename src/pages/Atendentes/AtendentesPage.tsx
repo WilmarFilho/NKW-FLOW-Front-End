@@ -1,14 +1,18 @@
+// Libbs
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import type { Attendant, AttendantInput } from '../../types/attendant';
-import { useAttendants } from '../../hooks/attendants/useAttendants';
+// Components
 import GenericTable from '../../components/Gerais/Tables/GenericTable';
 import Button from '../../components/Gerais/Buttons/Button';
 import Modal from '../../components/Gerais/Modal/Modal';
 import AttendantForm from '../../components/Atendentes/AttendantForm';
-
+// Types
+import type { Attendant, AttendantInput } from '../../types/attendant';
+// Hooks
+import { useAttendants } from '../../hooks/attendants/useAttendants';
+// Css
 import './atendentes.css';
-
+// Assets
 import ArrowUp from './assets/arrow-circle.svg';
 import XCheck from './assets/x-circle.svg';
 

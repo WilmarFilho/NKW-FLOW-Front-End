@@ -1,14 +1,17 @@
-import React from 'react';
-import AgentCard from '../../components/Agentes/AgentCard/AgentCard';
-import { useAgents } from '../../hooks/agents/useAgents';
-import './agentesPage.css';
-import Button from '../../components/Gerais/Buttons/Button';
+// Libbs
 import { motion } from 'framer-motion';
+// Components
+import Button from '../../components/Gerais/Buttons/Button';
+import AgentCard from '../../components/Agentes/AgentCard/AgentCard';
+// Hooks
+import { useAgents } from '../../hooks/agents/useAgents';
+// Css
+import './agentesPage.css';
 
-const AgentesPage: React.FC = () => {
+export default function AgentesPage() {
 
   const { agents } = useAgents();
-  
+
   return (
     <div className="agents-container">
 
@@ -62,4 +65,4 @@ const AgentesPage: React.FC = () => {
   );
 };
 
-export default AgentesPage;
+

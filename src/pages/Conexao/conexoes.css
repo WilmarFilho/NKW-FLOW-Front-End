@@ -18,8 +18,6 @@
   gap: 12px;
 }
 
-
-
 /* === Breakpoint 4: Tablets em Retrato === */
 @media (max-width: 767.98px) {
   .connections-header {

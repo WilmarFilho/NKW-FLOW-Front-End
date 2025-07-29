@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 // Hooks
 import useChats from '../../hooks/chats/useChats';
 import useMessages from '../../hooks/chats/useMessages';
@@ -10,12 +10,11 @@ import { Chat } from '../../types/chats';
 // Css
 import './conversas.css'
 
-
-const ConversasPage: React.FC = () => {
-  const [activeChat, setActiveChat] = React.useState<Chat | null>(null);
+export default function ConversasPage() {
+  const [activeChat, setActiveChat] = useState<Chat | null>(null);
   const { chats } = useChats('0523e7bd-314c-43c1-abaa-98b789c644e6');
   const { messages } = useMessages(activeChat?.id || null);
-  const [searchQuery, setSearchQuery] = React.useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
   return (
     <div className="conversations-container">
@@ -35,5 +34,3 @@ const ConversasPage: React.FC = () => {
     </div>
   );
 };
-
-export default ConversasPage;

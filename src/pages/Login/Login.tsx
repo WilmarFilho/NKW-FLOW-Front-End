@@ -1,10 +1,13 @@
+// Libbs
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+// Hooks
 import { useAuth } from '../../hooks/useAuth';
+// Assets
 import LogoIcon from './assets/logo.svg';
 import './login.css';
 
-const LoginPage = () => {
+export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const { login } = useAuth();
@@ -44,4 +47,3 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;

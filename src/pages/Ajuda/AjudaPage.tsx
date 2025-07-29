@@ -1,10 +1,15 @@
-import './ajudaPage.css';
-import ChatInput from '../../components/Gerais/Inputs/ChatInput';
-import { useRecoilValue } from 'recoil';
-import { helpChatState } from '../../state/atom';
-import { useSendHelpMessage } from '../../hooks/help/useSendHelpMessage';
+// Libbs
 import ReactMarkdown from 'react-markdown';
 import { motion } from 'framer-motion';
+import { useRecoilValue } from 'recoil';
+// Hooks
+import { useSendHelpMessage } from '../../hooks/help/useSendHelpMessage';
+// Components
+import ChatInput from '../../components/Gerais/Inputs/ChatInput';
+// Atom
+import { helpChatState } from '../../state/atom';
+// Css
+import './ajudaPage.css';
 
 export default function AjudaPage() {
   const messages = useRecoilValue(helpChatState);

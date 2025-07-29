@@ -1,13 +1,20 @@
-import { addConnectionModalState } from '../../state/atom';
+// Libbs
 import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { motion } from 'framer-motion';
+import { NavLink } from 'react-router-dom';
+// Atom
+import { addConnectionModalState } from '../../state/atom';
+// Hooks
+import { useConnections } from '../../hooks/connections/useConnections';
+// Components
 import Button from '../../components/Gerais/Buttons/Button';
 import ConnectionForm from '../../components/Conexoes/ConnectionForm';
 import GenericTable from '../../components/Gerais/Tables/GenericTable';
+// Types
 import type { Connection } from '../../types/connection';
+// Css
 import './conexoes.css';
-import { motion } from 'framer-motion';
-import { NavLink } from 'react-router-dom';
-import { useConnections } from '../../hooks/connections/useConnections';
+// Assets
 import XCheck from './assets/x-circle.svg';
 import ArrowUp from './assets/arrow-circle.svg';
 
@@ -41,8 +48,6 @@ export default function ConexoesPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
         className="connections-header"
-
-
       >
 
         <div>
@@ -58,10 +63,7 @@ export default function ConexoesPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
         className="generic-table"
-
-
       >
-
 
         <GenericTable<Connection>
           columns={['Nome', 'Número', 'Agente', 'Status']}
@@ -80,17 +82,12 @@ export default function ConexoesPage() {
                 </div>
                 <button className="delete-button" onClick={() => handleDelete(conn.id, conn.nome)}><XCheck /></button>
               </div>
-
-              
             </div>
           )}
         />
 
       </motion.div>
-
-
-
-
+      
       {isOpen && <ConnectionForm />}
 
     </div>
