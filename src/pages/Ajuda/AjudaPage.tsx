@@ -8,6 +8,9 @@ import { useSendHelpMessage } from '../../hooks/help/useSendHelpMessage';
 import ChatInput from '../../components/Gerais/Inputs/ChatInput';
 // Atom
 import { helpChatState } from '../../state/atom';
+// Assets
+import InstaIcon from './assets/insta.svg'
+import InfoIcon from './assets/info.svg'
 // Css
 import './ajudaPage.css';
 
@@ -23,14 +26,23 @@ export default function AjudaPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
         className="ajuda-header"
-
-
       >
 
         <div>
           <h2>Página de Ajuda</h2>
           <h3>Pergunte qualquer coisa que estiver com dúvidas sobre o NKW FLOW.</h3>
         </div>
+
+        <div className='wrapper-icons-ajuda'>
+          <div className='box-icon'>
+            <a href='https://google.com' target='_blank'><InstaIcon></InstaIcon></a>
+          </div>
+          <div className='box-icon'>
+            <a href='https://google.com' target='_blank'><InfoIcon></InfoIcon></a>
+          </div>
+        </div>
+
+
       </motion.div>
 
 
@@ -54,7 +66,7 @@ export default function AjudaPage() {
 
           </div>
         ))}
-        
+
       </motion.div>
 
       <ChatInput placeholder="Pergunte qualquer coisa" onSend={sendMessage} />

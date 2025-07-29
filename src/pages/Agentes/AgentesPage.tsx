@@ -5,12 +5,15 @@ import Button from '../../components/Gerais/Buttons/Button';
 import AgentCard from '../../components/Agentes/AgentCard/AgentCard';
 // Hooks
 import { useAgents } from '../../hooks/agents/useAgents';
+import { useConnections } from '../../hooks/connections/useConnections';
+
 // Css
 import './agentesPage.css';
 
 export default function AgentesPage() {
 
   const { agents } = useAgents();
+  const { connections } = useConnections();
 
   return (
     <div className="agents-container">
@@ -36,16 +39,20 @@ export default function AgentesPage() {
         transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
         className="agents-list"
       >
-        {agents.map((agent) => (
+        {agents.map((agent) => {
+          const connectionsForAgent = connections.filter(conn => conn.agente_id === agent.id);
+          const connectionNames = connectionsForAgent.map(conn => conn.nome.split('_')[0]);
 
-          <AgentCard
-            tipo={agent.tipo_de_agente}
-            key={agent.id}
-            name={agent.nome}
-            description={agent.descricao}
-          />
-
-        ))}
+          return (
+            <AgentCard
+              key={agent.id}
+              tipo={agent.tipo_de_agente}
+              name={agent.nome}
+              description={agent.descricao}
+              connections={connectionNames}
+            />
+          );
+        })}
       </motion.div>
 
     </div>

@@ -12,6 +12,15 @@
   cursor: pointer;
 }
 
+.agent-bullet {
+  background-color: var(--color-secundaria);
+  padding: 12px 16px;
+  font-family: var(--font-main);
+  font-size: 14px;
+  text-transform: uppercase;
+  border-radius: 8px;
+}
+
 .agent-card:hover {
   transform: scale(.9);
   transition: .4s;

@@ -6,6 +6,38 @@
   gap: 32px;
 }
 
+.ajuda-header {
+  display: flex;
+  gap: 32px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.wrapper-icons-ajuda {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+}
+
+.box-icon svg {
+  fill: white;
+  width: 1005;
+  height: 100%;
+}
+
+.box-icon {
+  background-color: var(--color-secundaria);
+  color: white;
+  padding: 20px;
+  border-radius: 20px;
+  height: 80px;
+  border: none;
+  cursor: pointer;
+  transition: .6s;
+}
 
 .help-chat {
   background-color: var(--color-background-dark);
