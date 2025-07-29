@@ -20,22 +20,14 @@ export default function AgentesPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
         className="agents-header"
-
-
       >
-
-
         <div>
           <h2>Vejas seus agentes disponíveis</h2>
           <h3>
             Para contratar mais agentes entre em contato.
           </h3>
         </div>
-
         <Button label='Entre em Contato' />
-
-
-
       </motion.div>
 
       <motion.div
@@ -43,8 +35,6 @@ export default function AgentesPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
         className="agents-list"
-
-
       >
         {agents.map((agent) => (
 
@@ -53,12 +43,9 @@ export default function AgentesPage() {
             key={agent.id}
             name={agent.nome}
             description={agent.descricao}
-
           />
 
         ))}
-
-
       </motion.div>
 
     </div>

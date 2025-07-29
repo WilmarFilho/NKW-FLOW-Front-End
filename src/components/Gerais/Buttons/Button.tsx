@@ -1,13 +1,12 @@
-import type { JSX } from 'react';
+//Css
 import './button.css';
 
-// Interface para as propriedades do botão
 interface ButtonProps {
   label: string;
   onClick?: () => void | null;
 }
 
-export default function Button({ label, onClick }: ButtonProps): JSX.Element {
+export default function Button({ label, onClick }: ButtonProps) {
   return (
     <button onClick={onClick} className="add-button">
       {label}

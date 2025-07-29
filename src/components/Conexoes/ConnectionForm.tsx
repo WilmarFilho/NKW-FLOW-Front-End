@@ -1,12 +1,14 @@
-import type { JSX } from 'react';
+//Libbs
 import { useRecoilState } from 'recoil';
+// Atom
 import { addConnectionModalState } from '../../state/atom';
-import Modal from '../Gerais/Modal/Modal';
+//Components
+import Modal from '../Gerais/ModalForm/Modal';
+//Hooks
 import { useAddConnection } from '../../hooks/connections/useAddConnection';
 import { useAgents } from '../../hooks/agents/useAgents';
 
-
-export default function AddConnectionModal(): JSX.Element | null {
+export default function AddConnectionModal() {
   const [modalState, setModalState] = useRecoilState(addConnectionModalState);
   const { agents } = useAgents();
 

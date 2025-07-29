@@ -1,5 +1,8 @@
+//Libbs
 import type { PropsWithChildren } from 'react';
-import './modal.css'; // Usaremos um CSS único também
+//Css
+import './modal.css'; 
+import './form.css'
 
 interface ModalProps {
   isOpen: boolean;
@@ -12,7 +15,6 @@ export default function Modal({ isOpen, onClose, title, children }: PropsWithChi
     return null;
   }
 
-  // Permite fechar o modal clicando no fundo escuro (overlay)
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
       onClose();

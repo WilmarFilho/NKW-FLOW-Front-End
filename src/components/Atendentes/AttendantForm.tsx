@@ -1,4 +1,6 @@
+//Libbs
 import { useState } from 'react';
+//Types
 import type { AttendantInput } from '../../types/attendant';
 
 interface AttendantFormProps {
@@ -19,11 +21,9 @@ export default function AttendantForm({ onSave, onClose }: AttendantFormProps) {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      await onSave(formData); // Chama a função passada pelo pai
+      await onSave(formData); 
       onClose()
-      // O pai (AtendentesPage) será responsável por fechar o modal no sucesso
     } catch (error) {
-      // O erro já é tratado no hook, mas podemos mostrar um alerta aqui se quisermos
       console.error('Erro no formulário:', error);
     } finally {
       setIsSubmitting(false);
@@ -46,8 +46,6 @@ export default function AttendantForm({ onSave, onClose }: AttendantFormProps) {
       </div>
       <div className="form-actions">
         <button type="submit" className="submit-button">{isSubmitting ? 'Salvando...' : 'Salvar'}</button>
-        
-        
       </div>
     </form>
   );

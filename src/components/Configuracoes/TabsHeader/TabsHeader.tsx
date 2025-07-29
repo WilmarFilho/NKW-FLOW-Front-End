@@ -1,6 +1,7 @@
+//Libbs
 import { motion } from 'framer-motion';
+//Css
 import './tabsHeader.css';
-
 
 type Props = {
   tabs: string[];
@@ -15,11 +16,7 @@ export default function TabsHeader({ tabs, activeTab, setActiveTab }: Props) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
       className="tabs-header"
-
-
     >
-
-
       {tabs.map((tab, index) => (
         <div
           key={index}
@@ -29,8 +26,6 @@ export default function TabsHeader({ tabs, activeTab, setActiveTab }: Props) {
           {tab}
         </div>
       ))}
-
     </motion.div>
-
   );
 }

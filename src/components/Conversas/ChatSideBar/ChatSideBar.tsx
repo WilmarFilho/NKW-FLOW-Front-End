@@ -6,6 +6,8 @@ import Tag from '../Tags/Tag';
 import ContactListItem from '../ChatListItem/ChatListItem';
 //Types
 import { Chat } from '../../../types/chats';
+//Css
+import './chatSideBar.css'
 
 interface Props {
   chats: Chat[];
@@ -47,20 +49,22 @@ const ChatSidebar = ({ chats, activeChat, setActiveChat, searchQuery, setSearchQ
           <Tag key={i} label={t} active={false} />
         ))}
       </div>
+      <div className='list-contacts'>
+        {filteredChats.map((chat) => {
+          const isActive = activeChat?.id === chat.id;
+          return (
+            <ContactListItem
+              key={chat.id}
+              classname={isActive ? 'contact-item active-contact' : 'contact-item'}
+              name={chat.contato_nome}
+              message="oi"
+              avatar="https://avatars.githubusercontent.com/u/103720085?v=4"
+              onClick={() => setActiveChat(chat)}
+            />
+          );
+        })}
+      </div>
 
-      {filteredChats.map((chat) => {
-        const isActive = activeChat?.id === chat.id;
-        return (
-          <ContactListItem
-            key={chat.id}
-            classname={isActive ? 'contact-item active-contact' : 'contact-item'}
-            name={chat.contato_nome}
-            message="oi"
-            avatar="https://avatars.githubusercontent.com/u/103720085?v=4"
-            onClick={() => setActiveChat(chat)}
-          />
-        );
-      })}
     </motion.div>
   );
 };

@@ -1,3 +1,4 @@
+//Css
 import './genericTable.css'
 
 interface GenericTableProps<T> {
@@ -6,7 +7,7 @@ interface GenericTableProps<T> {
   renderRow: (item: T, index: number) => React.ReactNode; 
 }
 
-function GenericTable<T>({ columns, data, renderRow }: GenericTableProps<T>) {
+export default function GenericTable<T>({ columns, data, renderRow }: GenericTableProps<T>) {
   return (
     <div >
       <div className="table-header">
@@ -18,8 +19,6 @@ function GenericTable<T>({ columns, data, renderRow }: GenericTableProps<T>) {
     </div>
   );
 }
-
-export default GenericTable;
 
 
 

@@ -1,4 +1,4 @@
-import React from 'react';
+//Css
 import './tag.css';
 
 interface TagProps {
@@ -6,12 +6,10 @@ interface TagProps {
   active?: boolean;
 }
 
-const Tag: React.FC<TagProps> = ({ label, active = false }) => {
+export default function Tag({ label, active = false } : TagProps) {
   return (
     <span className={`tag ${active ? 'active' : ''}`}>
       {label}
     </span>
   );
 };
-
-export default Tag;

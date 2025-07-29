@@ -13,20 +13,10 @@
   align-items: center;
 }
 
-.column-action-conex {
-  display: flex;
-  gap: 12px;
-}
-
-/* === Breakpoint 4: Tablets em Retrato === */
 @media (max-width: 767.98px) {
   .connections-header {
     flex-direction: column;
     align-items: start;
     gap: 16px;
   }
-
 }
-
-/* === Breakpoint 5: Smartphones === */
-@media (max-width: 599.98px) {}

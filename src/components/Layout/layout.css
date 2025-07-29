@@ -22,8 +22,8 @@
 
 .content-area {
   width: 80%;
-  padding: 20px 40px; /* Espaçamento interno da área de conteúdo */
-  overflow-y: auto; /* Para rolagem se o conteúdo for grande */
+  padding: 20px 40px; 
+  overflow-y: auto;
 }
 
 .content-area > div> :first-child > :first-child {

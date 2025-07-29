@@ -1,4 +1,6 @@
+//Libs
 import { motion } from 'framer-motion';
+//Css
 import './chatListItem.css';
 
 interface ContactListItemProps {
@@ -14,7 +16,7 @@ const itemVariants = {
   show: { opacity: 1, y: 0 },
 };
 
-const ChatListItem: React.FC<ContactListItemProps> = ({ name, message, classname, avatar, onClick }) => {
+export default function ChatListItem({ name, message, classname, avatar, onClick } : ContactListItemProps)  {
   return (
     <motion.div
       variants={itemVariants}
@@ -30,7 +32,6 @@ const ChatListItem: React.FC<ContactListItemProps> = ({ name, message, classname
   );
 };
 
-export default ChatListItem;
 
 
 

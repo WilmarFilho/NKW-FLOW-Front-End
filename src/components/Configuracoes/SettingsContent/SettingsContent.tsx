@@ -1,4 +1,6 @@
+//Libbs
 import { motion } from 'framer-motion';
+//Css
 import './settingsContent.css';
 
 type Props = {
@@ -19,14 +21,8 @@ export default function SettingsContent({ tabIndex }: Props) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.4, duration: 0.4, ease: 'easeOut' }}
       className="settings-content"
-
-
     >
-
       <p>{contentMap[tabIndex]}</p>
-
-
     </motion.div>
-
   );
 }

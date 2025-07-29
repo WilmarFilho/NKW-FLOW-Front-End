@@ -18,6 +18,11 @@
   margin-bottom: 10px;
 }
 
+.box-icons-table {
+  display: flex;
+  justify-content: center;
+}
+
 .connection-row,
 .attendant-row {
   background-color: var(--color-main);
@@ -27,6 +32,10 @@
   transition: .2s;
 }
 
+.column-action-conex {
+  display: flex;
+  gap: 12px;
+}
 
 .connection-row:hover,
 .attendant-row:hover {
@@ -44,10 +53,6 @@
   padding: 0px 0px 18px 0px;
   font-family: var(--font-main);
   font-size: 1.6em;
-}
-
-.attendant-row .email {
-  color: #8a8fa3;
 }
 
 .agent-select {

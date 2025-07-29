@@ -6,111 +6,15 @@
   gap: 32px;
 }
 
-.left-panel {
-  border-radius: 20px;
-  width: 30%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  background: var(--color-background-dark);
-  /* transparência */
-  backdrop-filter: blur(3px);
-  /* efeito blur */
-  -webkit-backdrop-filter: blur(10px);
-  /* suporte Safari */
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  /* borda suave */
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  /* sombra leve */
-  padding: 1rem;
-
-}
-
-.tags {
-  display: flex;
-  width: 100%;
-  gap: 8px;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-
-.contacts-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  overflow-y: auto;
-  scrollbar-width: none;
-  margin-top: 50px;
-}
-
-/* Esconde a barra em navegadores WebKit */
-.contacts-list::-webkit-scrollbar {
-  display: none;
-}
-
-.right-panel {
-  flex: 1;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 20px;
-  background: var(--color-background-dark);
-  backdrop-filter: blur(3px);
-  border-radius: 20px;
-}
-
-.messages {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-  scrollbar-width: none;
-  padding-right: 10px;
-}
-
-
 @media (max-width: 1111.98px) {
-  .left-panel {
-    width: 35%;
-  }
-
   .conversations-container {
     gap: 22px;
   }
 }
 
-
-/* === Breakpoint 3: Tablets em Paisagem / Desktops Pequenos === */
 @media (max-width: 991.98px) {
   .conversations-container {
     gap: 12px;
     flex-direction: column;
   }
-
-  .right-panel,
-  .left-panel {
-    width: 100%;
-  }
-
-  .right-panel {
-    height: 400px;
-  }
-
-  .left-panel {
-    height: 250px;
-  }
-
-  .contacts-list {
-    margin: 0;
-    gap: 40px;
-    flex-direction: row;
-  }
 }
-
-/* === Breakpoint 4: Tablets em Retrato === */
-@media (max-width: 767.98px) {}
-
-/* === Breakpoint 5: Smartphones === */
-@media (max-width: 599.98px) {}

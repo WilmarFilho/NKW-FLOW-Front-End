@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 // Components
 import GenericTable from '../../components/Gerais/Tables/GenericTable';
 import Button from '../../components/Gerais/Buttons/Button';
-import Modal from '../../components/Gerais/Modal/Modal';
+import Modal from '../../components/Gerais/ModalForm/Modal';
 import AttendantForm from '../../components/Atendentes/AttendantForm';
 // Types
 import type { Attendant, AttendantInput } from '../../types/attendant';
@@ -88,7 +88,6 @@ export default function AtendentesPage() {
                 {conn.status ? 'Ativado' : 'Desativado'}
               </div>
               <div className='box-icons-table'>
-                
                 <button className="delete-button" onClick={() => handleDelete(conn.id)}><XCheck  /></button>
               </div>
             </div>

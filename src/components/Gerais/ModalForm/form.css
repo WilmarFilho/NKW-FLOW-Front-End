@@ -1,88 +1,20 @@
 option {
     color: black;
 }
-
-.modal-header {
-  padding: 32px 0;
-}
-
-.modal-header h2 {
-  color: white;
-  font-size: 26px;
-  text-align: start;
-  font-family: var(--font-main);
-}
-
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.95); 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000; 
-  animation: fadeIn 0.3s ease-out;
-}
-
-.modal-content {
-  background: var(--color-main);
-  backdrop-filter: blur(3px);
-  padding: 60px 80px;
-  border-radius: 12px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-  position: relative;
-  width: 800px;
-  max-width: 75%;
-  height: fit-content;
-  text-align: center;
-  animation: slideUp 0.4s ease-out;
-}
-
-.modal-close-button {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  background: var(--color-background-input);
-  border: none;
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1rem;
-  font-weight: bold;
-  cursor: pointer;
-  color: #888;
-  transition: background-color 0.2s, color 0.2s;
-}
-
-.modal-close-button:hover {
-  background-color: #e0e0e0;
-  color: #333;
-}
-
-/* --- Estilos para a Etapa 1: Formulário --- */
 .connection-form h2 {
   margin-top: 0;
   margin-bottom: 10px;
   color: white;
 }
-
 .connection-form p {
     margin-bottom: 25px;
     color: #ffffff;
     font-size: 0.95rem;
 }
-
 .form-group {
   margin-bottom: 20px;
   text-align: left; /* Alinha labels e inputs à esquerda */
 }
-
 .form-group label {
   display: block;
   margin-bottom: 8px;
@@ -90,7 +22,6 @@ option {
   color: #ffffff;
   font-size: 0.9rem;
 }
-
 .form-group input,
 .form-group select {
   width: 100%;
@@ -102,16 +33,14 @@ option {
   box-sizing: border-box; /* Garante que padding não afete a largura total */
   transition: border-color 0.2s, box-shadow 0.2s;
 }
-
 .form-group input:focus,
 .form-group select:focus {
   outline: none;
 }
-
 .submit-button {
   width: 100%;
   padding: 14px;
-  background-color: var(--color-background-input);
+  background-color: var(--color-background-white);
   color: white;
   border: none;
   border-radius: 6px;
@@ -120,22 +49,17 @@ option {
   cursor: pointer;
   transition: background-color 0.2s, transform 0.1s;
 }
-
 .submit-button:active {
   transform: scale(0.98);
 }
-
-
 /* --- Estilos para a Etapa 2: QR Code --- */
 .qr-code-step h2 {
   margin-top: 0;
   margin-bottom: 10px;
 }
-
 .qr-code-step p {
   color: #666;
 }
-
 .qr-code-step img {
   width: 280px;
   height: 280px;
@@ -144,13 +68,11 @@ option {
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
-
 .status-text {
   font-weight: 500;
   color: #555;
   margin-top: 15px;
 }
-
 .error-text {
   color: #d9534f;
   background-color: #f8d7da;
@@ -160,7 +82,6 @@ option {
   font-weight: 500;
   margin-top: 15px;
 }
-
 
 /* --- Animações para uma entrada suave --- */
 @keyframes fadeIn {

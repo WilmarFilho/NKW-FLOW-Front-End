@@ -7,7 +7,7 @@ type ChatInputProps = {
   onSend: (message: string) => void;
 };
 
-const ChatInput: React.FC<ChatInputProps> = ({ placeholder = 'Digite sua mensagem...', onSend }) => {
+export default function ChatInput({ placeholder = 'Digite sua mensagem...', onSend } : ChatInputProps) {
   const [input, setInput] = useState('');
 
   const handleSend = () => {
@@ -49,5 +49,3 @@ const ChatInput: React.FC<ChatInputProps> = ({ placeholder = 'Digite sua mensage
 
   );
 };
-
-export default ChatInput;

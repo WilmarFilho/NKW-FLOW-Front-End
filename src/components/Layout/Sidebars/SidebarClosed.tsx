@@ -1,7 +1,9 @@
+//Libbs
 import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
+//Css
 import './sidebarclosed.css';
-
+//Assets
 import ConversasIcon from '../assets/chat.svg';
 import AtendenteIcon from '../assets/atendentes.svg';
 import AgenteIcon from '../assets/bot.svg';

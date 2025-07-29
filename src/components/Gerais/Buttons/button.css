@@ -20,15 +20,12 @@
   color: black;
 }
 
-
-
 /* === Breakpoint 3: Tablets em Paisagem / Desktops Pequenos === */
 @media (max-width: 1199.98px) {
   .add-button {
     height: 60px;
   }
 }
-
 
 /* === Breakpoint 3: Tablets em Paisagem / Desktops Pequenos === */
 @media (max-width: 991.98px) {

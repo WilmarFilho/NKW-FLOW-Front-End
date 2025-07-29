@@ -1,5 +1,6 @@
-import React from 'react';
+//Css
 import './messageBubble.css';
+//Libbs
 import { motion } from 'framer-motion';
 
 interface MessageBubbleProps {
@@ -7,7 +8,7 @@ interface MessageBubbleProps {
   sender: 'me' | 'other';
 }
 
-const MessageBubble: React.FC<MessageBubbleProps> = ({ text, sender }) => {
+export default function MessageBubble({ text, sender } : MessageBubbleProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -20,4 +21,4 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ text, sender }) => {
   );
 };
 
-export default MessageBubble;
+

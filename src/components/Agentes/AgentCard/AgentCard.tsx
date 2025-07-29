@@ -1,4 +1,4 @@
-import React from 'react';
+//Css
 import './agentCard.css';
 
 interface AgentCardProps {
@@ -7,7 +7,7 @@ interface AgentCardProps {
   description: string;
 }
 
-const AgentCard: React.FC<AgentCardProps> = ({ name, description, tipo }) => {
+export default function AgentCard({ name, description, tipo } : AgentCardProps) {
   return (
     <div className="agent-card">
       <img src='https://avatars.githubusercontent.com/u/103720085?v=4' alt={name} className="avatar" />
@@ -16,5 +16,3 @@ const AgentCard: React.FC<AgentCardProps> = ({ name, description, tipo }) => {
     </div>
   );
 };
-
-export default AgentCard;

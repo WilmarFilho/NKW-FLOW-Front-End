@@ -1,4 +1,4 @@
- 
+//Assets 
 import SearchIcon from '../assets/search.svg';
 import './searchbar.css';
 
@@ -6,7 +6,7 @@ interface SearchBarProps {
   onSearch: (query: string) => void;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
+export default function SearchBar ({ onSearch } : SearchBarProps)  {
   return (
     <div className="search-container">
 
@@ -23,5 +23,3 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
     </div>
   );
 };
-
-export default SearchBar;

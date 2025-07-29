@@ -40,9 +40,6 @@
   transition: .5s;
 }
 
-
-
-
 @media (max-width: 599.98px) {
   .box-chat-input {
     flex-direction: column;

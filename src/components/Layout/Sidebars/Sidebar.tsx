@@ -1,9 +1,11 @@
+//Libbs
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+//Hooks
 import { useAuth } from '../../../hooks/useAuth';
-
+//Css
 import './sidebar.css';
-
+//Assets
 import LogoIcon from '../assets/logo.svg';
 import ConversasIcon from '../assets/chat.svg';
 import AtendenteIcon from '../assets/atendentes.svg';
@@ -17,8 +19,8 @@ import LogoutIcon from '../assets/logout.svg';
 const Sidebar = () => {
   const user = {
     name: 'Wilmar Filho',
-    email: 'oftheguizo32@gmail.com', // Cuidado ao expor e-mails diretamente
-    avatarUrl: 'https://avatars.githubusercontent.com/u/103720085?v=4', // URL do avatar
+    email: 'oftheguizo32@gmail.com', 
+    avatarUrl: 'https://avatars.githubusercontent.com/u/103720085?v=4',
   };
 
   const navigate = useNavigate();

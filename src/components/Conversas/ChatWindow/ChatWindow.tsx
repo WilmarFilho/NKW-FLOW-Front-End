@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'; // 👈 importe isso
+import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 // Components
 import MessageBubble from '../MessageBubble/MessageBubble';
@@ -9,6 +9,8 @@ import { Message } from '../../../types/message';
 // Hooks
 import useToggleIA from '../../../hooks/chats/useToggleIA';
 import useSendMessage from '../../../hooks/chats/useSendMessage';
+// Css
+import './chatWindow.css'
 
 interface Props {
     activeChat: Chat | null;
@@ -20,10 +22,9 @@ const ChatWindow = ({ activeChat, messages, setActiveChat }: Props) => {
     const { toggleIA } = useToggleIA();
     const { sendMessage } = useSendMessage();
 
-    const messagesEndRef = useRef<HTMLDivElement | null>(null); // 👈 ref pro final
+    const messagesEndRef = useRef<HTMLDivElement | null>(null); 
 
     useEffect(() => {
-        // Sempre que mensagens forem atualizadas, rola pro fim
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
 
@@ -53,7 +54,7 @@ const ChatWindow = ({ activeChat, messages, setActiveChat }: Props) => {
                                 sender={msg.remetente === 'cliente' ? 'me' : 'other'}
                             />
                         ))}
-                        <div ref={messagesEndRef} /> {/* 👈 div invisível para rolar até */}
+                        <div ref={messagesEndRef} /> {/* div invisível para rolar até */}
                     </>
                 ) : (
                     <p style={{ padding: '1rem' }}>Selecione uma conversa</p>
