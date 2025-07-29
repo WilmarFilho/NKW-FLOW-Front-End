@@ -80,11 +80,11 @@ export default function AtendentesPage() {
 
       >
         <GenericTable<Attendant>
-          columns={['Nome', 'Email', 'Status', 'Ações']}
+          columns={['Nome', 'Email', 'Status', '']}
           data={attendants}
           renderRow={(conn, i) => (
             <div className="connection-row" key={i}>
-              <div>{conn.user.nome}</div>
+              <div className='box-table-nome'>{conn.user.nome} <button className="edit-button" ><ArrowUp  /></button></div>
               <div>{conn.user.email}</div>
               <div
                 className={`status-chip ${conn.status ? 'active' : 'inactive'}`}
@@ -92,7 +92,7 @@ export default function AtendentesPage() {
                 {conn.status ? 'Ativado' : 'Desativado'}
               </div>
               <div className='box-icons-table'>
-                <button className="edit-button" ><ArrowUp  /></button>
+                
                 <button className="delete-button" onClick={() => handleDelete(conn.id)}><XCheck  /></button>
               </div>
             </div>

@@ -9,6 +9,7 @@ import { motion } from 'framer-motion';
 import { NavLink } from 'react-router-dom';
 import { useConnections } from '../../hooks/useConnections';
 import XCheck from './assets/x-circle.svg';
+import ArrowUp from './assets/arrow-circle.svg';
 
 export default function ConexoesPage() {
 
@@ -75,7 +76,7 @@ export default function ConexoesPage() {
           data={connections}
           renderRow={(conn, i) => (
             <div className="connection-row" key={i}>
-              <div>{conn.nome.split('_')[0]}</div>
+              <div className='box-table-nome'>{conn.nome.split('_')[0]} <button className="edit-button" ><ArrowUp  /></button></div>
               <div>{conn.numero}</div>
               <NavLink to="/agentes"><div className="agent-select">{conn.agente.tipo_de_agente}</div></NavLink>
               <div className='column-action-conex'>
