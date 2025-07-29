@@ -11,7 +11,7 @@ import type { Connection } from '../../types/connection';
 export const useConnections = () => {
   const [connections, setConnections] = useRecoilState(connectionsState);
   
-  const { get, del } = useApi<Connection[]>();
+  const { get, del, put } = useApi<Connection[]>();
 
   const fetchConnections = useCallback(async () => {
     const data = await get('/connections');
@@ -44,6 +44,7 @@ export const useConnections = () => {
   return { 
     connections, 
     removeConnection,
+    fetchConnections,
   };
 };
 

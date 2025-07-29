@@ -25,9 +25,23 @@ export default function ConexoesPage() {
   const setModalState = useSetRecoilState(addConnectionModalState);
   const { isOpen } = useRecoilValue(addConnectionModalState);
 
-  const handleOpenModal = (): void => {
-    setModalState({ isOpen: true });
+  const handleOpenModal = () => {
+    setModalState({ isOpen: true, initialData: null, editMode: false });
   };
+
+  const handleEdit = (conn: Connection) => {
+    setModalState({
+      isOpen: true,
+      initialData: {
+        id: conn.id,
+        nome: conn.nome,
+        status: conn.status,
+        agente_id: conn.agente_id,
+      },
+      editMode: true,
+    });
+  };
+
 
   const handleDelete = async (id: string, nome: string) => {
     if (window.confirm('Tem certeza que deseja excluir esta conexão?')) {
@@ -69,8 +83,8 @@ export default function ConexoesPage() {
           columns={['Nome', 'Número', 'Agente', 'Status']}
           data={connections}
           renderRow={(conn, i) => (
-            <div className="connection-row" key={i}>
-              <div className='box-table-nome'>{conn.nome.split('_')[0]} <button className="edit-button" ><ArrowUp  /></button></div>
+            <div className="connection-row"  onClick={() => handleEdit(conn)} key={i}>
+              <div className='box-table-nome'>{conn.nome.split('_')[0]} <button className="edit-button" onClick={() => handleEdit(conn)} ><ArrowUp /></button></div>
               <div>{conn.numero}</div>
               <NavLink to="/agentes"><div className="agent-select">{conn.agente.tipo_de_agente}</div></NavLink>
               <div className='column-action-conex'>
@@ -87,7 +101,7 @@ export default function ConexoesPage() {
         />
 
       </motion.div>
-      
+
       {isOpen && <ConnectionForm />}
 
     </div>

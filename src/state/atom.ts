@@ -25,9 +25,13 @@ export const messagesState = atom<Message[]>({
 });
 
 // Controle do modal de adicionar conexão
-export const addConnectionModalState = atom({
+export const addConnectionModalState = atom<{
+  isOpen: boolean;
+  initialData: Partial<Connection> | null;
+  editMode?: boolean;
+}>({
   key: 'addConnectionModalState',
-  default: { isOpen: false },
+  default: { isOpen: false, initialData: null, editMode: false },
 });
 
 // Estado dos atendentes humanos
