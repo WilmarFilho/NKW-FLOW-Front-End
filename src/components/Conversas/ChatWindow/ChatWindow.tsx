@@ -1,4 +1,4 @@
-// Utils
+import { useEffect, useRef } from 'react'; // 👈 importe isso
 import { motion } from 'framer-motion';
 // Components
 import MessageBubble from '../MessageBubble/MessageBubble';
@@ -8,17 +8,33 @@ import { Chat } from '../../../types/chats';
 import { Message } from '../../../types/message';
 // Hooks
 import useToggleIA from '../../../hooks/useToggleIA';
+import useSendMessage from '../../../hooks/useSendMessage';
 
 interface Props {
     activeChat: Chat | null;
     messages: Message[];
     setActiveChat: (chat: Chat) => void;
-    onSendMessage: (text: string) => void;
 }
 
-const ChatWindow = ({ activeChat, messages, setActiveChat, onSendMessage }: Props) => {
-
+const ChatWindow = ({ activeChat, messages, setActiveChat }: Props) => {
     const { toggleIA } = useToggleIA();
+    const { sendMessage } = useSendMessage();
+
+    const messagesEndRef = useRef<HTMLDivElement | null>(null); // 👈 ref pro final
+
+    useEffect(() => {
+        // Sempre que mensagens forem atualizadas, rola pro fim
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [messages]);
+
+    const handleSendMessage = async (text: string) => {
+        if (!activeChat) return;
+
+        await sendMessage({
+            chat_id: activeChat.id,
+            mensagem: text,
+        });
+    };
 
     return (
         <motion.div
@@ -27,22 +43,25 @@ const ChatWindow = ({ activeChat, messages, setActiveChat, onSendMessage }: Prop
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.4, duration: 0.6, ease: 'easeOut' }}
         >
-            <div className="messages">
+            <div className="messages" style={{ overflowY: 'auto', maxHeight: '100%' }}>
                 {activeChat ? (
-                    messages.map((msg) => (
-                        <MessageBubble
-                            key={msg.id}
-                            text={msg.mensagem}
-                            sender={msg.remetente === 'cliente' ? 'me' : 'other'}
-                        />
-                    ))
+                    <>
+                        {messages.map((msg) => (
+                            <MessageBubble
+                                key={msg.id}
+                                text={msg.mensagem}
+                                sender={msg.remetente === 'cliente' ? 'me' : 'other'}
+                            />
+                        ))}
+                        <div ref={messagesEndRef} /> {/* 👈 div invisível para rolar até */}
+                    </>
                 ) : (
                     <p style={{ padding: '1rem' }}>Selecione uma conversa</p>
                 )}
             </div>
 
             <div className="box-chat-input">
-                <ChatInput placeholder="Digite uma mensagem" onSend={onSendMessage} />
+                <ChatInput placeholder="Digite uma mensagem" onSend={handleSendMessage} />
 
                 {activeChat && (
                     <button
