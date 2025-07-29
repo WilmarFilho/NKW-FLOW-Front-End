@@ -2,7 +2,7 @@ import './ajudaPage.css';
 import ChatInput from '../../components/Gerais/Inputs/ChatInput';
 import { useRecoilValue } from 'recoil';
 import { helpChatState } from '../../state/atom';
-import { useSendHelpMessage } from '../../hooks/useSendHelpMessage';
+import { useSendHelpMessage } from '../../hooks/help/useSendHelpMessage';
 import ReactMarkdown from 'react-markdown';
 import { motion } from 'framer-motion';
 

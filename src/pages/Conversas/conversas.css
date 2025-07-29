@@ -13,7 +13,7 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  background: var(--color-background-input);
+  background: var(--color-background-dark);
   /* transparência */
   backdrop-filter: blur(3px);
   /* efeito blur */
@@ -56,7 +56,7 @@
   flex-direction: column;
   justify-content: space-between;
   padding: 20px;
-  background: var(--color-background-input);
+  background: var(--color-background-dark);
   backdrop-filter: blur(3px);
   border-radius: 20px;
 }

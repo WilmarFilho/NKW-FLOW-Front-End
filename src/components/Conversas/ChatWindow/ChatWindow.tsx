@@ -7,8 +7,8 @@ import ChatInput from '../../Gerais/Inputs/ChatInput';
 import { Chat } from '../../../types/chats';
 import { Message } from '../../../types/message';
 // Hooks
-import useToggleIA from '../../../hooks/useToggleIA';
-import useSendMessage from '../../../hooks/useSendMessage';
+import useToggleIA from '../../../hooks/chats/useToggleIA';
+import useSendMessage from '../../../hooks/chats/useSendMessage';
 
 interface Props {
     activeChat: Chat | null;

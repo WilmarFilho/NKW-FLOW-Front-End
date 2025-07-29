@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: row !important;
   gap: 24px;
-  background-color: var(--color-background-input );
+  background-color: var(--color-background-dark );
   padding: 12px 20px;
   border-radius: 16px;
 }

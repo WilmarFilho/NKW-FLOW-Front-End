@@ -8,7 +8,7 @@
 
 
 .help-chat {
-  background-color: var(--color-background-input);
+  background-color: var(--color-background-dark);
   border-radius: 20px;
   padding: 32px 24px;
   height: 100%;

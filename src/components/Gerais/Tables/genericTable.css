@@ -1,5 +1,5 @@
 .generic-table {
-  background-color: var(--color-background-input);
+  background-color: var(--color-background-dark);
   padding: 72px 48px;
   border-radius: 16px;
   display: flex;
@@ -94,7 +94,7 @@
 
 .delete-button:hover, .edit-button:hover {
   transition: .6s;
-  background-color: var(--color-background-input);
+  background-color: var(--color-background-dark);
 }
 
 .edit-button {

@@ -1,7 +1,7 @@
 import React from 'react';
 // Hooks
-import useChats from '../../hooks/useChats';
-import useMessages from '../../hooks/useMessages';
+import useChats from '../../hooks/chats/useChats';
+import useMessages from '../../hooks/chats/useMessages';
 //Components
 import ChatSidebar from '../../components/Conversas/ChatSideBar/ChatSideBar';
 import ChatWindow from '../../components/Conversas/ChatWindow/ChatWindow';

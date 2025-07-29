@@ -3,8 +3,8 @@
   --font-secundaria: 'Jost', 'sans-serif';
   --color-main: #1b214a90;
   --color-secundaria: #52f2b73a;
-  --color-background: rgba(255, 255, 255, 0.1);
-  --color-background-input: #07070777;
+  --color-background-white: rgba(255, 255, 255, 0.1);
+  --color-background-dark: #07070777;
 }
 
 * {

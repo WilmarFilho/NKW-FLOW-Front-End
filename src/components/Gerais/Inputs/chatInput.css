@@ -5,7 +5,7 @@
   border-radius: 15px;
   width: 100%;
   padding: 20px;
-  background-color: var(--color-background);
+  background-color: var(--color-background-white);
 }
 
 .chat-input-wrapper input {
@@ -28,7 +28,7 @@
 }
 
 .toggle-ia-btn {
-  background-color: var(--color-background);
+  background-color: var(--color-background-white);
   border-radius: 15px;
   border: none;
   min-width: 125px;
