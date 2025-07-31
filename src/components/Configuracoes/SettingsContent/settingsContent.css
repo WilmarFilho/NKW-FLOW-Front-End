@@ -62,5 +62,6 @@
   outline: none;
   border: none;
   padding: 18px 32px;
+  cursor: pointer;
   border-radius: 10px;
 }

@@ -25,7 +25,7 @@ export default function AddConnectionModal() {
     handleInputChange,
     handleStartSession,
     handleEditConnection
-  } = useAddConnection(handleClose, initialData, editMode);
+  } = useAddConnection(handleClose, initialData);
 
 
   if (!modalState.isOpen) return null;

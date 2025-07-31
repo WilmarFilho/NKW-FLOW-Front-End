@@ -1,35 +1,23 @@
 import { useRecoilState } from 'recoil';
 import { authTokenState, userState } from '../../state/atom';
 import type { User } from '../../types/user';
+import { useApi } from '../utils/useApi';
 
 export const useAuth = () => {
   const [token, setToken] = useRecoilState(authTokenState);
   const [user, setUser] = useRecoilState(userState);
+  const { get } = useApi<User>(); // ← Correção aqui
 
   const login = async (email: string, senha: string) => {
 
-    const mockUser: User = {
-      id: 'user123',
-      email: 'teste@teste.com',
-      nome: 'Atendente A',
-      tipo_de_usuario: 'atendente',
-      status: true,
-      modo_tela: 'Black',
-      modo_side_bar: 'Full',
-      mostra_nome_mensagens: true,
-      modo_notificacao_atendente: false,
-      notificacao_para_entrar_conversa: true,
-      notificacao_necessidade_de_entrar_conversa: false,
-      notificacao_novo_chat: true,
-      criado_em: new Date().toISOString(),
-    };
-
     const token = '123' +  email + senha
-    const userId = '0523e7bd-314c-43c1-abaa-98b789c644e6'
+    const userId = '419da23a-5461-470c-a837-d79fa2bb2f0c'
+
+    const fetchedUser = await get(`/users/${userId}`);
 
     setToken({ token: token, userId: userId });
 
-    setUser(mockUser);
+    setUser(fetchedUser);
   };
 
   const logout = () => {

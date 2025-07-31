@@ -7,22 +7,26 @@ import SidebarClosed from './Sidebars/SidebarClosed';
 import { useRealtimeEvents } from '../../hooks/events/useRealtimeEvents';
 //Css
 import './Layout.css';
+//Libbs
+import { useRecoilState } from 'recoil';
+import { userState } from '../../state/atom';
+import { useUser } from '../../hooks/auth/useUser';
 
 export default function Layout() {
+  useUser();
+  const [user] = useRecoilState(userState);
 
-  const userId = '0523e7bd-314c-43c1-abaa-98b789c644e6';
-  useRealtimeEvents(userId);
+  useRealtimeEvents(user?.id); // ← HOOK sempre na raiz
 
   return (
     <div className="layout-container">
-
       <SidebarClosed />
       <Sidebar />
       <div className='wrapper-border'><div className='border'></div></div>
       <main className="content-area">
         <Outlet />
       </main>
-
     </div>
   );
-};
+}
+

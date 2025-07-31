@@ -5,12 +5,15 @@ import { useApi } from '../utils/useApi';
 import { useConnections } from './useConnections';
 //Types
 import { Connection } from '../../types/connection';
+import { useRecoilState } from 'recoil';
+import { userState } from '../../state/atom';
 
 interface AddConnectionResponse {
   qr_code: string;
 }
 
-export const useAddConnection = (onClose: () => void, initialData: Partial<Connection> | null, editMode?: boolean) => {
+export const useAddConnection = (onClose: () => void, initialData: Partial<Connection> | undefined | null) => {
+  const [user] = useRecoilState(userState);
   const [step, setStep] = useState<1 | 2>(1);
   const [formData, setFormData] = useState({
     nome: initialData?.nome?.split('_')[0] || '',
@@ -23,9 +26,6 @@ export const useAddConnection = (onClose: () => void, initialData: Partial<Conne
   const { post, put } = useApi<AddConnectionResponse>();
 
   const { fetchConnections } = useConnections()
-
-  // O ID mockado para Desenvolvimento
-  const MOCK_USER_ID = '0523e7bd-314c-43c1-abaa-98b789c644e6';
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { id, value } = e.target;
@@ -40,10 +40,12 @@ export const useAddConnection = (onClose: () => void, initialData: Partial<Conne
   const handleStartSession = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const connectionName = `${formData.nome}_${MOCK_USER_ID}`;
+    if(!user) return
+
+    const connectionName = `${formData.nome}_${user.id}`;
 
     const payload = {
-      user_id: MOCK_USER_ID,
+      user_id: user.id,
       nome: connectionName,
       status: false,
       agente_id: formData.agent,

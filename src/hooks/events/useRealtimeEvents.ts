@@ -5,7 +5,7 @@ import { apiConfig } from '../../config/api';
 import { addConnectionModalState } from '../../state/atom';
 
 
-export const useRealtimeEvents = (userId: string) => {
+export const useRealtimeEvents = (userId: string | undefined) => {
   const setConnections = useSetRecoilState(connectionsState);
   const setChats = useSetRecoilState(chatsState);
   const setMessages = useSetRecoilState(messagesState);
