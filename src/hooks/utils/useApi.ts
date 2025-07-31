@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
-import { apiConfig } from '../config/api';
+import { apiConfig } from '../../config/api';
 
 interface UseApiResult<T> {
   data: T | null;

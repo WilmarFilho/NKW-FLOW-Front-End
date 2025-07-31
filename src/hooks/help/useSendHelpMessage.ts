@@ -3,7 +3,7 @@ import { useSetRecoilState } from 'recoil';
 // Atom
 import { helpChatState } from '../../state/atom';
 // Utils
-import { useApi } from '../useApi';
+import { useApi } from '../utils/useApi';
 // Types
 import type { HelpChat } from '../../types/helpChat';
 

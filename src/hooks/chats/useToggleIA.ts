@@ -1,7 +1,7 @@
 // Libbs
 import { useCallback } from 'react';
 // Utils
-import { useApi } from '../useApi'; 
+import { useApi } from '../utils/useApi'; 
 // Types
 import type { Chat } from '../../types/chats';
 

@@ -28,7 +28,7 @@ export const messagesState = atom<Message[]>({
 // Controle do modal de adicionar conexão
 export const addConnectionModalState = atom<{
   isOpen: boolean;
-  initialData: Partial<Connection> | null;
+  initialData?: Partial<Connection> | null;
   editMode?: boolean;
 }>({
   key: 'addConnectionModalState',
@@ -56,35 +56,29 @@ export const helpChatState = atom<HelpChat[]>({
 // Autenticação
 
 
-export const userState = atom<User>({
+export const userState = atom<User | null>({
   key: 'userState',
-  default: {
-    id: 'mock-id',
-    email: 'mock@email.com',
-    nome: 'Mock User',
-    tipo_de_usuario: 'admin',
-    foto_perfil: '',
-    status: true,
-    modo_tela: 'Black',
-    modo_side_bar: 'Full',
-    mostra_nome_mensagens: true,
-    modo_notificacao_atendente: false,
-    notificacao_para_entrar_conversa: true,
-    notificacao_necessidade_de_entrar_conversa: false,
-    notificacao_novo_chat: true,
-    criado_em: new Date().toISOString(),
-  },
+  default: null,
 });
 
 
-export const authTokenState = atom<string | null>({
+export const authTokenState = atom<{ token: string; userId: string } | null>({
   key: 'authTokenState',
-  default: localStorage.getItem('token'),
+  default: (() => {
+    const token = localStorage.getItem('token');
+    const userId = localStorage.getItem('userId');
+    return token && userId ? { token, userId } : null;
+  })(),
   effects: [
     ({ onSet }) => {
-      onSet((token) => {
-        if (token) localStorage.setItem('token', token);
-        else localStorage.removeItem('token');
+      onSet((value) => {
+        if (value) {
+          localStorage.setItem('token', value.token);
+          localStorage.setItem('userId', value.userId);
+        } else {
+          localStorage.removeItem('token');
+          localStorage.removeItem('userId');
+        }
       });
     },
   ],

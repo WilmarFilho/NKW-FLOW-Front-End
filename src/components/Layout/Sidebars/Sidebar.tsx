@@ -2,7 +2,7 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 //Hooks
-import { useAuth } from '../../../hooks/useAuth';
+import { useAuth } from '../../../hooks/auth/useAuth';
 //Css
 import './sidebar.css';
 //Assets

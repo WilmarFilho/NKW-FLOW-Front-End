@@ -1,5 +1,5 @@
 // Utils
-import { useApi } from '../useApi'; 
+import { useApi } from '../utils/useApi'; 
 // Types
 import type { Message } from '../../types/message';
 

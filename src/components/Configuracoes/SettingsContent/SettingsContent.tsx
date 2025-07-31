@@ -1,8 +1,8 @@
 //Libbs
 import { motion } from 'framer-motion';
-import { useRecoilState } from 'recoil';
-import { userState } from '../../../state/atom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+// Hooks
+import { useUser } from '../../../hooks/auth/useUser';
 //Css
 import './settingsContent.css';
 //Components
@@ -14,19 +14,29 @@ type Props = {
 };
 
 export default function SettingsContent({ tabIndex }: Props) {
-  const [user, setUser] = useRecoilState(userState);
+  const { user, updateUser } = useUser();
 
-  // Estados locais (você pode usar useEffect se quiser sincronizar com mudanças do user)
-  const [mostrarNome, setMostrarNome] = useState(user.mostra_nome_mensagens);
-  const [notifAtendente, setNotifAtendente] = useState(user.modo_notificacao_atendente);
-  const [notifEntrarConversa, setNotifEntrarConversa] = useState(user.notificacao_para_entrar_conversa);
-  const [notifNovoChat, setNotifNovoChat] = useState(user.notificacao_novo_chat);
-  const [modoTela, setModoTela] = useState(user.modo_tela);
-  const [modoSidebar, setModoSidebar] = useState(user.modo_side_bar);
+  const [mostrarNome, setMostrarNome] = useState(false);
+  const [notifAtendente, setNotifAtendente] = useState(false);
+  const [notifEntrarConversa, setNotifEntrarConversa] = useState(false);
+  const [notifNovoChat, setNotifNovoChat] = useState(false);
+  const [modoTela, setModoTela] = useState<'Black' | 'White'>('Black');
+  const [modoSidebar, setModoSidebar] = useState<'Full' | 'Minimal'>('Full');
 
-  const handleSave = () => {
-    setUser({
-      ...user,
+  // Carrega valores do estado global do usuário
+  useEffect(() => {
+    if (user) {
+      setMostrarNome(user.mostra_nome_mensagens);
+      setNotifAtendente(user.modo_notificacao_atendente);
+      setNotifEntrarConversa(user.notificacao_para_entrar_conversa);
+      setNotifNovoChat(user.notificacao_novo_chat);
+      setModoTela(user.modo_tela);
+      setModoSidebar(user.modo_side_bar);
+    }
+  }, [user]);
+
+  const handleSave = async () => {
+    const success = await updateUser({
       mostra_nome_mensagens: mostrarNome,
       modo_notificacao_atendente: notifAtendente,
       notificacao_para_entrar_conversa: notifEntrarConversa,
@@ -34,7 +44,8 @@ export default function SettingsContent({ tabIndex }: Props) {
       modo_tela: modoTela,
       modo_side_bar: modoSidebar,
     });
-    alert('Alterações salvas!');
+
+    if (success) alert('Alterações salvas!');
   };
 
   const renderSwitch = (
@@ -72,8 +83,9 @@ export default function SettingsContent({ tabIndex }: Props) {
     </div>
   );
 
-
   const renderContent = () => {
+    if (!user) return <p>Carregando configurações...</p>;
+
     switch (tabIndex) {
       case 0:
         return (
@@ -114,7 +126,6 @@ export default function SettingsContent({ tabIndex }: Props) {
       case 3:
         return (
           <>
-            
             {renderSelect(
               'Modo de Tela',
               'Altere entre modo escuro (Black) e claro (White).',
@@ -129,14 +140,12 @@ export default function SettingsContent({ tabIndex }: Props) {
               (val) => setModoSidebar(val as 'Full' | 'Minimal'),
               ['Full', 'Minimal']
             )}
-        
           </>
         );
       default:
         return <p>Selecione uma aba de configuração válida.</p>;
     }
   };
-
 
   return (
     <motion.div
@@ -147,10 +156,9 @@ export default function SettingsContent({ tabIndex }: Props) {
     >
       {renderContent()}
 
-      <button className="save-btn" onClick={handleSave}>
+      <button className="save-btn" onClick={handleSave} disabled={!user}>
         Salvar alterações
       </button>
-
     </motion.div>
   );
 }

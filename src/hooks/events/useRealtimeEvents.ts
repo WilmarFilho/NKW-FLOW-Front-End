@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
-import { connectionsState, chatsState, messagesState } from '../state/atom';
-import { apiConfig } from '../config/api';
-import { addConnectionModalState } from '../state/atom';
+import { connectionsState, chatsState, messagesState } from '../../state/atom';
+import { apiConfig } from '../../config/api';
+import { addConnectionModalState } from '../../state/atom';
 
 
 export const useRealtimeEvents = (userId: string) => {
@@ -22,7 +22,7 @@ export const useRealtimeEvents = (userId: string) => {
         const payload = JSON.parse(event.data);
         const { event: tipo, connection, chat, message, state } = payload;
 
-        console.log(payload)
+        console.log(payload, chat)
 
         if (tipo === 'connection.update') {
           if (state === 'close') {

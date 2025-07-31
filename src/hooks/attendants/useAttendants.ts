@@ -6,7 +6,7 @@ import { attendantsState } from '../../state/atom';
 // Types
 import type { Attendant, AttendantInput } from '../../types/attendant';
 // Utils
-import { useApi } from '../useApi';
+import { useApi } from '../utils/useApi';
 
 export const useAttendants = () => {
   const [attendants, setAttendants] = useRecoilState(attendantsState);

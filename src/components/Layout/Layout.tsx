@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebars/Sidebar';
 import SidebarClosed from './Sidebars/SidebarClosed';
 //Hooks
-import { useRealtimeEvents } from '../../hooks/useRealtimeEvents';
+import { useRealtimeEvents } from '../../hooks/events/useRealtimeEvents';
 //Css
 import './Layout.css';
 

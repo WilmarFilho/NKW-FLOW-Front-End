@@ -4,7 +4,7 @@ import { useRecoilState } from 'recoil';
 // Atom
 import { connectionsState } from '../../state/atom';
 // Utils
-import { useApi } from '../useApi'; 
+import { useApi } from '../utils/useApi'; 
 // Types
 import type { Connection } from '../../types/connection';
 

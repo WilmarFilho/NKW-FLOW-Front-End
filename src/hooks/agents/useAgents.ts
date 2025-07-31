@@ -6,7 +6,7 @@ import { agentsState } from '../../state/atom';
 // Types
 import type { Agent } from '../../types/agent';
 // Utils
-import { useApi } from '../useApi';
+import { useApi } from '../utils/useApi';
 
 export const useAgents = () => {
   const [agents, setAgents] = useRecoilState(agentsState);

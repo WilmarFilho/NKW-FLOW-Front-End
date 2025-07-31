@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // Hooks
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../hooks/auth/useAuth';
 // Assets
 import LogoIcon from './assets/logo.svg';
 import './login.css';
@@ -14,8 +14,9 @@ export default function LoginPage() {
   const navigate = useNavigate();
 
   const handleLogin = async () => {
-    const fakeToken = 'abc123token';
-    login(fakeToken);
+
+    login(email, senha);
+
     navigate('/conexoes');
   };
 
@@ -46,4 +47,6 @@ export default function LoginPage() {
     </div>
   );
 };
+
+
 

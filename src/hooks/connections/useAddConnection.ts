@@ -1,7 +1,7 @@
 // Libs
 import { useState } from 'react';
 // Utils
-import { useApi } from '../useApi';
+import { useApi } from '../utils/useApi';
 import { useConnections } from './useConnections';
 //Types
 import { Connection } from '../../types/connection';
