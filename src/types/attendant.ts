@@ -9,6 +9,7 @@ export interface UserAdmin {
 export interface Attendant {
   id: string;
   status: boolean;
+  numero: string;
   user_id: string;
   user_admin_id: string;
   user: User;
@@ -18,6 +19,7 @@ export interface Attendant {
 export interface AttendantInput {
   nome: string;
   email: string;
+  numero: string;
   senha: string;
   status: boolean;
   user_id: string;

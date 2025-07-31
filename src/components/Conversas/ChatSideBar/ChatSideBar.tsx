@@ -8,6 +8,8 @@ import ContactListItem from '../ChatListItem/ChatListItem';
 import { Chat } from '../../../types/chats';
 //Css
 import './chatSideBar.css'
+import { useState } from 'react';
+import { useAgents } from '../../../hooks/agents/useAgents';
 
 interface Props {
   chats: Chat[];
@@ -15,6 +17,8 @@ interface Props {
   setActiveChat: (chat: Chat) => void;
   searchQuery: string;
   setSearchQuery: (q: string) => void;
+  setSelectedAgentId: (id: string | null) => void;
+  selectedAgentId: string | null;
 }
 
 const containerVariants = {
@@ -28,11 +32,26 @@ const containerVariants = {
   },
 };
 
-const ChatSidebar = ({ chats, activeChat, setActiveChat, searchQuery, setSearchQuery }: Props) => {
+const ChatSidebar = ({ chats, activeChat, setActiveChat, searchQuery, setSearchQuery, setSelectedAgentId, selectedAgentId }: Props) => {
+
+  const { agents } = useAgents();
+
+  console.log(chats)
+  console.log('AAAAA', selectedAgentId)
+
+
   const filteredChats = chats.filter((chat) => {
     const q = searchQuery.toLowerCase();
-    return chat.contato_nome?.toLowerCase().includes(q) || chat.connection?.numero?.includes(q);
+    const matchSearch = chat.contato_nome?.toLowerCase().includes(q) || chat.contato_numero?.includes(q);
+
+
+    const matchAgent = selectedAgentId
+      ? chat.connection?.agente_id === selectedAgentId
+      : true;
+
+    return matchSearch && matchAgent;
   });
+
 
   return (
     <motion.div
@@ -44,10 +63,26 @@ const ChatSidebar = ({ chats, activeChat, setActiveChat, searchQuery, setSearchQ
       <SearchBar onSearch={setSearchQuery} />
 
       <div className="tags">
-        <Tag key={'AA'} label={'Advogado'} active={true} />
-        {['Vendedor', 'Recepcionista', 'Comercial', 'Juridico'].map((t, i) => (
-          <Tag key={i} label={t} active={false} />
-        ))}
+
+        <Tag
+          key={'todos'}
+          label={'Todos'}
+          active={selectedAgentId === null}
+          onClick={() => setSelectedAgentId(null)}
+        />
+
+        {agents.map((agent) => {
+          return (
+            <Tag
+              key={agent.id}
+              label={agent.nome}
+              active={selectedAgentId === agent.id}
+              onClick={() => setSelectedAgentId(agent.id)}
+            />
+
+          )
+        })}
+
       </div>
       <div className='list-contacts'>
         {filteredChats.map((chat) => {

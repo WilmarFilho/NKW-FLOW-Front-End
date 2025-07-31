@@ -5,13 +5,15 @@ import { useRecoilState } from 'recoil';
 import { userState, authTokenState } from '../../state/atom';
 // Types
 import type { User } from '../../types/user';
+import type { Upload } from '../../types/upload';
 // Utils
 import { useApi } from '../utils/useApi';
 
 export function useUser() {
   const [user, setUser] = useRecoilState(userState);
   const [token] = useRecoilState(authTokenState);
-  const { get, put } = useApi<User>(); 
+  const { get, put } = useApi<User>();
+  const { post } = useApi<Upload>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -49,9 +51,45 @@ export function useUser() {
     }
   };
 
-  useEffect(() => {
-    fetchUser();
-  }, [token]);
+  const uploadProfileImage = async (file: File): Promise<string | null> => {
+    if (!token) return null;
 
-  return { user, updateUser, loading, error };
+    const formData = new FormData();
+    formData.append('arquivo', file);
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const responseURL = await post(`/upload/user/${userId}`, formData);
+
+      if(!responseURL) return null
+
+      return responseURL.url;
+
+    } catch (err) {
+      console.error('Erro ao fazer upload da imagem:', err);
+      setError('Erro ao enviar imagem.');
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (token && userId) {
+      fetchUser();
+    }
+  }, [token, userId]);
+
+  return { user, updateUser, uploadProfileImage, loading, error };
 }
+
+
+
+
+
+
+
+
+

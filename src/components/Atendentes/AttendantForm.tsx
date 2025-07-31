@@ -15,6 +15,7 @@ export default function AttendantForm({ onSave, onClose, initialData, editMode }
   const [formData, setFormData] = useState<AttendantInput>({
     nome: initialData?.nome || '',
     email: initialData?.email || '',
+    numero: initialData?.numero || '',
     senha: '', // nunca mostra senha anterior
     status: initialData?.status ?? true,
     user_id: initialData?.user_id ?? '',
@@ -49,6 +50,10 @@ export default function AttendantForm({ onSave, onClose, initialData, editMode }
       <div className="form-group">
         <label htmlFor="email">Email</label>
         <input id="email" type="email" placeholder="email@exemplo.com" value={formData.email} onChange={handleInputChange} required />
+      </div>
+      <div className="form-group">
+        <label htmlFor="numero">Número</label>
+        <input id="numero" type="number" placeholder="6499999999" value={formData.numero} onChange={handleInputChange} required />
       </div>
       <div className="form-group">
         <label htmlFor="senha">Senha</label>

@@ -1,8 +1,8 @@
 // Libs
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 // Atom
-import { attendantsState } from '../../state/atom';
+import { attendantsState, userState } from '../../state/atom';
 // Types
 import type { Attendant, AttendantInput } from '../../types/attendant';
 // Utils
@@ -12,6 +12,7 @@ export const useAttendants = () => {
   const [attendants, setAttendants] = useRecoilState(attendantsState);
   const { get, post, del, put } = useApi<Attendant[]>();
   const { data: createdAttendantData, post: createAttendantApi } = useApi<Attendant[]>();
+  const [user] = useRecoilState(userState)
 
   const fetchAttendants = async () => {
     const fetchedData = await get('/attendants');
@@ -50,10 +51,14 @@ export const useAttendants = () => {
 
       // ETAPA 2: Criar o registro de Atendente
       // TODO: user_admin_id deve vir de um contexto de autenticação ou ser passado como parâmetro
+
+      if(!user) return
+
       await createAttendantApi('/attendants', {
         user_id: createdUserId,
-        user_admin_id: '0523e7bd-314c-43c1-abaa-98b789c644e6', // Placeholder
+        user_admin_id: user.id,
         status: true,
+        numero: attendantData.numero,
       });
 
     } catch (err) {

@@ -83,8 +83,12 @@ export default function ConexoesPage() {
           columns={['Nome', 'Número', 'Agente', 'Status']}
           data={connections}
           renderRow={(conn, i) => (
-            <div className="connection-row"  key={i}>
-              <div className='box-table-nome'>{conn.nome.split('_')[0]} <button className="edit-button" onClick={() => handleEdit(conn)} ><ArrowUp /></button></div>
+            <div className="connection-row" key={i}>
+              <div className='box-table-nome'>
+                {conn.nome.split('_')[0]}
+                <button className="edit-button" onClick={() => handleEdit(conn)} ><ArrowUp /></button>
+                <button className="delete-button" onClick={() => handleDelete(conn.id, conn.nome)}><XCheck /></button>
+              </div>
               <div>{conn.numero}</div>
               <NavLink to="/agentes"><div className="agent-select">{conn.agente.tipo_de_agente}</div></NavLink>
               <div className='column-action-conex'>
@@ -94,7 +98,7 @@ export default function ConexoesPage() {
                   {conn.status ? 'Ativado' : 'Desativado'}
 
                 </div>
-                <button className="delete-button" onClick={() => handleDelete(conn.id, conn.nome)}><XCheck /></button>
+
               </div>
             </div>
           )}

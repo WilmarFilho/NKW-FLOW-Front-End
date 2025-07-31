@@ -14,7 +14,8 @@ type Props = {
 };
 
 export default function SettingsContent({ tabIndex }: Props) {
-  const { user, updateUser } = useUser();
+
+  const { user, updateUser, uploadProfileImage, loading } = useUser();
 
   const [mostrarNome, setMostrarNome] = useState(false);
   const [notifAtendente, setNotifAtendente] = useState(false);
@@ -47,6 +48,25 @@ export default function SettingsContent({ tabIndex }: Props) {
     });
 
     if (success) alert('Alterações salvas!');
+  };
+
+  // Função para lidar com a seleção e upload da imagem
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // 1. Faz o upload da imagem e obtém a URL
+    const imageUrl = await uploadProfileImage(file);
+
+    // 2. Se o upload foi bem-sucedido, atualiza o usuário com a nova URL
+    if (imageUrl) {
+      const success = await updateUser({ foto_perfil: imageUrl });
+      if (!success) {
+        alert('Houve um erro ao salvar a nova foto de perfil.');
+      }
+    } else {
+      alert('Falha no upload da imagem.');
+    }
   };
 
   const renderSwitch = (
@@ -101,22 +121,16 @@ export default function SettingsContent({ tabIndex }: Props) {
                   src={user.foto_perfil || '/default-avatar.png'}
                   alt="Foto de Perfil"
                   className="profile-image"
-                  onClick={() => document.getElementById('fileInput')?.click()}
+                  onClick={() => !loading && document.getElementById('fileInput')?.click()}
+                  style={{ cursor: loading ? 'wait' : 'pointer' }}
                 />
                 <input
                   type="file"
                   id="fileInput"
                   accept="image/*"
                   style={{ display: 'none' }}
-                  onChange={async (e) => {
-                    const file = e.target.files?.[0];
-                    if (!file) return;
-
-                    // Mock: substitua com upload real e obtenha URL da imagem
-                    const fakeUrl = URL.createObjectURL(file);
-                    await updateUser({ foto_perfil: fakeUrl });
-                    alert('Foto de perfil atualizada!');
-                  }}
+                  onChange={handleImageUpload}
+                  disabled={loading}
                 />
               </div>
             </div>
@@ -131,7 +145,7 @@ export default function SettingsContent({ tabIndex }: Props) {
                 className="password-input"
                 placeholder="Nova senha"
                 value={senhaUser}
-                onChange={(e) => {setsenhaUser(e.target.value)}}
+                onChange={(e) => { setsenhaUser(e.target.value) }}
               />
             </div>
           </>

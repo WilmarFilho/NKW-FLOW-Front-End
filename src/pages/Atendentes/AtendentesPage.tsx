@@ -42,6 +42,7 @@ export default function AtendentesPage() {
       nome: attendant.user.nome,
       email: attendant.user.email,
       status: attendant.status,
+      numero: attendant.numero
     });
     setIsModalOpen(true);
   };
@@ -57,7 +58,7 @@ export default function AtendentesPage() {
   const handleSaveAttendant = async (data: AttendantInput) => {
     try {
       if (editAttendantId) {
-        await editAttendant(editAttendantId, editUserId,  data);
+        await editAttendant(editAttendantId, editUserId, data);
       } else {
         await addAttendant(data);
       }
@@ -96,20 +97,23 @@ export default function AtendentesPage() {
         className="generic-table"
       >
         <GenericTable<Attendant>
-          columns={['Nome', 'Email', 'Status', '']}
+          columns={['Nome', 'Email', 'Número', 'Status']}
           data={attendants}
           renderRow={(conn, i) => (
-            <div className="connection-row"  key={i}>
-              <div className='box-table-nome'>{conn.user.nome} <button className="edit-button" onClick={() => handleEdit(conn)} ><ArrowUp /></button></div>
+            <div className="connection-row" key={i}>
+              <div className='box-table-nome'>
+                {conn.user.nome}
+                <button className="edit-button" onClick={() => handleEdit(conn)} ><ArrowUp /></button>
+                <button className="delete-button" onClick={() => handleDelete(conn.id)}><XCheck /></button>
+              </div>
               <div>{conn.user.email}</div>
+              <div>{conn.numero}</div>
               <div
                 className={`status-chip ${conn.status ? 'active' : 'inactive'}`}
               >
                 {conn.status ? 'Ativado' : 'Desativado'}
               </div>
-              <div className='box-icons-table'>
-                <button className="delete-button" onClick={() => handleDelete(conn.id)}><XCheck /></button>
-              </div>
+              
             </div>
           )}
         />

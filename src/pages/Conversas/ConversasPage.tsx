@@ -1,18 +1,22 @@
 import { useState } from 'react';
+import { useRecoilState } from 'recoil';
 // Hooks
 import useChats from '../../hooks/chats/useChats';
 import useMessages from '../../hooks/chats/useMessages';
-//Components
+// Components
 import ChatSidebar from '../../components/Conversas/ChatSideBar/ChatSideBar';
 import ChatWindow from '../../components/Conversas/ChatWindow/ChatWindow';
 // Types
 import { Chat } from '../../types/chats';
 // Css
 import './conversas.css'
+import { userState } from '../../state/atom';
 
 export default function ConversasPage() {
+  const [user] = useRecoilState(userState);
   const [activeChat, setActiveChat] = useState<Chat | null>(null);
-  const { chats } = useChats('0523e7bd-314c-43c1-abaa-98b789c644e6');
+  const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
+  const { chats } = useChats(user?.id, selectedAgentId);
   const { messages } = useMessages(activeChat?.id || null);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -24,8 +28,9 @@ export default function ConversasPage() {
         setActiveChat={setActiveChat}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
+        selectedAgentId={selectedAgentId}
+        setSelectedAgentId={setSelectedAgentId}
       />
-
       <ChatWindow
         activeChat={activeChat}
         messages={messages}
@@ -33,4 +38,4 @@ export default function ConversasPage() {
       />
     </div>
   );
-};
+}
