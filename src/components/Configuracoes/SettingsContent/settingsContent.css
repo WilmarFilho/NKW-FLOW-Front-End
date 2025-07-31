@@ -6,6 +6,48 @@
   color: #c1c1c1;
   height: 100%;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+  gap: 20px;
+}
+
+.box-text {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 70%;
+}
+
+.box-text span {
+  font-family: var(--font-main);
+  font-size: 24px;
+}
+
+.box-text p {
+  font-family: var(--font-secundaria);
+  font-size: 18px;
+  text-wrap: balance;
+  line-height: 150%;
+}
+
+.switch-wrapper {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
   align-items: center;
+  width: 100%;
+  background-color: var(--color-background-white);
+  padding: 18px;
+  border-radius: 12px;
+
+}
+
+.save-btn {
+  margin-top: 40px;
+  background-color: var(--color-secundaria);
+  outline: none;
+  border: none;
+  padding: 18px 32px;
+  border-radius: 10px;
 }

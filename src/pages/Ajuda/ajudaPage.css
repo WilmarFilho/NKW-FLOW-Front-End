@@ -30,12 +30,21 @@
 
 .box-icon {
   background-color: var(--color-secundaria);
-  color: white;
-  padding: 20px;
+  padding: 20px 32px;
   border-radius: 20px;
   height: 80px;
   border: none;
   cursor: pointer;
+  transition: .6s;
+}
+
+.box-icon:hover svg {
+  fill: black;
+  transition: .6s;
+}
+
+.box-icon:hover {
+  background-color: white;
   transition: .6s;
 }
 

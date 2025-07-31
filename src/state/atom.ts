@@ -5,6 +5,7 @@ import type { Agent } from '../types/agent';
 import type { HelpChat } from '../types/helpChat';
 import { Chat } from '../types/chats';
 import { Message } from '../types/message';
+import { User } from '../types/user';
 
 // Estado das conexões WhatsApp
 export const connectionsState = atom<Connection[]>({
@@ -53,6 +54,28 @@ export const helpChatState = atom<HelpChat[]>({
 });
 
 // Autenticação
+
+
+export const userState = atom<User>({
+  key: 'userState',
+  default: {
+    id: 'mock-id',
+    email: 'mock@email.com',
+    nome: 'Mock User',
+    tipo_de_usuario: 'admin',
+    foto_perfil: '',
+    status: true,
+    modo_tela: 'Black',
+    modo_side_bar: 'Full',
+    mostra_nome_mensagens: true,
+    modo_notificacao_atendente: false,
+    notificacao_para_entrar_conversa: true,
+    notificacao_necessidade_de_entrar_conversa: false,
+    notificacao_novo_chat: true,
+    criado_em: new Date().toISOString(),
+  },
+});
+
 
 export const authTokenState = atom<string | null>({
   key: 'authTokenState',

@@ -1,0 +1,21 @@
+.option-selector {
+  display: flex;
+  gap: 8px;
+}
+
+.option-btn {
+  padding: 12px 24px;
+  border-radius: 14px;
+  background-color: transparent;
+  cursor: pointer;
+  font-weight: 300;
+  border: none;
+  outline: none;
+  transition: 0.2s ease;
+  color: white;
+  font-family: var(--font-secundaria);
+}
+
+.option-btn.active {
+  background-color: var(--color-secundaria);
+}

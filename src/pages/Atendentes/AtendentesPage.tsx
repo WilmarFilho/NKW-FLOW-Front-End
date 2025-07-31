@@ -99,7 +99,7 @@ export default function AtendentesPage() {
           columns={['Nome', 'Email', 'Status', '']}
           data={attendants}
           renderRow={(conn, i) => (
-            <div className="connection-row" onClick={() => handleEdit(conn)} key={i}>
+            <div className="connection-row"  key={i}>
               <div className='box-table-nome'>{conn.user.nome} <button className="edit-button" onClick={() => handleEdit(conn)} ><ArrowUp /></button></div>
               <div>{conn.user.email}</div>
               <div

@@ -83,7 +83,7 @@ export default function ConexoesPage() {
           columns={['Nome', 'Número', 'Agente', 'Status']}
           data={connections}
           renderRow={(conn, i) => (
-            <div className="connection-row"  onClick={() => handleEdit(conn)} key={i}>
+            <div className="connection-row"  key={i}>
               <div className='box-table-nome'>{conn.nome.split('_')[0]} <button className="edit-button" onClick={() => handleEdit(conn)} ><ArrowUp /></button></div>
               <div>{conn.numero}</div>
               <NavLink to="/agentes"><div className="agent-select">{conn.agente.tipo_de_agente}</div></NavLink>

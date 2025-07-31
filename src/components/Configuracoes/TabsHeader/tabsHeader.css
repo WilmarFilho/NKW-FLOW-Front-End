@@ -16,8 +16,9 @@
   transition: 0.2s;
 }
 .tab-item.active {
-  background: #0fffc0;
-  color: #0f0f0f;
+  background: var(--color-main);
+  color: white;
+  transition: .5s;
 }
 
 /* === Breakpoint 4: Tablets em Retrato === */
