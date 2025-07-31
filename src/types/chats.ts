@@ -8,6 +8,7 @@ export interface Chat {
   ia_ativa: boolean;
   foto_perfil?: string;
   ultima_atualizacao: string;
+  ultima_mensagem: string,
   connection: Connection;
 }
 

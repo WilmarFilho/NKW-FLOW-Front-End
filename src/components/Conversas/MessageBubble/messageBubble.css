@@ -6,6 +6,8 @@
   color: #ffffff;
   font-size: 14px;
   font-family: var(--font-secundaria);
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .bubble.me {

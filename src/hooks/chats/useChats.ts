@@ -21,9 +21,10 @@ export default function useChats(userId: string) {
     }
 
     const fetchChats = async () => {
-      const data = await get('/chats');
+      const data = await get(`/chats/connections/chats/${userId}`);
       
       if (data) {
+        console.log(data)
         setChats(data);
       } else {
         setChats([]);

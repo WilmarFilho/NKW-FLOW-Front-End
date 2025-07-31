@@ -40,7 +40,20 @@
   background-color: var(--color-background-white);
   padding: 18px;
   border-radius: 12px;
+}
 
+.switch-wrapper img {
+  width: 80px;
+  border-radius: 100px;
+}
+
+.switch-wrapper input {
+  width: 100%;
+  background-color: var(--color-background-dark);
+  border: none;
+  outline: none;
+  border-radius: 12px;
+  padding: 18px 32px;
 }
 
 .save-btn {

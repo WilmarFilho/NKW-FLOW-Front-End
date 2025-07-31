@@ -7,7 +7,7 @@ interface ContactListItemProps {
   name: string;
   classname: string;
   message: string;
-  avatar: string;
+  avatar: string | undefined;
   onClick: () => void;
 }
 

@@ -57,8 +57,8 @@ const ChatSidebar = ({ chats, activeChat, setActiveChat, searchQuery, setSearchQ
               key={chat.id}
               classname={isActive ? 'contact-item active-contact' : 'contact-item'}
               name={chat.contato_nome}
-              message="oi"
-              avatar="https://avatars.githubusercontent.com/u/103720085?v=4"
+              message={chat.ultima_mensagem}
+              avatar={chat.foto_perfil}
               onClick={() => setActiveChat(chat)}
             />
           );

@@ -41,6 +41,7 @@ export function useUser() {
             nome: 'Atendente A',
             tipo_de_usuario: 'atendente',
             status: true,
+            foto_perfil: 'https://avatars.githubusercontent.com/u/103720085?v=4',
             modo_tela: 'Black',
             modo_side_bar: 'Full',
             mostra_nome_mensagens: true,

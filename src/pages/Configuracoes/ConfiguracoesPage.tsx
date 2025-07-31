@@ -6,7 +6,7 @@ import SettingsContent from '../../components/Configuracoes/SettingsContent/Sett
 // Css
 import './configuracoes.css';
 
-const tabs = ['Conta', 'Segurança', 'Notificações', 'Preferências'];
+const tabs = ['Conta', 'Notificações', 'Preferências'];
 
 export default function ConfiguracoesPage() {
   const [activeTab, setActiveTab] = useState(0);

@@ -20,6 +20,7 @@ export default function SettingsContent({ tabIndex }: Props) {
   const [notifAtendente, setNotifAtendente] = useState(false);
   const [notifEntrarConversa, setNotifEntrarConversa] = useState(false);
   const [notifNovoChat, setNotifNovoChat] = useState(false);
+  const [senhaUser, setsenhaUser] = useState('');
   const [modoTela, setModoTela] = useState<'Black' | 'White'>('Black');
   const [modoSidebar, setModoSidebar] = useState<'Full' | 'Minimal'>('Full');
 
@@ -90,23 +91,53 @@ export default function SettingsContent({ tabIndex }: Props) {
       case 0:
         return (
           <>
-            {renderSwitch(
-              'Mostrar nome nas mensagens',
-              'Exibe seu nome junto das mensagens enviadas no chat.',
-              mostrarNome,
-              () => setMostrarNome(!mostrarNome)
-            )}
-            {renderSwitch(
-              'Notificação de novo chat',
-              'Você será notificado sempre que um novo chat for iniciado.',
-              notifNovoChat,
-              () => setNotifNovoChat(!notifNovoChat)
-            )}
+            <div className="switch-wrapper profile-wrapper">
+              <div className="box-text">
+                <span className="switch-label">Foto de Perfil</span>
+                <p className="switch-description">Clique na imagem para alterar.</p>
+              </div>
+              <div className="profile-image-container">
+                <img
+                  src={user.foto_perfil || '/default-avatar.png'}
+                  alt="Foto de Perfil"
+                  className="profile-image"
+                  onClick={() => document.getElementById('fileInput')?.click()}
+                />
+                <input
+                  type="file"
+                  id="fileInput"
+                  accept="image/*"
+                  style={{ display: 'none' }}
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+
+                    // Mock: substitua com upload real e obtenha URL da imagem
+                    const fakeUrl = URL.createObjectURL(file);
+                    await updateUser({ foto_perfil: fakeUrl });
+                    alert('Foto de perfil atualizada!');
+                  }}
+                />
+              </div>
+            </div>
+
+            <div className="switch-wrapper">
+              <div className="box-text">
+                <span className="switch-label">Alterar Senha</span>
+                <p className="switch-description">Informe uma nova senha de acesso.</p>
+              </div>
+              <input
+                type="password"
+                className="password-input"
+                placeholder="Nova senha"
+                value={senhaUser}
+                onChange={(e) => {setsenhaUser(e.target.value)}}
+              />
+            </div>
           </>
         );
+
       case 1:
-        return <p>🚧 Funções de segurança como troca de senha e autenticação em 2 fatores estarão aqui.</p>;
-      case 2:
         return (
           <>
             {renderSwitch(
@@ -121,9 +152,15 @@ export default function SettingsContent({ tabIndex }: Props) {
               notifEntrarConversa,
               () => setNotifEntrarConversa(!notifEntrarConversa)
             )}
+            {renderSwitch(
+              'Notificação de novo chat',
+              'Você será notificado sempre que um novo chat for iniciado.',
+              notifNovoChat,
+              () => setNotifNovoChat(!notifNovoChat)
+            )}
           </>
         );
-      case 3:
+      case 2:
         return (
           <>
             {renderSelect(
@@ -139,6 +176,12 @@ export default function SettingsContent({ tabIndex }: Props) {
               modoSidebar,
               (val) => setModoSidebar(val as 'Full' | 'Minimal'),
               ['Full', 'Minimal']
+            )}
+            {renderSwitch(
+              'Mostrar nome nas mensagens',
+              'Exibe seu nome junto das mensagens enviadas no chat.',
+              mostrarNome,
+              () => setMostrarNome(!mostrarNome)
             )}
           </>
         );
