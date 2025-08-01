@@ -27,7 +27,7 @@ export default function AgentesPage() {
         <div>
           <h2>Vejas seus agentes disponíveis</h2>
           <h3>
-            Para contratar mais agentes entre em contato.
+            Ao adicionar uma nova conexão você seleciona um desses para responder por você. Para contratar mais agentes entre em contato.
           </h3>
         </div>
         <Button label='Entre em Contato' />

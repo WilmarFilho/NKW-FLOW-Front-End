@@ -105,24 +105,82 @@ export default function SettingsContent({ tabIndex }: Props) {
     switch (tabIndex) {
       case 0:
         return (
-          <div className="profile-wrapper">
-            <img
-              src={user.foto_perfil || '/default-avatar.png'}
-              alt="Foto de Perfil"
-              className="profile-image"
-              onClick={() => !loading && document.getElementById('fileInput')?.click()}
-              style={{ cursor: loading ? 'wait' : 'pointer' }}
-            />
-            <input
-              type="file"
-              id="fileInput"
-              accept="image/*"
-              style={{ display: 'none' }}
-              onChange={handleImageUpload}
-              disabled={loading}
-            />
-            <p className="switch-description">Clique na imagem para alterar.</p>
-          </div>
+          <>
+            <div className="main-header-accont-wrapper">
+              <div className="image-wrapper">
+                <img
+                  src={user.foto_perfil || '/default-avatar.png'}
+                  alt="Foto de Perfil"
+                  className="profile-image"
+                  onClick={() => !loading && document.getElementById('fileInput')?.click()}
+                  style={{ cursor: loading ? 'wait' : 'pointer' }}
+                />
+                <input
+                  type="file"
+                  id="fileInput"
+                  accept="image/*"
+                  style={{ display: 'none' }}
+                  onChange={handleImageUpload}
+                  disabled={loading}
+                />
+
+              </div>
+              <div className='name-wrapper'>
+                <h1>Nome de usuário</h1>
+                <h2>{user.nome}</h2>
+              </div>
+              <div className='name-wrapper'>
+                <h1>Cargo do usuário</h1>
+                <h2>Administrador</h2>
+              </div>
+            </div>
+            <div className='wrapper-box-configs'>
+              <div className="header-accont-wrapper">
+                <div className='name-wrapper'>
+                  <h1>Endereço</h1>
+                  <h2>Rua 9 Qd 9 Lt 2</h2>
+                </div>
+                <div className='name-wrapper'>
+                  <h1>Número</h1>
+                  <h2>64992434104</h2>
+                </div>
+                <div className='name-wrapper'>
+                  <h1>E-mail</h1>
+                  <h2>{user.email}</h2>
+                </div>
+              </div>
+              <div className="header-accont-wrapper">
+                <div className='name-wrapper'>
+                  <h1>Endereço</h1>
+                  <h2>Rua 9 Qd 9 Lt 2</h2>
+                </div>
+                <div className='name-wrapper'>
+                  <h1>Número</h1>
+                  <h2>64992434104</h2>
+                </div>
+                <div className='name-wrapper'>
+                  <h1>E-mail</h1>
+                  <h2>{user.email}</h2>
+                </div>
+              </div>
+              <div className="header-accont-wrapper">
+                <div className='name-wrapper'>
+                  <h1>Endereço</h1>
+                  <h2>Rua 9 Qd 9 Lt 2</h2>
+                </div>
+                <div className='name-wrapper'>
+                  <h1>Número</h1>
+                  <h2>64992434104</h2>
+                </div>
+                <div className='name-wrapper'>
+                  <h1>E-mail</h1>
+                  <h2>{user.email}</h2>
+                </div>
+              </div>
+              <button className='save-btn'>Editar Informações</button>
+            </div>
+
+          </>
         );
 
       case 1:

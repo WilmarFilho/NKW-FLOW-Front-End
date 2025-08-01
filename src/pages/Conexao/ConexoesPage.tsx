@@ -65,8 +65,8 @@ export default function ConexoesPage() {
       >
 
         <div>
-          <h2>Suas conexões</h2>
-          <h3>Verifique as conexões atuais, adicione ou desative…</h3>
+          <h2>Suas conexões do WhatsApp</h2>
+          <h3>Verifique suas conexões do WhatsApp aqui, você também pode adicionar ou desativar.</h3>
         </div>
 
         <Button label="Adicionar Conexão" onClick={handleOpenModal} />

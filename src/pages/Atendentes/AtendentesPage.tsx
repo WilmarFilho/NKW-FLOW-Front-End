@@ -84,8 +84,8 @@ export default function AtendentesPage() {
         className="connections-header"
       >
         <div>
-          <h2>Seus atendentes</h2>
-          <h3>Verifique seus atendentes atuais, adicione ou desative…</h3>
+          <h2>Seus atendentes humanos</h2>
+          <h3>Cadastre e veja seus atendentes humano que podem responder interagir com seus clientes desativando o agente na conversa</h3>
         </div>
         <Button label="Adicionar Atendente" onClick={() => handleAdd()} />
       </motion.div>

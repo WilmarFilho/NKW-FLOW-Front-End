@@ -4,6 +4,7 @@
   background-color: var(--color-main);
   border-radius: 12px;
   padding: 50px 24px;
+  gap: 18px;
   
   /* MUDANÇA PRINCIPAL: Controlar o layout interno com Flexbox */
   display: flex;
@@ -83,6 +84,7 @@
 
 .description {
   font-size: 14px;
+  text-wrap: balance;
   color: #ffffffad;
   line-height: 1.5;
 }
