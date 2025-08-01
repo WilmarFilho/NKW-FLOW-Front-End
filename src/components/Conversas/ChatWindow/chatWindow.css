@@ -4,10 +4,10 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 20px;
   background: var(--color-background-dark);
   backdrop-filter: blur(3px);
   border-radius: 20px;
+  overflow: hidden;
 }
 
 .messages {
@@ -16,7 +16,56 @@
   flex-direction: column;
   overflow-y: auto;
   scrollbar-width: none;
-  padding-right: 10px;
+  padding: 20px;
+}
+
+.wrapper-header-chat {
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--color-background-dark);
+  gap: 12px;
+  align-items: center;
+  padding: 14px 20px;
+}
+
+.column-icon-header svg {
+  width: 40px;
+  height: 40px;
+  fill: white;
+  cursor: pointer;
+}
+
+.column-info-header {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.column-info-header img {
+  width: 42px;
+  border-radius: 200px;
+}
+
+.text-header h1 {
+  font-size: 16px;
+  font-family: var(--font-main)
+}
+
+.text-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.text-header  span{
+  font-size: 14px;
+  font-family: var(--font-secundaria);
+  color: rgba(255, 255, 255, 0.457);
+  text-decoration: underline;
+}
+
+.box-chat-input-wrapper {
+  padding: 20px;
 }
 
 @media (max-width: 991.98px) {
