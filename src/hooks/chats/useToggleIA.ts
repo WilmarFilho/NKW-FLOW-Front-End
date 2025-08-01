@@ -1,16 +1,14 @@
 // Libbs
 import { useCallback } from 'react';
+import { toast } from 'react-toastify';
 // Utils
 import { useApi } from '../utils/useApi'; 
 // Types
 import type { Chat } from '../../types/chats';
 
-// Supabase geralmente retorna um array com o item atualizado.
-type ToggleIAResponse = Chat[];
-
 const useToggleIA = () => {
 
-  const { put } = useApi<ToggleIAResponse>();
+  const { put } = useApi<Chat>();
 
   const toggleIA = useCallback(async (chat: Chat, onSuccess: (updatedChat: Chat) => void) => {
     const payload = {
@@ -20,8 +18,11 @@ const useToggleIA = () => {
 
     const responseData = await put(`/chats/${chat.id}`, payload);
 
-    if (responseData && responseData.length > 0) {
-      onSuccess(responseData[0]); 
+    if (responseData) {
+      onSuccess(responseData); 
+      toast.success('Alteração salva!');
+    } else {
+      toast.error('Erro ao salvar. Tente novamente.');
     }
 
   }, [put]);
@@ -31,3 +32,8 @@ const useToggleIA = () => {
 };
 
 export default useToggleIA;
+
+
+
+
+

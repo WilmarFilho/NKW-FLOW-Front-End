@@ -25,16 +25,15 @@ interface Props {
 
 const ChatWindow = ({ activeChat, messages, setActiveChat }: Props) => {
     const { toggleIA } = useToggleIA();
+
     const { sendMessage } = useSendMessage();
 
     const { agents } = useAgents();
+    let agentActive = null
 
-    console.log(agents)
-    console.log(activeChat)
-
-    const agentActive = agents.find((agent) => agent.id === activeChat?.connection.agente_id);
-
-    console.log(agentActive)
+    if (activeChat && activeChat.connection) {
+        agentActive = agents.find((agent) => agent.id === activeChat?.connection.agente_id);
+    }
 
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
@@ -107,7 +106,7 @@ const ChatWindow = ({ activeChat, messages, setActiveChat }: Props) => {
                     {activeChat && (
                         <button
                             onClick={() => toggleIA(activeChat, setActiveChat)}
-                            className="toggle-ia-btn"
+                            className={activeChat.ia_ativa ? 'toggle-ia-btn toggle-ia-active' : 'toggle-ia-btn'}
                         >
                             {activeChat.ia_ativa ? 'Desativar IA' : 'Ativar IA'}
                         </button>

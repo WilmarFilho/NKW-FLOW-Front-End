@@ -68,6 +68,25 @@
   padding: 20px;
 }
 
+.toggle-ia-btn {
+  background-color: var(--color-background-white);
+  border-radius: 15px;
+  border: none;
+  min-width: 125px;
+  cursor: pointer;
+}
+
+.toggle-ia-active {
+  background-color: var(--color-secundaria) !important;
+  transition: .5s;
+}
+
+.toggle-ia-btn:hover {
+  background-color: var(--color-secundaria);
+  transition: .5s;
+}
+
+
 @media (max-width: 991.98px) {
   .right-panel {
     width: 100%;

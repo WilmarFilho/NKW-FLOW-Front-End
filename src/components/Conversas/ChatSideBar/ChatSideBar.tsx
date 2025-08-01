@@ -36,10 +36,6 @@ const ChatSidebar = ({ chats, activeChat, setActiveChat, searchQuery, setSearchQ
 
   const { agents } = useAgents();
 
-  console.log(chats)
-  console.log('AAAAA', selectedAgentId)
-
-
   const filteredChats = chats.filter((chat) => {
     const q = searchQuery.toLowerCase();
     const matchSearch = chat.contato_nome?.toLowerCase().includes(q) || chat.contato_numero?.includes(q);

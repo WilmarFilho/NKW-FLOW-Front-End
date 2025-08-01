@@ -27,18 +27,6 @@
   gap: 12px;
 }
 
-.toggle-ia-btn {
-  background-color: var(--color-background-white);
-  border-radius: 15px;
-  border: none;
-  min-width: 125px;
-  cursor: pointer;
-}
-
-.toggle-ia-btn:hover {
-  background-color: var(--color-secundaria);
-  transition: .5s;
-}
 
 @media (max-width: 599.98px) {
   .box-chat-input {

@@ -19,7 +19,6 @@ const itemVariants = {
 };
 
 export default function ChatListItem({ name, message, classname, avatar, onClick } : ContactListItemProps)  {
-  console.log('Imagem: ', avatar)
   return (
     <motion.div
       variants={itemVariants}

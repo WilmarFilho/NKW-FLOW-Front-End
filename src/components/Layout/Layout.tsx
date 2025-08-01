@@ -26,7 +26,7 @@ export default function Layout() {
     <div className="layout-container">
 
       <ToastContainer
-        position="bottom-right"
+        position="top-right"
         autoClose={2000}
       />
 

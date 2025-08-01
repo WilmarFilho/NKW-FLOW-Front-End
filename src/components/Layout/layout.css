@@ -45,7 +45,7 @@
 }
 
 .Toastify__toast-theme--light {
-  background-color: rgba(0, 0, 0, 0.842) !important;
+  background-color: rgba(0, 0, 0, 0.99) !important;
 }
 
 .Toastify__toast-icon svg {
