@@ -4,6 +4,8 @@
   justify-content: space-between;
   display: flex;
   flex-direction: column;
+  background-color: rgba(0, 0, 0, 0.25);
+  border-radius: 0px 15px 15px 0px;
 }
 
 .box-logo {
@@ -38,6 +40,17 @@
   font-family: var(--font-secundaria);
 }
 
+.MenuImage {
+  display: flex;
+  gap: 10px;
+  padding: 4px 4px;
+  align-items: center;
+}
+
+.MenuImage img {
+  object-fit: cover;
+}
+
 .MenuItem:hover,
 .MenuItem.active-link {
   background-color: rgba(27, 33, 74, 0.7);
@@ -53,11 +66,8 @@
 }
 
 .column-info {
-  display: flex;
-  flex-direction: row;
-  align-items: start;
-  justify-content: center;
   gap: 8px;
+  display: flex;
 }
 
 .column-links {

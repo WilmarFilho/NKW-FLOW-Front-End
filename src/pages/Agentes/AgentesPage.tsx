@@ -37,22 +37,24 @@ export default function AgentesPage() {
         initial={{ opacity: 0, y: 0 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
-        className="agents-list"
+        className="agents-wrapper"
       >
-        {agents.map((agent) => {
-          const connectionsForAgent = connections.filter(conn => conn.agente_id === agent.id);
-          const connectionNames = connectionsForAgent.map(conn => conn.nome.split('_')[0]);
+        <div className="agents-list">
+          {agents.map((agent) => {
+            const connectionsForAgent = connections.filter(conn => conn.agente_id === agent.id);
+            const connectionNames = connectionsForAgent.map(conn => conn.nome.split('_')[0]);
 
-          return (
-            <AgentCard
-              key={agent.id}
-              tipo={agent.tipo_de_agente}
-              name={agent.nome}
-              description={agent.descricao}
-              connections={connectionNames}
-            />
-          );
-        })}
+            return (
+              <AgentCard
+                key={agent.id}
+                tipo={agent.tipo_de_agente}
+                description={agent.descricao}
+                connections={connectionNames}
+              />
+            );
+          })}
+        </div>
+
       </motion.div>
 
     </div>

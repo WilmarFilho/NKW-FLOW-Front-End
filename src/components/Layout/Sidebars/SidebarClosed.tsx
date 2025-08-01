@@ -1,5 +1,4 @@
 //Libbs
-import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 //Css
 import './sidebarclosed.css';
@@ -8,7 +7,8 @@ import ConversasIcon from '../assets/chat.svg';
 import AtendenteIcon from '../assets/atendentes.svg';
 import AgenteIcon from '../assets/bot.svg';
 import ConexaoIcon from '../assets/conexao.svg';
-import ExpandIcon from '../assets/expand.svg';
+import ConfigIcon from '../assets/config.svg';
+import AjudaIcon from '../assets/ajuda.svg';
 
 const SidebarClosed = () => {
   const MenuItem = ({
@@ -27,30 +27,10 @@ const SidebarClosed = () => {
     </NavLink>
   );
 
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
-  useEffect(() => {
-    const sidebarElement = document.querySelector('.sidebar');
-    const sidebarClosedElement = document.querySelector('.sidebarclosed');
-    if (sidebarElement) {
-      if (isSidebarOpen) {
-        sidebarElement.classList.add('sidebar-is-open');
-        sidebarClosedElement?.classList.add('sidebarclosed-is-open');
-      } else {
-        sidebarElement.classList.remove('sidebar-is-open');
-        sidebarClosedElement?.classList.remove('sidebarclosed-is-open');
-      }
-    }
-  }, [isSidebarOpen]);
-
   return (
-    <div className="sidebarclosed">
+    <>
       <nav className="menu-principal-closed">
-        <div>
+        <div className='itens-list-menu'>
           <MenuItem to="/conversas">
             <ConversasIcon />
           </MenuItem>
@@ -66,13 +46,16 @@ const SidebarClosed = () => {
           <MenuItem to="/conexoes">
             <ConexaoIcon />
           </MenuItem>
-        </div>
 
-        <div className="MenuItem" onClick={toggleSidebar}>
-          <ExpandIcon />
+          <MenuItem to="/configuracoes">
+            <ConfigIcon />
+          </MenuItem>
+          <MenuItem to="/ajuda">
+            <AjudaIcon />
+          </MenuItem>
         </div>
       </nav>
-    </div>
+    </>
   );
 };
 

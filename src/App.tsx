@@ -16,39 +16,42 @@ import './main.css';
 
 function App() {
   return (
-    <RecoilRoot>
-      <BrowserRouter>
-        <Routes>
-          <Route
-            path="/login"
-            element={
-              <PublicRoute>
-                <LoginPage />
-              </PublicRoute>
-            }
-          />
+    <>
+      <RecoilRoot>
+        <BrowserRouter>
+          <Routes>
+            <Route
+              path="/login"
+              element={
+                <PublicRoute>
+                  <LoginPage />
+                </PublicRoute>
+              }
+            />
 
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute>
-                <Layout />
-              </ProtectedRoute>
-            }
-          >
-            <Route index element={<Navigate to="/conexoes" replace />} />
-            <Route path="conversas" element={<ConversasPage />} />
-            <Route path="atendentes" element={<AtendentesPage />} />
-            <Route path="agentes" element={<AgentesPage />} />
-            <Route path="conexoes" element={<ConexoesPage />} />
-            <Route path="configuracoes" element={<ConfiguracoesPage />} />
-            <Route path="ajuda" element={<AjudaPage />} />
-          </Route>
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <Layout />
+                </ProtectedRoute>
+              }
+            >
+              <Route index element={<Navigate to="/conexoes" replace />} />
+              <Route path="conversas" element={<ConversasPage />} />
+              <Route path="atendentes" element={<AtendentesPage />} />
+              <Route path="agentes" element={<AgentesPage />} />
+              <Route path="conexoes" element={<ConexoesPage />} />
+              <Route path="configuracoes" element={<ConfiguracoesPage />} />
+              <Route path="ajuda" element={<AjudaPage />} />
+            </Route>
 
-          <Route path="*" element={<Navigate to="/login" replace />} />
-        </Routes>
-      </BrowserRouter>
-    </RecoilRoot>
+            <Route path="*" element={<Navigate to="/login" replace />} />
+          </Routes>
+        </BrowserRouter>
+      </RecoilRoot>
+    </>
+
   );
 }
 

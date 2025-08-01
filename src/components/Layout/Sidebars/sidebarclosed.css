@@ -1,6 +1,25 @@
 .sidebarclosed {
-  display: none;
+  display: flex;
+  width: 140px;
+  padding: 40px 12px;
+  background-color: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  border-radius: 0 20px 20px 0;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 }
+
+.sidebarclosed .MenuItem {
+  justify-content: center;
+}
+
+.itens-list-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
 
 /* Aqui o sidebar pode começar a se preparar para ser alternável ou já ser */
 @media (max-width: 991.98px) {
@@ -26,7 +45,7 @@
     padding: 24px 0;
     align-items: center;
     gap: 32px;
-    
+
   }
 
   .menu-principal-closed div {

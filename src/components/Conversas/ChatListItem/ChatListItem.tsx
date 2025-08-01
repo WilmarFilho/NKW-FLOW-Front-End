@@ -2,6 +2,8 @@
 import { motion } from 'framer-motion';
 //Css
 import './chatListItem.css';
+//Assets
+import defaultAvatar from '../assets/default.webp'; 
 
 interface ContactListItemProps {
   name: string;
@@ -17,13 +19,14 @@ const itemVariants = {
 };
 
 export default function ChatListItem({ name, message, classname, avatar, onClick } : ContactListItemProps)  {
+  console.log('Imagem: ', avatar)
   return (
     <motion.div
       variants={itemVariants}
       className={classname}
       onClick={onClick}
     >
-      <img src={avatar} alt={name} className="avatar" />
+      <img src={avatar ? avatar : defaultAvatar} alt={name} className="avatar" />
       <div className="contact-texts">
         <strong>{name}</strong>
         <p>{message}</p>

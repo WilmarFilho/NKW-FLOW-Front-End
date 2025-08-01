@@ -13,15 +13,13 @@ import AgenteIcon from '../assets/bot.svg';
 import ConexaoIcon from '../assets/conexao.svg';
 import ConfigIcon from '../assets/config.svg';
 import AjudaIcon from '../assets/ajuda.svg';
-import ExpandIcon from '../assets/expand.svg';
 import LogoutIcon from '../assets/logout.svg';
+import { useRecoilState } from 'recoil';
+import { userState } from '../../../state/atom';
 
 const Sidebar = () => {
-  const user = {
-    name: 'Wilmar Filho',
-    email: 'oftheguizo32@gmail.com', 
-    avatarUrl: 'https://avatars.githubusercontent.com/u/103720085?v=4',
-  };
+
+  const [user] = useRecoilState(userState)
 
   const navigate = useNavigate();
   const { logout } = useAuth();
@@ -69,7 +67,7 @@ const Sidebar = () => {
   );
 
   return (
-    <div className="sidebar">
+    <>
       <div className="box-logo">
         <LogoIcon />
       </div>
@@ -104,24 +102,20 @@ const Sidebar = () => {
 
       <div className="user-menu">
         <div className="column-info">
-          <img src={user.avatarUrl} alt={user.name} className="user-avatar" />
+          <NavLink to='/configuracoes'>
+            <div className="MenuImage">
+              <img src={user?.foto_perfil} alt={user?.nome} className="user-avatar" />
+            </div>
+          </NavLink>
+
           <div className="user-info">
-            <p className="user-name">{user.name}</p>
-            <p className="user-email">{user.email}</p>
+            <p className="user-name">{user?.nome}</p>
+            <p className="user-email">{user?.email}</p>
           </div>
         </div>
 
-        <div className="column-links">
-          <div className="MenuItem" onClick={toggleSidebar}>
-            <ExpandIcon />
-          </div>
-          <div className="MenuItem" onClick={handleLogout}>
-            <LogoutIcon />
-          </div>
-          
-        </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -21,27 +21,39 @@
 }
 
 .content-area {
-  width: 80%;
-  padding: 20px 40px; 
+  width: 100%;
+  padding: 20px 40px;
   overflow-y: auto;
   scrollbar-width: none;
 }
 
-.content-area > div> :first-child > :first-child {
+.content-area>div> :first-child> :first-child {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.content-area > div > :first-child > :first-child h2 {
+.content-area>div> :first-child> :first-child h2 {
   font-family: var(--font-main);
   font-size: 40px;
 }
 
-.content-area > div > :first-child > :first-child h3 {
+.content-area>div> :first-child> :first-child h3 {
   font-size: 24px;
   opacity: 0.8;
   text-wrap: balance
+}
+
+.Toastify__toast-theme--light {
+  background-color: rgba(0, 0, 0, 0.842) !important;
+}
+
+.Toastify__toast-icon svg {
+  fill: var(--color-secundaria);
+}
+
+.Toastify__progress-bar--success {
+  background-color: var(--color-secundaria) !important;
 }
 
 /* === Breakpoint 1: Telas Grandes (ex: Laptops Maiores) === */
@@ -56,11 +68,12 @@
   .content-area {
     padding: 20px 32px;
   }
-  .content-area > div > :first-child > :first-child h2 {
+
+  .content-area>div> :first-child> :first-child h2 {
     font-size: 32px;
   }
 
-  .content-area > div > :first-child > :first-child h3 {
+  .content-area>div> :first-child> :first-child h3 {
     font-size: 20px;
   }
 }
@@ -70,6 +83,7 @@
   .content-area {
     padding: 12px 24px;
   }
+
   .border {
     display: none;
   }
@@ -81,11 +95,12 @@
     padding: 12px 20px;
     width: 80%;
   }
-  .content-area > div > :first-child > :first-child h2 {
+
+  .content-area>div> :first-child> :first-child h2 {
     font-size: 26px;
   }
 
-  .content-area > div > :first-child > :first-child h3 {
+  .content-area>div> :first-child> :first-child h3 {
     font-size: 18px;
   }
 }

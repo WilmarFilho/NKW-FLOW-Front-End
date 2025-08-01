@@ -3,6 +3,13 @@
   display: flex;
   flex-direction: column;
   gap: 32px;
+  height: 100%;
+}
+.agents-wrapper {
+  background-color: var(--color-background-dark);
+  height: 100%;
+  border-radius: 16px;
+  padding: 20px;
 }
 .agents-header {
   display: flex;

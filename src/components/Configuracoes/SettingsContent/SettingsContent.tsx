@@ -1,31 +1,30 @@
-//Libbs
+// Libs
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 // Hooks
 import { useUser } from '../../../hooks/auth/useUser';
-//Css
+// Css
 import './settingsContent.css';
-//Components
+// Components
 import ToggleSwitch from '../ToggleSwitch/ToggleSwitch';
 import OptionSelector from '../OptionSelector/OptionSelector';
+import { User } from '../../../types/user';
+import { toast } from 'react-toastify';
 
 type Props = {
   tabIndex: number;
 };
 
 export default function SettingsContent({ tabIndex }: Props) {
-
   const { user, updateUser, uploadProfileImage, loading } = useUser();
 
   const [mostrarNome, setMostrarNome] = useState(false);
   const [notifAtendente, setNotifAtendente] = useState(false);
   const [notifEntrarConversa, setNotifEntrarConversa] = useState(false);
   const [notifNovoChat, setNotifNovoChat] = useState(false);
-  const [senhaUser, setsenhaUser] = useState('');
   const [modoTela, setModoTela] = useState<'Black' | 'White'>('Black');
   const [modoSidebar, setModoSidebar] = useState<'Full' | 'Minimal'>('Full');
 
-  // Carrega valores do estado global do usuário
   useEffect(() => {
     if (user) {
       setMostrarNome(user.mostra_nome_mensagens);
@@ -37,32 +36,28 @@ export default function SettingsContent({ tabIndex }: Props) {
     }
   }, [user]);
 
-  const handleSave = async () => {
-    const success = await updateUser({
-      mostra_nome_mensagens: mostrarNome,
-      modo_notificacao_atendente: notifAtendente,
-      notificacao_para_entrar_conversa: notifEntrarConversa,
-      notificacao_novo_chat: notifNovoChat,
-      modo_tela: modoTela,
-      modo_side_bar: modoSidebar,
-    });
-
-    if (success) alert('Alterações salvas!');
+  const handleAutoUpdate = async (updatedFields: Partial<User>) => {
+    if (!user) return;
+    const success = await updateUser(updatedFields);
+    if (success) {
+      toast.success('Alteração salva!');
+    } else {
+      toast.error('Erro ao salvar. Tente novamente.');
+    }
   };
 
-  // Função para lidar com a seleção e upload da imagem
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    // 1. Faz o upload da imagem e obtém a URL
     const imageUrl = await uploadProfileImage(file);
 
-    // 2. Se o upload foi bem-sucedido, atualiza o usuário com a nova URL
     if (imageUrl) {
       const success = await updateUser({ foto_perfil: imageUrl });
-      if (!success) {
-        alert('Houve um erro ao salvar a nova foto de perfil.');
+      if (success) {
+        toast.success('Alteração salva!');
+      } else {
+        toast.error('Erro ao salvar. Tente novamente.');
       }
     } else {
       alert('Falha no upload da imagem.');
@@ -110,45 +105,24 @@ export default function SettingsContent({ tabIndex }: Props) {
     switch (tabIndex) {
       case 0:
         return (
-          <>
-            <div className="switch-wrapper profile-wrapper">
-              <div className="box-text">
-                <span className="switch-label">Foto de Perfil</span>
-                <p className="switch-description">Clique na imagem para alterar.</p>
-              </div>
-              <div className="profile-image-container">
-                <img
-                  src={user.foto_perfil || '/default-avatar.png'}
-                  alt="Foto de Perfil"
-                  className="profile-image"
-                  onClick={() => !loading && document.getElementById('fileInput')?.click()}
-                  style={{ cursor: loading ? 'wait' : 'pointer' }}
-                />
-                <input
-                  type="file"
-                  id="fileInput"
-                  accept="image/*"
-                  style={{ display: 'none' }}
-                  onChange={handleImageUpload}
-                  disabled={loading}
-                />
-              </div>
-            </div>
-
-            <div className="switch-wrapper">
-              <div className="box-text">
-                <span className="switch-label">Alterar Senha</span>
-                <p className="switch-description">Informe uma nova senha de acesso.</p>
-              </div>
-              <input
-                type="password"
-                className="password-input"
-                placeholder="Nova senha"
-                value={senhaUser}
-                onChange={(e) => { setsenhaUser(e.target.value) }}
-              />
-            </div>
-          </>
+          <div className="profile-wrapper">
+            <img
+              src={user.foto_perfil || '/default-avatar.png'}
+              alt="Foto de Perfil"
+              className="profile-image"
+              onClick={() => !loading && document.getElementById('fileInput')?.click()}
+              style={{ cursor: loading ? 'wait' : 'pointer' }}
+            />
+            <input
+              type="file"
+              id="fileInput"
+              accept="image/*"
+              style={{ display: 'none' }}
+              onChange={handleImageUpload}
+              disabled={loading}
+            />
+            <p className="switch-description">Clique na imagem para alterar.</p>
+          </div>
         );
 
       case 1:
@@ -158,47 +132,65 @@ export default function SettingsContent({ tabIndex }: Props) {
               'Notificação para atendente',
               'Envia um alerta ao atendente quando é necessário entrar em uma conversa.',
               notifAtendente,
-              () => setNotifAtendente(!notifAtendente)
+              () => {
+                const newVal = !notifAtendente;
+                setNotifAtendente(newVal);
+                handleAutoUpdate({ modo_notificacao_atendente: newVal });
+              }
             )}
             {renderSwitch(
               'Notificação ao entrar na conversa',
               'Informa você quando entrar em uma conversa ativa.',
               notifEntrarConversa,
-              () => setNotifEntrarConversa(!notifEntrarConversa)
+              () => {
+                const newVal = !notifEntrarConversa;
+                setNotifEntrarConversa(newVal);
+                handleAutoUpdate({ notificacao_para_entrar_conversa: newVal });
+              }
             )}
             {renderSwitch(
               'Notificação de novo chat',
               'Você será notificado sempre que um novo chat for iniciado.',
               notifNovoChat,
-              () => setNotifNovoChat(!notifNovoChat)
+              () => {
+                const newVal = !notifNovoChat;
+                setNotifNovoChat(newVal);
+                handleAutoUpdate({ notificacao_novo_chat: newVal });
+              }
             )}
-          </>
-        );
-      case 2:
-        return (
-          <>
             {renderSelect(
               'Modo de Tela',
               'Altere entre modo escuro (Black) e claro (White).',
               modoTela,
-              (val) => setModoTela(val as 'Black' | 'White'),
+              (val) => {
+                setModoTela(val as 'Black' | 'White');
+                handleAutoUpdate({ modo_tela: val as 'Black' | 'White' });
+              },
               ['Black', 'White']
             )}
             {renderSelect(
               'Modo de Sidebar',
               'Sidebar completa com nomes e ícones ou minimalista com ícones apenas.',
               modoSidebar,
-              (val) => setModoSidebar(val as 'Full' | 'Minimal'),
+              (val) => {
+                setModoSidebar(val as 'Full' | 'Minimal');
+                handleAutoUpdate({ modo_side_bar: val as 'Full' | 'Minimal' });
+              },
               ['Full', 'Minimal']
             )}
             {renderSwitch(
               'Mostrar nome nas mensagens',
               'Exibe seu nome junto das mensagens enviadas no chat.',
               mostrarNome,
-              () => setMostrarNome(!mostrarNome)
+              () => {
+                const newVal = !mostrarNome;
+                setMostrarNome(newVal);
+                handleAutoUpdate({ mostra_nome_mensagens: newVal });
+              }
             )}
           </>
         );
+
       default:
         return <p>Selecione uma aba de configuração válida.</p>;
     }
@@ -212,10 +204,6 @@ export default function SettingsContent({ tabIndex }: Props) {
       className="settings-content"
     >
       {renderContent()}
-
-      <button className="save-btn" onClick={handleSave} disabled={!user}>
-        Salvar alterações
-      </button>
     </motion.div>
   );
 }

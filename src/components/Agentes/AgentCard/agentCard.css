@@ -1,15 +1,62 @@
+/* Em agentCard.css */
+
 .agent-card {
   background-color: var(--color-main);
   border-radius: 12px;
   padding: 50px 24px;
+  
+  /* MUDANÇA PRINCIPAL: Controlar o layout interno com Flexbox */
   display: flex;
-  justify-content: center;
-  align-items: center;
   flex-direction: column;
+  justify-content: space-between; /* Distribui o espaço entre o topo e a base */
+
   text-align: center;
-  gap: 12px;
   transition: .4s;
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  /* Removidos: align-items, gap, pois controlaremos de outra forma */
+}
+
+/* NOVO: Container para a parte de cima */
+.agent-card-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+/* NOVO: Container para a parte de baixo */
+.agent-card-bottom {
+  /* 
+    Define uma altura mínima igual à altura do botão.
+    Ajuste este valor para corresponder à altura exata do seu botão + margens.
+    Isso "reserva" o espaço mesmo quando o botão não está lá.
+  */
+  min-height: 40px; /* Exemplo: altura do botão + padding */
+  display: flex;
+  align-items: center; /* Centraliza o botão verticalmente no espaço */
+  justify-content: center; /* Centraliza o botão horizontalmente */
+  margin-top: 12px; /* Adiciona um espaço como o 'gap' fazia */
+}
+
+/* O resto do seu CSS permanece o mesmo */
+.agent-card svg {
+  position: absolute;
+  top: -14px;
+  right: -14px;
+  fill: white;
+}
+
+.agent-icon {
+  width: 60px;
+  height: 60px;
+}
+
+.agent-card ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
 }
 
 .agent-bullet {
@@ -20,6 +67,9 @@
   text-transform: uppercase;
   border-radius: 8px;
 }
+
+/* ... etc ... */
+
 
 .agent-card:hover {
   transform: scale(.9);

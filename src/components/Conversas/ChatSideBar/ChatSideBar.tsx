@@ -75,7 +75,7 @@ const ChatSidebar = ({ chats, activeChat, setActiveChat, searchQuery, setSearchQ
           return (
             <Tag
               key={agent.id}
-              label={agent.nome}
+              label={agent.tipo_de_agente}
               active={selectedAgentId === agent.id}
               onClick={() => setSelectedAgentId(agent.id)}
             />
