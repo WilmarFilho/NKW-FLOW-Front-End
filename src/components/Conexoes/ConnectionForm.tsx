@@ -7,6 +7,7 @@ import Modal from '../Gerais/ModalForm/Modal';
 //Hooks
 import { useAddConnection } from '../../hooks/connections/useAddConnection';
 import { useAgents } from '../../hooks/agents/useAgents';
+import { useState } from 'react';
 
 export default function AddConnectionModal() {
 
@@ -24,7 +25,8 @@ export default function AddConnectionModal() {
     formData,
     handleInputChange,
     handleStartSession,
-    handleEditConnection
+    handleEditConnection,
+    isLoading
   } = useAddConnection(handleClose, initialData);
 
 
@@ -74,7 +76,16 @@ export default function AddConnectionModal() {
               )}
             </select>
           </div>
-          <button type="submit" className="submit-button">{editMode ? 'Salvar Alterações' : 'Gerar QR Code'}</button>
+          {isLoading ? (
+            <button type="button" className="submit-button loading" disabled>
+              <span className="spinner"></span>
+              Conectando...
+            </button>
+          ) : (
+            <button type="submit" className="submit-button">
+              {editMode ? 'Salvar Alterações' : 'Gerar QR Code'}
+            </button>
+          )}
         </form>
       )}
 
@@ -87,3 +98,5 @@ export default function AddConnectionModal() {
     </Modal>
   );
 }
+
+

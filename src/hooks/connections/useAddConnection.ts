@@ -15,6 +15,7 @@ interface AddConnectionResponse {
 export const useAddConnection = (onClose: () => void, initialData: Partial<Connection> | undefined | null) => {
   const [user] = useRecoilState(userState);
   const [step, setStep] = useState<1 | 2>(1);
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     nome: initialData?.nome?.split('_')[0] || '',
     agent: initialData?.agente_id || '',
@@ -40,7 +41,9 @@ export const useAddConnection = (onClose: () => void, initialData: Partial<Conne
   const handleStartSession = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if(!user) return
+    if (!user) return
+
+    setIsLoading(true)
 
     const payload = {
       user_id: user.id,
@@ -81,6 +84,7 @@ export const useAddConnection = (onClose: () => void, initialData: Partial<Conne
     handleStartSession,
     handleEditConnection,
     onClose,
+    isLoading,
     setFormData,
   };
 };
