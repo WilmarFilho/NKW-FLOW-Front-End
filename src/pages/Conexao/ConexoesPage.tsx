@@ -43,10 +43,10 @@ export default function ConexoesPage() {
   };
 
 
-  const handleDelete = async (id: string, nome: string) => {
+  const handleDelete = async (id: string) => {
     if (window.confirm('Tem certeza que deseja excluir esta conexão?')) {
       try {
-        await removeConnection(id, nome);
+        await removeConnection(id);
       } catch (error) {
         alert('Não foi possível excluir a connection.' + error);
       }
@@ -87,7 +87,7 @@ export default function ConexoesPage() {
               <div className='box-table-nome'>
                 {conn.nome.split('_')[0]}
                 <button className="edit-button" onClick={() => handleEdit(conn)} ><ArrowUp /></button>
-                <button className="delete-button" onClick={() => handleDelete(conn.id, conn.nome)}><XCheck /></button>
+                <button className="delete-button" onClick={() => handleDelete(conn.id)}><XCheck /></button>
               </div>
               <div>{conn.numero}</div>
               <NavLink to="/agentes"><div className="agent-select">{conn.agente.tipo_de_agente}</div></NavLink>

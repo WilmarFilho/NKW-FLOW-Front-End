@@ -27,7 +27,7 @@ export const useRealtimeEvents = (userId: string | undefined) => {
         if (tipo === 'connection.update') {
           if (state === 'close') {
             setConnections(prev => prev.filter(c => c.id !== connection.id));
-          } else {
+          } if (state === 'open') {
             setModalState({ isOpen: false });
 
             setConnections(prev => {

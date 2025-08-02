@@ -42,11 +42,9 @@ export const useAddConnection = (onClose: () => void, initialData: Partial<Conne
 
     if(!user) return
 
-    const connectionName = `${formData.nome}_${user.id}`;
-
     const payload = {
       user_id: user.id,
-      nome: connectionName,
+      nome: formData.nome,
       status: false,
       agente_id: formData.agent,
     };
