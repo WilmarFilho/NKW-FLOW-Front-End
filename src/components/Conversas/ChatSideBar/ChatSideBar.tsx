@@ -34,6 +34,9 @@ const containerVariants = {
 
 const ChatSidebar = ({ chats, activeChat, setActiveChat, searchQuery, setSearchQuery, setSelectedAgentId, selectedAgentId }: Props) => {
 
+  const [iaFilter, setIaFilter] = useState<'todos' | 'ativa' | 'desativada'>('todos');
+
+
   const { agents } = useAgents();
 
   const filteredChats = chats.filter((chat) => {
@@ -45,7 +48,14 @@ const ChatSidebar = ({ chats, activeChat, setActiveChat, searchQuery, setSearchQ
       ? chat.connection?.agente_id === selectedAgentId
       : true;
 
-    return matchSearch && matchAgent;
+    const matchIA =
+      iaFilter === 'todos'
+        ? true
+        : iaFilter === 'ativa'
+          ? chat.ia_ativa === true
+          : chat.ia_ativa === false;
+
+    return matchSearch && matchAgent && matchIA;
   });
 
 
@@ -57,6 +67,26 @@ const ChatSidebar = ({ chats, activeChat, setActiveChat, searchQuery, setSearchQ
       animate="show"
     >
       <SearchBar onSearch={setSearchQuery} />
+
+      <div className="ia-filters">
+        <span
+          className={`filter-ia ${iaFilter === 'ativa' ? 'active' : ''}`}
+          onClick={() => setIaFilter('ativa')}
+          style={{ cursor: 'pointer' }}
+        >
+          Agente Ativado
+        </span>
+
+        <span
+          className={`filter-ia ${iaFilter === 'desativada' ? 'active' : ''}`}
+          onClick={() => setIaFilter('desativada')}
+          style={{ cursor: 'pointer' }}
+        >
+          Agente Desativado
+        </span>
+        
+      </div>
+
 
       <div className="tags">
 
@@ -101,3 +131,5 @@ const ChatSidebar = ({ chats, activeChat, setActiveChat, searchQuery, setSearchQ
 };
 
 export default ChatSidebar;
+
+

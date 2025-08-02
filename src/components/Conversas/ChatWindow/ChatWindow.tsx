@@ -96,7 +96,7 @@ const ChatWindow = ({ activeChat, messages, setActiveChat }: Props) => {
                         <div ref={messagesEndRef} /> {/* div invisível para rolar até */}
                     </>
                 ) : (
-                    <p style={{ padding: '1rem' }}>Selecione uma conversa</p>
+                    <div className='messages-fallback'><p style={{ padding: '1rem' }}>Selecione uma conversa para começar.</p></div> 
                 )}
             </div>
             <div className="box-chat-input-wrapper">
