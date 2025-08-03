@@ -1,33 +1,31 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useRecoilState } from 'recoil';
 import { chatsState } from '../../state/atom';
 import { useApi } from '../utils/useApi'; 
 import type { Chat } from '../../types/chats';
 
-export default function useChats(userId: string | null | undefined, agentId?: string | null) {
+export default function useChats(userId: string | null | undefined) {
   const [chats, setChats] = useRecoilState(chatsState);
   const { get } = useApi<Chat[]>();
 
-  useEffect(() => {
+  const fetchChats = useCallback(async () => {
     if (!userId) {
       setChats([]);
       return;
     }
 
-    const fetchChats = async () => {
-      const query = agentId ? `?agente_id=${agentId}` : '';
-      const data = await get(`/chats/connections/chats/${userId}${query}`);
+    const data = await get(`/chats/connections/chats/${userId}`);
 
-      if (data) {
-        console.log(data)
-        setChats(data);
-      } else {
-        setChats([]);
-      }
-    };
+    if (data) {
+      setChats(data);
+    } else {
+      setChats([]);
+    }
+  }, [userId, get, setChats]);
 
+  useEffect(() => {
     fetchChats();
-  }, [userId, agentId, get, setChats]);
+  }, [fetchChats]);
 
-  return { chats };
+  return { chats, refetch: fetchChats };
 }

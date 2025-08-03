@@ -18,8 +18,12 @@ export const useRealtimeEvents = (userId: string | undefined) => {
     console.log(`[SSE] Conectado ao /events/${userId}`);
 
     eventSource.onmessage = (event) => {
+
+
+
       try {
         const payload = JSON.parse(event.data);
+        console.log(payload)
         const { event: tipo, connection, chat, message, state } = payload;
 
         console.log(payload, chat)
@@ -47,13 +51,28 @@ export const useRealtimeEvents = (userId: string | undefined) => {
 
             setChats(prev => {
               const exists = prev.find(c => c.id === chatId);
-              if (exists) return prev;
 
-              // Buscar o chat do backend
+              if (exists) {
+                return prev.map(chat =>
+                  chat.id === chatId
+                    ? {
+                      ...chat,
+                      ultima_mensagem: message.mensagem,
+                      mensagem_data: message.criado_em,
+                    }
+                    : chat
+                );
+              }
+
+              // Se o chat ainda não está carregado, busca ele do backend
               fetch(`${apiConfig.node}/chats/${chatId}`)
                 .then(res => res.json())
                 .then(chat => {
-                  setChats(prevChats => [...prevChats, chat]);
+                  setChats(prevChats => [...prevChats, {
+                    ...chat,
+                    ultima_mensagem: message.mensagem,
+                    mensagem_data: message.criado_em,
+                  }]);
                 })
                 .catch(err => {
                   console.error('Erro ao buscar chat para a mensagem recebida:', err);
@@ -61,6 +80,7 @@ export const useRealtimeEvents = (userId: string | undefined) => {
 
               return prev;
             });
+
 
             setMessages(prev => {
               const exists = prev.find(m => m.id === message.id);

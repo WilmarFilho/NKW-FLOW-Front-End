@@ -16,7 +16,7 @@ export default function ConversasPage() {
   const [user] = useRecoilState(userState);
   const [activeChat, setActiveChat] = useState<Chat | null>(null);
   const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
-  const { chats } = useChats(user?.id, selectedAgentId);
+  const { chats } = useChats(user?.id);
   const { messages } = useMessages(activeChat?.id || null);
   const [searchQuery, setSearchQuery] = useState('');
 

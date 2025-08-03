@@ -16,6 +16,12 @@ import defaultAvatar from '../assets/default.webp';
 import { useAgents } from '../../../hooks/agents/useAgents';
 import DotsIcon from '../assets/dots.svg'
 import { NavLink } from 'react-router-dom';
+import useChats from '../../../hooks/chats/useChats';
+import { useRecoilState } from 'recoil';
+import { userState } from '../../../state/atom';
+
+import { useSetRecoilState } from 'recoil';
+import { chatsState } from '../../../state/atom';
 
 interface Props {
     activeChat: Chat | null;
@@ -24,7 +30,11 @@ interface Props {
 }
 
 const ChatWindow = ({ activeChat, messages, setActiveChat }: Props) => {
+    const [user] = useRecoilState(userState);
     const { toggleIA } = useToggleIA();
+    const { refetch } = useChats(user?.id);
+    const setChats = useSetRecoilState(chatsState);
+
 
     const { sendMessage } = useSendMessage();
 
@@ -44,10 +54,25 @@ const ChatWindow = ({ activeChat, messages, setActiveChat }: Props) => {
     const handleSendMessage = async (text: string) => {
         if (!activeChat) return;
 
-        await sendMessage({
+        const result = await sendMessage({
             chat_id: activeChat.id,
             mensagem: text,
         });
+
+        if (result) {
+            const updatedChat = {
+                ...activeChat,
+                ultima_mensagem: text,
+                mensagem_data: '',
+            };
+
+            setActiveChat(updatedChat); 
+            setChats(prev =>
+                prev.map(chat =>
+                    chat.id === updatedChat.id ? updatedChat : chat
+                )
+            );
+        }
     };
 
     return (
@@ -96,7 +121,7 @@ const ChatWindow = ({ activeChat, messages, setActiveChat }: Props) => {
                         <div ref={messagesEndRef} /> {/* div invisível para rolar até */}
                     </>
                 ) : (
-                    <div className='messages-fallback'><p style={{ padding: '1rem' }}>Selecione uma conversa para começar.</p></div> 
+                    <div className='messages-fallback'><p style={{ padding: '1rem' }}>Selecione uma conversa para começar.</p></div>
                 )}
             </div>
             <div className="box-chat-input-wrapper">
@@ -105,7 +130,12 @@ const ChatWindow = ({ activeChat, messages, setActiveChat }: Props) => {
 
                     {activeChat && (
                         <button
-                            onClick={() => toggleIA(activeChat, setActiveChat)}
+                            onClick={() =>
+                                toggleIA(activeChat, (updatedChat) => {
+                                    setActiveChat(updatedChat);
+                                    refetch();
+                                })
+                            }
                             className={activeChat.ia_ativa ? 'toggle-ia-btn toggle-ia-active' : 'toggle-ia-btn'}
                         >
                             {activeChat.ia_ativa ? 'Desativar IA' : 'Ativar IA'}
@@ -118,3 +148,5 @@ const ChatWindow = ({ activeChat, messages, setActiveChat }: Props) => {
 };
 
 export default ChatWindow;
+
+
