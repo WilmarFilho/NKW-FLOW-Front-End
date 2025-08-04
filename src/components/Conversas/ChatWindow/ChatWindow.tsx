@@ -66,7 +66,7 @@ const ChatWindow = ({ activeChat, messages, setActiveChat }: Props) => {
                 mensagem_data: '',
             };
 
-            setActiveChat(updatedChat); 
+            setActiveChat(updatedChat);
             setChats(prev =>
                 prev.map(chat =>
                     chat.id === updatedChat.id ? updatedChat : chat
@@ -115,9 +115,12 @@ const ChatWindow = ({ activeChat, messages, setActiveChat }: Props) => {
                             <MessageBubble
                                 key={msg.id}
                                 text={msg.mensagem}
+                                mimetype={msg.mimetype}
+                                base64={msg.base64}
                                 sender={msg.remetente === 'cliente' ? 'me' : 'other'}
                             />
                         ))}
+
                         <div ref={messagesEndRef} /> {/* div invisível para rolar até */}
                     </>
                 ) : (
