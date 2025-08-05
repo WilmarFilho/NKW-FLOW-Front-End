@@ -1,0 +1,114 @@
+.tableRow {
+  display: grid;
+  align-items: center;
+  gap: 16px;
+  background-color: var(--color-main);
+  padding: 14px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+.tableRow:hover {
+  background-color: #181d3d90;
+}
+.tableRow > div {
+  text-align: start;
+}
+
+/* Estilos para células de nome com avatar */
+.cellName {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.cellName img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Estilos para o Status Chip */
+.statusChip {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: bold;
+  text-align: center;
+  width: fit-content;
+}
+.statusChip.active {
+  background-color:var(--color-secundaria);
+  color: #52f2b7;
+}
+.statusChip.inactive {
+  background-color: rgba(255, 85, 85, 0.15);
+  color: #ff5555;
+}
+
+/* Estilos para botões de ação (Editar, Deletar) */
+.actionCell {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-start;
+}
+.actionButton {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  outline: none;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+  cursor: pointer;
+}
+.actionButton svg {
+  width: 28px;
+  height: 28px;
+  fill: #a0a0a0;
+  transition: fill 0.2s;
+}
+.actionButton:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.actionButton:hover svg {
+  fill: #fff;
+}
+.actionButton:focus-visible {
+  outline: 2px solid var(--color-secundaria);
+}
+
+
+/* Responsividade do CONTEÚDO */
+@media (max-width: 991.98px) {
+  .tableRow {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+  }
+  .tableRow > div {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  .tableRow > div:last-child {
+      border-bottom: none;
+  }
+  /* Adiciona um pseudo-elemento para simular o label da coluna */
+  .tableRow > div::before {
+    content: attr(data-label); /* Lê o label do atributo data-label */
+    font-weight: bold;
+    color: #a0a0a0;
+  }
+  .actionCell {
+      justify-content: center;
+  }
+  .actionCell::before {
+      content: 'Ações'; /* Label fixo para ações */
+  }
+}

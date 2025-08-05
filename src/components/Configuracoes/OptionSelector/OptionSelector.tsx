@@ -1,4 +1,4 @@
-import './optionSelector.css';
+import styles from './OptionSelector.module.css';
 
 type OptionSelectorProps = {
   options: string[];
@@ -8,11 +8,11 @@ type OptionSelectorProps = {
 
 export default function OptionSelector({ options, selected, onChange }: OptionSelectorProps) {
   return (
-    <div className="option-selector">
+    <div className={styles.container}>
       {options.map((opt) => (
         <button
           key={opt}
-          className={`option-btn ${selected === opt ? 'active' : ''}`}
+          className={`${styles.button} ${selected === opt ? styles.active : ''}`}
           onClick={() => onChange(opt)}
         >
           {opt}

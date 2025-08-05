@@ -1,0 +1,38 @@
+.toggleSwitch {
+  width: 80px;
+  height: 38px;
+  border-radius: 999px;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border: none;
+  padding: 0;
+  background-color: transparent;
+}
+
+/* Estado ligado */
+.toggleSwitch.on {
+  background-color: var(--color-secundaria);
+}
+
+/* Estado desligado */
+.toggleSwitch.off {
+  background-color: #333;
+}
+
+/* O círculo interno que se move */
+.switchKnob {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: #fff;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: left 0.2s ease;
+}
+
+/* Move o knob para a direita quando o interruptor está ligado */
+.toggleSwitch.on .switchKnob {
+  left: 44px;
+}

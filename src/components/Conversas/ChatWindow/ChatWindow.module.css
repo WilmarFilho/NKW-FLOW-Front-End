@@ -1,0 +1,161 @@
+.chatWindow {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-background-dark);
+  backdrop-filter: blur(3px);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+/* --- Header --- */
+.chatHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  flex-shrink: 0;
+}
+
+.contactInfo {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  overflow: hidden;
+}
+
+.contactInfo img {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.contactText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.contactText h1 {
+  font-size: 16px;
+  font-family: var(--font-main);
+  color: #fff;
+}
+
+.contactText a {
+  text-decoration: none;
+}
+
+.contactText span {
+  font-size: 13px;
+  font-family: var(--font-secundaria);
+  color: rgba(255, 255, 255, 0.5);
+  transition: color 0.2s;
+}
+.contactText a:hover span {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: underline;
+}
+
+.optionsButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+  transition: background-color 0.2s;
+}
+.optionsButton svg {
+  width: 28px;
+  height: 28px;
+  fill: rgba(255, 255, 255, 0.7);
+}
+.optionsButton:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+.optionsButton:focus-visible {
+  outline: 2px solid var(--color-secundaria);
+  outline-offset: 1px;
+}
+
+/* --- Message List --- */
+.messageList {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  scrollbar-width: none;
+  padding: 20px;
+}
+.messageList::-webkit-scrollbar {
+  display: none;
+}
+
+/* --- Input Area --- */
+.inputAreaWrapper {
+  padding: 16px 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+.inputArea {
+  display: flex;
+  gap: 12px;
+}
+
+.toggleIaButton {
+  background-color: var(--color-background-white);
+  border-radius: 12px;
+  border: none;
+  min-width: 120px;
+  flex-shrink: 0;
+  cursor: pointer;
+  font-weight: 500;
+  color: #fff;
+  transition: background-color 0.3s, color 0.3s, outline-offset 0.1s;
+  outline: none;
+}
+.toggleIaButton:hover:not(.active) {
+  background-color: #3f3f3f;
+}
+
+.toggleIaButton.active {
+  background-color: var(--color-secundaria);
+  color: white;
+}
+.toggleIaButton:focus-visible {
+  outline: 2px solid var(--color-secundaria);
+  outline-offset: 2px;
+}
+
+/* --- Fallback (No chat selected) --- */
+.fallbackContainer {
+  flex: 1;
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-background-dark);
+  border-radius: 20px;
+}
+.fallbackContainer p {
+  font-size: 22px;
+  font-family: var(--font-main);
+  color: rgba(255, 255, 255, 0.6);
+  text-align: center;
+  padding: 1rem;
+}
+
+/* --- Media Queries --- */
+@media (max-width: 991.98px) {
+  .chatWindow, .fallbackContainer {
+    width: 100%;
+    height: 65vh; 
+  }
+}

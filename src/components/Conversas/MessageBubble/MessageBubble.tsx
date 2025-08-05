@@ -1,7 +1,6 @@
-//Css
-import './messageBubble.css';
-//Libbs
 import { motion } from 'framer-motion';
+// CSS Modules
+import styles from './MessageBubble.module.css';
 
 interface MessageBubbleProps {
   text?: string | null;
@@ -10,44 +9,65 @@ interface MessageBubbleProps {
   base64?: string;
 }
 
-const MessageBubble = ({ text, sender, mimetype = 'text', base64 }: MessageBubbleProps) => {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.1, duration: 0.4, ease: 'easeOut' }}
-      className={`bubble ${sender}`}
-    >
-      {mimetype === 'image' && base64 ? (
+const renderMessageContent = ({ mimetype, base64, text }: MessageBubbleProps) => {
+ 
+  const type = mimetype || 'text';
+
+  switch (true) {
+    case type === 'image' && !!base64:
+      return (
         <>
           <img
             src={`data:image/jpeg;base64,${base64}`}
-            alt="Imagem enviada"
-            className="message-image"
-            style={{ maxWidth: '200px', borderRadius: '12px', marginBottom: text ? '0.5rem' : 0 }}
+            alt="Imagem enviada na conversa"
+            className={styles.messageImage}
           />
+         
           {text && <p>{text}</p>}
         </>
-      ) : mimetype?.startsWith('audio') && base64 ? (
-        <audio controls>
-          <source src={`data:audio/ogg;base64,${base64}`} type="audio/ogg" />
-          Seu navegador não suporta áudio.
-        </audio>
-      ) : mimetype === 'sticker' && base64 ? (
-        <img
-          src={`data:image/jpeg;base64,${base64}`}
-          alt="Sticker"
-          className="message-image"
-          style={{ width: '120px', height: '120px' }}
-        />
-      ) : (
-        <p>{text}</p>
-      )}
+      );
 
-    </motion.div>
-  );
+    case type === 'sticker' && !!base64:
+      return (
+        <img
+          src={`data:image/webp;base64,${base64}`}
+          alt="Figurinha (sticker) enviada na conversa"
+          className={styles.stickerImage}
+        />
+      );
+      
+    case type.startsWith('audio') && !!base64:
+      return (
+        <audio controls className={styles.messageAudio}>
+          <source src={`data:audio/ogg;base64,${base64}`} type="audio/ogg" />
+          Seu navegador não suporta o elemento de áudio.
+        </audio>
+      );
+
+    default:
+      return <p>{text}</p>;
+  }
 };
 
+export default function MessageBubble(props: MessageBubbleProps) {
+  const { sender, mimetype } = props;
 
-export default MessageBubble;
+  const bubbleClasses = [
+    styles.messageBubble,
+    sender === 'me' ? styles.isMe : styles.isOther,
+    mimetype === 'sticker' ? styles.stickerBubble : '',
+  ].join(' ');
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.1, duration: 0.3, ease: 'easeOut' }}
+      className={bubbleClasses}
+    >
+      {renderMessageContent(props)}
+    </motion.div>
+  );
+}
+
 

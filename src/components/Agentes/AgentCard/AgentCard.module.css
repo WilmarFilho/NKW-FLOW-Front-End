@@ -1,0 +1,65 @@
+.card {
+  background-color: var(--color-main);
+  border-radius: 12px;
+  padding: 50px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  transition: transform 0.4s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  gap: 12px;
+}
+
+.card:hover {
+  transform: scale(0.9);
+}
+
+.icon {
+  width: 60px;
+  height: 60px;
+  position: absolute;
+  top: -14px;
+  right: -14px;
+  fill: white;
+}
+
+.title {
+  font-size: 22px;
+  font-family: var(--font-main);
+}
+
+.description {
+  font-size: 14px;
+  text-wrap: balance;
+  color: #ffffffad;
+  line-height: 1.5;
+}
+
+.connectionsContainer {
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+.connectionList {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.connectionItem {
+  background-color: var(--color-secundaria);
+  padding: 12px 16px;
+  font-family: var(--font-main);
+  font-size: 14px;
+  text-transform: uppercase;
+  border-radius: 8px;
+}

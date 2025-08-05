@@ -11,27 +11,26 @@ import type { Attendant, AttendantInput } from '../../types/attendant';
 // Hooks
 import { useAttendants } from '../../hooks/attendants/useAttendants';
 // Css
-import './atendentes.css';
+import PageStyles from '../PageStyles.module.css';
+import tableStyles from '../../components/Gerais/Tables/TableStyles.module.css'
 // Assets
-import ArrowUp from './assets/arrow-circle.svg';
-import XCheck from './assets/x-circle.svg';
+import EditIcon from './assets/arrow-circle.svg';
+import DeleteIcon from './assets/x-circle.svg';
+
 
 
 export default function AtendentesPage() {
+
   const { attendants, addAttendant, removeAttendant, editAttendant } = useAttendants();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [editData, setEditData] = useState<Partial<AttendantInput> | null>(null);
   const [editAttendantId, setEditAttendantId] = useState<string | null>(null);
   const [editUserId, setEditUserId] = useState<string | null>(null);
-
+  
   const handleDelete = async (id: string) => {
-    if (window.confirm('Tem certeza que deseja excluir este atendente?')) {
-      try {
-        await removeAttendant(id);
-      } catch (error) {
-        alert('Não foi possível excluir o atendente.' + error);
-      }
+    if (window.confirm('Tem certeza?')) {
+      await removeAttendant(id).catch(err => alert('Falha ao excluir: ' + err));
     }
   };
 
@@ -47,95 +46,93 @@ export default function AtendentesPage() {
     setIsModalOpen(true);
   };
 
-  const handleAdd = () => {
-    setEditAttendantId(null);
-    setEditUserId(null);
-    setEditData(null);
-    setIsModalOpen(true);
-  }
-
-
-  const handleSaveAttendant = async (data: AttendantInput) => {
-    try {
-      if (editAttendantId) {
-        await editAttendant(editAttendantId, editUserId, data);
-      } else {
-        await addAttendant(data);
-      }
-
-      setIsModalOpen(false);
-      setEditAttendantId(null);
-      setEditData(null);
-    } catch (error) {
-      alert('Não foi possível salvar o atendente.');
-      throw error;
+  const handleSave = async (data: AttendantInput) => {
+    if (editAttendantId) {
+      await editAttendant(editAttendantId, editUserId, data);
+    } else {
+      await addAttendant(data);
     }
+    closeModal();
   };
 
-  return (
-    <div className="connections-container">
+  const openModal = () => {
+    setEditAttendantId(null)
+    setIsModalOpen(true);
+  };
 
+  const closeModal = () => {
+    setEditAttendantId(null);
+    setIsModalOpen(false);
+  };
 
-
-      <motion.div
-        initial={{ opacity: 0, y: 0 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
-        className="connections-header"
-      >
-        <div>
-          <h2>Seus atendentes humanos</h2>
-          <h3>Cadastre e veja seus atendentes humano que podem responder interagir com seus clientes desativando o agente na conversa</h3>
-        </div>
-        <Button label="Adicionar Atendente" onClick={() => handleAdd()} />
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0, y: 0 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
-        className="generic-table"
-      >
-        <GenericTable<Attendant>
-          columns={['Nome', 'Email', 'Número', 'Status']}
-          data={attendants}
-          renderRow={(conn, i) => (
-            <div className="connection-row" key={i}>
-              <div className='box-table-nome'>
-                {conn.user.nome}
-                <button className="edit-button" onClick={() => handleEdit(conn)} ><ArrowUp /></button>
-                <button className="delete-button" onClick={() => handleDelete(conn.id)}><XCheck /></button>
-              </div>
-              <div>{conn.user.email}</div>
-              <div>{conn.numero}</div>
-              <div
-                className={`status-chip ${conn.status ? 'active' : 'inactive'}`}
-              >
-                {conn.status ? 'Ativado' : 'Desativado'}
-              </div>
-              
-            </div>
-          )}
-        />
-      </motion.div>
-
-      <Modal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title={editAttendantId ? 'Editar Atendente' : 'Cadastrar Novo Atendente'}
-      >
-        <AttendantForm
-          onSave={handleSaveAttendant}
-          onClose={() => {
-            setIsModalOpen(false);
-            setEditAttendantId(null);
-            setEditData(null);
-          }}
-          initialData={editData}
-          editMode={!!editAttendantId}
-        />
-      </Modal>
-
+  const renderAttendantRow = (attendant: Attendant) => (
+    <div
+      key={attendant.id}
+      className={tableStyles.tableRow}
+      style={{ gridTemplateColumns: '2fr 3fr 2fr 1fr 1fr' }}
+    >
+      <div data-label="Nome" className={tableStyles.cellName}>
+        <span>{attendant.user.nome}</span>
+      </div>
+      <div data-label="Email">{attendant.user.email}</div>
+      <div data-label="Número">{attendant.numero}</div>
+      <div data-label="Status">
+        <span className={`${tableStyles.statusChip} ${attendant.status ? tableStyles.active : tableStyles.inactive}`}>
+          {attendant.status ? 'Ativo' : 'Inativo'}
+        </span>
+      </div>
+      <div className={tableStyles.actionCell}>
+        <button className={tableStyles.actionButton} onClick={() => handleEdit(attendant)} aria-label="Editar">
+          <EditIcon />
+        </button>
+        <button className={tableStyles.actionButton} onClick={() => handleDelete(attendant.id)} aria-label="Deletar">
+          <DeleteIcon />
+        </button>
+      </div>
     </div>
+  );
+
+
+  return (
+      <div  className={PageStyles.container}>
+        <motion.header
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className={PageStyles.containerHeader}
+        >
+          <div  className={PageStyles.headerTitles}>
+            <h2>Seus atendentes humanos</h2>
+            <h3>Cadastre e gerencie os atendentes que podem interagir com seus clientes.</h3>
+          </div>
+          <Button label="Adicionar Atendente" onClick={() => openModal()} />
+        </motion.header>
+
+
+        <GenericTable<Attendant>
+          columns={['Nome', 'Email', 'Número', 'Status', 'Ações']}
+          data={attendants}
+          renderRow={renderAttendantRow}
+          gridTemplateColumns="2fr 3fr 2fr 1fr 1fr"
+        />
+
+
+        <Modal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          title={editAttendantId ? 'Editar Atendente' : 'Cadastrar Novo Atendente'}
+        >
+          <AttendantForm
+            onSave={handleSave}
+            onClose={closeModal}
+            initialData={editData ? {
+              nome: editData.nome,
+              email: editData.email,
+              status: editData.status,
+              numero: editData.numero
+            } : null}
+            editMode={!!editData}
+          />
+        </Modal>
+      </div>
   );
 }

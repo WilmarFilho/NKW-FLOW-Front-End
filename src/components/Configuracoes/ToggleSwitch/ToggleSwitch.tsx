@@ -1,4 +1,5 @@
-import './toggleSwitch.css';
+// CSS Modules
+import styles from './ToggleSwitch.module.css';
 
 type ToggleSwitchProps = {
   isOn: boolean;
@@ -7,8 +8,14 @@ type ToggleSwitchProps = {
 
 export default function ToggleSwitch({ isOn, onToggle }: ToggleSwitchProps) {
   return (
-    <div className={`toggle-switch ${isOn ? 'on' : 'off'}`} onClick={onToggle}>
-      <div className="switch-knob" />
-    </div>
+    <button
+      type="button"
+      role="switch"
+      aria-checked={isOn}
+      className={`${styles.toggleSwitch} ${isOn ? styles.on : styles.off}`}
+      onClick={onToggle}
+    >
+      <div className={styles.switchKnob} />
+    </button>
   );
 }

@@ -1,5 +1,5 @@
-// Css
-import './tag.css';
+// CSS Modules
+import styles from './Tag.module.css';
 
 interface TagProps {
   label: string;
@@ -8,13 +8,12 @@ interface TagProps {
 }
 
 export default function Tag({ label, active = false, onClick }: TagProps) {
+
+  const tagClasses = `${styles.tag} ${active ? styles.active : ''}`;
+
   return (
-    <span
-      className={`tag ${active ? 'active' : ''}`}
-      onClick={onClick}
-      style={{ cursor: 'pointer' }}
-    >
+    <button type="button" className={tagClasses} onClick={onClick}>
       {label}
-    </span>
+    </button>
   );
 }

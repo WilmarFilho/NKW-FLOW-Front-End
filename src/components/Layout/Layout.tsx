@@ -1,42 +1,39 @@
-//Libbs
 import { Outlet } from 'react-router-dom';
-//Components
-import SidebarWrapper from './Sidebars/SidebarWrapper';
-//Hooks
-import { useRealtimeEvents } from '../../hooks/events/useRealtimeEvents';
-//Css
-import './Layout.css';
-import 'react-toastify/dist/ReactToastify.css';
-//Libbs
-import { useRecoilState } from 'recoil';
-import { userState } from '../../state/atom';
-import { useUser } from '../../hooks/auth/useUser';
+import { useRecoilValue } from 'recoil';
 import { ToastContainer } from 'react-toastify';
 
-//<div className='wrapper-border'><div className='border'></div></div>
+// Components
+import SidebarWrapper from './Sidebars/SidebarWrapper';
 
+// Hooks
+import { useRealtimeEvents } from '../../hooks/events/useRealtimeEvents';
+import { useUser } from '../../hooks/auth/useUser';
+
+// State
+import { userState } from '../../state/atom';
+
+// Estilos
+import styles from './Layout.module.css';
+import 'react-toastify/dist/ReactToastify.css'; 
 
 export default function Layout() {
-  useUser();
-  const [user] = useRecoilState(userState);
-
-  useRealtimeEvents(user?.id); // ← HOOK sempre na raiz
+  useUser(); 
+  const user = useRecoilValue(userState);
+  useRealtimeEvents(user?.id);
 
   return (
-    <div className="layout-container">
-
+    <div className={styles.layoutContainer}>
       <ToastContainer
         position="top-right"
         autoClose={2000}
+        theme="light" 
       />
-
 
       <SidebarWrapper />
       
-      <main className="content-area">
-        <Outlet />
+      <main className={styles.contentArea}>
+        <Outlet /> 
       </main>
     </div>
   );
 }
-

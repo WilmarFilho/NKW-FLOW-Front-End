@@ -1,0 +1,32 @@
+.tag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px 24px; 
+  flex-shrink: 0; 
+  flex-grow: 0;
+  background-color: var(--color-background-white);
+  color: #aaa;
+  border-radius: 12px;
+  font-size: 15px;
+  font-family: var(--font-secundaria);
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+  border: none;
+  outline: transparent;
+}
+
+.tag.active {
+  background-color: var(--color-secundaria);
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.tag:not(.active):hover {
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+}
+
+.tag:focus-visible {
+  border: 1px solid var(--color-secundaria);
+}

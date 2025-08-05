@@ -1,12 +1,12 @@
-.help-container {
+.container {
   flex: 1;
   display: flex;
   flex-direction: column;
-  height: 94vh;
   gap: 32px;
+  height: 100%;
 }
 
-.ajuda-header {
+.containerHeader {
   display: flex;
   gap: 32px;
   flex-direction: row;
@@ -14,7 +14,39 @@
   align-items: center;
 }
 
-.wrapper-icons-ajuda {
+.headerTitles {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.headerTitles h2 {
+  font-family: var(--font-main);
+  font-size: 40px;
+}
+
+.headerTitles h3 {
+  font-size: 24px;
+  color: rgba(255, 255, 255, 0.648);
+  line-height: 35px;
+  opacity: 0.8;
+  text-wrap: balance
+}
+
+.agentsWrapper {
+  background-color: var(--color-background-dark);
+  height: 100%;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.agentsList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.wrapperIconsAjuda {
   display: flex;
   flex-direction: row;
   gap: 12px;
@@ -22,13 +54,13 @@
   align-items: center;
 }
 
-.box-icon svg {
+.boxIcon svg {
   fill: white;
   width: 1005;
   height: 100%;
 }
 
-.box-icon {
+.boxIcon {
   background-color: var(--color-secundaria);
   padding: 20px 32px;
   border-radius: 20px;
@@ -38,17 +70,17 @@
   transition: .6s;
 }
 
-.box-icon:hover svg {
+.boxIcon:hover svg {
   fill: black;
   transition: .6s;
 }
 
-.box-icon:hover {
+.boxIcon:hover {
   background-color: white;
   transition: .6s;
 }
 
-.help-chat {
+.helpChat {
   background-color: var(--color-background-dark);
   border-radius: 20px;
   padding: 32px 24px;
@@ -61,7 +93,7 @@
   scrollbar-width: none;
 }
 
-.help-message {
+.helpMessage {
   width: 60%;
   padding: 12px 18px;
   border-radius: 12px;
@@ -70,29 +102,65 @@
   white-space: pre-wrap;
 }
 
-.help-message.bot {
+.helpMessage.bot {
   background-color: #52f2b724;
   align-self: flex-start;
 }
 
-.help-message.user {
+.helpMessage.user {
   background-color: #52f2b769;
   align-self: flex-end;
 }
 
-
-
+.conversationsContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  gap: 32px;
+}
 
 /* === Breakpoint 2: Desktops Padrão === */
 @media (max-width: 1199.98px) {
+  .headerTitles h2 {
+    font-size: 32px;
+  }
+
   .help-container {
     height: 90vh;
+  }
+
+  .headerTitles h3 {
+    font-size: 20px;
+  }
+
+  .conversationsContainer {
+    gap: 22px;
   }
 }
 
 /* === Breakpoint 4: Tablets em Retrato === */
 @media (max-width: 767.98px) {
+  .headerTitles h2 {
+    font-size: 26px;
+  }
+
+  .conversationsContainer {
+    gap: 12px;
+    flex-direction: column;
+  }
+
   .help-message {
     width: 80%;
+  }
+
+  .containerHeader {
+    flex-direction: column;
+    align-items: start;
+    gap: 16px;
+  }
+
+  .headerTitles h3 {
+    font-size: 18px;
   }
 }

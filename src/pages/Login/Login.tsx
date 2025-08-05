@@ -5,7 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/auth/useAuth';
 // Assets
 import LogoIcon from './assets/logo.svg';
-import './login.css';
+//Css
+import styles from './Login.module.css'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -21,10 +22,10 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-box">
+    <div className={styles.loginContainer}>
+      <div className={styles.loginBox}>
 
-        <div className='wrapperLogo'>
+        <div className={styles.wrapperLogo}>
           <LogoIcon />
         </div>
 

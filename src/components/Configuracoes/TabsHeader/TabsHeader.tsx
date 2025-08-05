@@ -1,7 +1,7 @@
-//Libbs
+// Libs
 import { motion } from 'framer-motion';
-//Css
-import './tabsHeader.css';
+// CSS Modules
+import styles from './TabsHeader.module.css';
 
 type Props = {
   tabs: string[];
@@ -15,16 +15,17 @@ export default function TabsHeader({ tabs, activeTab, setActiveTab }: Props) {
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
-      className="tabs-header"
+      className={styles.tabsContainer}
     >
       {tabs.map((tab, index) => (
-        <div
+        <button
           key={index}
-          className={`tab-item ${index === activeTab ? 'active' : ''}`}
+          // Lógica para aplicar a classe 'active' de forma mais limpa
+          className={`${styles.tabButton} ${index === activeTab ? styles.active : ''}`}
           onClick={() => setActiveTab(index)}
         >
           {tab}
-        </div>
+        </button>
       ))}
     </motion.div>
   );

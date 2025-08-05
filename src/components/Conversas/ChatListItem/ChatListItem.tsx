@@ -1,15 +1,15 @@
-//Libs
+// Libs
 import { motion } from 'framer-motion';
-//Css
-import './chatListItem.css';
-//Assets
-import defaultAvatar from '../assets/default.webp'; 
+// CSS Modules
+import styles from './ChatListItem.module.css';
+// Assets
+import defaultAvatar from '../assets/default.webp';
 
-interface ContactListItemProps {
+interface ChatListItemProps {
   name: string;
-  classname: string;
   message: string;
-  avatar: string | undefined;
+  avatar?: string;
+  isActive: boolean;
   onClick: () => void;
 }
 
@@ -18,22 +18,32 @@ const itemVariants = {
   show: { opacity: 1, y: 0 },
 };
 
-export default function ChatListItem({ name, message, classname, avatar, onClick } : ContactListItemProps)  {
+export default function ChatListItem({
+  name,
+  message,
+  avatar,
+  isActive,
+  onClick,
+}: ChatListItemProps) {
+
+  const containerClasses = `${styles.chatListItem} ${isActive ? styles.active : ''}`;
+
   return (
-    <motion.div
+    <motion.button
       variants={itemVariants}
-      className={classname}
+      className={containerClasses}
       onClick={onClick}
+      type="button"
     >
-      <img src={avatar ? avatar : defaultAvatar} alt={name} className="avatar" />
-      <div className="contact-texts">
+      <img
+        src={avatar || defaultAvatar}
+        alt={`Avatar de ${name}`} 
+        className={styles.avatar}
+      />
+      <div className={styles.textContainer}>
         <strong>{name}</strong>
         <p>{message}</p>
       </div>
-    </motion.div>
+    </motion.button>
   );
-};
-
-
-
-
+}

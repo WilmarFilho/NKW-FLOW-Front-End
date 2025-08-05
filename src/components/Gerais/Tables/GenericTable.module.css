@@ -1,0 +1,41 @@
+.tableContainer {
+  background-color: var(--color-background-dark);
+  padding: 48px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+}
+
+.tableHeader {
+  display: grid;
+  align-items: center;
+  gap: 16px;
+  padding: 0 16px 18px 16px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.05);
+  font-family: var(--font-main);
+  font-size: 1.5em;
+  color: #a0a0a0;
+}
+
+.tableHeader div {
+  text-align: start;
+}
+
+.tableBody {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Responsividade da MOLDURA */
+@media (max-width: 991.98px) {
+  .tableContainer {
+    background-color: transparent;
+    padding: 16px 0;
+  }
+  .tableHeader {
+    display: none;
+  }
+}

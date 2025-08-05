@@ -1,4 +1,4 @@
-.login-container {
+.loginContainer {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -10,7 +10,7 @@
   font-family: var(--font-main);
 }
 
-.login-box {
+.loginBox {
   display: flex;
   flex-direction: column;
   gap: 1.5em;
@@ -26,7 +26,7 @@
   align-items: center;
 }
 
-.login-box input {
+.loginBox input {
   width: 70%;
   padding: 0.75rem;
   border-radius: 6px;
@@ -36,16 +36,16 @@
   font-size: 1rem;
 }
 
-.login-box input::placeholder {
+.loginBox input::placeholder {
   color: #9ca3af;
 }
 
-.login-box input:focus {
+.loginBox input:focus {
   outline: 2px solid #3b82f6;
   background-color: #4b5563;
 }
 
-.login-box button {
+.loginBox button {
   width: 70%;
   padding: 1.25rem 0.75rem;
   background-color: var(--color-main);

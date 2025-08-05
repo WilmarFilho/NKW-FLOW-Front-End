@@ -1,25 +1,26 @@
-//Assets 
+// Assets
 import SearchIcon from '../assets/search.svg';
-import './searchbar.css';
+
+// CSS Modules
+import styles from './Searchbar.module.css';
 
 interface SearchBarProps {
   onSearch: (query: string) => void;
 }
 
-export default function SearchBar ({ onSearch } : SearchBarProps)  {
+export default function SearchBar({ onSearch }: SearchBarProps) {
   return (
-    <div className="search-container">
-
-      <div className="search-icon">
+    <div className={styles.searchContainer} role="search">
+      <div className={styles.iconWrapper}>
         <SearchIcon />
       </div>
 
       <input
         type="text"
-        className="search-bar"
-        placeholder="Pesquisa por nome ou telefone"
+        className={styles.searchInput}
+        placeholder="Pesquisar por nome ou telefone..."
         onChange={(e) => onSearch(e.target.value)}
       />
     </div>
   );
-};
+}

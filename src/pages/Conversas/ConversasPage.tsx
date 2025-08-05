@@ -9,7 +9,7 @@ import ChatWindow from '../../components/Conversas/ChatWindow/ChatWindow';
 // Types
 import { Chat } from '../../types/chats';
 // Css
-import './conversas.css'
+import PageStyles from '../PageStyles.module.css'
 import { userState } from '../../state/atom';
 
 export default function ConversasPage() {
@@ -21,7 +21,7 @@ export default function ConversasPage() {
   const [searchQuery, setSearchQuery] = useState('');
 
   return (
-    <div className="conversations-container">
+    <div className={PageStyles.conversationsContainer}>
       <ChatSidebar
         chats={chats}
         activeChat={activeChat}

@@ -8,7 +8,7 @@ import { useAgents } from '../../hooks/agents/useAgents';
 import { useConnections } from '../../hooks/connections/useConnections';
 
 // Css
-import './agentesPage.css';
+import PageStyles from '../PageStyles.module.css'
 
 export default function AgentesPage() {
 
@@ -16,15 +16,15 @@ export default function AgentesPage() {
   const { connections } = useConnections();
 
   return (
-    <div className="agents-container">
+    <div className={PageStyles.container}>
 
       <motion.div
         initial={{ opacity: 0, y: 0 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
-        className="agents-header"
+        className={PageStyles.containerHeader}
       >
-        <div>
+        <div className={PageStyles.headerTitles}>
           <h2>Vejas seus agentes disponíveis</h2>
           <h3>
             Ao adicionar uma nova conexão você seleciona um desses para responder por você. Para contratar mais agentes entre em contato.
@@ -37,9 +37,9 @@ export default function AgentesPage() {
         initial={{ opacity: 0, y: 0 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
-        className="agents-wrapper"
+        className={PageStyles.agentsWrapper}
       >
-        <div className="agents-list">
+        <div className={PageStyles.agentsList}>
           {agents.map((agent) => {
             const connectionsForAgent = connections.filter(conn => conn.agente_id === agent.id);
             const connectionNames = connectionsForAgent.map(conn => conn.nome.split('_')[0]);

@@ -1,5 +1,5 @@
 // Libbs
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { motion } from 'framer-motion';
 import { NavLink } from 'react-router-dom';
 // Atom
@@ -8,27 +8,38 @@ import { addConnectionModalState } from '../../state/atom';
 import { useConnections } from '../../hooks/connections/useConnections';
 // Components
 import Button from '../../components/Gerais/Buttons/Button';
-import ConnectionForm from '../../components/Conexoes/ConnectionForm';
+import AddConnectionModal from '../../components/Conexoes/ConnectionForm';
 import GenericTable from '../../components/Gerais/Tables/GenericTable';
 // Types
 import type { Connection } from '../../types/connection';
 // Css
-import './conexoes.css';
+import PageStyles from '../PageStyles.module.css'
+import tableStyles from '../../components/Gerais/Tables/TableStyles.module.css';
 // Assets
-import XCheck from './assets/x-circle.svg';
-import ArrowUp from './assets/arrow-circle.svg';
+import EditIcon from './assets/arrow-circle.svg';
+import DeleteIcon from './assets/x-circle.svg';
+
+
 
 export default function ConexoesPage() {
+
+  const handleDelete = async (id: string) => {
+    if (window.confirm('Tem certeza que deseja excluir esta conexão?')) {
+      await removeConnection(id).catch(err => alert('Falha ao excluir: ' + err));
+    }
+  };
 
   const { connections, removeConnection } = useConnections();
 
   const setModalState = useSetRecoilState(addConnectionModalState);
-  const { isOpen } = useRecoilValue(addConnectionModalState);
 
-  const handleOpenModal = () => {
-    setModalState({ isOpen: true, initialData: null, editMode: false });
+  const handleOpenModal = (conn: Connection | null) => {
+    setModalState({
+      isOpen: true,
+      initialData: conn ? { id: conn.id, nome: conn.nome, status: conn.status, agente_id: conn.agente_id } : null,
+      editMode: !!conn,
+    });
   };
-
   const handleEdit = (conn: Connection) => {
     setModalState({
       isOpen: true,
@@ -42,72 +53,58 @@ export default function ConexoesPage() {
     });
   };
 
+  const renderConnectionRow = (conn: Connection) => (
+    <div
+      key={conn.id}
+      className={tableStyles.tableRow}
+      style={{ gridTemplateColumns: '2fr 2fr 2fr 1fr 1fr' }}
+    >
+      <div data-label="Nome">{conn.nome.split('_')[0]}</div>
+      <div data-label="Número">{conn.numero || 'N/A'}</div>
+      <div data-label="Agente">
+        <NavLink to="/agentes">{conn.agente?.tipo_de_agente || 'Nenhum'}</NavLink>
+      </div>
+      <div data-label="Status">
+        <span className={`${tableStyles.statusChip} ${conn.status ? tableStyles.active : tableStyles.inactive}`}>
+          {conn.status ? 'Ativo' : 'Inativo'}
+        </span>
+      </div>
+      <div className={tableStyles.actionCell}>
+        <button className={tableStyles.actionButton} onClick={() => handleEdit(conn)} aria-label="Editar">
+          <EditIcon />
+        </button>
+        <button className={tableStyles.actionButton} onClick={() => handleDelete(conn.id)} aria-label="Deletar">
+          <DeleteIcon />
+        </button>
+      </div>
+    </div>
+  );
 
-  const handleDelete = async (id: string) => {
-    if (window.confirm('Tem certeza que deseja excluir esta conexão?')) {
-      try {
-        await removeConnection(id);
-      } catch (error) {
-        alert('Não foi possível excluir a connection.' + error);
-      }
-    }
-  };
 
   return (
-    <div className="connections-container">
-
-
-      <motion.div
-        initial={{ opacity: 0, y: 0 }}
+    <div className={PageStyles.container}>
+      <motion.header
+        initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
-        className="connections-header"
+        className={PageStyles.containerHeader}
       >
-
-        <div>
+        <div className={PageStyles.headerTitles}>
           <h2>Suas conexões do WhatsApp</h2>
-          <h3>Verifique suas conexões do WhatsApp aqui, você também pode adicionar ou desativar.</h3>
+          <h3>Verifique, adicione ou desative suas conexões do WhatsApp.</h3>
         </div>
+        <Button label="Adicionar Conexão" onClick={() => handleOpenModal(null)} />
+      </motion.header>
 
-        <Button label="Adicionar Conexão" onClick={handleOpenModal} />
-      </motion.div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 0 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
-        className="generic-table"
-      >
+      <GenericTable<Connection>
+        columns={['Nome', 'Número', 'Agente', 'Status', 'Ações']}
+        data={connections}
+        renderRow={renderConnectionRow}
+        gridTemplateColumns="2fr 2fr 2fr 1fr 1fr"
+      />
 
-        <GenericTable<Connection>
-          columns={['Nome', 'Número', 'Agente', 'Status']}
-          data={connections}
-          renderRow={(conn, i) => (
-            <div className="connection-row" key={i}>
-              <div className='box-table-nome'>
-                {conn.nome.split('_')[0]}
-                <button className="edit-button" onClick={() => handleEdit(conn)} ><ArrowUp /></button>
-                <button className="delete-button" onClick={() => handleDelete(conn.id)}><XCheck /></button>
-              </div>
-              <div>{conn.numero}</div>
-              <NavLink to="/agentes"><div className="agent-select">{conn.agente.tipo_de_agente}</div></NavLink>
-              <div className='column-action-conex'>
-                <div
-                  className={`status-chip ${conn.status ? 'active' : 'inactive'}`}
-                >
-                  {conn.status ? 'Ativado' : 'Desativado'}
 
-                </div>
-
-              </div>
-            </div>
-          )}
-        />
-
-      </motion.div>
-
-      {isOpen && <ConnectionForm />}
-
+      <AddConnectionModal />
     </div>
   );
 }

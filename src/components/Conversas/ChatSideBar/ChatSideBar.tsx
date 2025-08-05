@@ -1,17 +1,23 @@
-//Utils
+// React / Libs
 import { motion } from 'framer-motion';
-//Components
-import SearchBar from '../SearchBar/Searchbar';
-import Tag from '../Tags/Tag';
-import ContactListItem from '../ChatListItem/ChatListItem';
-//Types
-import { Chat } from '../../../types/chats';
-//Css
-import './chatSideBar.css'
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
+
+// Hooks
 import { useAgents } from '../../../hooks/agents/useAgents';
 
-interface Props {
+// Components
+import SearchBar from '../SearchBar/Searchbar';
+import Tag from '../Tags/Tag';
+import ChatListItem from '../ChatListItem/ChatListItem'; 
+
+// Types
+import { Chat } from '../../../types/chats';
+
+// CSS Modules
+import styles from './ChatSideBar.module.css';
+
+// Interface com nome mais específico
+interface ChatSidebarProps {
   chats: Chat[];
   activeChat: Chat | null;
   setActiveChat: (chat: Chat) => void;
@@ -26,110 +32,87 @@ const containerVariants = {
   show: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.1,
+      staggerChildren: 0.1,
     },
   },
 };
 
-const ChatSidebar = ({ chats, activeChat, setActiveChat, searchQuery, setSearchQuery, setSelectedAgentId, selectedAgentId }: Props) => {
-
-  const [iaFilter, setIaFilter] = useState<'todos' | 'ativa' | 'desativada'>('todos');
-
-
+export default function ChatSidebar({
+  chats,
+  activeChat,
+  setActiveChat,
+  searchQuery,
+  setSearchQuery,
+  setSelectedAgentId,
+  selectedAgentId,
+}: ChatSidebarProps) {
+  const [iaStatusFilter, setIaStatusFilter] = useState<'todos' | 'ativa' | 'desativada'>('todos');
   const { agents } = useAgents();
 
-  const filteredChats = chats.filter((chat) => {
-    const q = searchQuery.toLowerCase();
-    const matchSearch = chat.contato_nome?.toLowerCase().includes(q) || chat.contato_numero?.includes(q);
+  const filteredChats = useMemo(() => {
+    return chats.filter((chat) => {
+      const query = searchQuery.toLowerCase();
+      const matchesSearch = chat.contato_nome?.toLowerCase().includes(query) || chat.contato_numero?.includes(query);
 
+      const matchesAgent = selectedAgentId ? chat.connection?.agente_id === selectedAgentId : true;
 
-    const matchAgent = selectedAgentId
-      ? chat.connection?.agente_id === selectedAgentId
-      : true;
+      const matchesIAStatus =
+        iaStatusFilter === 'todos' ? true : iaStatusFilter === 'ativa' ? chat.ia_ativa === true : chat.ia_ativa === false;
 
-    const matchIA =
-      iaFilter === 'todos'
-        ? true
-        : iaFilter === 'ativa'
-          ? chat.ia_ativa === true
-          : chat.ia_ativa === false;
-
-    return matchSearch && matchAgent && matchIA;
-  });
-
+      return matchesSearch && matchesAgent && matchesIAStatus;
+    });
+  }, [chats, searchQuery, selectedAgentId, iaStatusFilter]);
 
   return (
-    <motion.div
-      className="left-panel"
+    <motion.aside
+      className={styles.chatSidebar}
       variants={containerVariants}
       initial="hidden"
       animate="show"
     >
       <SearchBar onSearch={setSearchQuery} />
 
-      <div className="ia-filters">
-        <span
-          className={`filter-ia ${iaFilter === 'ativa' ? 'active' : ''}`}
-          onClick={() => setIaFilter('ativa')}
-          style={{ cursor: 'pointer' }}
+      <div className={styles.iaFilterContainer}>
+        <button
+          type="button"
+          className={`${styles.iaFilterButton} ${iaStatusFilter === 'ativa' ? styles.active : ''}`}
+          onClick={() => setIaStatusFilter('ativa')}
         >
           Agente Ativado
-        </span>
-
-        <span
-          className={`filter-ia ${iaFilter === 'desativada' ? 'active' : ''}`}
-          onClick={() => setIaFilter('desativada')}
-          style={{ cursor: 'pointer' }}
+        </button>
+        <button
+          type="button"
+          className={`${styles.iaFilterButton} ${iaStatusFilter === 'desativada' ? styles.active : ''}`}
+          onClick={() => setIaStatusFilter('desativada')}
         >
           Agente Desativado
-        </span>
+        </button>
+      </div>
+
+      <div className={styles.tagsContainer}>
         
+        {agents.map((agent) => (
+          <Tag
+            key={agent.id}
+            label={agent.tipo_de_agente}
+            active={selectedAgentId === agent.id}
+            onClick={() => setSelectedAgentId(agent.id)}
+          />
+        ))}
       </div>
 
-
-      <div className="tags">
-
-        <Tag
-          key={'todos'}
-          label={'Todos'}
-          active={selectedAgentId === null}
-          onClick={() => setSelectedAgentId(null)}
-        />
-
-        {agents.map((agent) => {
-          return (
-            <Tag
-              key={agent.id}
-              label={agent.tipo_de_agente}
-              active={selectedAgentId === agent.id}
-              onClick={() => setSelectedAgentId(agent.id)}
-            />
-
-          )
-        })}
-
+      <div className={styles.chatList}>
+        {filteredChats.map((chat) => (
+          <ChatListItem
+            key={chat.id}
+            isActive={activeChat?.id === chat.id}
+            name={chat.contato_nome}
+            message={chat.ultima_mensagem}
+            avatar={chat.foto_perfil}
+            onClick={() => setActiveChat(chat)}
+          />
+        ))}
       </div>
-      <div className='list-contacts'>
-        {filteredChats.map((chat) => {
-          const isActive = activeChat?.id === chat.id;
-          return (
-            <ContactListItem
-              key={chat.id}
-              classname={isActive ? 'contact-item active-contact' : 'contact-item'}
-              name={chat.contato_nome}
-              message={chat.ultima_mensagem}
-              avatar={chat.foto_perfil}
-              onClick={() => setActiveChat(chat)}
-            />
-          );
-        })}
-      </div>
-
-    </motion.div>
+    </motion.aside>
   );
-};
-
-export default ChatSidebar;
-
-
+}

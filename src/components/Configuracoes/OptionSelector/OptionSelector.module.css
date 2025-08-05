@@ -1,9 +1,9 @@
-.option-selector {
+.container {
   display: flex;
   gap: 8px;
 }
 
-.option-btn {
+.button {
   padding: 12px 24px;
   border-radius: 14px;
   background-color: transparent;
@@ -16,6 +16,6 @@
   font-family: var(--font-secundaria);
 }
 
-.option-btn.active {
+.active {
   background-color: var(--color-secundaria);
 }

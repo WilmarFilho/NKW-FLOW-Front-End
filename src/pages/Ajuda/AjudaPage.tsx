@@ -12,32 +12,32 @@ import { helpChatState } from '../../state/atom';
 import InstaIcon from './assets/insta.svg'
 import InfoIcon from './assets/info.svg'
 // Css
-import './ajudaPage.css';
+import PageStyles from '../PageStyles.module.css'
 
 export default function AjudaPage() {
   const messages = useRecoilValue(helpChatState);
   const { sendMessage } = useSendHelpMessage();
 
   return (
-    <div className="help-container">
+    <div className={PageStyles.container}>
 
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
-        className="ajuda-header"
+        className={PageStyles.containerHeader}
       >
 
-        <div>
+        <div className={PageStyles.headerTitles}>
           <h2>Página de Ajuda</h2>
           <h3>Pergunte qualquer coisa que estiver com dúvidas sobre o NKW FLOW.</h3>
         </div>
 
-        <div className='wrapper-icons-ajuda'>
-          <div className='box-icon'>
+        <div className={PageStyles.wrapperIconsAjuda}>
+          <div className={PageStyles.boxIcon} >
             <a href='https://google.com' target='_blank'><InstaIcon></InstaIcon></a>
           </div>
-          <div className='box-icon'>
+          <div className={PageStyles.boxIcon}>
             <a href='https://google.com' target='_blank'><InfoIcon></InfoIcon></a>
           </div>
         </div>
@@ -50,7 +50,7 @@ export default function AjudaPage() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
-        className="help-chat"
+        className={PageStyles.helpChat}
 
 
       >
@@ -58,7 +58,7 @@ export default function AjudaPage() {
         {messages.map((msg, idx) => (
           <div
             key={idx}
-            className={`help-message ${msg.from === 'user' ? 'user' : 'bot'}`}
+            className={`${PageStyles.helpMessage} ${msg.from === 'user' ? PageStyles.user : PageStyles.bot}`}
           >
             <ReactMarkdown>
               {msg.content.text}
