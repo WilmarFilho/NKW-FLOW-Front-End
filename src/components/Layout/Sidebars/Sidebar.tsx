@@ -58,11 +58,15 @@ const Sidebar = () => {
     children: React.ReactNode;
   }) => (
     <NavLink to={to}>
-      {({ isActive }) => (
-        <div className={` MenuItem ${isActive ? 'active-link' : ''} `}>
-          {children}
-        </div>
-      )}
+      <NavLink
+        to={to}
+        // A classe agora é aplicada diretamente no NavLink (que vira uma tag <a>)
+        className={({ isActive }) =>
+          `MenuItem ${isActive ? 'active-link' : ''}`
+        }
+      >
+        {children}
+      </NavLink>
     </NavLink>
   );
 

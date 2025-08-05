@@ -40,6 +40,10 @@
   font-family: var(--font-secundaria);
 }
 
+.MenuItem:focus, MenuItem.active-link:focus {
+  outline: 1px solid white
+}
+
 .MenuImage {
   display: flex;
   gap: 10px;

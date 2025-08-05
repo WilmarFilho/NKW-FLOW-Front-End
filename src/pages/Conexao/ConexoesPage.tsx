@@ -33,11 +33,11 @@ export default function ConexoesPage() {
 
   const setModalState = useSetRecoilState(addConnectionModalState);
 
-  const handleOpenModal = (conn: Connection | null) => {
+  const handleOpenModal = () => {
     setModalState({
       isOpen: true,
-      initialData: conn ? { id: conn.id, nome: conn.nome, status: conn.status, agente_id: conn.agente_id } : null,
-      editMode: !!conn,
+      initialData: null,
+      editMode: false,
     });
   };
   const handleEdit = (conn: Connection) => {
@@ -92,7 +92,7 @@ export default function ConexoesPage() {
           <h2>Suas conexões do WhatsApp</h2>
           <h3>Verifique, adicione ou desative suas conexões do WhatsApp.</h3>
         </div>
-        <Button label="Adicionar Conexão" onClick={() => handleOpenModal(null)} />
+        <Button label="Adicionar Conexão" onClick={() => handleOpenModal()} />
       </motion.header>
 
 
