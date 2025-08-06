@@ -4,7 +4,7 @@
   justify-content: space-between;
   display: flex;
   flex-direction: column;
-  background-color: rgba(0, 0, 0, 0.25);
+  background-color: var(--color-background-sidebar);
   border-radius: 0px 15px 15px 0px;
 }
 
@@ -27,6 +27,7 @@
   padding-bottom: 20px;
 }
 
+
 .MenuItem {
   display: flex;
   gap: 10px;
@@ -41,7 +42,7 @@
 }
 
 .MenuItem:focus, MenuItem.active-link:focus {
-  outline: 1px solid white
+  outline: 1px solid rgba(255, 255, 255, 0.04)
 }
 
 .MenuImage {
@@ -57,7 +58,7 @@
 
 .MenuItem:hover,
 .MenuItem.active-link {
-  background-color: rgba(27, 33, 74, 0.7);
+  background-color: var(--color-background-menuItem);
   outline: 1px solid rgba(255, 255, 255, 0.15);
   color: #ffffff;
 }

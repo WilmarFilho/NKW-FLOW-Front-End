@@ -91,6 +91,13 @@ export default function ChatSidebar({
 
       <div className={styles.tagsContainer}>
         
+        <Tag
+          key={'todos'}
+          label={'Todos'}
+          active={selectedAgentId === null}
+          onClick={() => setSelectedAgentId(null)}
+        />
+
         {agents.map((agent) => (
           <Tag
             key={agent.id}

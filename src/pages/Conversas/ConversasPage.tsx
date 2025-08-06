@@ -17,6 +17,7 @@ export default function ConversasPage() {
   const [activeChat, setActiveChat] = useState<Chat | null>(null);
   const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
   const { chats } = useChats(user?.id);
+  console.log(chats)
   const { messages } = useMessages(activeChat?.id || null);
   const [searchQuery, setSearchQuery] = useState('');
 

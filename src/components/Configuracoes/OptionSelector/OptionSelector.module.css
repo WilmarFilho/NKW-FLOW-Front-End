@@ -12,10 +12,11 @@
   border: none;
   outline: none;
   transition: 0.2s ease;
-  color: white;
+  color: var(--color-text);
   font-family: var(--font-secundaria);
 }
 
 .active {
+  color: var(--color-text-table);
   background-color: var(--color-secundaria);
 }

@@ -1,5 +1,6 @@
 .button {
   height: 100px; 
+  width: 250px;
   padding: 0 32px;
   border-radius: 12px;
   border: 2px solid transparent;
@@ -23,9 +24,7 @@
 
 /* --- Estilos de Estado --- */
 .primary:hover:not(:disabled) {
-  background-color: #ffffff;
-  color: #000000;
-  transform: scale(0.95);
+  transform: scale(0.90);
 }
 
 /* Hover para a variante secundária */

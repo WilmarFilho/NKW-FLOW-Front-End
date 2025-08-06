@@ -6,6 +6,7 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+  color: var(--color-text);
   overflow-y: auto;
   scrollbar-width: none; /* Firefox */
 }
@@ -18,13 +19,13 @@
   display: flex;
   align-items: center;
   gap: 60px;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 2px solid var(--color-subtext-1);
   width: 100%;
   padding: 20px;
 }
 
 .profileImageWrapper {
-  width: 100%;
+  width: 40%;
   height: 200px;
   display: flex;
   justify-content: start;
@@ -37,25 +38,39 @@
   height: 100%;
   border-radius: 50%;
   cursor: pointer;
-  border: 3px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--color-subtext-1);
 }
 
-.userInfo {
+.userInfo, .userInfoMain {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 16px;
   width: 100%;
 }
 
 .userInfo h1 {
   font-size: 16px;
   font-weight: 400;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--color-subtext-2);
 }
 
 .userInfo h2 {
   font-size: 22px;
   font-weight: 500;
+}
+
+.userInfoMain h1 {
+  font-size: 28px;
+  font-weight: 400;
+  opacity: .5;
+  color: var(--color-subtext-2);
+}
+
+.userInfoMain h2 {
+  font-size: 50px;
+  font-weight: 500;
+  font-family: var(--font-main);
+  text-transform: uppercase;
 }
 
 .configsWrapperBox {
@@ -79,9 +94,9 @@
   align-items: center;
   justify-content: flex-start;
   gap: 80px;
-  background-color: rgba(255, 255, 255, 0.03);
+  background-color:var(--color-subtext-1);
   width: 100%;
-  padding: 24px;
+  padding: 50px 24px;
   border-radius: 12px;
 }
 
@@ -105,7 +120,7 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  background-color: rgba(255, 255, 255, 0.03);
+  background-color: var(--color-subtext-1);
   padding: 24px;
   border-radius: 12px;
 }
@@ -126,7 +141,7 @@
 .settingDescription {
   font-family: var(--font-secundaria);
   font-size: 16px;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--color-subtext-2);
   line-height: 1.5;
   text-wrap: balance;
 }

@@ -109,7 +109,7 @@ export default function AtendentesPage() {
 
 
         <GenericTable<Attendant>
-          columns={['Nome', 'Email', 'Número', 'Status', 'Ações']}
+          columns={['Nome', 'Email', 'Número', 'Status', '']}
           data={attendants}
           renderRow={renderAttendantRow}
           gridTemplateColumns="2fr 3fr 2fr 1fr 1fr"

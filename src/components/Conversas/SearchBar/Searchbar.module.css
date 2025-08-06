@@ -16,6 +16,10 @@
   transition: opacity 0.2s ease-in-out;
 }
 
+.iconWrapper svg {
+  stroke: var(--color-text-table);
+}
+
 .searchInput {
   width: 100%;
   padding: 18px 16px 18px 48px;
@@ -23,14 +27,14 @@
   border: 1px solid transparent;
   border-radius: 15px;
   font-family: var(--font-secundaria);
-  color: #ffffff; 
+  color: var(--color-text-table);
   font-size: 16px;
   outline: none; 
   transition: border-color 0.2s ease-in-out;
 }
 
 .searchInput::placeholder {
-  color: #aaa;
+  color: var(--color-text-table);
 }
 
 .searchInput:focus {

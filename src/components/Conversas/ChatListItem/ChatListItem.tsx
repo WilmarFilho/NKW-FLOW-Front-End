@@ -42,7 +42,7 @@ export default function ChatListItem({
       />
       <div className={styles.textContainer}>
         <strong>{name}</strong>
-        <p>{message}</p>
+        <p>{message ? message : 'Arquivo de mídia 📎'}</p>
       </div>
     </motion.button>
   );

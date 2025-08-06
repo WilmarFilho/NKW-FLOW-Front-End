@@ -6,10 +6,11 @@
   padding: 14px 16px;
   border-radius: 10px;
   cursor: pointer;
+  color: var(--color-text-table);
   transition: background-color 0.2s, transform 0.2s;
 }
 .tableRow:hover {
-  background-color: #181d3d90;
+  background-color: var(--color-subtext-2);
 }
 .tableRow > div {
   text-align: start;
@@ -30,20 +31,20 @@
 
 /* Estilos para o Status Chip */
 .statusChip {
+  display: block;
   padding: 8px 16px;
   border-radius: 20px;
   font-size: 13px;
   font-weight: bold;
   text-align: center;
-  width: fit-content;
 }
 .statusChip.active {
   background-color:var(--color-secundaria);
-  color: #52f2b7;
+  color: var(--color-text-table);
 }
 .statusChip.inactive {
   background-color: rgba(255, 85, 85, 0.15);
-  color: #ff5555;
+  color: var(--color-text-table);
 }
 
 /* Estilos para botões de ação (Editar, Deletar) */
@@ -103,7 +104,7 @@
   .tableRow > div::before {
     content: attr(data-label); /* Lê o label do atributo data-label */
     font-weight: bold;
-    color: #a0a0a0;
+    color: var(--color-text);
   }
   .actionCell {
       justify-content: center;

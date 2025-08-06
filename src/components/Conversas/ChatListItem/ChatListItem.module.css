@@ -1,20 +1,16 @@
 .chatListItem {
   display: flex;
   align-items: center;
-  width: 100%; /* Garante que ocupe o espaço disponível */
+  width: 100%; 
   padding: 10px 12px;
   gap: 12px;
   border-radius: 10px;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
   background: none;
   border: none;
   text-align: left; 
   font-family: inherit;
-}
-
-.chatListItem:focus-visible {
-  border: 1px solid var(--color-secundaria);
 }
 
 .avatar {
@@ -26,7 +22,20 @@
 }
 
 .chatListItem.active {
-  background-color: var(--color-background-dark);
+  background-color: var(--color-subtext-1);
+}
+
+.chatListItem:focus {
+  outline: none; /* Remove o foco visual no clique */
+}
+
+.chatListItem:focus-visible {
+  outline: 1px solid var(--color-subtext-1); /* Mostra foco na navegação por teclado */
+}
+
+.chatListItem:hover {
+  background: var(--color-subtext-1);
+  transition: .6s;
 }
 
 .textContainer {
@@ -39,7 +48,7 @@
 .textContainer strong {
   font-size: 14px;
   font-family: var(--font-main);
-  color: #ffffff;
+  color: var(--color-text);
   white-space: nowrap; 
   overflow: hidden;
   text-overflow: ellipsis;
@@ -48,7 +57,7 @@
 .textContainer p {
   font-family: var(--font-secundaria);
   font-size: 12px;
-  color: #aaa;
+  color:var(--color-subtext-2);
   white-space: nowrap; 
   overflow: hidden;
   text-overflow: ellipsis; 

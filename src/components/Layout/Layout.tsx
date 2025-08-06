@@ -14,25 +14,40 @@ import { userState } from '../../state/atom';
 
 // Estilos
 import styles from './Layout.module.css';
-import 'react-toastify/dist/ReactToastify.css'; 
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Layout() {
-  useUser(); 
+
+  useUser();
+
   const user = useRecoilValue(userState);
+
+  const modoTela = user?.modo_tela || 'dark';
+
   useRealtimeEvents(user?.id);
 
+  const body = document.body;
+
+  body.classList.remove('modo-light', 'modo-dark');
+
+  if (user?.modo_tela === 'White') {
+    body.classList.add('modo-light');
+  } else {
+    body.classList.add('modo-dark');
+  }
+
   return (
-    <div className={styles.layoutContainer}>
+    <div className={`${styles.layoutContainer} ${modoTela === 'White' ? styles.light : styles.dark}`}>
       <ToastContainer
         position="top-right"
         autoClose={2000}
-        theme="light" 
+        theme="light"
       />
 
       <SidebarWrapper />
-      
+
       <main className={styles.contentArea}>
-        <Outlet /> 
+        <Outlet />
       </main>
     </div>
   );

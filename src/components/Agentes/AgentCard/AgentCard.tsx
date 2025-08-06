@@ -17,6 +17,7 @@ const iconMap = {
   Vendedor: VendedorIcon,
   Recepcionista: RecepcionistaIcon,
   Tecnico: TecnicoIcon,
+  Contador: VendedorIcon,
 };
 
 export default function AgentCard({ description, tipo, connections }: AgentCardProps) {

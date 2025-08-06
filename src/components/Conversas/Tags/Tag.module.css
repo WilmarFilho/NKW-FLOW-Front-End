@@ -6,7 +6,7 @@
   flex-shrink: 0; 
   flex-grow: 0;
   background-color: var(--color-background-white);
-  color: #aaa;
+  color: var(--color-text-table);
   border-radius: 12px;
   font-size: 15px;
   font-family: var(--font-secundaria);
@@ -18,13 +18,13 @@
 
 .tag.active {
   background-color: var(--color-secundaria);
-  color: #ffffff;
+  color: var(--color-text-table);
   font-weight: 500;
 }
 
 .tag:not(.active):hover {
-    background-color: #2a2a2a;
-    color: #e0e0e0;
+    background-color: var(--color-background-tags-hover);
+    color: var(--color-text-table);
 }
 
 .tag:focus-visible {

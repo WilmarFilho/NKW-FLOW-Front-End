@@ -97,7 +97,7 @@ export default function ConexoesPage() {
 
 
       <GenericTable<Connection>
-        columns={['Nome', 'Número', 'Agente', 'Status', 'Ações']}
+        columns={['Nome', 'Número', 'Agente', 'Status', '']}
         data={connections}
         renderRow={renderConnectionRow}
         gridTemplateColumns="2fr 2fr 2fr 1fr 1fr"

@@ -122,11 +122,11 @@ export default function SettingsContent({ tabIndex }: Props) {
                   disabled={loading}
                 />
               </div>
-              <div className={styles.userInfo}>
+              <div className={styles.userInfoMain}>
                 <h1>Nome de usuário</h1>
                 <h2>{user.nome}</h2>
               </div>
-              <div className={styles.userInfo}>
+              <div className={styles.userInfoMain}>
                 <h1>Cargo</h1>
                 <h2>Administrador</h2>
               </div>
@@ -134,7 +134,18 @@ export default function SettingsContent({ tabIndex }: Props) {
 
             <div className={styles.configsWrapperBox}>
               <div className={styles.infoGrid}>
+
+                 <div className={styles.headerAccountWrapper}>
+                  <div className={styles.userInfo}><h1>E-mail</h1><h2>{user.email}</h2></div>
+                  <div className={styles.userInfo}><h1>Senha</h1><h2>***********</h2></div>
+                  <div className={styles.userInfo}><h1>Plano Contradado</h1><h2>Premium</h2></div>
+                </div>
+
                 <div className={styles.headerAccountWrapper}>
+                  <div className={styles.userInfo}>
+                    <h1>Cidade</h1>
+                    <h2>Goiânia</h2>
+                  </div>
                   <div className={styles.userInfo}>
                     <h1>Endereço</h1>
                     <h2>Rua 9 Qd 9 Lt 2</h2>
@@ -143,22 +154,9 @@ export default function SettingsContent({ tabIndex }: Props) {
                     <h1>Número</h1>
                     <h2>(64) 99243-4104</h2>
                   </div>
-                  <div className={styles.userInfo}>
-                    <h1>E-mail</h1>
-                    <h2>{user.email}</h2>
-                  </div>
+                  
                 </div>
-                {/* Repetido para fins de layout, conforme original */}
-                <div className={styles.headerAccountWrapper}>
-                  <div className={styles.userInfo}><h1>Campo X</h1><h2>Valor Y</h2></div>
-                  <div className={styles.userInfo}><h1>Campo A</h1><h2>Valor B</h2></div>
-                  <div className={styles.userInfo}><h1>Campo C</h1><h2>Valor D</h2></div>
-                </div>
-                <div className={styles.headerAccountWrapper}>
-                  <div className={styles.userInfo}><h1>Campo X</h1><h2>Valor Y</h2></div>
-                  <div className={styles.userInfo}><h1>Campo A</h1><h2>Valor B</h2></div>
-                  <div className={styles.userInfo}><h1>Campo C</h1><h2>Valor D</h2></div>
-                </div>
+                
               </div>
               <button className={styles.editButton}>Editar Informações</button>
             </div>

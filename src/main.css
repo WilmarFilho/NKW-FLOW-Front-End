@@ -1,36 +1,149 @@
 :root {
   --font-main: 'K2D', 'sans-serif';
   --font-secundaria: 'Jost', 'sans-serif';
-  --color-main: #1b214a90;
-  --color-secundaria: #52f2b73a;
-  --color-background-white: rgba(255, 255, 255, 0.1);
-  --color-background-dark: #07070777;
 }
 
+/* Tema Light */
+body.modo-light {
+  --color-main: #070707e4;
+  --color-secundaria: #1b214af5;
+  --color-background-dark: #fcfcfc;
+  --color-background-white: #49539b7b;
+
+  --color-text: #101010;
+  --color-subtext-1: #ebebeb76;
+  --color-subtext-2: #151515e5;
+
+  --color-background-tags-hover: #1b214ab9;
+
+  --color-text-table: #fafafa;
+
+  --color-background-menuItem: #070707f3;
+
+  --color-background-sidebar: #070707e7;
+
+  --color-chat-dropdown: rgba(255, 255, 255, 0.954);
+
+  color: var(--color-text);
+}
+
+/* Tema Dark */
+body.modo-dark {
+  --color-main: #1b214a90;
+  --color-secundaria: #52f2b73a;
+  --color-background-dark: #07070777;
+  --color-background-white: rgba(255, 255, 255, 0.1);
+
+  --color-text: #fafafa;
+  --color-subtext-1: #ffffff05;
+  --color-subtext-2: #ffffffb3;
+
+  --color-background-tags-hover: #2a2a2a;
+
+  --color-text-table: #fafafa;
+
+  --color-background-menuItem: #1b214a90;
+
+  --color-background-sidebar: #07070777;
+
+  --color-chat-dropdown: rgba(0, 0, 0, 0.954);
+
+  color: var(--color-text);
+}
+
+
 * {
-  color: #FFF;
   font-family: var(--font-secundaria);
 }
 
 /* Remove margens e preenchimentos padrão de todos os elementos principais */
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
   margin: 0;
   padding: 0;
   border: 0;
   font-size: 100%;
-  font: inherit; /* Garante que as fontes sejam herdadas */
+  font: inherit;
+  /* Garante que as fontes sejam herdadas */
   vertical-align: baseline;
 }
 
@@ -43,8 +156,17 @@ time, mark, audio, video {
 }
 
 /* Elementos HTML5 de display-role para navegadores mais antigos */
-article, aside, details, figcaption, figure,
-footer, header, hgroup, menu, nav, section {
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
   display: block;
 }
 
@@ -54,17 +176,21 @@ body {
 }
 
 /* Remove estilos de lista padrão */
-ol, ul {
+ol,
+ul {
   list-style: none;
 }
 
 /* Garante que citações e aspas sejam renderizadas corretamente */
-blockquote, q {
+blockquote,
+q {
   quotes: none;
 }
 
-blockquote:before, blockquote:after,
-q:before, q:after {
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
   content: '';
   content: none;
 }
@@ -76,26 +202,36 @@ table {
 }
 
 /* Opcional: Reset básico para formulários (pode ser mais específico conforme a necessidade) */
-input, button, textarea, select {
+input,
+button,
+textarea,
+select {
   font: inherit;
-  margin: 0; /* Alguns navegadores adicionam margens a inputs */
+  margin: 0;
+  /* Alguns navegadores adicionam margens a inputs */
 }
 
 /* Opcional: Reset para links para remover a decoração padrão */
 a {
   text-decoration: none;
-  color: inherit; /* Faz com que os links herdem a cor do texto pai */
+  color: inherit;
+  /* Faz com que os links herdem a cor do texto pai */
 }
 
 /* Opcional: Melhorias na acessibilidade do foco */
 :focus {
-  outline: 2px solid transparent; /* Remove o outline padrão */
+  outline: 2px solid transparent;
+  /* Remove o outline padrão */
   /* Considere adicionar um outline customizado e visível para acessibilidade */
   /* Ex: outline: 2px solid blue; */
 }
 
 /* Opcional: Garante que imagens e mídias sejam responsivas por padrão */
-img, picture, video, canvas, svg {
+img,
+picture,
+video,
+canvas,
+svg {
   display: block;
   max-width: 100%;
 }

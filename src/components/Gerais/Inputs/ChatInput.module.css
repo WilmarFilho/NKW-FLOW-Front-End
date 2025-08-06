@@ -6,6 +6,7 @@
   width: 100%;
   padding: 8px 8px 8px 20px;
   background-color: var(--color-background-white);
+  color: var(--color-text-table);
   border: 1px solid transparent;
   transition: border-color 0.2s ease;
 }
@@ -25,7 +26,7 @@
 }
 
 .inputField::placeholder {
-  color: #777;
+  color: var(--color-text-table);
 }
 
 .sendButton {
@@ -40,7 +41,7 @@
   background: none;
   border-radius: 10px;
   cursor: pointer;
-  color: #777; 
+  color: var(--color-text-table);
   transition: background-color 0.2s, color 0.2s, outline-offset 0.1s;
 }
 

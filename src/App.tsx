@@ -16,15 +16,12 @@ const LoginPage = lazy(() => import('./pages/Login/Login'));
 
 import './main.css';
 
-// Componente para exibir enquanto o lazy component está sendo carregado
-const Loader = () => <div>Carregando...</div>;
-
 function App() {
   return (
     <>
       <RecoilRoot>
         <BrowserRouter>
-          <Suspense fallback={<Loader />}>
+          <Suspense fallback={<Layout />}>
             <Routes>
               <Route
                 path="/login"

@@ -16,9 +16,63 @@
   align-items: center;
   gap: 12px;
   padding: 14px 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--color-background-white);
   flex-shrink: 0;
 }
+
+.dropdown {
+  position: relative;
+}
+
+.menuItems {
+  position: absolute;
+  right: 0;
+  margin-top: 0.5rem;
+  background: var(--color-chat-dropdown);
+  padding: 12px 12px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 200px;
+}
+
+.menuItems button {
+  padding: 20px 20px;
+  width: 100%;
+  color: var(--color-text);
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  outline: none;
+  background-color: var(--color-subtext-1);
+  text-align: left;
+}
+
+.menuItems button:hover {
+  background-color: var(--color-background-white);
+  transition: .3s;
+}
+
+.inputGroup {
+  display: flex;
+  gap: 12px;
+}
+
+.inputEditChat {
+  height: 100px;
+  padding: 8px 22px;
+  width: 100%;
+  border-radius: 8px;
+  background-color: var(--color-background-dark);
+  color: #aaa;
+  font-family: var(--color-secundaria);
+  outline: none;
+  border: none;
+}
+
 
 .contactInfo {
   display: flex;
@@ -43,22 +97,20 @@
 .contactText h1 {
   font-size: 16px;
   font-family: var(--font-main);
-  color: #fff;
+  color: var(--color-text);
 }
 
 .contactText a {
   text-decoration: none;
+  color: var(--color-text);
 }
 
 .contactText span {
   font-size: 13px;
   font-family: var(--font-secundaria);
-  color: rgba(255, 255, 255, 0.5);
-  transition: color 0.2s;
-}
-.contactText a:hover span {
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--color-subtext-2);
   text-decoration: underline;
+  transition:  .5s;
 }
 
 .optionsButton {
@@ -73,14 +125,17 @@
   outline: none;
   transition: background-color 0.2s;
 }
+
 .optionsButton svg {
   width: 28px;
   height: 28px;
-  fill: rgba(255, 255, 255, 0.7);
+  fill: var(--color-text);
 }
+
 .optionsButton:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+  background-color: var(--color-subtext-1);
 }
+
 .optionsButton:focus-visible {
   outline: 2px solid var(--color-secundaria);
   outline-offset: 1px;
@@ -95,6 +150,7 @@
   scrollbar-width: none;
   padding: 20px;
 }
+
 .messageList::-webkit-scrollbar {
   display: none;
 }
@@ -102,8 +158,9 @@
 /* --- Input Area --- */
 .inputAreaWrapper {
   padding: 16px 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid var(--color-background-white);
 }
+
 .inputArea {
   display: flex;
   gap: 12px;
@@ -121,6 +178,7 @@
   transition: background-color 0.3s, color 0.3s, outline-offset 0.1s;
   outline: none;
 }
+
 .toggleIaButton:hover:not(.active) {
   background-color: #3f3f3f;
 }
@@ -129,6 +187,7 @@
   background-color: var(--color-secundaria);
   color: white;
 }
+
 .toggleIaButton:focus-visible {
   outline: 2px solid var(--color-secundaria);
   outline-offset: 2px;
@@ -144,18 +203,21 @@
   background: var(--color-background-dark);
   border-radius: 20px;
 }
+
 .fallbackContainer p {
   font-size: 22px;
   font-family: var(--font-main);
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--color-text);
   text-align: center;
   padding: 1rem;
 }
 
 /* --- Media Queries --- */
 @media (max-width: 991.98px) {
-  .chatWindow, .fallbackContainer {
+
+  .chatWindow,
+  .fallbackContainer {
     width: 100%;
-    height: 65vh; 
+    height: 65vh;
   }
 }

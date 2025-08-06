@@ -27,7 +27,7 @@
 
 .headerTitles h3 {
   font-size: 24px;
-  color: rgba(255, 255, 255, 0.648);
+  color: var(--color-subtext-2);
   line-height: 35px;
   opacity: 0.8;
   text-wrap: balance
@@ -70,13 +70,8 @@
   transition: .6s;
 }
 
-.boxIcon:hover svg {
-  fill: black;
-  transition: .6s;
-}
-
 .boxIcon:hover {
-  background-color: white;
+  transform: scale(0.90);
   transition: .6s;
 }
 
