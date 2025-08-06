@@ -45,13 +45,17 @@
   transition: background-color 0.2s, color 0.2s, outline-offset 0.1s;
 }
 
+.sendButton svg {
+  fill: var(--color-text);
+}
+
 .sendButton:hover:not(:disabled) {
-  background-color: var(--color-secundaria);
+  background-color: var(--color-background-white);
   color: #ffffff;
 }
 
 .sendButton:focus-visible {
-  outline: 2px solid var(--color-secundaria);
+  outline: 2px solid var(--color-background-white);
   outline-offset: 2px;
   color: var(--color-secundaria);
 }
@@ -59,4 +63,59 @@
 .sendButton:disabled {
   cursor: not-allowed;
   opacity: 0.5;
+}
+
+/* Adicione estas classes ao seu arquivo ChatInput.module.css */
+
+.recordingContainer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: space-between;
+  border-radius: 12px;
+  width: 100%;
+  padding: 8px 8px 8px 20px;
+  background-color: var(--color-background-white);
+  color: var(--color-text-table);
+  border: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.visualizer {
+  flex-grow: 1;
+  height: 40px;
+}
+
+.trashButton svg {
+  stroke: #e63946; /* Vermelho para a lixeira */
+}
+
+.sendRecordingButton svg {
+  stroke: var(--primary-color); /* Sua cor primária */
+}
+
+.recordingStatus {
+  color: #e63946;
+  /* Vermelho para indicar gravação */
+  font-weight: 500;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.recordingStatus span {
+  font-variant-numeric: tabular-nums;
+  margin-left: 8px;
+}
+
+.stopButton svg {
+  stroke: white;
+  /* Ícone branco */
+}
+
+.visualizerContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
 }

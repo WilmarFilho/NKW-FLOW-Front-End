@@ -28,6 +28,12 @@ export default function ChatListItem({
 
   const containerClasses = `${styles.chatListItem} ${isActive ? styles.active : ''}`;
 
+  const nameInMessageRegex = /^\*.*?\*\s?/;
+
+  const cleanedMessage = message
+    ? message.replace(nameInMessageRegex, '').trim()
+    : 'Arquivo de mídia 📎';
+
   return (
     <motion.button
       variants={itemVariants}
@@ -37,12 +43,12 @@ export default function ChatListItem({
     >
       <img
         src={avatar || defaultAvatar}
-        alt={`Avatar de ${name}`} 
+        alt={`Avatar de ${name}`}
         className={styles.avatar}
       />
       <div className={styles.textContainer}>
         <strong>{name}</strong>
-        <p>{message ? message : 'Arquivo de mídia 📎'}</p>
+        <p>{cleanedMessage}</p>
       </div>
     </motion.button>
   );

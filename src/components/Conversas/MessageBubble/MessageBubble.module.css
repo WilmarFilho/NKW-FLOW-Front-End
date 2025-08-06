@@ -45,6 +45,7 @@
 .messageImage {
   max-width: 100%;
   max-height: 400px;
+  object-fit: cover;
   border-radius: 12px;
   display: block; 
 }
@@ -58,4 +59,29 @@
 .messageAudio {
   width: 270px;
   max-width: 100%;
+}
+
+
+/* Adicione estas classes ao final do seu arquivo MessageBubble.module.css */
+
+.documentContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 0;
+}
+
+.documentIcon {
+  font-size: 1.8rem;
+}
+
+.documentLink {
+  color: inherit;
+  font-weight: 500;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.documentLink:hover {
+  opacity: 0.8;
 }

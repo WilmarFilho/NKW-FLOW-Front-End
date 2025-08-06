@@ -44,6 +44,21 @@ const renderMessageContent = ({ mimetype, base64, text }: MessageBubbleProps) =>
     );
   }
 
+  if (type !== 'text' && base64) {
+    return (
+      <div className={styles.documentContainer}>
+        <span className={styles.documentIcon}>📄</span>
+        <a
+          href={`data:${mimetype};base64,${base64}`}
+          download={text || 'arquivo'} // 'text' contém o nome do arquivo ou legenda
+          className={styles.documentLink}
+        >
+          {text || 'Baixar Documento'}
+        </a>
+      </div>
+    );
+  }
+
   if (!text) return null;
 
   const rawLines = text.split('\n');
@@ -51,8 +66,6 @@ const renderMessageContent = ({ mimetype, base64, text }: MessageBubbleProps) =>
   const lines = rawLines
     .map((l) => l.trim())
     .filter((l) => l !== '');
-
-  console.log(lines)
 
   return (
     <p className={styles.messageText}>

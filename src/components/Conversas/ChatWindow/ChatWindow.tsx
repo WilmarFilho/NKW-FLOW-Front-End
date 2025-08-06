@@ -43,6 +43,7 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
     const { sendMessage } = useSendMessage();
     const { refetch } = useChats(user?.id);
     const { agents } = useAgents();
+    const [isDragging, setIsDragging] = useState(false);
 
     const [isRenameOpen, setRenameOpen] = useState(false);
     const [newName, setNewName] = useState('');
@@ -74,11 +75,21 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
         return agents.find((agent) => agent.id === activeChat.connection.agente_id);
     }, [agents, activeChat]);
 
-    const handleSendMessage = async (text: string) => {
+    const handleSendMessage = async (text: string, mimetype?: string, base64?: string) => {
         if (!activeChat) return;
-        const result = await sendMessage({ chat_id: activeChat.id, mensagem: text, user_id: user?.id });
+        const result = await sendMessage({
+            chat_id: activeChat.id,
+            mensagem: text,
+            user_id: user?.id,
+            mimetype,
+            base64,
+        });
         if (result) {
-            const updatedChat = { ...activeChat, ultima_mensagem: text };
+            // Atualiza a "última mensagem" de forma mais inteligente
+            const lastMessageText = text ||
+                (mimetype?.startsWith('image/') ? '📷 Imagem' :
+                    (mimetype?.startsWith('audio/') ? '🎙️ Áudio' : '📄 Documento'));
+            const updatedChat = { ...activeChat, ultima_mensagem: lastMessageText };
             setActiveChat(updatedChat);
             setChats((prev) => prev.map((chat) => (chat.id === updatedChat.id ? updatedChat : chat)));
         }
@@ -184,7 +195,41 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
 
             </Modal>
 
-            <div className={styles.messageList}>
+            {isDragging && (
+                <div className={styles.dragOverlay}>
+                    <div className={styles.overlayContent}>
+                        {/* 1. Mensagem de overlay generalizada */}
+                        <p>📄 Solte o arquivo para enviar</p>
+                    </div>
+                </div>
+            )}
+
+
+            <div className={styles.messageList}
+                onDragOver={(e) => {
+                    e.preventDefault();
+                    setIsDragging(true);
+                }}
+                onDragLeave={(e) => {
+                    e.preventDefault();
+                    setIsDragging(false);
+                }}
+                onDrop={(e) => {
+                    e.preventDefault();
+                    setIsDragging(false);
+                    const file = e.dataTransfer.files[0];
+                    // 2. Validação simples
+                    if (!file) return;
+
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                        const base64 = (reader.result as string).split(',')[1];
+                        // 3. Lógica para definir o texto da mensagem
+                        const messageText = file.type.startsWith('image/') ? '' : file.name;
+                        handleSendMessage(messageText, file.type, base64);
+                    };
+                    reader.readAsDataURL(file);
+                }}>
                 {messages.map((msg) => (
                     <MessageBubble
                         key={msg.id}
@@ -200,6 +245,7 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
             <div className={styles.inputAreaWrapper}>
                 <div className={styles.inputArea}>
                     <ChatInput placeholder="Digite uma mensagem" onSend={handleSendMessage} />
+
                     <button
                         type="button"
                         onClick={handleToggleIA}
@@ -212,6 +258,8 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
         </motion.section>
     );
 };
+
+
 
 
 
