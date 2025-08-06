@@ -25,6 +25,8 @@ import { useAgents } from '../../../hooks/agents/useAgents';
 // Assets & CSS
 import defaultAvatar from '../assets/default.webp';
 import DotsIcon from '../assets/dots.svg';
+import EditIcon from '../assets/pencil.svg';
+import TrashIcon from '../assets/trash.svg';
 import styles from './ChatWindow.module.css';
 import Button from '../../../components/Gerais/Buttons/Button';
 
@@ -141,6 +143,7 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
                                                         }}
                                                         className={active ? styles.activeOption : ''}
                                                     >
+                                                        <EditIcon />
                                                         Editar Chat
                                                     </button>
                                                 )}
@@ -151,6 +154,7 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
                                                         onClick={handleDeleteChat}
                                                         className={active ? styles.activeOption : ''}
                                                     >
+                                                        <TrashIcon />
                                                         Deletar Chat
                                                     </button>
                                                 )}

@@ -56,7 +56,8 @@ export default function AtendentesPage() {
   };
 
   const openModal = () => {
-    setEditAttendantId(null)
+    setEditAttendantId(null);
+    setEditData(null);
     setIsModalOpen(true);
   };
 

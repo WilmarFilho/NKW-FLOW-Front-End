@@ -22,6 +22,17 @@ export default function DashboardPage() {
         <Button label='Cashback' />
       </motion.div>
 
+      <motion.div
+        initial={{ opacity: 0, y: 0 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
+        className={PageStyles.cashbackWrapper}
+      >
+        
+          <h2>Informações sobre como ganhar cashback, link para compartilhar e quantidade de indicações validas</h2>
+        
+      </motion.div>
+
     </div>
   );
 };

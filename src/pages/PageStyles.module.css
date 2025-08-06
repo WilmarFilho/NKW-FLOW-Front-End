@@ -14,6 +14,23 @@
   align-items: center;
 }
 
+.containerRow {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+}
+
+.containerColumnLarge, .containerColumnSmall {
+  height: 350px;
+  width: 100%;
+  border-radius: 12px;
+  background-color: var(--color-background-dark);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
 .headerTitles {
   display: flex;
   flex-direction: column;
@@ -33,7 +50,21 @@
   text-wrap: balance
 }
 
-.agentsWrapper {
+.cashbackWrapper  {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px 80px !important;
+}
+
+.cashbackWrapper  h2 {
+  font-size: 32px;
+  text-wrap: balance;
+  text-align: center;
+  line-height: 50px;
+}
+
+.agentsWrapper, .cashbackWrapper {
   background-color: var(--color-background-dark);
   height: 100%;
   border-radius: 16px;
