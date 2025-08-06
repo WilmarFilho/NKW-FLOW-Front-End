@@ -10,44 +10,76 @@ interface MessageBubbleProps {
 }
 
 const renderMessageContent = ({ mimetype, base64, text }: MessageBubbleProps) => {
- 
   const type = mimetype || 'text';
 
-  switch (true) {
-    case type === 'image' && !!base64:
-      return (
-        <>
-          <img
-            src={`data:image/jpeg;base64,${base64}`}
-            alt="Imagem enviada na conversa"
-            className={styles.messageImage}
-          />
-         
-          {text && <p>{text}</p>}
-        </>
-      );
-
-    case type === 'sticker' && !!base64:
-      return (
+  if (type === 'image' && base64) {
+    return (
+      <>
         <img
-          src={`data:image/webp;base64,${base64}`}
-          alt="Figurinha (sticker) enviada na conversa"
-          className={styles.stickerImage}
+          src={`data:image/jpeg;base64,${base64}`}
+          alt="Imagem enviada na conversa"
+          className={styles.messageImage}
         />
-      );
-      
-    case type.startsWith('audio') && !!base64:
-      return (
-        <audio controls className={styles.messageAudio}>
-          <source src={`data:audio/ogg;base64,${base64}`} type="audio/ogg" />
-          Seu navegador não suporta o elemento de áudio.
-        </audio>
-      );
-
-    default:
-      return <p>{text}</p>;
+        {text && <p>{text}</p>}
+      </>
+    );
   }
+
+  if (type === 'sticker' && base64) {
+    return (
+      <img
+        src={`data:image/webp;base64,${base64}`}
+        alt="Figurinha (sticker) enviada na conversa"
+        className={styles.stickerImage}
+      />
+    );
+  }
+
+  if (type.startsWith('audio') && base64) {
+    return (
+      <audio controls className={styles.messageAudio}>
+        <source src={`data:audio/ogg;base64,${base64}`} type="audio/ogg" />
+        Seu navegador não suporta o elemento de áudio.
+      </audio>
+    );
+  }
+
+  if (!text) return null;
+
+  const rawLines = text.split('\n');
+
+  const lines = rawLines
+    .map((l) => l.trim())
+    .filter((l) => l !== '');
+
+  console.log(lines)
+
+  return (
+    <p className={styles.messageText}>
+      {lines.map((line, idx) => {
+        const isFirstLine = idx === 0;
+        const matchBold = line.match(/^\*(.*?)\*$/);
+
+        if (isFirstLine && matchBold) {
+          return (
+            <span key={idx}>
+              <strong>{matchBold[1]}</strong>
+              <br />
+            </span>
+          );
+        }
+
+        return (
+          <span key={idx}>
+            {line}
+            <br />
+          </span>
+        );
+      })}
+    </p>
+  );
 };
+
 
 export default function MessageBubble(props: MessageBubbleProps) {
   const { sender, mimetype } = props;

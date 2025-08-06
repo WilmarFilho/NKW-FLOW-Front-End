@@ -12,6 +12,10 @@
   margin-bottom: 12px;
 }
 
+.box-logo svg {
+  width: 90%;
+}
+
 .principal-menu,
 .suporte-menu {
   display: flex;

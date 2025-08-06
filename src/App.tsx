@@ -13,6 +13,8 @@ const ConexoesPage = lazy(() => import('./pages/Conexao/ConexoesPage'));
 const ConfiguracoesPage = lazy(() => import('./pages/Configuracoes/ConfiguracoesPage'));
 const AjudaPage = lazy(() => import('./pages/Ajuda/AjudaPage'));
 const LoginPage = lazy(() => import('./pages/Login/Login'));
+import DashboardPage from './pages/Dashboard/DashboardPage';
+import CashbackPage from './pages/Cashback/CashbackPage';
 
 import './main.css';
 
@@ -41,11 +43,13 @@ function App() {
                 }
               >
                 <Route index element={<Navigate to="/conexoes" replace />} />
+                <Route path="dashboard" element={<DashboardPage />} />
                 <Route path="conversas" element={<ConversasPage />} />
                 <Route path="atendentes" element={<AtendentesPage />} />
                 <Route path="agentes" element={<AgentesPage />} />
                 <Route path="conexoes" element={<ConexoesPage />} />
                 <Route path="configuracoes" element={<ConfiguracoesPage />} />
+                <Route path="cashback" element={<CashbackPage />} />
                 <Route path="ajuda" element={<AjudaPage />} />
               </Route>
 

@@ -10,7 +10,7 @@
   transition: background-color 0.2s, transform 0.2s;
 }
 .tableRow:hover {
-  background-color: var(--color-subtext-2);
+  background-color: var(--color-background-tags-hover);
 }
 .tableRow > div {
   text-align: start;

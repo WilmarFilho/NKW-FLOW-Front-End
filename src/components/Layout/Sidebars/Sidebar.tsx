@@ -13,6 +13,8 @@ import AgenteIcon from '../assets/bot.svg';
 import ConexaoIcon from '../assets/conexao.svg';
 import ConfigIcon from '../assets/config.svg';
 import AjudaIcon from '../assets/ajuda.svg';
+import DashIcon from '../assets/dash.svg'
+import GiftIcon from '../assets/gift.svg'
 import LogoutIcon from '../assets/logout.svg';
 import { useRecoilState } from 'recoil';
 import { userState } from '../../../state/atom';
@@ -78,6 +80,9 @@ const Sidebar = () => {
 
       <nav className="principal-menu">
         <h4>Menu Principal</h4>
+        <MenuItem to="/dashboard">
+          <DashIcon /> Dashboard
+        </MenuItem>
         <MenuItem to="/conversas">
           <ConversasIcon /> Conversas
         </MenuItem>
@@ -97,6 +102,10 @@ const Sidebar = () => {
         <MenuItem to="/configuracoes">
           {' '}
           <ConfigIcon /> Configuracoes
+        </MenuItem>
+         <MenuItem to="/cashback">
+          {' '}
+          <GiftIcon /> Cashback
         </MenuItem>
         <MenuItem to="/ajuda">
           {' '}

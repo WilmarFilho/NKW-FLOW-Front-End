@@ -74,7 +74,7 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
 
     const handleSendMessage = async (text: string) => {
         if (!activeChat) return;
-        const result = await sendMessage({ chat_id: activeChat.id, mensagem: text });
+        const result = await sendMessage({ chat_id: activeChat.id, mensagem: text, user_id: user?.id });
         if (result) {
             const updatedChat = { ...activeChat, ultima_mensagem: text };
             setActiveChat(updatedChat);

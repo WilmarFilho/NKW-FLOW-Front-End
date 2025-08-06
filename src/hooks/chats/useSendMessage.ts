@@ -5,11 +5,10 @@ import type { Message } from '../../types/message';
 
 interface SendMessagePayload {
   chat_id: string;
+  user_id?: string;
   mensagem: string;
-  remetente?: 'humano';
   mimetype?: string;
   base64?: string;
-  transcricao?: string;
 }
 
 export default function useSendMessage() {
@@ -28,3 +27,8 @@ export default function useSendMessage() {
 
   return { sendMessage };
 }
+
+
+
+
+

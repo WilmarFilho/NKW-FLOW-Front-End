@@ -9,6 +9,8 @@ import AgenteIcon from '../assets/bot.svg';
 import ConexaoIcon from '../assets/conexao.svg';
 import ConfigIcon from '../assets/config.svg';
 import AjudaIcon from '../assets/ajuda.svg';
+import DashIcon from '../assets/dash.svg'
+import GiftIcon from '../assets/gift.svg'
 
 const SidebarClosed = () => {
   const MenuItem = ({
@@ -35,6 +37,11 @@ const SidebarClosed = () => {
     <>
       <nav className="menu-principal-closed">
         <div className='itens-list-menu'>
+
+          <MenuItem to="/dashboard">
+            <DashIcon />
+          </MenuItem>
+
           <MenuItem to="/conversas">
             <ConversasIcon />
           </MenuItem>
@@ -53,6 +60,9 @@ const SidebarClosed = () => {
 
           <MenuItem to="/configuracoes">
             <ConfigIcon />
+          </MenuItem>
+          <MenuItem to="/cashback">
+            <GiftIcon />
           </MenuItem>
           <MenuItem to="/ajuda">
             <AjudaIcon />
