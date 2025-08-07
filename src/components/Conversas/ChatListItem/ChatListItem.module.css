@@ -22,7 +22,7 @@
 }
 
 .chatListItem.active {
-  background-color: var(--color-subtext-1);
+  background-color: var(--color-background-chats-options);
 }
 
 .chatListItem:focus {
@@ -30,11 +30,11 @@
 }
 
 .chatListItem:focus-visible {
-  outline: 1px solid var(--color-subtext-1); /* Mostra foco na navegação por teclado */
+  outline: 1px solid var(--color-background-chats-options); /* Mostra foco na navegação por teclado */
 }
 
 .chatListItem:hover {
-  background: var(--color-subtext-1);
+  background: var(--color-background-chats-options);
   transition: .6s;
 }
 
@@ -43,12 +43,12 @@
   flex-direction: column;
   gap: 8px; 
   overflow: hidden; 
+  color: var(--color-text);
 }
 
 .textContainer strong {
   font-size: 14px;
   font-family: var(--font-main);
-  color: var(--color-text);
   white-space: nowrap; 
   overflow: hidden;
   text-overflow: ellipsis;
@@ -57,7 +57,7 @@
 .textContainer p {
   font-family: var(--font-secundaria);
   font-size: 12px;
-  color:var(--color-subtext-2);
+  opacity: .6;
   white-space: nowrap; 
   overflow: hidden;
   text-overflow: ellipsis; 

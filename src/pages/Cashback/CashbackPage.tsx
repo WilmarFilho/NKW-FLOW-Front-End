@@ -18,6 +18,7 @@ export default function DashboardPage() {
       >
         <div className={PageStyles.headerTitles}>
           <h2>Vejas seu cashback</h2>
+          <h3>Informações sobre como ganhar cashback, link para compartilhar e quantidade de indicações validas</h3>
         </div>
         <Button label='Cashback' />
       </motion.div>

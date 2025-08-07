@@ -13,6 +13,53 @@
   padding: 1rem;
 }
 
+.wrapperSearchBar {
+  display: flex;
+  gap: 8px;
+}
+
+.buttonAddChat {
+  border-radius: 12px;
+  cursor: pointer;
+  width: 100px;
+  border: none;
+  outline: none;
+  background-color: var(--color-secundaria);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.buttonAlterActiveChats {
+  width: 100%;
+  border-radius: 12px;
+  cursor: pointer;
+  background-color: var(--color-background-white);
+  border: none;
+  color: var(--color-button-searchbar);
+  outline: none;
+  display: flex;
+  gap: 12px;
+  height: 50px;
+  font-family: var(--font-main);
+  justify-content: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  align-items: center;
+  transition: .5s;
+}
+
+.buttonAlterActiveChats:hover {
+  background-color: var(--color-primary);
+  transition: .5s;
+  color: var(--color-text-white);
+}
+
+.buttonAddChat svg,
+.buttonAlterActiveChats svg {
+  fill: var(--color-text-white);
+}
+
 .iaFilterContainer {
   display: flex;
   flex-direction: row;
@@ -21,7 +68,8 @@
 
 .iaFilterButton {
   background-color: var(--color-background-dark);
-  padding: 16px 24px;
+  text-transform: uppercase;
+  padding: 12px 20px;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -30,26 +78,31 @@
   border-radius: 12px;
   cursor: pointer;
   transition: background-color 0.2s, color 0.2s;
-  border: 1px solid var(--color-background-white);
-  font-family: inherit;
-  font-size: 1rem;
+  border: 1px solid var(--color-button-searchbar);
+  font-family: var(--font-main);
+  font-size: 16px;
+  font-weight: 300;
+  letter-spacing: 2px;
+  line-height: 22px;
   /* Define um tamanho de fonte base */
-  color: var(--color-subtext-2);
+  color: var(--color-button-searchbar);
 }
 
 .iaFilterButton:hover {
-  background-color: var(--color-background-white);
+  background-color: var(--color-primary);
+  border: 1px solid var(--color-primary);
   transition: .2s;
-  color: var(--color-text-table);
+  color: var(--color-text-white);
 }
 
-.iaFilterButton:focus-visible {
-  border: 1px solid var(--color-secundaria);
+.iaFilterButton:focus {
+  border: none;
+  outline: none;
 }
 
 .iaFilterButton.active {
-  background-color: var(--color-secundaria);
-  color: var(--color-text-table);
+  background-color: var(--color-primary);
+  color: var(--color-text-white);
 }
 
 .tagsContainer {

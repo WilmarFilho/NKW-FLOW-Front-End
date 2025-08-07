@@ -8,7 +8,7 @@ import PageStyles from '../PageStyles.module.css'
 export default function DashboardPage() {
 
   return (
-    <div className={PageStyles.container}>
+    <div className={PageStyles.containerDashboard}>
 
       <motion.div
         initial={{ opacity: 0, y: 0 }}
@@ -18,6 +18,7 @@ export default function DashboardPage() {
       >
         <div className={PageStyles.headerTitles}>
           <h2>Vejas seu resumos</h2>
+          <h3>Resumos de produtividade para o cliente ter acompanhamento facil.</h3>
         </div>
         <Button label='Quero Ajuda' />
       </motion.div>
@@ -35,7 +36,7 @@ export default function DashboardPage() {
         <div className={PageStyles.containerColumnSmall}>
           <h2>Resumo de Chats por IA</h2>
         </div>
-        
+
       </motion.div>
 
       <motion.div
@@ -55,7 +56,7 @@ export default function DashboardPage() {
         <div className={PageStyles.containerColumnSmall}>
           <h2>Resumo de Conexões</h2>
         </div>
-        
+
       </motion.div>
 
     </div>

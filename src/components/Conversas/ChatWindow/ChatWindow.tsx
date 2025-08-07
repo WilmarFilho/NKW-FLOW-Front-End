@@ -27,8 +27,11 @@ import defaultAvatar from '../assets/default.webp';
 import DotsIcon from '../assets/dots.svg';
 import EditIcon from '../assets/pencil.svg';
 import TrashIcon from '../assets/trash.svg';
+import InfoIcon from '../assets/info.svg'
+import BotIcon from '../assets/bot.svg'
 import styles from './ChatWindow.module.css';
 import Button from '../../../components/Gerais/Buttons/Button';
+import ToggleSwitch from '../../../components/Configuracoes/ToggleSwitch/ToggleSwitch';
 
 interface ChatWindowProps {
     activeChat: Chat | null;
@@ -44,6 +47,7 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
     const { refetch } = useChats(user?.id);
     const { agents } = useAgents();
     const [isDragging, setIsDragging] = useState(false);
+    const [isDetailsOpen, setDetailsOpen] = useState(false);
 
     const [isRenameOpen, setRenameOpen] = useState(false);
     const [newName, setNewName] = useState('');
@@ -119,7 +123,7 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
             transition={{ delay: 0.4, duration: 0.6, ease: 'easeOut' }}
         >
             <header className={styles.chatHeader}>
-                <div className={styles.contactInfo}>
+                <div className={styles.contactInfo} onClick={() => setDetailsOpen(true)} style={{ cursor: 'pointer' }}>
                     <img src={activeChat.foto_perfil || defaultAvatar} alt={`Avatar de ${activeChat.contato_nome}`} />
                     <div className={styles.contactText}>
                         <h1>{activeChat.contato_nome}</h1>
@@ -155,7 +159,7 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
                                                         className={active ? styles.activeOption : ''}
                                                     >
                                                         <EditIcon />
-                                                        Editar Chat
+                                                        Renomear a conversa.
                                                     </button>
                                                 )}
                                             </MenuItem>
@@ -166,10 +170,22 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
                                                         className={active ? styles.activeOption : ''}
                                                     >
                                                         <TrashIcon />
-                                                        Deletar Chat
+                                                        Apagar conversa.
                                                     </button>
                                                 )}
                                             </MenuItem>
+                                            <MenuItem>
+                                                {({ active }: { active: boolean }) => (
+                                                    <button
+                                                        onClick={() => setDetailsOpen(true)}
+                                                        className={active ? styles.activeOption : ''}
+                                                    >
+                                                        <InfoIcon />
+                                                        Dados da conversa.
+                                                    </button>
+                                                )}
+                                            </MenuItem>
+
                                         </motion.div>
                                     </MenuItems>
                                 )}
@@ -179,7 +195,26 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
                 </Menu>
             </header>
 
-            <Modal isOpen={isRenameOpen} onClose={() => setRenameOpen(false)} title="Renomear Chat">
+            <Modal transparent={true} isOpen={isDetailsOpen} onClose={() => setDetailsOpen(false)} title="Detalhes do Chat">
+                <div className={styles.chatDetails}>
+
+                    <img src={activeChat.foto_perfil || defaultAvatar} alt={`Avatar de ${activeChat.contato_nome}`} />
+                    <h2>{activeChat.contato_nome}</h2>
+                    <h3>{activeChat.contato_numero}</h3>
+
+                    <div className={styles.bottomDetails}>
+                        <NavLink to="/agentes">
+                            <p>Agente - {agentActive?.tipo_de_agente || 'N/A'}</p>
+                        </NavLink>
+                        <strong className={activeChat.ia_ativa ? styles.statusIaActive : styles.statusIaInactive}>{activeChat.ia_ativa ? 'IA Ativa' : 'IA Desativada'}</strong>
+                    </div>
+
+                </div>
+            </Modal>
+
+
+
+            <Modal transparent={true} isOpen={isRenameOpen} onClose={() => setRenameOpen(false)} title="Renomear Chat">
                 <div className={styles.inputGroup}>
                     <input
                         value={newName}
@@ -244,15 +279,17 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
 
             <div className={styles.inputAreaWrapper}>
                 <div className={styles.inputArea}>
-                    <ChatInput placeholder="Digite uma mensagem" onSend={handleSendMessage} />
 
-                    <button
-                        type="button"
-                        onClick={handleToggleIA}
-                        className={`${styles.toggleIaButton} ${activeChat.ia_ativa ? styles.active : ''}`}
+
+                    <div
+                        className={`${styles.toggleIaButton}`}
                     >
-                        {activeChat.ia_ativa ? 'Desativar IA' : 'Ativar IA'}
-                    </button>
+                        <div className={styles.headerToggleIa}>
+                            <BotIcon /> {activeChat.ia_ativa ? 'Ativado' : 'Desativado'}
+                        </div>
+                        <ToggleSwitch variant={'secondary'} isOn={activeChat.ia_ativa ? true : false} onToggle={handleToggleIA} />
+                    </div>
+                    <ChatInput placeholder="Digite uma mensagem" onSend={handleSendMessage} />
                 </div>
             </div>
         </motion.section>

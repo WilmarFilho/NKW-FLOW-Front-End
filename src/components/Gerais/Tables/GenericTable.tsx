@@ -3,12 +3,16 @@ import { motion } from 'framer-motion';
 // CSS Modules
 import styles from './GenericTable.module.css';
 
+import FunnelIcon from './assets/funnel.svg'
 
 interface GenericTableProps<T> {
   columns: string[];
   data: T[];
   renderRow: (item: T, index: number) => React.ReactNode;
   gridTemplateColumns: string;
+  onSortClick?: (col: string) => void;
+  sortField?: string | null;
+  sortOrder?: 'asc' | 'desc';
 }
 
 export default function GenericTable<T>({
@@ -16,6 +20,9 @@ export default function GenericTable<T>({
   data,
   renderRow,
   gridTemplateColumns,
+  onSortClick,
+  sortField,
+  sortOrder
 }: GenericTableProps<T>) {
   return (
     <motion.section
@@ -29,10 +36,30 @@ export default function GenericTable<T>({
         className={styles.tableHeader}
         style={{ gridTemplateColumns }}
       >
-        {columns.map((col, i) => (
-          <div key={i}>{col}</div>
-        ))}
+        {columns.map((col, i) => {
+          const colKey = col.toLowerCase();
+          const isActive = sortField === colKey;
+
+          return (
+            <div
+              key={i}
+              onClick={() => onSortClick?.(col)}
+              className={styles.sortableHeader}
+            >
+              <span>{col}</span>
+
+              {col === 'Nome' || col === 'Email' ? (
+                <span className={`${styles.sortIcon} ${isActive ? styles.active : ''}`}>
+                  <FunnelIcon />
+                </span>
+              ) : ''}
+
+
+            </div>
+          );
+        })}
       </header>
+
       <div className={styles.tableBody}>
         {data.map((item, index) => renderRow(item, index))}
       </div>

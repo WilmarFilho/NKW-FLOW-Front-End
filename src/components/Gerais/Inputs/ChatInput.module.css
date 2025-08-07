@@ -20,13 +20,14 @@
   border: none;
   outline: none;
   background: none;
-  color: #e0e0e0;
+  color: var(--color-text);
+  opacity: .5;
   font-size: 16px;
   font-family: var(--font-secundaria);
 }
 
 .inputField::placeholder {
-  color: var(--color-text-table);
+  color: var(--color-text);
 }
 
 .sendButton {
@@ -47,6 +48,7 @@
 
 .sendButton svg {
   fill: var(--color-text);
+  opacity: .5;
 }
 
 .sendButton:hover:not(:disabled) {

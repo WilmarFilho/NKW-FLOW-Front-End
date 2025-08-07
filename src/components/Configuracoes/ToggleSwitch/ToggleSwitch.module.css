@@ -10,14 +10,28 @@
   background-color: transparent;
 }
 
+.toggleSwitchSecondary {
+  width: 100%;
+  height: 30px;
+  border-radius: 999px;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border: none;
+  padding: 0;
+  background-color: transparent;
+}
+
 /* Estado ligado */
-.toggleSwitch.on {
+.toggleSwitch.on,
+.toggleSwitchSecondary.on {
   background-color: var(--color-secundaria);
 }
 
 /* Estado desligado */
-.toggleSwitch.off {
-  background-color: #333;
+.toggleSwitch.off,
+.toggleSwitchSecondary.off {
+  background-color: var(--color-background-dark);
 }
 
 /* O círculo interno que se move */
@@ -32,7 +46,26 @@
   transition: left 0.2s ease;
 }
 
+.switchKnobSecondary {
+  width: 28px;
+  height: 26px;
+  border-radius: 50%;
+  background-color: var(--color-text);
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: left 0.2s ease;
+}
+
+.switchKnobSecondary.on {
+  background-color: var(--color-text-white);
+}
+
 /* Move o knob para a direita quando o interruptor está ligado */
 .toggleSwitch.on .switchKnob {
   left: 44px;
+}
+
+.toggleSwitchSecondary.on .switchKnobSecondary {
+  left: 88px;
 }

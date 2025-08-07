@@ -8,13 +8,15 @@ import { useAgents } from '../../../hooks/agents/useAgents';
 // Components
 import SearchBar from '../SearchBar/Searchbar';
 import Tag from '../Tags/Tag';
-import ChatListItem from '../ChatListItem/ChatListItem'; 
+import ChatListItem from '../ChatListItem/ChatListItem';
 
 // Types
 import { Chat } from '../../../types/chats';
 
 // CSS Modules
 import styles from './ChatSideBar.module.css';
+
+import AddChatIcon from '../assets/addchat.svg'
 
 // Interface com nome mais específico
 interface ChatSidebarProps {
@@ -70,7 +72,12 @@ export default function ChatSidebar({
       initial="hidden"
       animate="show"
     >
-      <SearchBar onSearch={setSearchQuery} />
+      <div className={styles.wrapperSearchBar}>
+        <SearchBar onSearch={setSearchQuery} />
+        <button className={styles.buttonAddChat}>
+          <AddChatIcon />
+        </button>
+      </div>
 
       <div className={styles.iaFilterContainer}>
         <button
@@ -90,7 +97,7 @@ export default function ChatSidebar({
       </div>
 
       <div className={styles.tagsContainer}>
-        
+
         <Tag
           key={'todos'}
           label={'Todos'}
@@ -119,6 +126,12 @@ export default function ChatSidebar({
             onClick={() => setActiveChat(chat)}
           />
         ))}
+      </div>
+
+      <div>
+        <button className={styles.buttonAlterActiveChats}>
+          Ver Chats Fechados
+        </button>
       </div>
     </motion.aside>
   );

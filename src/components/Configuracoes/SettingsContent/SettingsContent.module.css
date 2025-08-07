@@ -8,40 +8,84 @@
   gap: 24px;
   color: var(--color-text);
   overflow-y: auto;
-  scrollbar-width: none; /* Firefox */
+  scrollbar-width: none;
+  /* Firefox */
 }
+
 .settingsContent::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, and Opera */
+  display: none;
+  /* Chrome, Safari, and Opera */
 }
 
 /* --- Seção de Perfil (Aba 0) --- */
 .mainHeaderAccountWrapper {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 60px;
-  border-bottom: 2px solid var(--color-subtext-1);
+  border-bottom: 2px solid var(--color-borders);
   width: 100%;
-  padding: 20px;
+  padding: 20px 20px 50px 20px;
 }
 
 .profileImageWrapper {
-  width: 100%;
-  height: 200px;
+  position: absolute;
+  top: -68px;
+  right: -68px;
+  width: 250px;
+  height: 250px;
+  z-index: 999;
+  border-radius: 400px;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: end;
+  padding-bottom: 30px;
+}
+
+/* Overlay escuro */
+.profileImageWrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 400px;
+  background-color: rgba(0, 0, 0, 0);
+  transition: background-color 0.3s ease;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Texto sobreposto */
+.overlayText {
+  position: absolute;
+  z-index: 2;
+  color: var(--color-text-white);
+  font-size: 1.1rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+/* Ativa overlay e texto no hover */
+.profileImageWrapper:hover::after {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.profileImageWrapper:hover .overlayText {
+  opacity: 1;
 }
 
 .profileImage {
   object-fit: cover;
-  width: 200px;
-  height: 100%;
+  position: absolute;
+  width: 250px;
+  height: 250px;
+  top: 0;
   border-radius: 50%;
   cursor: pointer;
-  border: 1px solid var(--color-subtext-1);
 }
 
-.userInfo, .userInfoMain {
+.userInfo,
+.userInfoMain {
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -51,12 +95,15 @@
 .userInfo h1 {
   font-size: 16px;
   font-weight: 400;
-  color: var(--color-subtext-2);
+  color: var(--color-text);
+  opacity: .7;
 }
 
 .userInfo h2 {
   font-size: 22px;
   font-weight: 500;
+  color: var(--color-text);
+  opacity: 1;
 }
 
 .userInfoMain h1 {
@@ -86,7 +133,10 @@
 .infoGrid {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  height: 100%;
+  gap: 24px;
+  justify-content: space-between;
+  padding: 20px 0;
 }
 
 .headerAccountWrapper {
@@ -94,7 +144,7 @@
   align-items: center;
   justify-content: flex-start;
   gap: 80px;
-  background-color:var(--color-subtext-1);
+  background-color: var(--color-borders);
   width: 100%;
   padding: 50px 24px;
   border-radius: 12px;
@@ -105,7 +155,7 @@
   font-family: var(--font-main);
   margin-top: 20px;
   background-color: var(--color-secundaria);
-  color: white;
+  color: var(--color-text-white);
   font-weight: bold;
   outline: none;
   border: none;

@@ -17,28 +17,28 @@
 }
 
 .iconWrapper svg {
-  stroke: var(--color-text-table);
+  stroke: var(--color-button-searchbar);
 }
 
 .searchInput {
   width: 100%;
-  padding: 18px 16px 18px 48px;
+  padding: 16px 16px 16px 48px;
   background-color: var(--color-background-white);
   border: 1px solid transparent;
   border-radius: 15px;
   font-family: var(--font-secundaria);
-  color: var(--color-text-table);
+  color: var(--color-button-searchbar);
   font-size: 16px;
   outline: none; 
   transition: border-color 0.2s ease-in-out;
 }
 
 .searchInput::placeholder {
-  color: var(--color-text-table);
+  color:var(--color-button-searchbar);
 }
 
 .searchInput:focus {
-  border-color: var(--color-secundaria);
+  border-color: var(--color-button-searchbar);
 }
 
 .searchContainer:focus-within .iconWrapper {

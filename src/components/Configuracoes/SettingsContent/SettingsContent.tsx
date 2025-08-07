@@ -13,6 +13,9 @@ import styles from './SettingsContent.module.css';
 import ToggleSwitch from '../ToggleSwitch/ToggleSwitch';
 import OptionSelector from '../OptionSelector/OptionSelector';
 
+// Assets
+import EditIcon from '../assets/pencil.svg'
+
 // Types
 import { User } from '../../../types/user';
 
@@ -113,6 +116,7 @@ export default function SettingsContent({ tabIndex }: Props) {
                   onClick={() => !loading && document.getElementById('profileImageInput')?.click()}
                   style={{ cursor: loading ? 'wait' : 'pointer' }}
                 />
+                <span className={styles.overlayText}>Editar</span>
                 <input
                   type="file"
                   id="profileImageInput"
@@ -135,7 +139,7 @@ export default function SettingsContent({ tabIndex }: Props) {
             <div className={styles.configsWrapperBox}>
               <div className={styles.infoGrid}>
 
-                 <div className={styles.headerAccountWrapper}>
+                <div className={styles.headerAccountWrapper}>
                   <div className={styles.userInfo}><h1>E-mail</h1><h2>{user.email}</h2></div>
                   <div className={styles.userInfo}><h1>Senha</h1><h2>***********</h2></div>
                   <div className={styles.userInfo}><h1>Plano Contradado</h1><h2>Premium</h2></div>
@@ -154,9 +158,9 @@ export default function SettingsContent({ tabIndex }: Props) {
                     <h1>Número</h1>
                     <h2>(64) 99243-4104</h2>
                   </div>
-                  
+
                 </div>
-                
+
               </div>
               <button className={styles.editButton}>Editar Informações</button>
             </div>

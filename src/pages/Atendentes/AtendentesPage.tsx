@@ -1,5 +1,5 @@
 // Libbs
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 // Components
 import GenericTable from '../../components/Gerais/Tables/GenericTable';
@@ -23,11 +23,16 @@ export default function AtendentesPage() {
 
   const { attendants, addAttendant, removeAttendant, editAttendant } = useAttendants();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeFilter, setActiveFilter] = useState<'todos' | 'ativo' | 'inativo'>('todos');
+
+  const [sortField, setSortField] = useState<keyof Attendant | 'nome' | 'email' | 'numero' | null>(null);
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+
 
   const [editData, setEditData] = useState<Partial<AttendantInput> | null>(null);
   const [editAttendantId, setEditAttendantId] = useState<string | null>(null);
   const [editUserId, setEditUserId] = useState<string | null>(null);
-  
+
   const handleDelete = async (id: string) => {
     if (window.confirm('Tem certeza?')) {
       await removeAttendant(id).catch(err => alert('Falha ao excluir: ' + err));
@@ -66,22 +71,61 @@ export default function AtendentesPage() {
     setIsModalOpen(false);
   };
 
+  const filteredAttendants = useMemo(() => {
+    if (activeFilter === 'todos') {
+      return attendants;
+    }
+    const isStatusActive = activeFilter === 'ativo';
+    return attendants.filter(attendant => attendant.status === isStatusActive);
+  }, [attendants, activeFilter]);
+
+  const sortedAttendants = useMemo(() => {
+    const data = [...filteredAttendants];
+    if (!sortField) return data;
+
+    return data.sort((a, b) => {
+      const getFieldValue = (attendant: Attendant) => {
+        switch (sortField) {
+          case 'nome':
+            return attendant.user.nome.toLowerCase();
+          case 'email':
+            return attendant.user.email.toLowerCase();
+          case 'numero':
+            return attendant.numero;
+          case 'status':
+            return attendant.status ? 1 : 0;
+          default:
+            return '';
+        }
+      };
+
+      const aValue = getFieldValue(a);
+      const bValue = getFieldValue(b);
+
+      if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
+      if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
+      return 0;
+    });
+  }, [filteredAttendants, sortField, sortOrder]);
+
+
   const renderAttendantRow = (attendant: Attendant) => (
     <div
       key={attendant.id}
       className={tableStyles.tableRow}
-      style={{ gridTemplateColumns: '2fr 3fr 2fr 1fr 1fr' }}
+      style={{ gridTemplateColumns: '1fr 2fr 2fr 2fr 1fr' }}
     >
-      <div data-label="Nome" className={tableStyles.cellName}>
-        <span>{attendant.user.nome}</span>
-      </div>
-      <div data-label="Email">{attendant.user.email}</div>
-      <div data-label="Número">{attendant.numero}</div>
       <div data-label="Status">
         <span className={`${tableStyles.statusChip} ${attendant.status ? tableStyles.active : tableStyles.inactive}`}>
           {attendant.status ? 'Ativo' : 'Inativo'}
         </span>
       </div>
+      <div data-label="Nome" className={tableStyles.cellName}>
+        <span>{attendant.user.nome}</span>
+      </div>
+      <div data-label="Email">{attendant.user.email}</div>
+      <div data-label="Número">{attendant.numero}</div>
+
       <div className={tableStyles.actionCell}>
         <button className={tableStyles.actionButton} onClick={() => handleEdit(attendant)} aria-label="Editar">
           <EditIcon />
@@ -95,45 +139,87 @@ export default function AtendentesPage() {
 
 
   return (
-      <div  className={PageStyles.container}>
-        <motion.header
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className={PageStyles.containerHeader}
-        >
-          <div  className={PageStyles.headerTitles}>
-            <h2>Seus atendentes humanos</h2>
-            <h3>Cadastre e gerencie os atendentes que podem interagir com seus clientes.</h3>
-          </div>
-          <Button label="Adicionar Atendente" onClick={() => openModal()} />
-        </motion.header>
+    <div className={PageStyles.container}>
+      <motion.header
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className={PageStyles.containerHeader}
+      >
+        <div className={PageStyles.headerTitles}>
+          <h2>Seus atendentes humanos</h2>
+          <h3>Cadastre e gerencie os atendentes que podem interagir com seus clientes.</h3>
+        </div>
+        <Button label="Adicionar Atendente" onClick={() => openModal()} />
+      </motion.header>
 
-
+      <div className={PageStyles.containerContent} >
         <GenericTable<Attendant>
-          columns={['Nome', 'Email', 'Número', 'Status', '']}
-          data={attendants}
+          columns={['Status', 'Nome', 'Email', 'Número', '']}
+          data={sortedAttendants}
           renderRow={renderAttendantRow}
-          gridTemplateColumns="2fr 3fr 2fr 1fr 1fr"
+          gridTemplateColumns="1fr 2fr 2fr 2fr 1fr"
+          onSortClick={(col) => {
+            const fieldMap: Record<string, 'nome' | 'email' | 'numero' | 'status'> = {
+              'Nome': 'nome',
+              'Email': 'email',
+              'Número': 'numero',
+              'Status': 'status',
+            };
+
+            const selectedField = fieldMap[col];
+
+            if (selectedField === sortField) {
+              setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc');
+            } else {
+              setSortField(selectedField); // Agora o tipo é válido
+              setSortOrder('asc');
+            }
+          }}
+
+          sortField={sortField}
+          sortOrder={sortOrder}
         />
 
 
-        <Modal
-          isOpen={isModalOpen}
-          onClose={closeModal}
-          title={editAttendantId ? 'Editar Atendente' : 'Cadastrar Novo Atendente'}
-        >
-          <AttendantForm
-            onSave={handleSave}
-            onClose={closeModal}
-            initialData={editData ? {
-              nome: editData.nome,
-              email: editData.email,
-              status: editData.status,
-              numero: editData.numero
-            } : null}
-            editMode={!!editData}
-          />
-        </Modal>
+        <div className={PageStyles.containerBottom}>
+          <button
+            className={`${PageStyles.buttonBase} ${activeFilter === 'ativo' ? PageStyles.activeFilter : ''}`}
+            onClick={() => setActiveFilter('ativo')}
+          >
+            <span>Ver atendentes ativos</span>
+          </button>
+          <button
+            className={`${PageStyles.buttonBase} ${activeFilter === 'inativo' ? PageStyles.activeFilter : ''}`}
+            onClick={() => setActiveFilter('inativo')}
+          >
+            <span>Ver Atendentes Inativos</span>
+          </button>
+        </div>
+
       </div>
+
+
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        title={editAttendantId ? 'Editar Atendente' : 'Cadastrar Novo Atendente'}
+      >
+        <AttendantForm
+          onSave={handleSave}
+          onClose={closeModal}
+          initialData={editData ? {
+            nome: editData.nome,
+            email: editData.email,
+            status: editData.status,
+            numero: editData.numero
+          } : null}
+          editMode={!!editData}
+        />
+      </Modal>
+    </div >
   );
 }
+
+
+

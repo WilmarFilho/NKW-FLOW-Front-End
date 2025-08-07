@@ -2,15 +2,14 @@
   display: grid;
   align-items: center;
   gap: 16px;
-  background-color: var(--color-main);
   padding: 14px 16px;
   border-radius: 10px;
   cursor: pointer;
-  color: var(--color-text-table);
+  color: var(--color-text);
   transition: background-color 0.2s, transform 0.2s;
 }
 .tableRow:hover {
-  background-color: var(--color-background-tags-hover);
+  background-color: var(--color-background-row-hover);
 }
 .tableRow > div {
   text-align: start;
@@ -35,16 +34,17 @@
   padding: 8px 16px;
   border-radius: 20px;
   font-size: 13px;
+  width: 75%;
   font-weight: bold;
   text-align: center;
 }
 .statusChip.active {
   background-color:var(--color-secundaria);
-  color: var(--color-text-table);
+  color: var(--color-text-white);
 }
 .statusChip.inactive {
-  background-color: rgba(255, 85, 85, 0.15);
-  color: var(--color-text-table);
+  background-color: var(--color-background-red);
+  color: var(--color-text-white);
 }
 
 /* Estilos para botões de ação (Editar, Deletar) */
@@ -80,6 +80,9 @@
 .actionButton:focus-visible {
   outline: 2px solid var(--color-secundaria);
 }
+
+
+
 
 
 /* Responsividade do CONTEÚDO */

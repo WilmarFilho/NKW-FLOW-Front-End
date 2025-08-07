@@ -17,7 +17,7 @@
   align-items: center;
   gap: 12px;
   padding: 14px 20px;
-  border-bottom: 1px solid var(--color-background-white);
+  border-bottom: 1px solid var(--color-borders);
   flex-shrink: 0;
 }
 
@@ -37,7 +37,7 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  width: 230px;
+  width: 285px;
 }
 
 .menuItems button {
@@ -52,7 +52,7 @@
   gap: 12px;
   border-radius: 8px;
   outline: none;
-  background-color: var(--color-subtext-1);
+  background-color: var(--color-background-chats-options);
   text-align: left;
 }
 
@@ -90,6 +90,7 @@
   gap: 12px;
   align-items: center;
   overflow: hidden;
+  width: 100%;
 }
 
 .contactInfo img {
@@ -121,7 +122,7 @@
   font-family: var(--font-secundaria);
   color: var(--color-subtext-2);
   text-decoration: underline;
-  transition:  .5s;
+  transition: .5s;
 }
 
 .optionsButton {
@@ -159,7 +160,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(25, 25, 25, 0.75);
+  background-color: rgba(0, 0, 0, 0.85);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -176,6 +177,62 @@
   background-color: rgba(0, 0, 0, 0.4);
   padding: 16px 24px;
   border-radius: 12px;
+}
+
+.chatDetails {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 22px;
+  height: 600px;
+}
+
+.chatDetails img {
+  width: 180px;
+  height: 180px;
+  border-radius: 200px;
+}
+
+.chatDetails h2 {
+  font-size: 34px;
+  font-family: var(--font-main);
+  color: var(--color-text-table);
+}
+
+.chatDetails h3 {
+  font-size: 28px;
+  color: var(--color-text-table);
+  font-family: var(--font-main);
+}
+
+.bottomDetails {
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+  gap: 18px;
+  margin: 24px 0px;
+  color: var(--color-text-table);
+}
+
+.statusIaActive {
+  background-color: var(--color-secundaria);
+  color: var(--color-text-table);
+}
+
+.statusIaInactive {
+  background-color: rgba(255, 85, 85, 0.15);
+  color: var(--color-text-table);
+}
+
+.bottomDetails a {
+  font-size: 20px;
+}
+
+.bottomDetails strong {
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-size: 20px;
 }
 
 
@@ -195,8 +252,8 @@
 
 /* --- Input Area --- */
 .inputAreaWrapper {
-  padding: 16px 20px;
-  border-top: 1px solid var(--color-background-white);
+  padding: 12px 20px;
+  border-top: 1px solid var(--color-borders);
 }
 
 .inputArea {
@@ -208,22 +265,32 @@
   background-color: var(--color-background-white);
   border-radius: 12px;
   border: none;
-  min-width: 120px;
+  min-width: 160px;
   flex-shrink: 0;
-  cursor: pointer;
-  font-weight: 500;
-  color: #fff;
+  padding: 12px 20px;
+  font-family: var(--font-main);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  color: var(--color-text);
+  opacity: .8;
   transition: background-color 0.3s, color 0.3s, outline-offset 0.1s;
   outline: none;
 }
 
-.toggleIaButton:hover:not(.active) {
-  background-color: #3f3f3f;
+.headerToggleIa {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
 }
 
-.toggleIaButton.active {
-  background-color: var(--color-secundaria);
-  color: white;
+.headerToggleIa svg {
+  stroke: var(--color-text);
+  opacity: .8;
 }
 
 .toggleIaButton:focus-visible {

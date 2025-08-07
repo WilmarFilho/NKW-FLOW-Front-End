@@ -6,11 +6,12 @@ import styles from './Modal.module.css';
 
 interface ModalProps {
   isOpen: boolean;
+  transparent?: boolean;
   onClose: () => void;
   title: string;
 }
 
-export default function Modal({ isOpen, onClose, title, children }: PropsWithChildren<ModalProps>) {
+export default function Modal({ isOpen, onClose, title, children, transparent = false }: PropsWithChildren<ModalProps>) {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -40,13 +41,13 @@ export default function Modal({ isOpen, onClose, title, children }: PropsWithChi
 
   return (
     <div
-      className={styles.modalOverlay}
+      className={transparent ? styles.modalOverlayTransparent : styles.modalOverlay}
       onClick={handleOverlayClick}
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
     >
-      <div className={styles.modalContent}>
+      <div  className={transparent ? styles.modalContentTransparent : styles.modalContent}>
         <header className={styles.modalHeader}>
           <h2 id="modal-title">{title}</h2>
           <button onClick={onClose} className={styles.closeButton} aria-label="Fechar modal">
