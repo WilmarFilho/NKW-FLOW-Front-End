@@ -77,7 +77,7 @@
   padding: 8px 22px;
   width: 100%;
   border-radius: 8px;
-  background-color: var(--color-background-dark);
+  background-color: var(--color-background-messages);
   color: #aaa;
   font-family: var(--color-secundaria);
   outline: none;
@@ -197,12 +197,12 @@
 .chatDetails h2 {
   font-size: 34px;
   font-family: var(--font-main);
-  color: var(--color-text-table);
+  color: var(--color-text);
 }
 
 .chatDetails h3 {
   font-size: 28px;
-  color: var(--color-text-table);
+  color: var(--color-text);
   font-family: var(--font-main);
 }
 
@@ -212,17 +212,18 @@
   flex-direction: column;
   gap: 18px;
   margin: 24px 0px;
-  color: var(--color-text-table);
+  color: var(--color-text);
+  opacity: .7;
 }
 
 .statusIaActive {
   background-color: var(--color-secundaria);
-  color: var(--color-text-table);
+  color: var(--color-text-white);
 }
 
 .statusIaInactive {
   background-color: rgba(255, 85, 85, 0.15);
-  color: var(--color-text-table);
+  color: var(--color-text-white);
 }
 
 .bottomDetails a {

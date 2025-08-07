@@ -37,24 +37,34 @@ export default function AgentesPage() {
         initial={{ opacity: 0, y: 0 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
+        className={PageStyles.agentsList}
+      >
+        {agents.map((agent) => {
+          const connectionsForAgent = connections.filter(conn => conn.agente_id === agent.id);
+          const connectionNames = connectionsForAgent.map(conn => conn.nome.split('_')[0]);
+
+          return (
+            <AgentCard
+              key={agent.id}
+              tipo={agent.tipo_de_agente}
+              description={agent.descricao}
+              connections={connectionNames}
+            />
+          );
+        })}
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 0 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
         className={PageStyles.agentsWrapper}
       >
-        <div className={PageStyles.agentsList}>
-          {agents.map((agent) => {
-            const connectionsForAgent = connections.filter(conn => conn.agente_id === agent.id);
-            const connectionNames = connectionsForAgent.map(conn => conn.nome.split('_')[0]);
 
-            return (
-              <AgentCard
-                key={agent.id}
-                tipo={agent.tipo_de_agente}
-                description={agent.descricao}
-                connections={connectionNames}
-              />
-            );
-          })}
-        </div>
-
+        <h2>Informações da base de conhecimento do cliente</h2>
+        <h3>
+          Mostrar Qualidade do Treinamento, botão para solicitar novos treinamentos ...
+        </h3>
       </motion.div>
 
     </div>

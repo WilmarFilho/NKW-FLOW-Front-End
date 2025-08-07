@@ -31,6 +31,12 @@ export default function DashboardPage() {
       >
         
           <h2>Informações sobre como ganhar cashback, link para compartilhar e quantidade de indicações validas</h2>
+
+          <h2>Gameficação de progresso nas recompensas</h2>
+
+          <h2>X Convidados com assinatura efetuada ganha X% de desconto no plano ativo</h2>
+
+          <h2>Mostrar o progresso / Mostrar link para convidar / Explicar como funciona</h2>
         
       </motion.div>
 

@@ -38,6 +38,13 @@ body.modo-light {
   --color-background-menuItem: #070707f3;
   --color-background-sidebar: #070707e7;
 
+  --color-background-tags-hover: #49539bd4;
+
+  --color-overlay-modal-chat: #fcfcfc81;
+  --color-modal-chat: #fcfcfc;
+  --color-overlay-modal: #fcfcfcc6;
+  --color-modal: #fcfcfc;
+
   /* Backgrounds */
 
   --color-background-dark: #fcfcfc;
@@ -81,6 +88,13 @@ body.modo-dark {
 
   --color-background-menuItem: #1b214a90;
   --color-background-sidebar: #07070777;
+
+  --color-background-tags-hover: rgba(255, 255, 255, 0.2);
+
+  --color-overlay-modal-chat: #07070777;
+  --color-modal-chat: #070707;
+  --color-overlay-modal: #070707ed;
+  --color-modal: #101010;
 
   /* Backgrounds */
 

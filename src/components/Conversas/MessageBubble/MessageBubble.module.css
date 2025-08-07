@@ -26,13 +26,14 @@
 
 .isMe {
   background-color: var(--color-secundaria);
-  color: #ffffff;
+  color: var(--color-text-white);
   align-self: flex-end;
   border-bottom-right-radius: 4px; 
 }
 
 .isOther {
   background-color: var(--color-background-messages);
+  color: var(--color-text-white);
   align-self: flex-start;
   border-bottom-left-radius: 4px;
 }

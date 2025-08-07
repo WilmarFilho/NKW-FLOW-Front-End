@@ -144,7 +144,7 @@
   align-items: center;
   justify-content: flex-start;
   gap: 80px;
-  background-color: var(--color-borders);
+  border-bottom: 1px solid var(--color-borders);
   width: 100%;
   padding: 50px 24px;
   border-radius: 12px;
@@ -152,16 +152,24 @@
 
 .editButton {
   width: 100%;
-  font-family: var(--font-main);
+  font-family: var(--font-secundaria);
+  letter-spacing: 2px;
   margin-top: 20px;
-  background-color: var(--color-secundaria);
-  color: var(--color-text-white);
-  font-weight: bold;
+  background-color: var(--color-filter-attendants);
+  color: var(--color-text);
   outline: none;
   border: none;
+  font-size: 14px;
+  text-transform: uppercase;
   padding: 18px 32px;
   cursor: pointer;
   border-radius: 10px;
+}
+
+.editButton:hover {
+  transition: .4s;
+  background-color: var(--color-filter-hover-attendants);
+  color: var(--color-text-white);
 }
 
 /* --- Seção de Configurações (Aba 1) --- */

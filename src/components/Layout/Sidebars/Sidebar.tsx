@@ -81,7 +81,7 @@ const Sidebar = () => {
       <nav className="principal-menu">
         <h4>Menu Principal</h4>
         <MenuItem to="/dashboard">
-          <DashIcon /> Dashboard
+          <DashIcon /> Resumo
         </MenuItem>
         <MenuItem to="/conversas">
           <ConversasIcon /> Conversas
@@ -105,7 +105,7 @@ const Sidebar = () => {
         </MenuItem>
          <MenuItem to="/cashback">
           {' '}
-          <GiftIcon /> Cashback
+          <GiftIcon /> Recompensas
         </MenuItem>
         <MenuItem to="/ajuda">
           {' '}

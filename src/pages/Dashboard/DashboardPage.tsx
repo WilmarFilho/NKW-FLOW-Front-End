@@ -30,11 +30,15 @@ export default function DashboardPage() {
         className={PageStyles.containerRow}
       >
         <div className={PageStyles.containerColumnLarge}>
-          <h2>Resumo de Chats</h2>
+          <h2>
+            Quantidade de Chats Atendidos por IA
+          </h2>
         </div>
 
         <div className={PageStyles.containerColumnSmall}>
-          <h2>Resumo de Chats por IA</h2>
+          <h2>
+            Quantidade de Mensagens disparadas por IA
+          </h2>
         </div>
 
       </motion.div>
@@ -46,15 +50,21 @@ export default function DashboardPage() {
         className={PageStyles.containerRow}
       >
         <div className={PageStyles.containerColumnSmall}>
-          <h2>Resumo de Atendentes</h2>
+          <h2>
+            Quantidade de chats fechados pelos Atendentes
+          </h2>
         </div>
 
         <div className={PageStyles.containerColumnSmall}>
-          <h2>Resumos de Agentes</h2>
+          <h2>
+            Quantidade de chats por conexão
+          </h2>
         </div>
 
         <div className={PageStyles.containerColumnSmall}>
-          <h2>Resumo de Conexões</h2>
+          <h2>
+            Quantidade de mensagens por Atendentes
+          </h2>
         </div>
 
       </motion.div>

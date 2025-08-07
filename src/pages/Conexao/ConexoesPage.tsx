@@ -18,6 +18,7 @@ import tableStyles from '../../components/Gerais/Tables/TableStyles.module.css';
 // Assets
 import EditIcon from './assets/arrow-circle.svg';
 import DeleteIcon from './assets/x-circle.svg';
+import { useMemo, useState } from 'react';
 
 
 
@@ -30,6 +31,10 @@ export default function ConexoesPage() {
   };
 
   const { connections, removeConnection } = useConnections();
+
+  const [activeFilter, setActiveFilter] = useState<'todos' | 'ativo' | 'inativo'>('todos');
+  const [sortField, setSortField] = useState<keyof Connection | 'nome' | null>(null);
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
   const setModalState = useSetRecoilState(addConnectionModalState);
 
@@ -52,6 +57,38 @@ export default function ConexoesPage() {
       editMode: true,
     });
   };
+
+  const filteredConnections = useMemo(() => {
+    if (activeFilter === 'todos') {
+      return connections;
+    }
+    const isStatusActive = activeFilter === 'ativo';
+    return connections.filter(connection => connection.status === isStatusActive);
+  }, [connections, activeFilter]);
+
+  const sortedConnections = useMemo(() => {
+    const data = [...filteredConnections];
+    if (!sortField) return data;
+
+    return data.sort((a, b) => {
+      const getFieldValue = (connection: Connection) => {
+        switch (sortField) {
+          case 'nome':
+            return connection.nome.toLowerCase();
+          default:
+            return '';
+        }
+      };
+
+
+      const aValue = getFieldValue(a);
+      const bValue = getFieldValue(b);
+
+      if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
+      if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
+      return 0;
+    });
+  }, [filteredConnections, sortField, sortOrder]);
 
   const renderConnectionRow = (conn: Connection) => (
     <div
@@ -99,10 +136,44 @@ export default function ConexoesPage() {
 
         <GenericTable<Connection>
           columns={['Nome', 'Número', 'Agente', 'Status', '']}
-          data={connections}
+          data={sortedConnections}
           renderRow={renderConnectionRow}
           gridTemplateColumns="2fr 2fr 2fr 1fr 1fr"
+          onSortClick={(col) => {
+            const fieldMap: Record<string, 'nome'> = {
+              'Nome': 'nome'
+            };
+
+            const selectedField = fieldMap[col];
+
+            if (selectedField === sortField) {
+              setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc');
+            } else {
+              setSortField(selectedField); // Agora o tipo é válido
+              setSortOrder('asc');
+            }
+          }}
+
+          sortField={sortField}
+          sortOrder={sortOrder}
         />
+
+        <div className={PageStyles.containerBottom}>
+          <button
+            className={`${PageStyles.buttonBase} ${activeFilter === 'ativo' ? PageStyles.activeFilter : ''}`}
+            onClick={() => setActiveFilter('ativo')}
+
+          >
+            <span>Ver conexões ativas</span>
+          </button>
+          <button
+            className={`${PageStyles.buttonBase} ${activeFilter === 'inativo' ? PageStyles.activeFilter : ''}`}
+            onClick={() => setActiveFilter('inativo')}
+
+          >
+            <span>Ver conexões Inativas</span>
+          </button>
+        </div>
 
       </div>
 
