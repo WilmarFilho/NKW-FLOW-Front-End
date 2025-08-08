@@ -38,7 +38,7 @@ export default function useChats(userId: string | null | undefined) {
     return result;
   };
 
-   const reOpenChat = async (chatId: string, status: string) => {
+  const reOpenChat = async (chatId: string, status: string) => {
     const result = await put(`/chats/${chatId}`, { status: status });
     if (result) {
       setChats((prev) =>

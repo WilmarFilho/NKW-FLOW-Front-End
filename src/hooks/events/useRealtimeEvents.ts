@@ -92,13 +92,45 @@ export const useRealtimeEvents = (userId: string | undefined) => {
 
         if (tipo === 'send.message') {
           console.log('📤 Mensagem enviada');
+
           if (message) {
+            const chatId = message.chat_id;
+
             setMessages(prev => {
               const exists = prev.find(m => m.id === message.id);
               return exists ? prev : [...prev, message];
             });
+
+            setChats(prev => {
+              const exists = prev.find(c => c.id === chatId);
+
+              if (exists) {
+                return prev.map(chat =>
+                  chat.id === chatId
+                    ? {
+                      ...chat,
+                      ultima_mensagem: message.mensagem,
+                      mensagem_data: message.criado_em,
+                    }
+                    : chat
+                );
+              }
+
+              // Novo chat recebido via evento
+              if (chat) {
+                return [...prev, {
+                  ...chat,
+                  ultima_mensagem: message.mensagem,
+                  mensagem_data: message.criado_em,
+                }];
+              }
+
+              return prev;
+            });
           }
         }
+
+
 
       } catch (err) {
         console.error('[SSE] Erro ao processar evento:', err);

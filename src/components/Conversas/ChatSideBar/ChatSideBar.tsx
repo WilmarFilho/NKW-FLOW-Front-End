@@ -27,6 +27,7 @@ interface ChatSidebarProps {
   setSearchQuery: (q: string) => void;
   setSelectedAgentId: (id: string | null) => void;
   selectedAgentId: string | null;
+  setIsAddChatOpen: (value: boolean) => void;
 }
 
 const containerVariants = {
@@ -47,6 +48,7 @@ export default function ChatSidebar({
   setSearchQuery,
   setSelectedAgentId,
   selectedAgentId,
+  setIsAddChatOpen,
 }: ChatSidebarProps) {
   const [iaStatusFilter, setIaStatusFilter] = useState<'todos' | 'ativa' | 'desativada'>('todos');
   const { agents } = useAgents();
@@ -67,7 +69,7 @@ export default function ChatSidebar({
     });
   }, [chats, searchQuery, selectedAgentId, iaStatusFilter, statusFilter]);
 
-  
+
 
   return (
     <motion.aside
@@ -78,9 +80,10 @@ export default function ChatSidebar({
     >
       <div className={styles.wrapperSearchBar}>
         <SearchBar onSearch={setSearchQuery} />
-        <button className={styles.buttonAddChat}>
+        <button onClick={() => setIsAddChatOpen(true)} className={styles.buttonAddChat}>
           <AddChatIcon />
         </button>
+
       </div>
 
       <div className={styles.iaFilterContainer}>

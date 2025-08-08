@@ -11,14 +11,42 @@ import { Chat } from '../../types/chats';
 // Css
 import PageStyles from '../PageStyles.module.css'
 import { userState } from '../../state/atom';
+import Modal from '../../components/Gerais/ModalForm/Modal';
+import useSendMessage from '../../hooks/chats/useSendMessage';
+import { useConnections } from '../../hooks/connections/useConnections';
 
 export default function ConversasPage() {
   const [user] = useRecoilState(userState);
+  const { connections } = useConnections();
   const [activeChat, setActiveChat] = useState<Chat | null>(null);
   const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
   const { chats } = useChats(user?.id);
+  const { sendMessage } = useSendMessage();
   const { messages } = useMessages(activeChat?.id || null);
   const [searchQuery, setSearchQuery] = useState('');
+
+  const [isAddChatOpen, setIsAddChatOpen] = useState(false);
+  const [newChatNumber, setNewChatNumber] = useState('');
+  const [newChatMessage, setNewChatMessage] = useState('');
+  const [selectedConnectionId, setSelectedConnectionId] = useState('');
+
+
+  const handleSendMessage = async (text: string, numero: string, connectionId: string) => {
+    const result = await sendMessage({
+      mensagem: text,
+      number: numero,
+      connection_id: connectionId,
+    });
+    if (result) {
+      console.log(result);
+      setIsAddChatOpen(false);
+      setNewChatNumber('');
+      setNewChatMessage('');
+      setSelectedConnectionId('');
+    }
+  };
+
+
 
   return (
     <div className={PageStyles.conversationsContainer}>
@@ -30,12 +58,69 @@ export default function ConversasPage() {
         setSearchQuery={setSearchQuery}
         selectedAgentId={selectedAgentId}
         setSelectedAgentId={setSelectedAgentId}
+        setIsAddChatOpen={setIsAddChatOpen}
       />
       <ChatWindow
         activeChat={activeChat}
         messages={messages}
         setActiveChat={setActiveChat}
       />
+
+      {isAddChatOpen && (
+
+        <Modal isOpen={isAddChatOpen} onClose={() => setIsAddChatOpen(false)} title='Começar nova conversa.'>
+
+
+          <div className={PageStyles.modalContent}>
+            <h2>Nova Conversa</h2>
+            <select
+              value={selectedConnectionId}
+              className={PageStyles.formSelect}
+              onChange={(e) => setSelectedConnectionId(e.target.value)}
+            >
+              <option value="">Selecione a conexão</option>
+              {connections.map((conn) => (
+                <option key={conn.id} value={conn.id}>
+                  {conn.nome || conn.id}
+                </option>
+              ))}
+            </select>
+
+            <input
+              type="text"
+              placeholder="Número com DDD (ex: 11999999999)"
+              value={newChatNumber}
+              className={PageStyles.formInput}
+              onChange={(e) => setNewChatNumber(e.target.value)}
+            />
+
+            <textarea
+              placeholder="Primeira mensagem"
+              className={PageStyles.formInput}
+              value={newChatMessage}
+              onChange={(e) => setNewChatMessage(e.target.value)}
+            />
+
+            <div className={PageStyles.modalActions}>
+              
+              <button
+                className={PageStyles.submitButton}
+                onClick={() =>
+                  handleSendMessage(newChatMessage, newChatNumber, selectedConnectionId)
+                }
+                disabled={!newChatNumber || !newChatMessage || !selectedConnectionId}
+              >
+                Enviar
+              </button>
+            </div>
+
+          </div>
+
+
+        </Modal>
+
+      )}
+
     </div>
   );
 }
