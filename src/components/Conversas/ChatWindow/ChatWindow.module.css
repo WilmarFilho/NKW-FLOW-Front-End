@@ -318,6 +318,31 @@
   padding: 1rem;
 }
 
+.buttonReOpen {
+  height: 70px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-family: var(--font-main);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: .5s;
+  outline: none;
+  background-color: var(--color-background-white);
+  color: var(--color-button-searchbar);
+}
+
+.buttonReOpen:hover {
+  background-color: var(--color-primary);
+  transition: .5s;
+  color: var(--color-text-white);
+}
+
 /* --- Media Queries --- */
 @media (max-width: 991.98px) {
 

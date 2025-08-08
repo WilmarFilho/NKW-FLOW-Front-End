@@ -38,13 +38,18 @@ export default function useChats(userId: string | null | undefined) {
     return result;
   };
 
-  const fectchImageProfile = async (chatId: string) => {
-    const updatedChat = await put<Chat>(`/chats/fetchImage/${chatId}`);
-    if (updatedChat) {
+   const reOpenChat = async (chatId: string, status: string) => {
+    const result = await put(`/chats/${chatId}`, { status: status });
+    if (result) {
       setChats((prev) =>
-        prev.map((chat) => (chat.id === chatId ? updatedChat : chat))
+        prev.map((chat) => (chat.id === chatId ? { ...chat, status: status } : chat))
       );
     }
+    return result;
+  };
+
+  const fectchImageProfile = async (chatId: string) => {
+    const updatedChat = await put<Chat>(`/chats/fetchImage/${chatId}`);
     return updatedChat;
   };
 
@@ -52,7 +57,7 @@ export default function useChats(userId: string | null | undefined) {
     fetchChats();
   }, [fetchChats]);
 
-  return { chats, refetch: fetchChats, deleteChat, renameChat, fectchImageProfile };
+  return { chats, refetch: fetchChats, deleteChat, renameChat, fectchImageProfile, reOpenChat };
 }
 
 

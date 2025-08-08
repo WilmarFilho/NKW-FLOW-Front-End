@@ -21,7 +21,7 @@ import DeleteIcon from './assets/x-circle.svg';
 
 export default function AtendentesPage() {
 
-  const { attendants, addAttendant, removeAttendant, editAttendant } = useAttendants();
+  const { attendants, addAttendant, removeAttendant, editAttendant, updateAttendantStatus } = useAttendants();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState<'todos' | 'ativo' | 'inativo'>('todos');
 
@@ -39,14 +39,21 @@ export default function AtendentesPage() {
     }
   };
 
+  const handleStatusToggle = async (attendant: Attendant) => {
+    // Adicione um confirm para segurança, se desejar
+    if (window.confirm('Deseja alterar o status do atendente?')) {
+      await updateAttendantStatus(attendant).catch(err => alert('Falha ao alterar o status: ' + err.message));
+    }
+  };
+
   const handleEdit = (attendant: Attendant) => {
     setEditAttendantId(attendant.id);
     setEditUserId(attendant.user.id);
     setEditData({
       nome: attendant.user.nome,
       email: attendant.user.email,
-      status: attendant.status,
-      numero: attendant.numero
+      status: attendant.user.status,
+      numero: attendant.user.numero
     });
     setIsModalOpen(true);
   };
@@ -76,7 +83,7 @@ export default function AtendentesPage() {
       return attendants;
     }
     const isStatusActive = activeFilter === 'ativo';
-    return attendants.filter(attendant => attendant.status === isStatusActive);
+    return attendants.filter(attendant => attendant.user.status === isStatusActive);
   }, [attendants, activeFilter]);
 
   const sortedAttendants = useMemo(() => {
@@ -91,9 +98,9 @@ export default function AtendentesPage() {
           case 'email':
             return attendant.user.email.toLowerCase();
           case 'numero':
-            return attendant.numero;
+            return attendant.user.numero;
           case 'status':
-            return attendant.status ? 1 : 0;
+            return attendant.user.status ? 1 : 0;
           default:
             return '';
         }
@@ -108,6 +115,8 @@ export default function AtendentesPage() {
     });
   }, [filteredAttendants, sortField, sortOrder]);
 
+  
+
 
   const renderAttendantRow = (attendant: Attendant) => (
     <div
@@ -115,16 +124,19 @@ export default function AtendentesPage() {
       className={tableStyles.tableRow}
       style={{ gridTemplateColumns: '1fr 2fr 2fr 2fr 1fr' }}
     >
-      <div data-label="Status">
-        <span className={`${tableStyles.statusChip} ${attendant.status ? tableStyles.active : tableStyles.inactive}`}>
-          {attendant.status ? 'Ativo' : 'Inativo'}
+      <div data-label="Status" onClick={() => handleStatusToggle(attendant)} className={tableStyles.clickableStatus}>
+
+        {/* CORREÇÃO PRINCIPAL: Ler o status do objeto aninhado 'user' */}
+        <span className={`${tableStyles.statusChip} ${attendant.user.status ? tableStyles.active : tableStyles.inactive}`}>
+          {attendant.user.status ? 'Ativo' : 'Inativo'}
         </span>
+
       </div>
       <div data-label="Nome" className={tableStyles.cellName}>
         <span>{attendant.user.nome}</span>
       </div>
       <div data-label="Email">{attendant.user.email}</div>
-      <div data-label="Número">{attendant.numero}</div>
+      <div data-label="Número">{attendant.user.numero}</div>
 
       <div className={tableStyles.actionCell}>
         <button className={tableStyles.actionButtonEdit} onClick={() => handleEdit(attendant)} aria-label="Editar">
@@ -136,7 +148,6 @@ export default function AtendentesPage() {
       </div>
     </div>
   );
-
 
   return (
     <div className={PageStyles.container}>

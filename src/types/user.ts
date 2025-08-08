@@ -6,6 +6,7 @@ export interface User {
   id: string;
   email: string;
   nome: string;
+  numero: string;
   tipo_de_usuario: TipoUsuario;
   foto_perfil?: string;
   status: boolean;

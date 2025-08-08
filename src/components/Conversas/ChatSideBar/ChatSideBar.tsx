@@ -50,6 +50,7 @@ export default function ChatSidebar({
 }: ChatSidebarProps) {
   const [iaStatusFilter, setIaStatusFilter] = useState<'todos' | 'ativa' | 'desativada'>('todos');
   const { agents } = useAgents();
+  const [statusFilter, setStatusFilter] = useState<'Open' | 'Close'>('Open');
 
   const filteredChats = useMemo(() => {
     return chats.filter((chat) => {
@@ -58,12 +59,15 @@ export default function ChatSidebar({
 
       const matchesAgent = selectedAgentId ? chat.connection?.agente_id === selectedAgentId : true;
 
-      const matchesIAStatus =
-        iaStatusFilter === 'todos' ? true : iaStatusFilter === 'ativa' ? chat.ia_ativa === true : chat.ia_ativa === false;
+      const matchesIAStatus = iaStatusFilter === 'todos' ? true : iaStatusFilter === 'ativa' ? chat.ia_ativa === true : chat.ia_ativa === false;
 
-      return matchesSearch && matchesAgent && matchesIAStatus;
+      const matchesStatus = statusFilter === 'Open' ? chat.status === 'Open' : chat.status === 'Close';
+
+      return matchesSearch && matchesAgent && matchesIAStatus && matchesStatus;
     });
-  }, [chats, searchQuery, selectedAgentId, iaStatusFilter]);
+  }, [chats, searchQuery, selectedAgentId, iaStatusFilter, statusFilter]);
+
+  
 
   return (
     <motion.aside
@@ -130,9 +134,16 @@ export default function ChatSidebar({
       </div>
 
       <div>
-        <button className={styles.buttonAlterActiveChats}>
-          Ver Chats Fechados
-        </button>
+        <div className={styles.statusToggleContainer}>
+          <button
+            className={styles.buttonAlterActiveChats}
+            onClick={() =>
+              setStatusFilter((prev) => (prev === 'Open' ? 'Close' : 'Open'))
+            }
+          >
+            {statusFilter === 'Open' ? 'Ver Chats Fechados' : 'Ver Chats Abertos'}
+          </button>
+        </div>
       </div>
     </motion.aside>
   );

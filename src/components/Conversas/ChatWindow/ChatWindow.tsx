@@ -29,6 +29,8 @@ import EditIcon from '../assets/pencil.svg';
 import TrashIcon from '../assets/trash.svg';
 import InfoIcon from '../assets/info.svg'
 import BotIcon from '../assets/bot.svg'
+import XCircleIcon from '../assets/x-circle.svg'
+import PlayIcon from '../assets/play.svg'
 import styles from './ChatWindow.module.css';
 import Button from '../../../components/Gerais/Buttons/Button';
 import ToggleSwitch from '../../../components/Configuracoes/ToggleSwitch/ToggleSwitch';
@@ -44,7 +46,7 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
     const setChats = useSetRecoilState(chatsState);
     const { toggleIA } = useToggleIA();
     const { sendMessage } = useSendMessage();
-    const { refetch } = useChats(user?.id);
+    const { refetch, reOpenChat } = useChats(user?.id);
     const { agents } = useAgents();
     const [isDragging, setIsDragging] = useState(false);
     const [isDetailsOpen, setDetailsOpen] = useState(false);
@@ -60,6 +62,23 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
             setActiveChat(null);
         }
     };
+
+    const handleToggleChatStatus = async () => {
+        if (!activeChat) return;
+
+        const newStatus = activeChat.status === 'Open' ? 'Close' : 'Open';
+
+        const result = await reOpenChat(activeChat.id, newStatus);
+        if (result) {
+            const updatedChat = { ...activeChat, status: newStatus };
+            setActiveChat(updatedChat);
+            setChats((prev) =>
+                prev.map((chat) => (chat.id === updatedChat.id ? updatedChat : chat))
+            );
+        }
+    };
+
+
 
     const handleRenameChat = async () => {
         if (!activeChat || !newName.trim()) return;
@@ -114,6 +133,8 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
             </div>
         );
     }
+
+    console.log(activeChat.status)
 
     return (
         <motion.section
@@ -185,6 +206,31 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
                                                     </button>
                                                 )}
                                             </MenuItem>
+
+                                            <MenuItem>
+                                                {({ active }: { active: boolean }) => (
+                                                    <button
+                                                        onClick={handleToggleChatStatus}
+                                                        className={active ? styles.activeOption : ''}
+                                                    >
+                                                        <>
+                                                            {activeChat.status === 'Open' ? (
+                                                                <>
+                                                                    <XCircleIcon />
+                                                                    Fechar conversa.
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    <PlayIcon />
+                                                                    Reabrir conversa.
+                                                                </>
+                                                            )}
+                                                        </>
+                                                    </button>
+                                                )}
+                                            </MenuItem>
+
+
 
                                         </motion.div>
                                     </MenuItems>
@@ -278,8 +324,7 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
             </div>
 
             <div className={styles.inputAreaWrapper}>
-                <div className={styles.inputArea}>
-
+                {activeChat.status === 'Open' ? <div className={styles.inputArea}>
 
                     <div
                         className={`${styles.toggleIaButton}`}
@@ -289,8 +334,19 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
                         </div>
                         <ToggleSwitch variant={'secondary'} isOn={activeChat.ia_ativa ? true : false} onToggle={handleToggleIA} />
                     </div>
+
                     <ChatInput placeholder="Digite uma mensagem" onSend={handleSendMessage} />
+
                 </div>
+
+                    : (
+                        <div className={styles.chatClosedBanner}>
+                            <p>Este chat está fechado e não permite novas mensagens.</p>
+                            <button  onClick={handleToggleChatStatus} className={styles.buttonReOpen}> Esta Conversa Esta Fechada, clique para reabrir</button>
+
+                        </div>
+                    )}
+
             </div>
         </motion.section>
     );
