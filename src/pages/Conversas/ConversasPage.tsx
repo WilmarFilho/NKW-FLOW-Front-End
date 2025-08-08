@@ -72,37 +72,45 @@ export default function ConversasPage() {
 
 
           <div className={PageStyles.modalContent}>
-            <h2>Nova Conversa</h2>
-            <select
-              value={selectedConnectionId}
-              className={PageStyles.formSelect}
-              onChange={(e) => setSelectedConnectionId(e.target.value)}
-            >
-              <option value="">Selecione a conexão</option>
-              {connections.map((conn) => (
-                <option key={conn.id} value={conn.id}>
-                  {conn.nome || conn.id}
-                </option>
-              ))}
-            </select>
+           
+            <div className={PageStyles.formGroup}>
+               <label htmlFor="numero">Conexão para disparar mensagem</label>
+              <select
+                value={selectedConnectionId}
+                className={PageStyles.formSelect}
+                onChange={(e) => setSelectedConnectionId(e.target.value)}
+              >
+                <option value="">Selecione a conexão</option>
+                {connections.map((conn) => (
+                  <option key={conn.id} value={conn.id}>
+                    {conn.nome || conn.id}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className={PageStyles.formGroup}>
+              <label htmlFor="numero">Número de Telefone</label>
+              <input
+                type="text"
+                placeholder="Número com DDD (ex: 11999999999)"
+                value={newChatNumber}
+                className={PageStyles.formInput}
+                onChange={(e) => setNewChatNumber(e.target.value)}
+              />
 
-            <input
-              type="text"
-              placeholder="Número com DDD (ex: 11999999999)"
-              value={newChatNumber}
-              className={PageStyles.formInput}
-              onChange={(e) => setNewChatNumber(e.target.value)}
-            />
+            </div>
 
-            <textarea
-              placeholder="Primeira mensagem"
-              className={PageStyles.formInput}
-              value={newChatMessage}
-              onChange={(e) => setNewChatMessage(e.target.value)}
-            />
-
+            <div className={PageStyles.formGroup}>
+              <label htmlFor="numero">Primeira Mensagem</label>
+              <input
+                placeholder="Primeira mensagem"
+                className={PageStyles.formInput}
+                value={newChatMessage}
+                onChange={(e) => setNewChatMessage(e.target.value)}
+              />
+            </div>
             <div className={PageStyles.modalActions}>
-              
+
               <button
                 className={PageStyles.submitButton}
                 onClick={() =>
