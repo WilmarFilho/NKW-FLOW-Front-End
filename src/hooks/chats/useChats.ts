@@ -6,7 +6,8 @@ import type { Chat } from '../../types/chats';
 
 export default function useChats(userId: string | null | undefined) {
   const [chats, setChats] = useRecoilState(chatsState);
-  const { get, del, put } = useApi<Chat[]>();
+  const { get, del, put } = useApi();
+
 
   const fetchChats = useCallback(async () => {
     if (!userId) {
@@ -14,14 +15,10 @@ export default function useChats(userId: string | null | undefined) {
       return;
     }
 
-    const data = await get(`/chats/connections/chats/${userId}`);
-
-    if (data) {
-      setChats(data);
-    } else {
-      setChats([]);
-    }
-  }, [userId, get, setChats]);
+    const data = await get<Chat[]>(`/chats/connections/chats/${userId}`);
+    if (data) setChats(data);
+    else setChats([]);
+  }, [userId, get]);
 
   const deleteChat = async (chatId: string) => {
     const result = await del(`/chats/${chatId}`);
@@ -41,9 +38,22 @@ export default function useChats(userId: string | null | undefined) {
     return result;
   };
 
+  const fectchImageProfile = async (chatId: string) => {
+    const updatedChat = await put<Chat>(`/chats/fetchImage/${chatId}`);
+    if (updatedChat) {
+      setChats((prev) =>
+        prev.map((chat) => (chat.id === chatId ? updatedChat : chat))
+      );
+    }
+    return updatedChat;
+  };
+
   useEffect(() => {
     fetchChats();
   }, [fetchChats]);
 
-  return { chats, refetch: fetchChats,  deleteChat, renameChat  };
+  return { chats, refetch: fetchChats, deleteChat, renameChat, fectchImageProfile };
 }
+
+
+

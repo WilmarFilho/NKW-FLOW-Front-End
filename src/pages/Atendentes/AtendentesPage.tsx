@@ -127,10 +127,10 @@ export default function AtendentesPage() {
       <div data-label="Número">{attendant.numero}</div>
 
       <div className={tableStyles.actionCell}>
-        <button className={tableStyles.actionButton} onClick={() => handleEdit(attendant)} aria-label="Editar">
+        <button className={tableStyles.actionButtonEdit} onClick={() => handleEdit(attendant)} aria-label="Editar">
           <EditIcon />
         </button>
-        <button className={tableStyles.actionButton} onClick={() => handleDelete(attendant.id)} aria-label="Deletar">
+        <button className={tableStyles.actionButtonDelete} onClick={() => handleDelete(attendant.id)} aria-label="Deletar">
           <DeleteIcon />
         </button>
       </div>

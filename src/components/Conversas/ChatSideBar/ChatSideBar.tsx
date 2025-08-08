@@ -119,6 +119,7 @@ export default function ChatSidebar({
         {filteredChats.map((chat) => (
           <ChatListItem
             key={chat.id}
+            chatId={chat.id}
             isActive={activeChat?.id === chat.id}
             name={chat.contato_nome}
             message={chat.ultima_mensagem}

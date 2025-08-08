@@ -53,9 +53,9 @@
   gap: 10px;
   justify-content: flex-start;
 }
-.actionButton {
-  background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+.actionButtonEdit, .actionButtonDelete {
+  background-color: var(--color-background-row-hover);
+  border: none;
   border-radius: 8px;
   outline: none;
   padding: 8px;
@@ -65,22 +65,45 @@
   transition: background-color 0.2s;
   cursor: pointer;
 }
-.actionButton svg {
+
+.actionButtonDelete svg {
   width: 28px;
   height: 28px;
   fill: #a0a0a0;
   transition: fill 0.2s;
 }
-.actionButton:hover {
-  background-color: var(--color-primary);
-}
-.actionButton:hover svg {
-  fill: #fff;
-}
-.actionButton:focus-visible {
-  outline: 2px solid var(--color-secundaria);
+.actionButtonEdit svg {
+  width: 28px;
+  height: 28px;
+  fill: #a0a0a0;
+  transition: fill 0.2s;
 }
 
+
+
+.actionButtonEdit:hover {
+  background-color: var( --color-background-tags-hover);
+}
+.actionButtonDelete:hover {
+  background-color: var(--color-background-red);
+}
+
+
+.actionButtonEdit:hover svg, .actionButtonDelete:hover svg {
+  fill: #fff;
+}
+.actionButtonEdit:focus-visible, .actionButtonDelete:focus-visible {
+  outline: 2px solid var(--color-primary);
+}
+
+
+
+
+
+
+.clickableStatus {
+  cursor: pointer;
+}
 
 
 

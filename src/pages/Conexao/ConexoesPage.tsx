@@ -30,7 +30,14 @@ export default function ConexoesPage() {
     }
   };
 
-  const { connections, removeConnection } = useConnections();
+  const { connections, removeConnection, updateConnectionStatus } = useConnections();
+
+  const handleStatusToggle = async (connection: Connection) => {
+    // Adicione um confirm para segurança, se desejar
+    if (window.confirm(`Deseja alterar o status da conexão "${connection.nome.split('_')[0]}" para "${connection.status ? 'Inativo' : 'Ativo'}"?`)) {
+      await updateConnectionStatus(connection).catch(err => alert('Falha ao alterar o status: ' + err.message));
+    }
+  };
 
   const [activeFilter, setActiveFilter] = useState<'todos' | 'ativo' | 'inativo'>('todos');
   const [sortField, setSortField] = useState<keyof Connection | 'nome' | null>(null);
@@ -94,23 +101,26 @@ export default function ConexoesPage() {
     <div
       key={conn.id}
       className={tableStyles.tableRow}
-      style={{ gridTemplateColumns: '2fr 2fr 2fr 1fr 1fr' }}
+      style={{ gridTemplateColumns: '1fr 2fr 2fr 2fr 1fr' }}
     >
-      <div data-label="Nome">{conn.nome.split('_')[0]}</div>
-      <div data-label="Número">{conn.numero || 'N/A'}</div>
-      <div data-label="Agente">
-        <NavLink to="/agentes">{conn.agente?.tipo_de_agente || 'Nenhum'}</NavLink>
-      </div>
-      <div data-label="Status">
+
+      <div data-label="Status" onClick={() => handleStatusToggle(conn)} className={tableStyles.clickableStatus}>
         <span className={`${tableStyles.statusChip} ${conn.status ? tableStyles.active : tableStyles.inactive}`}>
           {conn.status ? 'Ativo' : 'Inativo'}
         </span>
       </div>
+
+      <div data-label="Nome" onClick={() => handleEdit(conn)}>{conn.nome.split('_')[0]}</div>
+      <div data-label="Número" onClick={() => handleEdit(conn)}>{conn.numero || 'N/A'}</div>
+      <div data-label="Agente" >
+        <NavLink to="/agentes">{conn.agente?.tipo_de_agente || 'Nenhum'}</NavLink>
+      </div>
+
       <div className={tableStyles.actionCell}>
-        <button className={tableStyles.actionButton} onClick={() => handleEdit(conn)} aria-label="Editar">
+        <button className={tableStyles.actionButtonEdit} onClick={() => handleEdit(conn)} aria-label="Editar">
           <EditIcon />
         </button>
-        <button className={tableStyles.actionButton} onClick={() => handleDelete(conn.id)} aria-label="Deletar">
+        <button className={tableStyles.actionButtonDelete} onClick={() => handleDelete(conn.id)} aria-label="Deletar">
           <DeleteIcon />
         </button>
       </div>
@@ -135,10 +145,10 @@ export default function ConexoesPage() {
       <div className={PageStyles.containerContent} >
 
         <GenericTable<Connection>
-          columns={['Nome', 'Número', 'Agente', 'Status', '']}
+          columns={['Status', 'Nome', 'Número', 'Agente', '']}
           data={sortedConnections}
           renderRow={renderConnectionRow}
-          gridTemplateColumns="2fr 2fr 2fr 1fr 1fr"
+          gridTemplateColumns="1fr 2fr 2fr 2fr 1fr"
           onSortClick={(col) => {
             const fieldMap: Record<string, 'nome'> = {
               'Nome': 'nome'
@@ -182,3 +192,7 @@ export default function ConexoesPage() {
     </div>
   );
 }
+
+
+
+
