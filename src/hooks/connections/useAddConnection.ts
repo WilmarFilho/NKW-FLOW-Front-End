@@ -25,7 +25,6 @@ export const useAddConnection = (onClose: () => void, initialData: Partial<Conne
   const [qrCode, setQrCode] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Utiliza o loading e error do hook useApi
   const { post, put } = useApi();
   const { fetchConnections } = useConnections();
 

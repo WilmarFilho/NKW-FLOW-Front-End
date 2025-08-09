@@ -7,14 +7,13 @@ import { useApi } from '../utils/useApi';
 // Types
 import type { HelpChat } from '../../types/helpChat';
 
-
 interface HelpChatResponse {
   reply: string;
 }
 
 export function useSendHelpMessage() {
 
-  const { post } = useApi<HelpChatResponse>();
+  const { post } = useApi();
   const setMessages = useSetRecoilState(helpChatState);
 
   const sendMessage = async (text: string) => {
@@ -24,7 +23,7 @@ export function useSendHelpMessage() {
     };
     setMessages(prev => [...prev, userMessage]);
 
-    const data = await post('/api/help/chat', { message: text });
+    const data = await post<HelpChatResponse>('/api/help/chat', { message: text });
 
     if (data && data.reply) {
       const systemMessage: HelpChat = {

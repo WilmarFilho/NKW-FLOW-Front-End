@@ -8,7 +8,7 @@ import type { Chat } from '../../types/chats';
 
 const useToggleIA = () => {
 
-  const { put } = useApi<Chat>();
+  const { put } = useApi();
 
   const toggleIA = useCallback(async (chat: Chat, onSuccess: (updatedChat: Chat) => void) => {
     const payload = {
@@ -16,7 +16,7 @@ const useToggleIA = () => {
       ia_ativa: !chat.ia_ativa,
     };
 
-    const responseData = await put(`/chats/${chat.id}`, payload);
+    const responseData = await put<Chat>(`/chats/${chat.id}`, payload);
 
     if (responseData) {
       onSuccess(responseData); 
@@ -27,7 +27,6 @@ const useToggleIA = () => {
 
   }, [put]);
  
-
   return { toggleIA };
 };
 

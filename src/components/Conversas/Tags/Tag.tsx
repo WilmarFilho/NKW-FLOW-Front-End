@@ -1,4 +1,5 @@
 // CSS Modules
+import React from 'react';
 import styles from './Tag.module.css';
 
 interface TagProps {
@@ -7,7 +8,7 @@ interface TagProps {
   onClick?: () => void;
 }
 
-export default function Tag({ label, active = false, onClick }: TagProps) {
+function Tag({ label, active = false, onClick }: TagProps) {
 
   const tagClasses = `${styles.tag} ${active ? styles.active : ''}`;
 
@@ -17,3 +18,5 @@ export default function Tag({ label, active = false, onClick }: TagProps) {
     </button>
   );
 }
+
+export default React.memo(Tag);

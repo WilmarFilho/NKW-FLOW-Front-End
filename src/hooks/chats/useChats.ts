@@ -1,15 +1,19 @@
+// Libs
 import { useEffect, useCallback } from 'react';
+// Recoil
 import { useRecoilState } from 'recoil';
 import { chatsState } from '../../state/atom';
+// Hooks
 import { useApi } from '../utils/useApi';
+// Types
 import type { Chat } from '../../types/chats';
 
 export default function useChats(userId: string | null | undefined) {
   const [chats, setChats] = useRecoilState(chatsState);
   const { get, del, put } = useApi();
 
-
   const fetchChats = useCallback(async () => {
+    
     if (!userId) {
       setChats([]);
       return;
@@ -59,6 +63,3 @@ export default function useChats(userId: string | null | undefined) {
 
   return { chats, refetch: fetchChats, deleteChat, renameChat, fectchImageProfile, reOpenChat };
 }
-
-
-

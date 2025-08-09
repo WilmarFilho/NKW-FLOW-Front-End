@@ -10,23 +10,20 @@ import { useApi } from '../utils/useApi';
 
 export const useAgents = () => {
   const [agents, setAgents] = useRecoilState(agentsState);
-  const { get } = useApi<Agent[]>();
+  const { get } = useApi();
 
   const fetchAgents = async () => {
-    const fetchedData = await get('/agents');
+    const fetchedData = await get<Agent[]>('/agents');
     if (fetchedData) {
       setAgents(fetchedData);
     }
   };
 
-  // Efeito para carregar agents na montagem do componente
   useEffect(() => {
     fetchAgents();
   }, [get, setAgents]);
-
 
   return {
     agents,
   };
 };
-

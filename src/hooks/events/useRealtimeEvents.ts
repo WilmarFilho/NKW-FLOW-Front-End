@@ -1,9 +1,10 @@
+// Libs
 import { useEffect } from 'react';
+// Recoil
 import { useSetRecoilState } from 'recoil';
-import { connectionsState, chatsState, messagesState } from '../../state/atom';
+import { connectionsState, chatsState, messagesState, addConnectionModalState } from '../../state/atom';
+// Config
 import { apiConfig } from '../../config/api';
-import { addConnectionModalState } from '../../state/atom';
-
 
 export const useRealtimeEvents = (userId: string | undefined) => {
   const setConnections = useSetRecoilState(connectionsState);
@@ -15,18 +16,13 @@ export const useRealtimeEvents = (userId: string | undefined) => {
     if (!userId) return;
 
     const eventSource = new EventSource(`${apiConfig.node}/events/${userId}`);
-    console.log(`[SSE] Conectado ao /events/${userId}`);
 
     eventSource.onmessage = (event) => {
 
-
-
       try {
         const payload = JSON.parse(event.data);
-        console.log(payload)
+  
         const { event: tipo, connection, chat, message, state } = payload;
-
-        console.log(payload, chat)
 
         if (tipo === 'connection.update') {
           if (state === 'close') {
@@ -44,7 +40,7 @@ export const useRealtimeEvents = (userId: string | undefined) => {
         }
 
         if (tipo === 'messages.upsert') {
-          console.log('📥 Nova mensagem recebida');
+          console.log('📥 Nova mensagem recebida : messages.upsert');
 
           if (message) {
             const chatId = message.chat_id;
@@ -89,9 +85,8 @@ export const useRealtimeEvents = (userId: string | undefined) => {
           }
         }
 
-
         if (tipo === 'send.message') {
-          console.log('📤 Mensagem enviada');
+          console.log('📤 Mensagem enviada: send message');
 
           if (message) {
             const chatId = message.chat_id;
@@ -130,8 +125,6 @@ export const useRealtimeEvents = (userId: string | undefined) => {
           }
         }
 
-
-
       } catch (err) {
         console.error('[SSE] Erro ao processar evento:', err);
       }
@@ -144,7 +137,6 @@ export const useRealtimeEvents = (userId: string | undefined) => {
 
     return () => {
       eventSource.close();
-      console.log('[SSE] Conexão encerrada');
     };
   }, [userId]);
 };

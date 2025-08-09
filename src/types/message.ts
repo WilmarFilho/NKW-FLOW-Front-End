@@ -7,4 +7,7 @@ export interface Message {
   base64: string;
   transcricao: string;
   criado_em: string;
+  file_name: string;
+  quote_id: string;
+  user_id: string;
 }

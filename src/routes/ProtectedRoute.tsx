@@ -13,3 +13,5 @@ export const PublicRoute = ({ children }: { children: JSX.Element }) => {
 
   return isAuthenticated ? <Navigate to="/conversas" replace /> : children;
 };
+
+

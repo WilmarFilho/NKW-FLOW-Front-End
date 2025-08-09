@@ -1,5 +1,4 @@
-// Caminho sugerido: src/hooks/chats/useAudioRecorder.ts
-
+// Libs
 import { useState, useRef, useCallback } from 'react';
 
 type AudioRecorderHook = {

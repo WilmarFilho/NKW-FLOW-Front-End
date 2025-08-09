@@ -1,4 +1,4 @@
-import { useEffect, useRef, useMemo, useState } from 'react';
+import { useEffect, useRef, useMemo, useState, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Menu, MenuItem, MenuItems, MenuButton } from '@headlessui/react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
@@ -21,6 +21,7 @@ import useToggleIA from '../../../hooks/chats/useToggleIA';
 import useSendMessage from '../../../hooks/chats/useSendMessage';
 import useChats from '../../../hooks/chats/useChats';
 import { useAgents } from '../../../hooks/agents/useAgents';
+import { useDragAndDropFile } from '../../../hooks/chats/useDragAndDropFile';
 
 // Assets & CSS
 import defaultAvatar from '../assets/default.webp';
@@ -48,12 +49,26 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
     const { sendMessage } = useSendMessage();
     const { refetch, reOpenChat } = useChats(user?.id);
     const { agents } = useAgents();
-    const [isDragging, setIsDragging] = useState(false);
+
     const [isDetailsOpen, setDetailsOpen] = useState(false);
 
     const [isRenameOpen, setRenameOpen] = useState(false);
     const [newName, setNewName] = useState('');
     const { deleteChat, renameChat } = useChats(user?.id);
+
+    const handleFileDrop = useCallback((file: File) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+            const base64 = (reader.result as string).split(',')[1];
+            const messageText = file.type.startsWith('image/') ? '' : file.name;
+            handleSendMessage(messageText, file.type, base64);
+        };
+        reader.readAsDataURL(file);
+    }, []);
+
+    const { isDragging, handleDragOver, handleDragLeave, handleDrop } = useDragAndDropFile({
+        onDropFile: handleFileDrop,
+    });
 
     const handleDeleteChat = async () => {
         if (window.confirm('Tem certeza?')) {
@@ -77,8 +92,6 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
             );
         }
     };
-
-
 
     const handleRenameChat = async () => {
         if (!activeChat || !newName.trim()) return;
@@ -287,30 +300,9 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
 
 
             <div className={styles.messageList}
-                onDragOver={(e) => {
-                    e.preventDefault();
-                    setIsDragging(true);
-                }}
-                onDragLeave={(e) => {
-                    e.preventDefault();
-                    setIsDragging(false);
-                }}
-                onDrop={(e) => {
-                    e.preventDefault();
-                    setIsDragging(false);
-                    const file = e.dataTransfer.files[0];
-                    // 2. Validação simples
-                    if (!file) return;
-
-                    const reader = new FileReader();
-                    reader.onload = () => {
-                        const base64 = (reader.result as string).split(',')[1];
-                        // 3. Lógica para definir o texto da mensagem
-                        const messageText = file.type.startsWith('image/') ? '' : file.name;
-                        handleSendMessage(messageText, file.type, base64);
-                    };
-                    reader.readAsDataURL(file);
-                }}>
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}>
                 {messages.map((msg) => (
                     <MessageBubble
                         key={msg.id}
@@ -342,7 +334,7 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
                     : (
                         <div className={styles.chatClosedBanner}>
                             <p>Este chat está fechado e não permite novas mensagens.</p>
-                            <button  onClick={handleToggleChatStatus} className={styles.buttonReOpen}> Esta Conversa Esta Fechada, clique para reabrir</button>
+                            <button onClick={handleToggleChatStatus} className={styles.buttonReOpen}> Esta Conversa Esta Fechada, clique para reabrir</button>
 
                         </div>
                     )}

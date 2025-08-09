@@ -3,12 +3,15 @@ export type ModoTela = 'Black' | 'White';
 export type ModoSidebar = 'Full' | 'Minimal';
 
 export interface User {
-  id: string;
+  cidade: string;
+  endereco: string;
+  numero: string;
+  foto_perfil?: string;
   email: string;
   nome: string;
-  numero: string;
+  senha_hash: string
   tipo_de_usuario: TipoUsuario;
-  foto_perfil?: string;
+  id: string;
   status: boolean;
   modo_tela: ModoTela;
   modo_side_bar: ModoSidebar;
@@ -18,4 +21,7 @@ export interface User {
   notificacao_necessidade_de_entrar_conversa: boolean;
   notificacao_novo_chat: boolean;
   criado_em: string;
+  ref_code: string;
+  referrals_count: number;
+  discount_percent: number;
 }

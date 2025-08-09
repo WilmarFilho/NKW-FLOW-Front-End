@@ -12,13 +12,14 @@ import { useApi } from '../utils/useApi';
 export function useUser() {
   const [user, setUser] = useRecoilState(userState);
   const [token] = useRecoilState(authTokenState);
-  const { get, put } = useApi<User>();
-  const { post } = useApi<Upload>();
+  const { get, put } = useApi();
+  const { post } = useApi();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const userId = localStorage.getItem('userId');
 
+  // Carrega o usuário
   const fetchUser = async () => {
     if (!token || !userId) return;
 
@@ -26,7 +27,7 @@ export function useUser() {
     setError(null);
 
     try {
-      const fetchedUser = await get(`/users/${userId}`);
+      const fetchedUser = await get<User>(`/users/${userId}`);
       if (fetchedUser) {
         setUser(fetchedUser);
       }
@@ -38,11 +39,12 @@ export function useUser() {
     }
   };
 
+  // Atualiza o usuário
   const updateUser = async (updates: Partial<User>): Promise<boolean> => {
     if (!token || !userId) return false;
 
     try {
-      await put(`/users/${userId}`, updates);
+      await put<User>(`/users/${userId}`, updates);
       await fetchUser();
       return true;
     } catch (err) {
@@ -51,6 +53,7 @@ export function useUser() {
     }
   };
 
+  // Atualiza foto do usuário
   const uploadProfileImage = async (file: File): Promise<string | null> => {
     if (!token) return null;
 
@@ -61,7 +64,7 @@ export function useUser() {
     setError(null);
 
     try {
-      const responseURL = await post(`/upload/user/${userId}`, formData);
+      const responseURL = await post<Upload>(`/upload/user/${userId}`, formData);
 
       if(!responseURL) return null
 

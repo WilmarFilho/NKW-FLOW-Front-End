@@ -1,7 +1,5 @@
 // Utils
 import { useApi } from '../utils/useApi';
-// Types
-import type { Message } from '../../types/message';
 
 interface SendMessagePayload {
   chat_id?: string;
@@ -15,8 +13,6 @@ interface SendMessagePayload {
 
 export default function useSendMessage() {
   const { post } = useApi();
-
- 
 
   const sendMessage = async (payload: SendMessagePayload) => {
      console.log(payload)
@@ -32,11 +28,3 @@ export default function useSendMessage() {
 
   return { sendMessage };
 }
-
-
-
-
-
-
-
-

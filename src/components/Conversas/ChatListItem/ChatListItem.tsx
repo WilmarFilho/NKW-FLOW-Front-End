@@ -8,6 +8,7 @@ import { useState } from 'react';
 import useChats from '../../../hooks/chats/useChats';
 import { userState } from '../../../state/atom';
 import { useRecoilState } from 'recoil';
+import React from 'react';
 
 interface ChatListItemProps {
   name: string;
@@ -23,7 +24,7 @@ const itemVariants = {
   show: { opacity: 1, y: 0 },
 };
 
-export default function ChatListItem({
+function ChatListItem({
   name,
   message,
   avatar,
@@ -78,3 +79,5 @@ export default function ChatListItem({
     </motion.button>
   );
 }
+
+export default React.memo(ChatListItem);
