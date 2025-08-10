@@ -20,6 +20,7 @@ export default function Layout() {
 
   useUser();
 
+
   const user = useRecoilValue(userState);
 
   const modoTela = user?.modo_tela || 'dark';

@@ -19,7 +19,7 @@ export const useConnections = () => {
     } else {
       setConnections([]);
     }
-  }, [get, setConnections]);
+  }, [get]);
 
   useEffect(() => {
     fetchConnections();

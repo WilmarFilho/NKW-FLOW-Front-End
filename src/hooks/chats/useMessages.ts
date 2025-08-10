@@ -4,14 +4,14 @@ import { useRecoilState } from 'recoil';
 // Atom
 import { messagesState } from '../../state/atom';
 // Utils
-import { useApi } from '../utils/useApi'; 
+import { useApi } from '../utils/useApi';
 // Types
 import type { Message } from '../../types/message';
 
 export default function useMessages(chatId: string | null) {
- 
+
   const [allMessages, setMessages] = useRecoilState(messagesState);
-  
+
   const { get } = useApi();
 
   useEffect(() => {
@@ -19,18 +19,13 @@ export default function useMessages(chatId: string | null) {
 
     const fetchMessages = async () => {
       const data = await get<Message[]>(`/messages/chat/${chatId}`);
-      
-      if (data) {
-        setMessages(prevMessages => {
-          const existingIds = new Set(prevMessages.map(p => p.id));
-          const newMessages = data.filter(m => !existingIds.has(m.id));
-          return [...prevMessages, ...newMessages];
-        });
-      }
+      if (!data) return;
+      setMessages(data);
     };
 
     fetchMessages();
   }, [chatId, get, setMessages]);
+
 
   const filteredMessages = useMemo(() => {
     return allMessages.filter(msg => msg.chat_id === chatId);

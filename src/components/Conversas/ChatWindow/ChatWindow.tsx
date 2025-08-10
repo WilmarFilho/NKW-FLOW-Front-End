@@ -17,7 +17,7 @@ import { Chat } from '../../../types/chats';
 import { Message } from '../../../types/message';
 // Hooks
 import useSendMessage from '../../../hooks/chats/useSendMessage';
-import useChats from '../../../hooks/chats/useChats';
+import useChatActions  from '../../../hooks/chats/useChatActions';
 import { useDragAndDropFile } from '../../../hooks/chats/useDragAndDropFile';
 // Assets
 import defaultAvatar from '../assets/default.webp';
@@ -44,7 +44,7 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
 
     // Custom hooks
     const { sendMessage } = useSendMessage();
-    const { refetch, reOpenChat, deleteChat, renameChat, toggleIA } = useChats(user?.id);
+    const { reOpenChat, deleteChat, renameChat, toggleIA } = useChatActions();
 
     // Modals
     const [isDetailsOpen, setDetailsOpen] = useState(false);
@@ -108,9 +108,8 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
         if (updatedIaStatus !== null) {
             const updatedChat = { ...activeChat, ia_ativa: updatedIaStatus };
             setActiveChat(updatedChat);
-            refetch();
         }
-    }, [activeChat, toggleIA, setActiveChat, refetch]);
+    }, [activeChat, toggleIA, setActiveChat]);
 
     const handleDeleteChat = useCallback(async () => {
         if (!activeChat) return;
@@ -344,3 +343,4 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
         </motion.section>
     );
 }
+

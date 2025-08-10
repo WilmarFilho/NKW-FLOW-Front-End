@@ -5,10 +5,9 @@ import styles from './ChatListItem.module.css';
 // Assets
 import defaultAvatar from '../assets/default.webp';
 import { useState } from 'react';
-import useChats from '../../../hooks/chats/useChats';
-import { userState } from '../../../state/atom';
-import { useRecoilState } from 'recoil';
 import React from 'react';
+// Types
+import { Chat } from '../../../types/chats';
 
 interface ChatListItemProps {
   name: string;
@@ -17,6 +16,7 @@ interface ChatListItemProps {
   chatId: string;
   isActive: boolean;
   onClick: () => void;
+  fectchImageProfile: (chatId: string) => Promise<Chat | null>;
 }
 
 const itemVariants = {
@@ -31,26 +31,25 @@ function ChatListItem({
   isActive,
   onClick,
   chatId,
+  fectchImageProfile,
 }: ChatListItemProps) {
 
   const [avatarUrl, setAvatarUrl] = useState(avatar || defaultAvatar);
   const [hasError, setHasError] = useState(false);
-  const [user] = useRecoilState(userState);
-
-  const { fectchImageProfile } = useChats(user?.id);
+  
 
   const handleImageError = async () => {
-  if (!hasError) {
-    setHasError(true);
+    if (!hasError) {
+      setHasError(true);
 
-    const data = await fectchImageProfile(chatId);
-    if (data?.foto_perfil) {
-      setAvatarUrl(data.foto_perfil);
-    } else {
-      setAvatarUrl(defaultAvatar);
+      const data = await fectchImageProfile(chatId);
+      if (data?.foto_perfil) {
+        setAvatarUrl(data.foto_perfil);
+      } else {
+        setAvatarUrl(defaultAvatar);
+      }
     }
-  }
-};
+  };
 
   const nameInMessageRegex = /^\*.*?\*\s?/;
   const cleanedMessage = message

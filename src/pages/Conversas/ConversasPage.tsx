@@ -17,6 +17,7 @@ export default function ConversasPage() {
         activeChat={state.activeChat}
         setActiveChat={state.setActiveChat}
         setIsAddChatOpen={state.setIsAddChatOpen}
+        fectchImageProfile={state.fectchImageProfile}
       />
 
       <ChatWindow
@@ -88,3 +89,5 @@ export default function ConversasPage() {
     </div>
   );
 }
+
+

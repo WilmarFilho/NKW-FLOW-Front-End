@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import { apiConfig } from '../../config/api';
 
@@ -12,6 +12,7 @@ export const useApi = () => {
     requestData?: unknown,
     config?: AxiosRequestConfig
   ): Promise<T | null> => {
+    console.log(`[useApi] Chamando ${method.toUpperCase()} ${path}`);
     setLoading(true);
     setError(null);
     try {
@@ -66,12 +67,12 @@ export const useApi = () => {
     return executeRequest<T>('delete', path, undefined, config);
   }, [executeRequest]);
 
-  return {
+  return useMemo(() => ({
     loading,
     error,
     get,
     post,
     put,
     del,
-  };
+  }), [loading, error, get, post, put, del]);
 };

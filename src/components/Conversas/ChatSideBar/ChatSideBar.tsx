@@ -24,6 +24,7 @@ interface ChatSidebarProps {
   activeChat: Chat | null;
   setActiveChat: (chat: Chat) => void;
   setIsAddChatOpen: (value: boolean) => void;
+  fectchImageProfile: (chatId: string) => Promise<Chat | null>;
 }
 
 const containerVariants = {
@@ -68,6 +69,7 @@ function ChatSidebar({
   activeChat,
   setActiveChat,
   setIsAddChatOpen,
+  fectchImageProfile,
 }: ChatSidebarProps) {
   // Props de Filtro
   const [iaStatusFilter, setIaStatusFilter] = useState<'todos' | 'ativa' | 'desativada'>('todos');
@@ -148,6 +150,7 @@ function ChatSidebar({
             name={chat.contato_nome}
             message={chat.ultima_mensagem}
             avatar={chat.foto_perfil}
+            fectchImageProfile={fectchImageProfile}
             onClick={() => setActiveChat(chat)}
           />
         ))}
