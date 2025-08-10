@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { ToastContainer } from 'react-toastify';
+import { useEffect } from 'react';
 
 // Components
 import SidebarWrapper from './Sidebars/SidebarWrapper';
@@ -18,8 +19,11 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export default function Layout() {
 
-  useUser();
+  const { fetchUser } = useUser();
 
+  useEffect(() => {
+    fetchUser();
+  }, [fetchUser]);
 
   const user = useRecoilValue(userState);
 

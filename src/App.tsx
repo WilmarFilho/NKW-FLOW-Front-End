@@ -1,8 +1,6 @@
 // Libs
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
-// Recoil
-import { RecoilRoot } from 'recoil';
 // Components
 import Layout from './components/Layout/Layout';
 // Routes
@@ -31,7 +29,7 @@ function App() {
           path="/login"
           element={
             <PublicRoute>
-              <Suspense fallback={<div>Carregando...</div>}>
+              <Suspense fallback={''}>
                 <LoginPage />
               </Suspense>
             </PublicRoute>
@@ -52,7 +50,7 @@ function App() {
           <Route
             path="dashboard"
             element={
-              <Suspense fallback={<div>Carregando...</div>}>
+             <Suspense fallback={''}>
                 <DashboardPage />
               </Suspense>
             }
@@ -60,7 +58,7 @@ function App() {
           <Route
             path="conversas"
             element={
-              <Suspense fallback={<div>Carregando...</div>}>
+              <Suspense fallback={''}>
                 <ConversasPage />
               </Suspense>
             }
@@ -68,7 +66,7 @@ function App() {
           <Route
             path="atendentes"
             element={
-              <Suspense fallback={<div>Carregando...</div>}>
+              <Suspense fallback={''}>
                 <AtendentesPage />
               </Suspense>
             }
@@ -76,7 +74,7 @@ function App() {
           <Route
             path="agentes"
             element={
-              <Suspense fallback={<div>Carregando...</div>}>
+             <Suspense fallback={''}>
                 <AgentesPage />
               </Suspense>
             }
@@ -84,7 +82,7 @@ function App() {
           <Route
             path="conexoes"
             element={
-              <Suspense fallback={<div>Carregando...</div>}>
+             <Suspense fallback={''}>
                 <ConexoesPage />
               </Suspense>
             }
@@ -92,7 +90,7 @@ function App() {
           <Route
             path="configuracoes"
             element={
-              <Suspense fallback={<div>Carregando...</div>}>
+              <Suspense fallback={''}>
                 <ConfiguracoesPage />
               </Suspense>
             }
@@ -100,7 +98,7 @@ function App() {
           <Route
             path="cashback"
             element={
-              <Suspense fallback={<div>Carregando...</div>}>
+              <Suspense fallback={''}>
                 <CashbackPage />
               </Suspense>
             }
@@ -108,7 +106,7 @@ function App() {
           <Route
             path="ajuda"
             element={
-              <Suspense fallback={<div>Carregando...</div>}>
+              <Suspense fallback={''}>
                 <AjudaPage />
               </Suspense>
             }

@@ -17,7 +17,7 @@ import { Chat } from '../../../types/chats';
 import { Message } from '../../../types/message';
 // Hooks
 import useSendMessage from '../../../hooks/chats/useSendMessage';
-import useChatActions  from '../../../hooks/chats/useChatActions';
+import useChatActions from '../../../hooks/chats/useChatActions';
 import { useDragAndDropFile } from '../../../hooks/chats/useDragAndDropFile';
 // Assets
 import defaultAvatar from '../assets/default.webp';
@@ -108,6 +108,12 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
         if (updatedIaStatus !== null) {
             const updatedChat = { ...activeChat, ia_ativa: updatedIaStatus };
             setActiveChat(updatedChat);
+
+            setChats(prev =>
+                prev.map(chat =>
+                    chat.id === updatedChat.id ? updatedChat : chat
+                )
+            );
         }
     }, [activeChat, toggleIA, setActiveChat]);
 

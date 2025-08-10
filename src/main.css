@@ -105,6 +105,18 @@ body.modo-dark {
 
 * {
   font-family: var(--font-secundaria);
+   -webkit-tap-highlight-color: transparent;
+}
+
+button, a {
+  -webkit-tap-highlight-color: transparent; /* Remove o azul no Chrome/Safari mobile */
+  outline: none; /* Remove a borda de foco padrão */
+}
+
+button:focus,
+button:active {
+  outline: none;
+  box-shadow: none; /* Remove sombras no clique */
 }
 
 /* Remove margens e preenchimentos padrão de todos os elementos principais */

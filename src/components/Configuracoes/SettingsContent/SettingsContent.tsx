@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 
 // Hooks
-import { useUser } from '../../../hooks/auth/useUser';
+import { userState } from '../../../state/atom';
+import { useUserAction } from '../../../hooks/auth/useUserAction';
 
 // CSS Modules
 import styles from './SettingsContent.module.css';
@@ -13,18 +14,17 @@ import styles from './SettingsContent.module.css';
 import ToggleSwitch from '../ToggleSwitch/ToggleSwitch';
 import OptionSelector from '../OptionSelector/OptionSelector';
 
-// Assets
-import EditIcon from '../assets/pencil.svg'
-
 // Types
 import { User } from '../../../types/user';
+import { useRecoilValue } from 'recoil';
 
 type Props = {
   tabIndex: number;
 };
 
 export default function SettingsContent({ tabIndex }: Props) {
-  const { user, updateUser, uploadProfileImage, loading } = useUser();
+  const user = useRecoilValue(userState);
+  const { updateUser, uploadProfileImage, loading } = useUserAction();
 
   // Nomes de estado mais descritivos
   const [showNameInMessages, setShowNameInMessages] = useState(false);
@@ -47,6 +47,7 @@ export default function SettingsContent({ tabIndex }: Props) {
 
   const handleSettingsUpdate = async (updatedFields: Partial<User>) => {
     if (!user) return;
+
     const success = await updateUser(updatedFields);
     if (success) {
       toast.success('Alteração salva com sucesso!');
@@ -260,3 +261,5 @@ export default function SettingsContent({ tabIndex }: Props) {
     </>
   );
 }
+
+
