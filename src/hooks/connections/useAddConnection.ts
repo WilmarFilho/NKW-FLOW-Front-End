@@ -7,13 +7,18 @@ import { useConnections } from './useConnections';
 // Types
 import { Connection } from '../../types/connection';
 // Atom
-import { userState } from '../../state/atom';
+import { connectionsState, userState } from '../../state/atom';
 
 interface AddConnectionResponse {
   qr_code: string;
 }
 
-export const useAddConnection = (onClose: () => void, initialData: Partial<Connection> | undefined | null) => {
+export const useAddConnection = (
+  onClose: () => void,
+  fetchConnections: () => Promise<void>, // Adicione este parâmetro
+  initialData: Partial<Connection> | undefined | null
+) => {
+  const [connections, setConnections] = useRecoilState(connectionsState);
   const [user] = useRecoilState(userState);
   const [step, setStep] = useState<1 | 2>(1);
   const [formData, setFormData] = useState({
@@ -26,7 +31,7 @@ export const useAddConnection = (onClose: () => void, initialData: Partial<Conne
   const [isLoading, setIsLoading] = useState(false);
 
   const { post, put } = useApi();
-  const { fetchConnections } = useConnections();
+
 
   useEffect(() => {
     if (initialData) {
@@ -73,17 +78,19 @@ export const useAddConnection = (onClose: () => void, initialData: Partial<Conne
 
   const handleEditConnection = async (e: React.FormEvent) => {
     e.preventDefault();
-    const result = await put(`/connections/${formData.id}`, {
+    const result = await put<Connection>(`/connections/${formData.id}`, {
       nome: formData.nome,
       agente_id: formData.agent,
       status: formData.status,
     });
 
     if (result !== null) {
-      fetchConnections();
+      await fetchConnections();
       onClose();
     }
   };
+
+
 
   return {
     step,

@@ -24,8 +24,9 @@ import EditIcon from './assets/arrow-circle.svg';
 import DeleteIcon from './assets/x-circle.svg';
 
 export default function ConexoesPage() {
-  const { connections, removeConnection, updateConnectionStatus } = useConnections();
+  const { connections, removeConnection, updateConnectionStatus, fetchConnections } = useConnections();
 
+  
   const [activeFilter, setActiveFilter] = useState<'todos' | 'ativo' | 'inativo'>('todos');
   const [sortField, setSortField] = useState<'nome' | null>(null);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
@@ -184,7 +185,7 @@ export default function ConexoesPage() {
         </div>
       </div>
 
-      <AddConnectionModal />
+       <AddConnectionModal fetchConnections={fetchConnections} />
 
     </div>
   );

@@ -13,8 +13,7 @@ import { useAgents } from '../../hooks/agents/useAgents';
 // Css
 import formStyles from '../Gerais/ModalForm/ModalForm.module.css';
 
-
-export default function AddConnectionModal() {
+export default function AddConnectionModal({ fetchConnections }: { fetchConnections: () => Promise<void> }) {
   const [modalState, setModalState] = useRecoilState(addConnectionModalState);
   const { agents } = useAgents();
   const { initialData, editMode } = modalState;
@@ -31,7 +30,7 @@ export default function AddConnectionModal() {
     handleStartSession,
     handleEditConnection,
     isLoading,
-  } = useAddConnection(handleClose, initialData);
+  } = useAddConnection(handleClose, fetchConnections, initialData);
 
   if (!modalState.isOpen) return null;
 
