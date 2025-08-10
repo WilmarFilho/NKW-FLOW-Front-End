@@ -128,10 +128,3 @@ export const useAttendants = () => {
     updateAttendantStatus,
   };
 };
-
-
-
-
-
-
-

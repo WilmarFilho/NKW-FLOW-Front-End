@@ -1,5 +1,3 @@
-// Caminho sugerido: src/components/Gerais/Inputs/ChatInput.tsx
-
 import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
@@ -10,7 +8,7 @@ import { useAudioRecorder } from '../../../hooks/chats/useAudioRecorder';
 import styles from './ChatInput.module.css';
 import UploadIcon from './assets/upload.svg';
 import MicIcon from './assets/mic.svg';
-import TrashIcon from './assets/trash.svg'; // Use um ícone de lixeira
+import TrashIcon from './assets/trash.svg';
 import SendIcon from './assets/send.svg';
 
 type ChatInputProps = {

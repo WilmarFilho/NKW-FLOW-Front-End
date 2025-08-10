@@ -25,7 +25,7 @@ export const messagesState = atom<Message[]>({
   default: [],
 });
 
-// Controle do modal de adicionar conexão
+// Controle do modal de adicionar nova conversa
 export const addConnectionModalState = atom<{
   isOpen: boolean;
   initialData?: Partial<Connection> | null;
@@ -59,7 +59,6 @@ export const userState = atom<User | null>({
   key: 'userState',
   default: null,
 });
-
 
 export const authTokenState = atom<{ token: string; userId: string } | null>({
   key: 'authTokenState',

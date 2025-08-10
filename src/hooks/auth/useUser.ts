@@ -87,12 +87,3 @@ export function useUser() {
 
   return { user, updateUser, uploadProfileImage, loading, error };
 }
-
-
-
-
-
-
-
-
-

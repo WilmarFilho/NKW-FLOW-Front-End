@@ -241,7 +241,3 @@ export default function AtendentesPage() {
     </div >
   );
 }
-
-
-
-

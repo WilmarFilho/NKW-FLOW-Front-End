@@ -81,7 +81,7 @@ export default function AttendantForm({
         <label htmlFor="numero">Número de Telefone</label>
         <input
           id="numero"
-          type="tel" // Usar 'tel' é semanticamente melhor para números de telefone
+          type="tel" 
           className={formStyles.formInput}
           placeholder="64999999999"
           value={formData.numero}
@@ -92,13 +92,12 @@ export default function AttendantForm({
       <div className={formStyles.formGroup}>
         <label htmlFor="senha">Senha</label>
         <input
-          id="senha"
+          id="senha_hash"
           type="password"
           className={formStyles.formInput}
           placeholder={editMode ? 'Deixe em branco para não alterar' : 'Mínimo 6 caracteres'}
           value={formData.senha_hash}
           onChange={handleInputChange}
-          // A senha só é obrigatória no modo de criação
           required={!editMode}
         />
       </div>
@@ -129,7 +128,6 @@ export default function AttendantForm({
         <button
           type="submit"
           className={formStyles.submitButton}
-          // MELHORIA: Desabilita o botão durante o envio
           disabled={isSubmitting}
         >
           {isSubmitting ? 'Salvando...' : editMode ? 'Atualizar Atendente' : 'Criar Atendente'}

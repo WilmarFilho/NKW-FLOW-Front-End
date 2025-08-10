@@ -1,93 +1,84 @@
-// Libbs
-import { useSetRecoilState } from 'recoil';
+import { useState, useMemo, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { NavLink } from 'react-router-dom';
-// Atom
-import { addConnectionModalState } from '../../state/atom';
+import { useRecoilState } from 'recoil';
+
 // Hooks
 import { useConnections } from '../../hooks/connections/useConnections';
+
 // Components
 import Button from '../../components/Gerais/Buttons/Button';
 import AddConnectionModal from '../../components/Conexoes/ConnectionForm';
 import GenericTable from '../../components/Gerais/Tables/GenericTable';
+
 // Types
+import { addConnectionModalState } from '../../state/atom';
 import type { Connection } from '../../types/connection';
-// Css
-import PageStyles from '../PageStyles.module.css'
+
+// Styles
+import PageStyles from '../PageStyles.module.css';
 import tableStyles from '../../components/Gerais/Tables/TableStyles.module.css';
+
 // Assets
 import EditIcon from './assets/arrow-circle.svg';
 import DeleteIcon from './assets/x-circle.svg';
-import { useMemo, useState } from 'react';
 
 export default function ConexoesPage() {
-
-  const handleDelete = async (id: string) => {
-    if (window.confirm('Tem certeza que deseja excluir esta conexão?')) {
-      await removeConnection(id).catch(err => alert('Falha ao excluir: ' + err));
-    }
-  };
-
   const { connections, removeConnection, updateConnectionStatus } = useConnections();
 
-  const handleStatusToggle = async (connection: Connection) => {
-    // Adicione um confirm para segurança, se desejar
-    if (window.confirm(`Deseja alterar o status da conexão "${connection.nome.split('_')[0]}" para "${connection.status ? 'Inativo' : 'Ativo'}"?`)) {
-      await updateConnectionStatus(connection).catch(err => alert('Falha ao alterar o status: ' + err.message));
+  const [activeFilter, setActiveFilter] = useState<'todos' | 'ativo' | 'inativo'>('todos');
+  const [sortField, setSortField] = useState<'nome' | null>(null);
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+
+  const [modalState, setModalState] = useRecoilState(addConnectionModalState);
+
+  const handleDelete = useCallback(async (id: string) => {
+    const confirm = window.confirm('Tem certeza que deseja excluir esta conexão?');
+    if (!confirm) return;
+
+    try {
+      await removeConnection(id);
+    } catch (err) {
+      alert('Falha ao excluir: ' + err);
+    }
+  }, [removeConnection]);
+
+  const handleStatusToggle = useCallback(async (connection: Connection) => {
+    const newStatus = connection.status ? 'Inativo' : 'Ativo';
+    const confirm = window.confirm(`Deseja alterar o status da conexão "${connection.nome.split('_')[0]}" para "${newStatus}"?`);
+    if (!confirm) return;
+
+    try {
+      await updateConnectionStatus(connection);
+    } catch {
+      alert('Falha ao alterar o status: ');
+    }
+  }, [updateConnectionStatus]);
+
+  const openModal = (conn?: Connection) => {
+    if (conn) {
+      setModalState({ isOpen: true, initialData: conn, editMode: true });
+    } else {
+      setModalState({ isOpen: true, initialData: null, editMode: false });
     }
   };
 
-  const [activeFilter, setActiveFilter] = useState<'todos' | 'ativo' | 'inativo'>('todos');
-  const [sortField, setSortField] = useState<keyof Connection | 'nome' | null>(null);
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
-
-  const setModalState = useSetRecoilState(addConnectionModalState);
-
-  const handleOpenModal = () => {
-    setModalState({
-      isOpen: true,
-      initialData: null,
-      editMode: false,
-    });
-  };
   const handleEdit = (conn: Connection) => {
-    setModalState({
-      isOpen: true,
-      initialData: {
-        id: conn.id,
-        nome: conn.nome,
-        status: conn.status,
-        agente_id: conn.agente_id,
-      },
-      editMode: true,
-    });
+    openModal(conn);
   };
 
   const filteredConnections = useMemo(() => {
-    if (activeFilter === 'todos') {
-      return connections;
-    }
-    const isStatusActive = activeFilter === 'ativo';
-    return connections.filter(connection => connection.status === isStatusActive);
+    if (activeFilter === 'todos') return connections;
+    const isActive = activeFilter === 'ativo';
+    return connections.filter(c => c.status === isActive);
   }, [connections, activeFilter]);
 
   const sortedConnections = useMemo(() => {
-    const data = [...filteredConnections];
-    if (!sortField) return data;
+    if (!sortField) return filteredConnections;
 
-    return data.sort((a, b) => {
-      const getFieldValue = (connection: Connection) => {
-        switch (sortField) {
-          case 'nome':
-            return connection.nome.toLowerCase();
-          default:
-            return '';
-        }
-      };
-
-
-      const aValue = getFieldValue(a);
-      const bValue = getFieldValue(b);
+    return [...filteredConnections].sort((a, b) => {
+      const aValue = a[sortField]?.toString().toLowerCase() ?? '';
+      const bValue = b[sortField]?.toString().toLowerCase() ?? '';
 
       if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
       if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
@@ -95,22 +86,38 @@ export default function ConexoesPage() {
     });
   }, [filteredConnections, sortField, sortOrder]);
 
-  const renderConnectionRow = (conn: Connection) => (
+  const renderConnectionRow = useCallback((conn: Connection) => (
     <div
       key={conn.id}
       className={tableStyles.tableRow}
       style={{ gridTemplateColumns: '1fr 2fr 2fr 2fr 1fr' }}
+      role="row"
+      tabIndex={0}
+      aria-label={`Conexão ${conn.nome.split('_')[0]}`}
     >
-
-      <div data-label="Status" onClick={() => handleStatusToggle(conn)} className={tableStyles.clickableStatus}>
+      <div
+        data-label="Status"
+        onClick={() => handleStatusToggle(conn)}
+        className={tableStyles.clickableStatus}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => e.key === 'Enter' && handleStatusToggle(conn)}
+        aria-pressed={conn.status}
+      >
         <span className={`${tableStyles.statusChip} ${conn.status ? tableStyles.active : tableStyles.inactive}`}>
           {conn.status ? 'Ativo' : 'Inativo'}
         </span>
       </div>
 
-      <div data-label="Nome" onClick={() => handleEdit(conn)}>{conn.nome.split('_')[0]}</div>
-      <div data-label="Número" onClick={() => handleEdit(conn)}>{conn.numero || 'N/A'}</div>
-      <div data-label="Agente" >
+      <div data-label="Nome" onClick={() => handleEdit(conn)} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && handleEdit(conn)}>
+        {conn.nome.split('_')[0]}
+      </div>
+
+      <div data-label="Número" onClick={() => handleEdit(conn)} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && handleEdit(conn)}>
+        {conn.numero || 'N/A'}
+      </div>
+
+      <div data-label="Agente">
         <NavLink to="/agentes">{conn.agente?.tipo_de_agente || 'Nenhum'}</NavLink>
       </div>
 
@@ -123,8 +130,7 @@ export default function ConexoesPage() {
         </button>
       </div>
     </div>
-  );
-
+  ), [handleDelete, handleEdit, handleStatusToggle]);
 
   return (
     <div className={PageStyles.container}>
@@ -137,31 +143,27 @@ export default function ConexoesPage() {
           <h2>Suas conexões do WhatsApp</h2>
           <h3>Verifique, adicione ou desative suas conexões do WhatsApp.</h3>
         </div>
-        <Button label="Adicionar Conexão" onClick={() => handleOpenModal()} />
+        <Button label="Adicionar Conexão" onClick={() => openModal()} />
       </motion.header>
 
-      <div className={PageStyles.containerContent} >
-
+      <div className={PageStyles.containerContent}>
         <GenericTable<Connection>
           columns={['Status', 'Nome', 'Número', 'Agente', '']}
           data={sortedConnections}
           renderRow={renderConnectionRow}
           gridTemplateColumns="1fr 2fr 2fr 2fr 1fr"
           onSortClick={(col) => {
-            const fieldMap: Record<string, 'nome'> = {
-              'Nome': 'nome'
-            };
-
+            const fieldMap: Record<string, 'nome'> = { Nome: 'nome' };
             const selectedField = fieldMap[col];
+            if (!selectedField) return;
 
             if (selectedField === sortField) {
-              setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc');
+              setSortOrder(prev => (prev === 'asc' ? 'desc' : 'asc'));
             } else {
-              setSortField(selectedField); // Agora o tipo é válido
+              setSortField(selectedField);
               setSortOrder('asc');
             }
           }}
-
           sortField={sortField}
           sortOrder={sortOrder}
         />
@@ -170,19 +172,16 @@ export default function ConexoesPage() {
           <button
             className={`${PageStyles.buttonBase} ${activeFilter === 'ativo' ? PageStyles.activeFilter : ''}`}
             onClick={() => setActiveFilter('ativo')}
-
           >
             <span>Ver conexões ativas</span>
           </button>
           <button
             className={`${PageStyles.buttonBase} ${activeFilter === 'inativo' ? PageStyles.activeFilter : ''}`}
             onClick={() => setActiveFilter('inativo')}
-
           >
-            <span>Ver conexões Inativas</span>
+            <span>Ver conexões inativas</span>
           </button>
         </div>
-
       </div>
 
       <AddConnectionModal />

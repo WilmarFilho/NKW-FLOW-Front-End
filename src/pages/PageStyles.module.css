@@ -337,11 +337,6 @@
   outline-offset: 2px;
 }
 
-
-
-
-
-
 /* Forms/formStyles.module.css */
 .formTitle {
   margin-top: 0;
@@ -388,12 +383,11 @@
 
 .modalContent {
   background: var(--color-modal);
-  padding: 40px 50px;
   border-radius: 16px;
   gap: 20px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
   position: relative;
-  width: 90%;
+  width: 100%;
   max-width: 700px;
   max-height: 90vh; 
   display: flex;
@@ -485,8 +479,6 @@
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
-
-
 
 /* === Breakpoint 2: Desktops Padrão === */
 @media (max-width: 1199.98px) {

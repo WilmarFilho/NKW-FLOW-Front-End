@@ -114,5 +114,3 @@ export default function MessageBubble(props: MessageBubbleProps) {
     </motion.div>
   );
 }
-
-

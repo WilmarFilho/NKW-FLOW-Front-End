@@ -75,16 +75,3 @@ export const useApi = () => {
     del,
   };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-

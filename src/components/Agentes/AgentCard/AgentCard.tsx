@@ -46,8 +46,3 @@ export default function AgentCard({ description, tipo, connections }: AgentCardP
     </div>
   );
 }
-
-
-
-
-
