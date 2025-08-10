@@ -1,11 +1,16 @@
+// Libs
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { RecoilRoot } from 'recoil';
 import { Suspense, lazy } from 'react'; 
-
+// Recoil
+import { RecoilRoot } from 'recoil';
+// Components
 import Layout from './components/Layout/Layout';
+// Routes
 import { ProtectedRoute, PublicRoute } from './routes/ProtectedRoute';
+// CSS
+import './main.css';
 
-// Importar os componentes de página com React.lazy
+// Lazy imports das páginas
 const ConversasPage = lazy(() => import('./pages/Conversas/ConversasPage'));
 const AtendentesPage = lazy(() => import('./pages/Atendentes/AtendentesPage'));
 const AgentesPage = lazy(() => import('./pages/Agentes/AgentesPage'));
@@ -13,52 +18,108 @@ const ConexoesPage = lazy(() => import('./pages/Conexao/ConexoesPage'));
 const ConfiguracoesPage = lazy(() => import('./pages/Configuracoes/ConfiguracoesPage'));
 const AjudaPage = lazy(() => import('./pages/Ajuda/AjudaPage'));
 const LoginPage = lazy(() => import('./pages/Login/Login'));
-import DashboardPage from './pages/Dashboard/DashboardPage';
-import CashbackPage from './pages/Cashback/CashbackPage';
-
-import './main.css';
+const DashboardPage = lazy(() => import('./pages/Dashboard/DashboardPage'));
+const CashbackPage = lazy(() => import('./pages/Cashback/CashbackPage'));
 
 function App() {
   return (
-    <>
-      <RecoilRoot>
-        <BrowserRouter>
-          <Suspense fallback={<Layout />}>
-            <Routes>
-              <Route
-                path="/login"
-                element={
-                  <PublicRoute>
-                    <LoginPage />
-                  </PublicRoute>
-                }
-              />
+    <RecoilRoot>
+      <BrowserRouter future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
+        <Routes>
+          {/* Rota pública (login) */}
+          <Route
+            path="/login"
+            element={
+              <PublicRoute>
+                <Suspense fallback={<div>Carregando...</div>}>
+                  <LoginPage />
+                </Suspense>
+              </PublicRoute>
+            }
+          />
 
-              <Route
-                path="/"
-                element={
-                  <ProtectedRoute>
-                    <Layout />
-                  </ProtectedRoute>
-                }
-              >
-                <Route index element={<Navigate to="/conexoes" replace />} />
-                <Route path="dashboard" element={<DashboardPage />} />
-                <Route path="conversas" element={<ConversasPage />} />
-                <Route path="atendentes" element={<AtendentesPage />} />
-                <Route path="agentes" element={<AgentesPage />} />
-                <Route path="conexoes" element={<ConexoesPage />} />
-                <Route path="configuracoes" element={<ConfiguracoesPage />} />
-                <Route path="cashback" element={<CashbackPage />} />
-                <Route path="ajuda" element={<AjudaPage />} />
-              </Route>
+          {/* Rotas protegidas */}
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Layout />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<Navigate to="/conexoes" replace />} />
 
-              <Route path="*" element={<Navigate to="/login" replace />} />
-            </Routes>
-          </Suspense>
-        </BrowserRouter>
-      </RecoilRoot>
-    </>
+            <Route
+              path="dashboard"
+              element={
+                <Suspense fallback={<div>Carregando...</div>}>
+                  <DashboardPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="conversas"
+              element={
+                <Suspense fallback={<div>Carregando...</div>}>
+                  <ConversasPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="atendentes"
+              element={
+                <Suspense fallback={<div>Carregando...</div>}>
+                  <AtendentesPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="agentes"
+              element={
+                <Suspense fallback={<div>Carregando...</div>}>
+                  <AgentesPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="conexoes"
+              element={
+                <Suspense fallback={<div>Carregando...</div>}>
+                  <ConexoesPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="configuracoes"
+              element={
+                <Suspense fallback={<div>Carregando...</div>}>
+                  <ConfiguracoesPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="cashback"
+              element={
+                <Suspense fallback={<div>Carregando...</div>}>
+                  <CashbackPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="ajuda"
+              element={
+                <Suspense fallback={<div>Carregando...</div>}>
+                  <AjudaPage />
+                </Suspense>
+              }
+            />
+          </Route>
+
+          {/* Redirecionamento para login */}
+          <Route path="*" element={<Navigate to="/login" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </RecoilRoot>
   );
 }
 

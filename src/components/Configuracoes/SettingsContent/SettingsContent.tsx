@@ -107,131 +107,145 @@ export default function SettingsContent({ tabIndex }: Props) {
       case 0: // Aba de Perfil
         return (
           <>
-            <div className={styles.mainHeaderAccountWrapper}>
-              <div className={styles.profileImageWrapper}>
-                <img
-                  src={user.foto_perfil || '/default-avatar.png'}
-                  alt="Foto de Perfil"
-                  className={styles.profileImage}
-                  onClick={() => !loading && document.getElementById('profileImageInput')?.click()}
-                  style={{ cursor: loading ? 'wait' : 'pointer' }}
-                />
-                <span className={styles.overlayText}>Editar</span>
-                <input
-                  type="file"
-                  id="profileImageInput"
-                  accept="image/*"
-                  style={{ display: 'none' }}
-                  onChange={handleImageUpload}
-                  disabled={loading}
-                />
-              </div>
-              <div className={styles.userInfoMain}>
-                <h1>Nome de usuário</h1>
-                <h2>{user.nome}</h2>
-              </div>
-              <div className={styles.userInfoMain}>
-                <h1>Cargo</h1>
-                <h2>Administrador</h2>
-              </div>
-            </div>
-
-            <div className={styles.configsWrapperBox}>
-              <div className={styles.infoGrid}>
-
-                <div className={styles.headerAccountWrapper}>
-                  <div className={styles.userInfo}><h1>E-mail</h1><h2>{user.email}</h2></div>
-                  <div className={styles.userInfo}><h1>Senha</h1><h2>***********</h2></div>
-                  <div className={styles.userInfo}><h1>Plano Contradado</h1><h2>Premium</h2></div>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4, duration: 0.4, ease: 'easeOut' }}
+              className={styles.settingsContentAccount}
+            >
+              <div className={styles.mainHeaderAccountWrapper}>
+                <div className={styles.profileImageWrapper}>
+                  <img
+                    src={user.foto_perfil || '/default-avatar.png'}
+                    alt="Foto de Perfil"
+                    className={styles.profileImage}
+                    onClick={() => !loading && document.getElementById('profileImageInput')?.click()}
+                    style={{ cursor: loading ? 'wait' : 'pointer' }}
+                  />
+                  <span className={styles.overlayText}>Editar</span>
+                  <input
+                    type="file"
+                    id="profileImageInput"
+                    accept="image/*"
+                    style={{ display: 'none' }}
+                    onChange={handleImageUpload}
+                    disabled={loading}
+                  />
                 </div>
+                <div className={styles.userInfoMain}>
+                  <h1>Nome de usuário</h1>
+                  <h2>{user.nome}</h2>
+                </div>
+                <div className={styles.userInfoMain}>
+                  <h1>Cargo</h1>
+                  <h2>Administrador</h2>
+                </div>
+              </div>
 
-                <div className={styles.headerAccountWrapper}>
-                  <div className={styles.userInfo}>
-                    <h1>Cidade</h1>
-                    <h2>Goiânia</h2>
+              <div className={styles.configsWrapperBox}>
+                <div className={styles.infoGrid}>
+
+                  <div className={styles.headerAccountWrapper}>
+                    <div className={styles.userInfo}><h1>E-mail</h1><h2>{user.email}</h2></div>
+                    <div className={styles.userInfo}><h1>Senha</h1><h2>***********</h2></div>
+                    <div className={styles.userInfo}><h1>Plano Contradado</h1><h2>Premium</h2></div>
                   </div>
-                  <div className={styles.userInfo}>
-                    <h1>Endereço</h1>
-                    <h2>Rua 9 Qd 9 Lt 2</h2>
-                  </div>
-                  <div className={styles.userInfo}>
-                    <h1>Número</h1>
-                    <h2>(64) 99243-4104</h2>
+
+                  <div className={styles.headerAccountWrapper}>
+                    <div className={styles.userInfo}>
+                      <h1>Cidade</h1>
+                      <h2>Goiânia</h2>
+                    </div>
+                    <div className={styles.userInfo}>
+                      <h1>Endereço</h1>
+                      <h2>Rua 9 Qd 9 Lt 2</h2>
+                    </div>
+                    <div className={styles.userInfo}>
+                      <h1>Número</h1>
+                      <h2>(64) 99243-4104</h2>
+                    </div>
+
                   </div>
 
                 </div>
-
+                <button className={styles.editButton}>Editar Informações</button>
               </div>
-              <button className={styles.editButton}>Editar Informações</button>
-            </div>
+            </motion.div>
           </>
         );
 
       case 1: // Aba de Configurações
         return (
           <>
-            {renderSwitchSetting(
-              'Notificação para atendente',
-              'Envia um alerta ao atendente quando é necessário entrar em uma conversa.',
-              notifyAttendant,
-              () => {
-                const newValue = !notifyAttendant;
-                setNotifyAttendant(newValue);
-                handleSettingsUpdate({ modo_notificacao_atendente: newValue });
-              }
-            )}
-            {renderSwitchSetting(
-              'Notificação ao entrar na conversa',
-              'Informa você quando entrar em uma conversa ativa.',
-              notifyOnEnterConversation,
-              () => {
-                const newValue = !notifyOnEnterConversation;
-                setNotifyOnEnterConversation(newValue);
-                handleSettingsUpdate({ notificacao_para_entrar_conversa: newValue });
-              }
-            )}
-            {renderSwitchSetting(
-              'Notificação de novo chat',
-              'Você será notificado sempre que um novo chat for iniciado.',
-              notifyOnNewChat,
-              () => {
-                const newValue = !notifyOnNewChat;
-                setNotifyOnNewChat(newValue);
-                handleSettingsUpdate({ notificacao_novo_chat: newValue });
-              }
-            )}
-            {renderSelectSetting(
-              'Modo de Tela',
-              'Altere entre modo escuro (Black) e claro (White).',
-              screenMode,
-              (val) => {
-                const newValue = val as 'Black' | 'White';
-                setScreenMode(newValue);
-                handleSettingsUpdate({ modo_tela: newValue });
-              },
-              ['Black', 'White']
-            )}
-            {renderSelectSetting(
-              'Modo de Sidebar',
-              'Completa com nomes e ícones ou minimalista apenas com ícones.',
-              sidebarMode,
-              (val) => {
-                const newValue = val as 'Full' | 'Minimal';
-                setSidebarMode(newValue);
-                handleSettingsUpdate({ modo_side_bar: newValue });
-              },
-              ['Full', 'Minimal']
-            )}
-            {renderSwitchSetting(
-              'Mostrar nome nas mensagens',
-              'Exibe seu nome junto das mensagens enviadas no chat.',
-              showNameInMessages,
-              () => {
-                const newValue = !showNameInMessages;
-                setShowNameInMessages(newValue);
-                handleSettingsUpdate({ mostra_nome_mensagens: newValue });
-              }
-            )}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4, duration: 0.4, ease: 'easeOut' }}
+              className={styles.settingsContent}
+            >
+              {renderSwitchSetting(
+                'Notificação para atendente',
+                'Envia um alerta ao atendente quando é necessário entrar em uma conversa.',
+                notifyAttendant,
+                () => {
+                  const newValue = !notifyAttendant;
+                  setNotifyAttendant(newValue);
+                  handleSettingsUpdate({ modo_notificacao_atendente: newValue });
+                }
+              )}
+              {renderSwitchSetting(
+                'Notificação ao entrar na conversa',
+                'Informa você quando entrar em uma conversa ativa.',
+                notifyOnEnterConversation,
+                () => {
+                  const newValue = !notifyOnEnterConversation;
+                  setNotifyOnEnterConversation(newValue);
+                  handleSettingsUpdate({ notificacao_para_entrar_conversa: newValue });
+                }
+              )}
+              {renderSwitchSetting(
+                'Notificação de novo chat',
+                'Você será notificado sempre que um novo chat for iniciado.',
+                notifyOnNewChat,
+                () => {
+                  const newValue = !notifyOnNewChat;
+                  setNotifyOnNewChat(newValue);
+                  handleSettingsUpdate({ notificacao_novo_chat: newValue });
+                }
+              )}
+              {renderSelectSetting(
+                'Modo de Tela',
+                'Altere entre modo escuro (Black) e claro (White).',
+                screenMode,
+                (val) => {
+                  const newValue = val as 'Black' | 'White';
+                  setScreenMode(newValue);
+                  handleSettingsUpdate({ modo_tela: newValue });
+                },
+                ['Black', 'White']
+              )}
+              {renderSelectSetting(
+                'Modo de Sidebar',
+                'Completa com nomes e ícones ou minimalista apenas com ícones.',
+                sidebarMode,
+                (val) => {
+                  const newValue = val as 'Full' | 'Minimal';
+                  setSidebarMode(newValue);
+                  handleSettingsUpdate({ modo_side_bar: newValue });
+                },
+                ['Full', 'Minimal']
+              )}
+              {renderSwitchSetting(
+                'Mostrar nome nas mensagens',
+                'Exibe seu nome junto das mensagens enviadas no chat.',
+                showNameInMessages,
+                () => {
+                  const newValue = !showNameInMessages;
+                  setShowNameInMessages(newValue);
+                  handleSettingsUpdate({ mostra_nome_mensagens: newValue });
+                }
+              )}
+            </motion.div>
           </>
         );
 
@@ -241,13 +255,8 @@ export default function SettingsContent({ tabIndex }: Props) {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 0.4, duration: 0.4, ease: 'easeOut' }}
-      className={styles.settingsContent}
-    >
+    <>
       {renderActiveTabContent()}
-    </motion.div>
+    </>
   );
 }

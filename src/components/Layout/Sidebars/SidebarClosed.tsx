@@ -20,18 +20,16 @@ const SidebarClosed = () => {
     to: string;
     children: React.ReactNode;
   }) => (
-    <NavLink to={to}>
-      <NavLink
-        to={to}
-        // A classe agora é aplicada diretamente no NavLink (que vira uma tag <a>)
-        className={({ isActive }) =>
-          `MenuItem ${isActive ? 'active-link' : ''}`
-        }
-      >
-        {children}
-      </NavLink>
+    <NavLink
+      to={to}
+      className={({ isActive }) =>
+        `MenuItem ${isActive ? 'active-link' : ''}`
+      }
+    >
+      {children}
     </NavLink>
   );
+
 
   return (
     <>

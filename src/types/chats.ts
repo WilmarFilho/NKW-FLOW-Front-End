@@ -1,4 +1,4 @@
-import { Connection } from './connection';
+import { Agent } from './agent';
 
 export interface Chat {
   status: string;
@@ -11,5 +11,10 @@ export interface Chat {
   ia_ativa: boolean;
   ultima_atualizacao: string;
   ultima_mensagem: string,
-  connection: Connection;
+  connection: {
+    agente: Agent,
+    agente_id: string,
+    id: string,
+    nome: string
+  };
 }

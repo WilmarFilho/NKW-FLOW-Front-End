@@ -35,7 +35,7 @@ export default function DashboardPage() {
           </h2>
         </div>
 
-        <div className={PageStyles.containerColumnSmall}>
+        <div className={PageStyles.containerColumnLarge}>
           <h2>
             Quantidade de Mensagens disparadas por IA
           </h2>
@@ -47,7 +47,7 @@ export default function DashboardPage() {
         initial={{ opacity: 0, y: 0 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
-        className={PageStyles.containerRow}
+        className={PageStyles.containerRowSmall}
       >
         <div className={PageStyles.containerColumnSmall}>
           <h2>
@@ -72,5 +72,3 @@ export default function DashboardPage() {
     </div>
   );
 };
-
-

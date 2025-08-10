@@ -1,137 +1,90 @@
-import { useState } from 'react';
-import { useRecoilState } from 'recoil';
-// Hooks
-import useChats from '../../hooks/chats/useChats';
-import useMessages from '../../hooks/chats/useMessages';
+// Css
+import PageStyles from '../PageStyles.module.css';
 // Components
 import ChatSidebar from '../../components/Conversas/ChatSideBar/ChatSideBar';
 import ChatWindow from '../../components/Conversas/ChatWindow/ChatWindow';
-// Types
-import { Chat } from '../../types/chats';
-// Css
-import PageStyles from '../PageStyles.module.css'
-import { userState } from '../../state/atom';
 import Modal from '../../components/Gerais/ModalForm/Modal';
-import useSendMessage from '../../hooks/chats/useSendMessage';
-import { useConnections } from '../../hooks/connections/useConnections';
+// Hook da Página
+import { useConversasPage } from '../../hooks/chats/useConversasPage';
 
 export default function ConversasPage() {
-  const [user] = useRecoilState(userState);
-  const { connections } = useConnections();
-  const [activeChat, setActiveChat] = useState<Chat | null>(null);
-  const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
-  const { chats } = useChats(user?.id);
-  const { sendMessage } = useSendMessage();
-  const { messages } = useMessages(activeChat?.id || null);
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const [isAddChatOpen, setIsAddChatOpen] = useState(false);
-  const [newChatNumber, setNewChatNumber] = useState('');
-  const [newChatMessage, setNewChatMessage] = useState('');
-  const [selectedConnectionId, setSelectedConnectionId] = useState('');
-
-
-  const handleSendMessage = async (text: string, numero: string, connectionId: string) => {
-    const result = await sendMessage({
-      mensagem: text,
-      number: numero,
-      connection_id: connectionId,
-    });
-    if (result) {
-      console.log(result);
-      setIsAddChatOpen(false);
-      setNewChatNumber('');
-      setNewChatMessage('');
-      setSelectedConnectionId('');
-    }
-  };
-
-
+  const state = useConversasPage();
 
   return (
     <div className={PageStyles.conversationsContainer}>
       <ChatSidebar
-        chats={chats}
-        activeChat={activeChat}
-        setActiveChat={setActiveChat}
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        selectedAgentId={selectedAgentId}
-        setSelectedAgentId={setSelectedAgentId}
-        setIsAddChatOpen={setIsAddChatOpen}
+        chats={state.chats}
+        activeChat={state.activeChat}
+        setActiveChat={state.setActiveChat}
+        setIsAddChatOpen={state.setIsAddChatOpen}
       />
+
       <ChatWindow
-        activeChat={activeChat}
-        messages={messages}
-        setActiveChat={setActiveChat}
+        activeChat={state.activeChat}
+        messages={state.messages}
+        setActiveChat={state.setActiveChat}
       />
 
-      {isAddChatOpen && (
-
-        <Modal isOpen={isAddChatOpen} onClose={() => setIsAddChatOpen(false)} title='Começar nova conversa.'>
-
-
+      {state.isAddChatOpen && (
+        <Modal
+          isOpen={state.isAddChatOpen}
+          onClose={() => state.setIsAddChatOpen(false)}
+          title="Começar nova conversa."
+        >
           <div className={PageStyles.modalContent}>
-           
             <div className={PageStyles.formGroup}>
-               <label htmlFor="numero">Conexão para disparar mensagem</label>
+              <label>Conexão para disparar mensagem</label>
               <select
-                value={selectedConnectionId}
+                value={state.selectedConnectionId}
                 className={PageStyles.formSelect}
-                onChange={(e) => setSelectedConnectionId(e.target.value)}
+                onChange={(e) => state.setSelectedConnectionId(e.target.value)}
               >
                 <option value="">Selecione a conexão</option>
-                {connections.map((conn) => (
+                {state.connections.map((conn) => (
                   <option key={conn.id} value={conn.id}>
                     {conn.nome || conn.id}
                   </option>
                 ))}
               </select>
             </div>
+
             <div className={PageStyles.formGroup}>
-              <label htmlFor="numero">Número de Telefone</label>
+              <label>Número de Telefone</label>
               <input
                 type="text"
                 placeholder="Número com DDD (ex: 11999999999)"
-                value={newChatNumber}
+                value={state.newChatNumber}
                 className={PageStyles.formInput}
-                onChange={(e) => setNewChatNumber(e.target.value)}
+                onChange={(e) => state.setNewChatNumber(e.target.value)}
               />
-
             </div>
 
             <div className={PageStyles.formGroup}>
-              <label htmlFor="numero">Primeira Mensagem</label>
+              <label>Primeira Mensagem</label>
               <input
                 placeholder="Primeira mensagem"
                 className={PageStyles.formInput}
-                value={newChatMessage}
-                onChange={(e) => setNewChatMessage(e.target.value)}
+                value={state.newChatMessage}
+                onChange={(e) => state.setNewChatMessage(e.target.value)}
               />
             </div>
-            <div className={PageStyles.modalActions}>
 
+            <div className={PageStyles.modalActions}>
               <button
                 className={PageStyles.submitButton}
-                onClick={() =>
-                  handleSendMessage(newChatMessage, newChatNumber, selectedConnectionId)
+                onClick={state.handleSendMessage}
+                disabled={
+                  !state.newChatNumber ||
+                  !state.newChatMessage ||
+                  !state.selectedConnectionId
                 }
-                disabled={!newChatNumber || !newChatMessage || !selectedConnectionId}
               >
                 Enviar
               </button>
             </div>
-
           </div>
-
-
         </Modal>
-
       )}
-
     </div>
   );
 }
-
-
-

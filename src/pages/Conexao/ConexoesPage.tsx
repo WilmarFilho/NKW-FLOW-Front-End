@@ -20,8 +20,6 @@ import EditIcon from './assets/arrow-circle.svg';
 import DeleteIcon from './assets/x-circle.svg';
 import { useMemo, useState } from 'react';
 
-
-
 export default function ConexoesPage() {
 
   const handleDelete = async (id: string) => {
@@ -192,7 +190,3 @@ export default function ConexoesPage() {
     </div>
   );
 }
-
-
-
-

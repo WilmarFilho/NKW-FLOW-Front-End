@@ -4,7 +4,7 @@ import { useRecoilState } from 'recoil';
 // Atom
 import { attendantsState, userState } from '../../state/atom';
 // Types
-import type { Attendant } from '../../types/attendant';
+import type { Attendant, AttendantFormData } from '../../types/attendant';
 import { User } from '../../types/user';
 // Utils
 import { useApi } from '../utils/useApi';
@@ -29,11 +29,12 @@ export const useAttendants = () => {
   const addAttendant = async (attendantData: Partial<User>) => {
     if (!user) {
       console.error('Usuário administrador não encontrado. Ação cancelada.');
-      return; 
+      return;
     }
 
     try {
       // ETAPA 1: Criar o registro de Usuário.
+      console.log(attendantData)
       const userResponse = await post<User[]>('/users', {
         nome: attendantData.nome,
         numero: attendantData.numero,
@@ -76,25 +77,21 @@ export const useAttendants = () => {
 
   const editAttendant = async (
     attendantId: string,
-    userId: string | null, 
-    updatedData: Partial<User & { status: boolean }>
+    userId: string,
+    updatedData: Partial<AttendantFormData>
   ) => {
     try {
-      // Cria um objeto apenas com os dados do usuário a serem atualizados
-      const userUpdatePayload: Record<string, unknown> = {};
-      if (updatedData.nome) userUpdatePayload.nome = updatedData.nome;
-      if (updatedData.email) userUpdatePayload.email = updatedData.email;
-      if (updatedData.senha_hash) userUpdatePayload.senha_hash = updatedData.senha_hash;
-      if (updatedData.numero) userUpdatePayload.numero = updatedData.numero;
-      if (updatedData.status) userUpdatePayload.status = updatedData.status;
+      const userUpdatePayload: Partial<User> = {
+        nome: updatedData.nome,
+        email: updatedData.email,
+        senha_hash: updatedData.senha_hash,
+        numero: updatedData.numero,
+        status: updatedData.status,
+      };
 
+      // Atualiza usuário
+      await put(`/users/${userId}`, userUpdatePayload);
 
-      // Atualiza o usuário do atendente
-      if (Object.keys(userUpdatePayload).length > 0) {
-        await put(`/users/${userId}`, userUpdatePayload);
-      }
-
-      // Atualiza a lista para refletir as mudanças
       await fetchAttendants();
     } catch (err) {
       console.error('Falha ao editar atendente:', err);
@@ -102,13 +99,14 @@ export const useAttendants = () => {
     }
   };
 
+
   const updateAttendantStatus = useCallback(async (attendant: Attendant) => {
 
     if (!attendant.user || !attendant.user.id) {
       throw new Error('Dados do usuário do atendente estão incompletos.');
     }
     try {
-      
+
       const newStatus = !attendant.user.status;
 
       await put(`/users/${attendant.user.id}`, { status: newStatus });

@@ -7,7 +7,7 @@ import Button from '../../components/Gerais/Buttons/Button';
 import Modal from '../../components/Gerais/ModalForm/Modal';
 import AttendantForm from '../../components/Atendentes/AttendantForm';
 // Types
-import type { Attendant, AttendantInput } from '../../types/attendant';
+import type { Attendant, AttendantFormData } from '../../types/attendant';
 // Hooks
 import { useAttendants } from '../../hooks/attendants/useAttendants';
 // Css
@@ -25,11 +25,11 @@ export default function AtendentesPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState<'todos' | 'ativo' | 'inativo'>('todos');
 
-  const [sortField, setSortField] = useState<keyof Attendant | 'nome' | 'email' | 'numero' | null>(null);
+  const [sortField, setSortField] = useState<keyof AttendantFormData | null>(null);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
 
-  const [editData, setEditData] = useState<Partial<AttendantInput> | null>(null);
+  const [editData, setEditData] = useState<AttendantFormData | null>(null);
   const [editAttendantId, setEditAttendantId] = useState<string | null>(null);
   const [editUserId, setEditUserId] = useState<string | null>(null);
 
@@ -47,21 +47,30 @@ export default function AtendentesPage() {
   };
 
   const handleEdit = (attendant: Attendant) => {
+    if (!attendant.user) return;
+
     setEditAttendantId(attendant.id);
-    setEditUserId(attendant.user.id);
+    setEditUserId(attendant.user_id);
+    
     setEditData({
+      id: attendant.id,
+      user_id: attendant.user_id,
       nome: attendant.user.nome,
       email: attendant.user.email,
       status: attendant.user.status,
-      numero: attendant.user.numero
+      numero: attendant.user.numero,
     });
+
     setIsModalOpen(true);
   };
 
-  const handleSave = async (data: AttendantInput) => {
+  const handleSave = async (data: AttendantFormData) => {
     if (editAttendantId) {
-      await editAttendant(editAttendantId, editUserId, data);
+      // edição
+      console.log(editAttendantId, data.user_id, data)
+      await editAttendant(editAttendantId, data.user_id!, data);
     } else {
+      // criação
       await addAttendant(data);
     }
     closeModal();
@@ -115,7 +124,7 @@ export default function AtendentesPage() {
     });
   }, [filteredAttendants, sortField, sortOrder]);
 
-  
+
 
 
   const renderAttendantRow = (attendant: Attendant) => (
@@ -223,14 +232,16 @@ export default function AtendentesPage() {
             nome: editData.nome,
             email: editData.email,
             status: editData.status,
-            numero: editData.numero
-          } : null}
+            numero: editData.numero, 
+            user_id: editData.user_id
+          } : undefined}
           editMode={!!editData}
         />
       </Modal>
     </div >
   );
 }
+
 
 
 

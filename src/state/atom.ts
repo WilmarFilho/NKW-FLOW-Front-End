@@ -55,7 +55,6 @@ export const helpChatState = atom<HelpChat[]>({
 
 // Autenticação
 
-
 export const userState = atom<User | null>({
   key: 'userState',
   default: null,

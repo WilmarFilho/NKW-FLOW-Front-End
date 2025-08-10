@@ -6,7 +6,6 @@ import AgentCard from '../../components/Agentes/AgentCard/AgentCard';
 // Hooks
 import { useAgents } from '../../hooks/agents/useAgents';
 import { useConnections } from '../../hooks/connections/useConnections';
-
 // Css
 import PageStyles from '../PageStyles.module.css'
 
@@ -70,5 +69,3 @@ export default function AgentesPage() {
     </div>
   );
 };
-
-

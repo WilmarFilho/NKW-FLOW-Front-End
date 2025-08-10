@@ -7,3 +7,13 @@ export interface Attendant {
   user: User;
   user_admin: User;
 }
+
+export interface AttendantFormData {
+  id?: string; // id do atendente, opcional no create
+  user_id?: string; // id do user, obrigatório no edit
+  nome: string;
+  email: string;
+  numero: string;
+  senha_hash?: string;
+  status: boolean;
+}

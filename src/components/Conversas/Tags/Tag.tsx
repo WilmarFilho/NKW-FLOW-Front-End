@@ -20,3 +20,5 @@ function Tag({ label, active = false, onClick }: TagProps) {
 }
 
 export default React.memo(Tag);
+
+

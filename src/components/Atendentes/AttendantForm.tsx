@@ -1,13 +1,13 @@
 import { useState } from 'react';
 // Tipos
-import type { AttendantInput } from '../../types/attendant';
+import type { AttendantFormData } from '../../types/attendant';
 // Css
-import formStyles from '../Gerais/ModalForm/ModalForm.module.css'; 
+import formStyles from '../Gerais/ModalForm/ModalForm.module.css';
 
 interface AttendantFormProps {
-  onSave: (data: AttendantInput) => Promise<void>;
+  onSave: (data: AttendantFormData) => Promise<void>;
   onClose: () => void;
-  initialData?: Partial<AttendantInput> | null; 
+  initialData?: Partial<AttendantFormData>;
   editMode?: boolean;
 }
 
@@ -17,12 +17,12 @@ export default function AttendantForm({
   initialData,
   editMode = false,
 }: AttendantFormProps) {
-  
-  const [formData, setFormData] = useState<AttendantInput>({
+
+  const [formData, setFormData] = useState<AttendantFormData>({
     nome: initialData?.nome || '',
     email: initialData?.email || '',
     numero: initialData?.numero || '',
-    senha: '', // Senha é sempre resetada por segurança
+    senha_hash: '', // Senha é sempre resetada por segurança
     status: initialData?.status ?? true,
     user_id: initialData?.user_id ?? '',
   });
@@ -43,7 +43,7 @@ export default function AttendantForm({
     setError(null);
     try {
       await onSave(formData);
-      onClose(); 
+      onClose();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Ocorreu um erro desconhecido.');
       console.error('Erro ao salvar atendente:', err);
@@ -53,7 +53,7 @@ export default function AttendantForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className={formStyles.formContainer}> 
+    <form onSubmit={handleSubmit} className={formStyles.formContainer}>
       <div className={formStyles.formGroup}>
         <label htmlFor="nome">Nome</label>
         <input
@@ -96,10 +96,10 @@ export default function AttendantForm({
           type="password"
           className={formStyles.formInput}
           placeholder={editMode ? 'Deixe em branco para não alterar' : 'Mínimo 6 caracteres'}
-          value={formData.senha}
+          value={formData.senha_hash}
           onChange={handleInputChange}
           // A senha só é obrigatória no modo de criação
-          required={!editMode} 
+          required={!editMode}
         />
       </div>
       {editMode && (
@@ -130,7 +130,7 @@ export default function AttendantForm({
           type="submit"
           className={formStyles.submitButton}
           // MELHORIA: Desabilita o botão durante o envio
-          disabled={isSubmitting} 
+          disabled={isSubmitting}
         >
           {isSubmitting ? 'Salvando...' : editMode ? 'Atualizar Atendente' : 'Criar Atendente'}
         </button>
