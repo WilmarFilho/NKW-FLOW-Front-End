@@ -1,29 +1,31 @@
 // Libs
-import { useEffect, useCallback } from 'react';
+import { useCallback } from 'react';
 import { useRecoilState } from 'recoil';
 // Atom
-import { connectionsState } from '../../state/atom';
+import { connectionsState, userState } from '../../state/atom';
 // Utils
 import { useApi } from '../utils/useApi';
 // Types
 import type { Connection } from '../../types/connection';
+import { User } from '../../types/user';
 
 export const useConnections = () => {
+  const [user] = useRecoilState(userState)
   const [connections, setConnections] = useRecoilState(connectionsState);
   const { get, del, put } = useApi();
 
-  const fetchConnections = useCallback(async () => {
-    const data = await get<Connection[]>('/connections');
+  const fetchConnections = useCallback(async (userParam?: User) => {
+
+    const currentUser = userParam ?? user;
+    if (!currentUser) return;
+
+    const data = await get<Connection[]>(`/connections/${currentUser.id}`);
+
     if (data) {
       setConnections(data);
-    } else {
-      setConnections([]);
-    }
-  }, [get]);
+    } 
 
-  useEffect(() => {
-    fetchConnections();
-  }, [fetchConnections]);
+  }, [get]);
 
   const removeConnection = useCallback(async (id: string) => {
     const result = await del(`/connections/${id}`);
@@ -52,7 +54,6 @@ export const useConnections = () => {
   }, [put, setConnections]);
 
   return {
-    connections,
     removeConnection,
     fetchConnections,
     updateConnectionStatus,

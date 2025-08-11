@@ -3,16 +3,16 @@ import { motion } from 'framer-motion';
 // Components
 import Button from '../../components/Gerais/Buttons/Button';
 import AgentCard from '../../components/Agentes/AgentCard/AgentCard';
-// Hooks
-import { useAgents } from '../../hooks/agents/useAgents';
-import { useConnections } from '../../hooks/connections/useConnections';
 // Css
 import PageStyles from '../PageStyles.module.css'
+// Recoil
+import { useRecoilValue } from 'recoil';
+import { agentsState, connectionsState } from '../../state/atom';
 
 export default function AgentesPage() {
 
-  const { agents } = useAgents();
-  const { connections } = useConnections();
+  const connections = useRecoilValue(connectionsState)
+  const agents = useRecoilValue(agentsState)
 
   return (
     <div className={PageStyles.container}>

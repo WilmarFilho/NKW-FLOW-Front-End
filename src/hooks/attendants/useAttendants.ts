@@ -1,5 +1,5 @@
 // Libs
-import { useEffect, useCallback } from 'react';
+import { useCallback } from 'react';
 import { useRecoilState } from 'recoil';
 // Atom
 import { attendantsState, userState } from '../../state/atom';
@@ -8,23 +8,27 @@ import type { Attendant, AttendantFormData } from '../../types/attendant';
 import { User } from '../../types/user';
 // Utils
 import { useApi } from '../utils/useApi';
+import { toast } from 'react-toastify';
 
 export const useAttendants = () => {
   const [attendants, setAttendants] = useRecoilState(attendantsState);
-  const { get, post, del, put } = useApi();
+  const { post, del, put } = useApi();
   const [user] = useRecoilState(userState)
 
   // Função para buscar e atualizar a lista de atendentes.
-  const fetchAttendants = useCallback(async () => {
-    const fetchedData = await get<Attendant[]>('/attendants');
+  const fetchAttendants = useCallback(async (userParam?: User) => {
+    const currentUser = userParam ?? user;
+    if (!currentUser) return;
+
+    const fetchedData = await post<Attendant[]>('/attendants/list', {
+      user_admin_id: currentUser.id,
+      tipo_de_usuario: currentUser.tipo_de_usuario 
+    });
+
     if (fetchedData) {
       setAttendants(fetchedData);
     }
-  }, [get, setAttendants]);
-
-  useEffect(() => {
-    fetchAttendants();
-  }, [fetchAttendants]);
+  }, [setAttendants, user]);
 
   const addAttendant = async (attendantData: Partial<User>) => {
     if (!user) {
@@ -46,6 +50,7 @@ export const useAttendants = () => {
       // Validação robusta da resposta da API.
       const createdUserId = userResponse?.[0]?.id;
       if (!createdUserId) {
+        toast.error('com API de Usuário');
         throw new Error('A API de usuários não retornou um ID válido.');
       }
 
@@ -90,14 +95,13 @@ export const useAttendants = () => {
 
       // Atualiza usuário
       await put(`/users/${userId}`, userUpdatePayload);
-
       await fetchAttendants();
+      toast.success('Alteração salva com sucesso!');
     } catch (err) {
       console.error('Falha ao editar atendente:', err);
       throw err;
     }
   };
-
 
   const updateAttendantStatus = useCallback(async (attendant: Attendant) => {
 
@@ -109,9 +113,8 @@ export const useAttendants = () => {
       const newStatus = !attendant.user.status;
 
       await put(`/users/${attendant.user.id}`, { status: newStatus });
-
       await fetchAttendants();
-
+      toast.success('Alteração salva com sucesso!');
     } catch (err) {
       console.error('Falha ao atualizar o status do atendente:', err);
       throw err;

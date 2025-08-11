@@ -1,6 +1,6 @@
 // Libs
-import { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
+import { useCallback } from 'react'; // faltava importar useCallback
 // Atom
 import { agentsState } from '../../state/atom';
 // Types
@@ -12,18 +12,14 @@ export const useAgents = () => {
   const [agents, setAgents] = useRecoilState(agentsState);
   const { get } = useApi();
 
-  const fetchAgents = async () => {
+  const fetchAgents = useCallback(async () => {
     const fetchedData = await get<Agent[]>('/agents');
     if (fetchedData) {
       setAgents(fetchedData);
     }
-  };
-
-  useEffect(() => {
-    fetchAgents();
   }, [get, setAgents]);
 
   return {
-    agents,
+    fetchAgents,
   };
 };

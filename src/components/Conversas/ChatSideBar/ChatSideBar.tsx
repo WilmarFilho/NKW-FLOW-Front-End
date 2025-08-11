@@ -2,7 +2,6 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { motion } from 'framer-motion';
 
 // Hooks
-import { useAgents } from '../../../hooks/agents/useAgents';
 import { useDebounce } from '../../../hooks/utils/useDebounce';
 
 // Components
@@ -18,6 +17,8 @@ import styles from './ChatSideBar.module.css';
 
 // Assets
 import AddChatIcon from '../assets/addchat.svg';
+import { agentsState } from '../../../state/atom';
+import { useRecoilValue } from 'recoil';
 
 interface ChatSidebarProps {
   chats: Chat[];
@@ -78,7 +79,7 @@ function ChatSidebar({
   const debouncedSearch = useDebounce(searchQuery, 300);
   const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
   // Carregando Agents para as Tags
-  const { agents } = useAgents();
+  const agents = useRecoilValue(agentsState)
 
   const filteredChats = useMemo(
     () =>

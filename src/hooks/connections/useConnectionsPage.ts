@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback } from 'react';
-import { useRecoilState } from 'recoil';
-import { addConnectionModalState } from '../../state/atom';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { addConnectionModalState, connectionsState } from '../../state/atom';
 import { useConnections } from './useConnections';
 import type { Connection } from '../../types/connection';
 
@@ -10,7 +10,8 @@ type SortOrder = 'asc' | 'desc';
 
 export function useConnectionsPage() {
 
-  const { connections, removeConnection, updateConnectionStatus, fetchConnections } = useConnections();
+  const connections = useRecoilValue(connectionsState)
+  const { removeConnection, updateConnectionStatus, fetchConnections } = useConnections();
   const [activeFilter, setActiveFilter] = useState<Filter>('todos');
   const [sortField, setSortField] = useState<SortField>(null);
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');

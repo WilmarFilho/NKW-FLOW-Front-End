@@ -1,10 +1,11 @@
 // Hooks
-import { useAgents } from '../../hooks/agents/useAgents';
+import { useRecoilValue } from 'recoil';
 // Type
 import { Connection } from '../../types/connection';
 // Css
 import formStyles from '../Gerais/Form/form.module.css'
 import styles from './ConnectionForm.module.css'
+import { agentsState } from '../../state/atom';
 
 interface ConnectionFormProps {
   formData: Partial<Connection> | null;
@@ -22,7 +23,7 @@ export default function ConnectionForm({
   editMode
 }: ConnectionFormProps) {
 
-  const { agents } = useAgents();
+  const agents = useRecoilValue(agentsState)
 
   if (step === 1) {
     return (

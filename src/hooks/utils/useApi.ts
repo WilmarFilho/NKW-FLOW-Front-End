@@ -1,20 +1,18 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import { apiConfig } from '../../config/api';
+import { toast } from 'react-toastify';
 
 export const useApi = () => {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-
   const executeRequest = useCallback(async <T>(
     method: 'get' | 'post' | 'put' | 'delete',
     path: string,
     requestData?: unknown,
     config?: AxiosRequestConfig
   ): Promise<T | null> => {
+
     console.log(`[useApi] Chamando ${method.toUpperCase()} ${path}`);
-    setLoading(true);
-    setError(null);
+
     try {
       const url = `${apiConfig.node}${path}`;
       let response: AxiosResponse<T>;
@@ -37,17 +35,22 @@ export const useApi = () => {
       return response.data;
     } catch (err) {
       const axiosError = err as AxiosError;
+      let errorMessage = '';
+
       if (axiosError.response) {
-        setError(`Erro: ${axiosError.response.status} - ${axiosError.response.statusText}`);
-      } else if (axiosError.request) {
-        setError('Nenhuma resposta recebida do servidor. Verifique sua conexão.');
-      } else {
-        setError(`Erro na requisição: ${axiosError.message}`);
+        const data = axiosError.response.data as { message?: string; error?: string };
+        errorMessage = data?.message || data?.error || `Erro: ${axiosError.response.status} - ${axiosError.response.statusText}`;
       }
-      console.error('Erro na requisição API:', axiosError);
-      return null;
-    } finally {
-      setLoading(false);
+      else if (axiosError.request) {
+        errorMessage = 'Nenhuma resposta recebida do servidor backend. Verifique sua conexão.';
+      } else {
+        errorMessage = `Erro na requisição: ${axiosError.message}`;
+      }
+
+      toast.error(errorMessage);
+
+      throw new Error
+
     }
   }, []);
 
@@ -68,11 +71,9 @@ export const useApi = () => {
   }, [executeRequest]);
 
   return useMemo(() => ({
-    loading,
-    error,
     get,
     post,
     put,
     del,
-  }), [loading, error, get, post, put, del]);
+  }), [get, post, put, del]);
 };

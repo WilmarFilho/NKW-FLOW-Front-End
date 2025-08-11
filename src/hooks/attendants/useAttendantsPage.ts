@@ -23,7 +23,7 @@ export function useAttendantsPage() {
 
   const handleStatusToggle = async (attendant: Attendant) => {
     if (window.confirm('Deseja alterar o status do atendente?')) {
-      await updateAttendantStatus(attendant).catch(err => alert('Falha ao alterar o status: ' + err.message));
+      await updateAttendantStatus(attendant);
     }
   };
 

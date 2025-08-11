@@ -1,27 +1,21 @@
 // Libs
-import { useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useState } from 'react';
+import { useRecoilValue } from 'recoil';
 // Hooks
 import useChats from './useChats';
 import useMessages from '../../hooks/chats/useMessages';
 import useSendMessage from '../../hooks/chats/useSendMessage';
-import { useConnections } from '../../hooks/connections/useConnections';
 // Recoil
-import { userState } from '../../state/atom';
+import { chatsState, connectionsState } from '../../state/atom';
 // Type
 import { Chat } from '../../types/chats';
 
 export function useConversasPage() {
-    // Carregar Dados
-    const [user] = useRecoilState(userState);
-    const { connections } = useConnections();
-    const { chats, fetchChats, fectchImageProfile } = useChats();
 
-    useEffect(() => {
-        if (user?.id) {
-            fetchChats(user.id);
-        }
-    }, [user?.id, fetchChats]);
+    // Carregar Dados
+    const connections = useRecoilValue(connectionsState);
+    const chats = useRecoilValue(chatsState)
+    const { fectchImageProfile } = useChats();
     
     // Carregar Hooks
     const { sendMessage } = useSendMessage();

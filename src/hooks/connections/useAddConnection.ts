@@ -8,10 +8,6 @@ import { Connection } from '../../types/connection';
 // Atom
 import { userState } from '../../state/atom';
 
-interface AddConnectionResponse {
-  qr_code: string;
-}
-
 export const useAddConnection = () => {
 
   const [user] = useRecoilState(userState);
@@ -34,13 +30,12 @@ export const useAddConnection = () => {
       agente_id: connection.agente_id,
     };
 
-    const data = await post<AddConnectionResponse>('/connections', payload);
+    const qrcode = await post<string>('/connections', payload);
 
-    if (data) {
-      setQrCode(data.qr_code);
-      setIsLoading(false)
-      setStep(2);
-    }
+    setQrCode(qrcode);
+    setIsLoading(false)
+    setStep(2);
+
   };
 
   const handleEditConnection = async (connection: Partial<Connection>) => {
