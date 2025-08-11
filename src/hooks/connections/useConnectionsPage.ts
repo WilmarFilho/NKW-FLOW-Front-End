@@ -9,11 +9,13 @@ type SortField = 'nome' | null;
 type SortOrder = 'asc' | 'desc';
 
 export function useConnectionsPage() {
-  const { connections, removeConnection, updateConnectionStatus, fetchConnections } = useConnections();
 
+  const { connections, removeConnection, updateConnectionStatus, fetchConnections } = useConnections();
   const [activeFilter, setActiveFilter] = useState<Filter>('todos');
   const [sortField, setSortField] = useState<SortField>(null);
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
+  const [formData, setFormData] = useState<Partial<Connection> | null>(null);
+
   const [modalState, setModalState] = useRecoilState(addConnectionModalState);
 
   const handleDelete = useCallback(async (id: string) => {
@@ -41,15 +43,22 @@ export function useConnectionsPage() {
 
   const openModal = useCallback((conn?: Connection) => {
     if (conn) {
-      setModalState({ isOpen: true, initialData: conn, editMode: true });
+      setFormData(conn)
+      setModalState({ isOpen: true, editMode: true });
     } else {
-      setModalState({ isOpen: true, initialData: null, editMode: false });
+      setModalState({ isOpen: true, editMode: false });
     }
   }, [setModalState]);
 
   const handleEdit = useCallback((conn: Connection) => {
     openModal(conn);
   }, [openModal]);
+
+  const closeModal = useCallback(() => {
+    setModalState({ isOpen: false, editMode: false });
+    setFormData(null);
+  }, []);
+
 
   const filteredConnections = useMemo(() => {
     if (activeFilter === 'todos') return connections;
@@ -72,10 +81,14 @@ export function useConnectionsPage() {
 
   return {
     connections: sortedConnections,
+    closeModal,
     activeFilter,
     sortField,
     sortOrder,
     modalState,
+    formData,
+    setFormData,
+    setModalState,
     setActiveFilter,
     setSortField,
     setSortOrder,

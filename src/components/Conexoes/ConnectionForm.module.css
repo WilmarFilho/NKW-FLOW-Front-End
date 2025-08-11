@@ -1,0 +1,14 @@
+.qrCodeStep h2 {
+    margin-bottom: 10px;
+    font-size: 22px;
+    color: var(--color-text);
+    text-align: center;
+}
+
+.qrCodeStep img {
+    width: 250px;
+    height: 250px;
+    margin: 20px auto;
+    display: block;
+    border-radius: 8px;
+}

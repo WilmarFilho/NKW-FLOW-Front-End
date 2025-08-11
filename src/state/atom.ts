@@ -28,11 +28,10 @@ export const messagesState = atom<Message[]>({
 // Controle do modal de adicionar nova conversa
 export const addConnectionModalState = atom<{
   isOpen: boolean;
-  initialData?: Partial<Connection> | null;
   editMode?: boolean;
 }>({
   key: 'addConnectionModalState',
-  default: { isOpen: false, initialData: null, editMode: false },
+  default: { isOpen: false, editMode: false },
 });
 
 // Estado dos atendentes humanos

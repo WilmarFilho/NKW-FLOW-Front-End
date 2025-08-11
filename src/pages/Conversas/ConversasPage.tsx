@@ -1,11 +1,13 @@
 // Css
 import PageStyles from '../PageStyles.module.css';
+import FormStyles from '../../components/Gerais/Form/form.module.css'
 // Components
 import ChatSidebar from '../../components/Conversas/ChatSideBar/ChatSideBar';
 import ChatWindow from '../../components/Conversas/ChatWindow/ChatWindow';
-import Modal from '../../components/Gerais/ModalForm/Modal';
+import Modal from '../../components/Gerais/Modal/Modal';
 // Hook da Página
 import { useConversasPage } from '../../hooks/chats/useConversasPage';
+import { Form } from 'react-router-dom';
 
 export default function ConversasPage() {
   const state = useConversasPage();
@@ -29,11 +31,13 @@ export default function ConversasPage() {
       {state.isAddChatOpen && (
         <Modal
           isOpen={state.isAddChatOpen}
+          labelSubmit='Enviar'
+          onSave={state.handleSendMessage}
           onClose={() => state.setIsAddChatOpen(false)}
           title="Começar nova conversa."
         >
-          <div className={PageStyles.modalContent}>
-            <div className={PageStyles.formGroup}>
+          <div className={FormStyles.formContainer}>
+            <div className={FormStyles.formGroup}>
               <label>Conexão para disparar mensagem</label>
               <select
                 value={state.selectedConnectionId}
@@ -49,39 +53,29 @@ export default function ConversasPage() {
               </select>
             </div>
 
-            <div className={PageStyles.formGroup}>
-              <label>Número de Telefone</label>
-              <input
-                type="text"
-                placeholder="Número com DDD (ex: 11999999999)"
-                value={state.newChatNumber}
-                className={PageStyles.formInput}
-                onChange={(e) => state.setNewChatNumber(e.target.value)}
-              />
-            </div>
+            <div className={FormStyles.formRow}>
 
-            <div className={PageStyles.formGroup}>
-              <label>Primeira Mensagem</label>
-              <input
-                placeholder="Primeira mensagem"
-                className={PageStyles.formInput}
-                value={state.newChatMessage}
-                onChange={(e) => state.setNewChatMessage(e.target.value)}
-              />
-            </div>
+              <div className={FormStyles.formGroup}>
+                <label>Número de Telefone</label>
+                <input
+                  type="text"
+                  placeholder="Número com DDD (ex: 11999999999)"
+                  value={state.newChatNumber}
+                  className={PageStyles.formInput}
+                  onChange={(e) => state.setNewChatNumber(e.target.value)}
+                />
+              </div>
 
-            <div className={PageStyles.modalActions}>
-              <button
-                className={PageStyles.submitButton}
-                onClick={state.handleSendMessage}
-                disabled={
-                  !state.newChatNumber ||
-                  !state.newChatMessage ||
-                  !state.selectedConnectionId
-                }
-              >
-                Enviar
-              </button>
+              <div className={FormStyles.formGroup}>
+                <label>Primeira Mensagem</label>
+                <input
+                  placeholder="Primeira mensagem"
+                  className={PageStyles.formInput}
+                  value={state.newChatMessage}
+                  onChange={(e) => state.setNewChatMessage(e.target.value)}
+                />
+              </div>
+
             </div>
           </div>
         </Modal>

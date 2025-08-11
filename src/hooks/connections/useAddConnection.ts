@@ -1,106 +1,61 @@
 // Libs
-import { useEffect, useState, useCallback } from 'react';
+import { useState } from 'react';
 import { useRecoilState } from 'recoil';
 // Utils
 import { useApi } from '../utils/useApi';
-import { useConnections } from './useConnections';
 // Types
 import { Connection } from '../../types/connection';
 // Atom
-import { connectionsState, userState } from '../../state/atom';
+import { userState } from '../../state/atom';
 
 interface AddConnectionResponse {
   qr_code: string;
 }
 
-export const useAddConnection = (
-  onClose: () => void,
-  fetchConnections: () => Promise<void>, // Adicione este parâmetro
-  initialData: Partial<Connection> | undefined | null
-) => {
-  const [connections, setConnections] = useRecoilState(connectionsState);
+export const useAddConnection = () => {
+
   const [user] = useRecoilState(userState);
   const [step, setStep] = useState<1 | 2>(1);
-  const [formData, setFormData] = useState({
-    nome: '',
-    agent: '',
-    id: '',
-    status: true,
-  });
   const [qrCode, setQrCode] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const { post, put } = useApi();
 
+  const handleStartSession = async (connection: Partial<Connection>) => {
 
-  useEffect(() => {
-    if (initialData) {
-      setFormData({
-        nome: initialData.nome?.split('_')[0] || '',
-        agent: initialData.agente_id || '',
-        id: initialData.id || '',
-        status: initialData.status ?? true,
-      });
-    } else {
-      setFormData({ nome: '', agent: '', id: '', status: true });
-    }
-  }, [initialData]);
-
-  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { id, value } = e.target;
-    if (id === 'status') {
-      setFormData((prev) => ({ ...prev, status: value === 'ativo' }));
-    } else {
-      setFormData((prev) => ({ ...prev, [id]: value }));
-    }
-  }, []);
-
-  const handleStartSession = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
     setIsLoading(true)
 
     if (!user) return;
 
     const payload = {
       user_id: user.id,
-      nome: formData.nome,
+      nome: connection.nome,
       status: false,
-      agente_id: formData.agent,
+      agente_id: connection.agente_id,
     };
 
     const data = await post<AddConnectionResponse>('/connections', payload);
 
     if (data) {
       setQrCode(data.qr_code);
+      setIsLoading(false)
       setStep(2);
     }
   };
 
-  const handleEditConnection = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const result = await put<Connection>(`/connections/${formData.id}`, {
-      nome: formData.nome,
-      agente_id: formData.agent,
-      status: formData.status,
+  const handleEditConnection = async (connection: Partial<Connection>) => {
+    await put<Connection>(`/connections/${connection.id}`, {
+      nome: connection.nome,
+      agente_id: connection.agente_id,
+      status: connection.status,
     });
-
-    if (result !== null) {
-      await fetchConnections();
-      onClose();
-    }
   };
-
-
 
   return {
     step,
     qrCode,
-    formData,
-    handleInputChange,
     handleStartSession,
     handleEditConnection,
-    onClose,
     isLoading,
-    setFormData,
   };
 };

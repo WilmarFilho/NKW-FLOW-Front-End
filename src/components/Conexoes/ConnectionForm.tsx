@@ -1,126 +1,104 @@
-import { useRecoilState } from 'recoil';
-
-// State
-import { addConnectionModalState } from '../../state/atom';
-
-// Components
-import Modal from '../Gerais/ModalForm/Modal';
-
 // Hooks
-import { useAddConnection } from '../../hooks/connections/useAddConnection';
 import { useAgents } from '../../hooks/agents/useAgents';
-
+// Type
+import { Connection } from '../../types/connection';
 // Css
-import formStyles from '../Gerais/ModalForm/ModalForm.module.css';
+import formStyles from '../Gerais/Form/form.module.css'
+import styles from './ConnectionForm.module.css'
 
-export default function AddConnectionModal({ fetchConnections }: { fetchConnections: () => Promise<void> }) {
-  const [modalState, setModalState] = useRecoilState(addConnectionModalState);
+interface ConnectionFormProps {
+  formData: Partial<Connection> | null;
+  onChange: (data: Partial<Connection> | null) => void;
+  step: 1 | 2;
+  qrCode: string | null;
+  editMode?: boolean;
+}
+
+export default function ConnectionForm({
+  formData,
+  onChange,
+  step,
+  qrCode,
+  editMode
+}: ConnectionFormProps) {
+
   const { agents } = useAgents();
-  const { initialData, editMode } = modalState;
 
-  const handleClose = () => {
-    setModalState({ isOpen: false, initialData: null, editMode: false });
-  };
+  if (step === 1) {
+    return (
+      <div className={formStyles.formContainer}>
 
-  const {
-    step,
-    qrCode,
-    formData,
-    handleInputChange,
-    handleStartSession,
-    handleEditConnection,
-    isLoading,
-  } = useAddConnection(handleClose, fetchConnections, initialData);
-
-  if (!modalState.isOpen) return null;
-
-  const getTitle = () => {
-    if (editMode) return 'Editar Conexão';
-    return step === 1 ? 'Criar Nova Conexão' : 'Conecte seu WhatsApp';
-  };
-
-  return (
-    <Modal isOpen={modalState.isOpen} onClose={handleClose} title={getTitle()}>
-      {step === 1 && (
-        // Aplicando a classe do container do formulário
-        <form
-          onSubmit={editMode ? handleEditConnection : handleStartSession}
-          className={formStyles.formContainer} 
-        >
-          <p className={formStyles.formDescription}>
-            {editMode
-              ? 'Edite as informações da sua conexão.'
-              : 'Preencha os dados abaixo para gerar o QR Code de conexão.'}
-          </p>
+        <div className={formStyles.formRow} >
           <div className={formStyles.formGroup}>
-            <label htmlFor="nome">Nome da Conexão</label>
+            <label>Nome da Conexão</label>
             <input
               id="nome"
               type="text"
-              className={formStyles.formInput}
-              value={formData.nome}
-              onChange={handleInputChange}
-              placeholder="Ex: WhatsApp da Loja"
-              required
+              value={formData?.nome}
+              onChange={(e) =>
+                onChange({
+                  ...formData,
+                  nome: e.target.value
+                })
+              }
             />
           </div>
-          {editMode && (
-            <div className={formStyles.formGroup}>
-              <label htmlFor="status">Status</label>
-              <select
-                id="status"
-                className={formStyles.formSelect}
-                value={formData.status ? 'ativo' : 'inativo'}
-                onChange={handleInputChange}
-              >
-                <option value="ativo">Ativo</option>
-                <option value="inativo">Desativado</option>
-              </select>
-            </div>
-          )}
           <div className={formStyles.formGroup}>
-            <label htmlFor="agent">Agente IA</label>
+            <label>Agente IA</label>
             <select
               id="agent"
-              className={formStyles.formSelect}
-              value={formData.agent}
-              onChange={handleInputChange}
-              required
+              value={formData?.agente_id}
+              onChange={(e) =>
+                onChange({
+                  ...formData,
+                  agente_id: e.target.value
+                })
+              }
             >
-              <option value="">Selecione um agente</option>
-              {agents?.map((agent) => (
-                <option key={agent.id} value={agent.id}>
-                  {agent.tipo_de_agente}
-                </option>
+              <option value="">Selecione</option>
+              {agents?.map((a) => (
+                <option key={a.id} value={a.id}>{a.tipo_de_agente}</option>
               ))}
             </select>
           </div>
-          {isLoading ? (
-            <button type="button" className={formStyles.submitButton} disabled>
-              <span className={formStyles.spinner}></span>
-              Conectando...
-            </button>
-          ) : (
-            <button type="submit" className={formStyles.submitButton}>
-              {editMode ? 'Salvar Alterações' : 'Gerar QR Code'}
-            </button>
-          )}
-          
-        </form>
-      )}
-
-      {step === 2 && (
-        <div className={formStyles.qrCodeStep}>
-          <p className={formStyles.formDescription}>
-            Abra o WhatsApp em seu celular, vá em "Aparelhos Conectados" e escaneie o código abaixo.
-          </p>
-          {qrCode ? (
-            <img src={qrCode} alt="QR Code para conectar no WhatsApp" />
-          ) : (
-            <div className={formStyles.statusText}>Gerando QR Code...</div>
-          )}
         </div>
-      )}
-    </Modal>
-  );
+
+        {editMode && (
+          <div className={formStyles.formGroup}>
+            <label>Status</label>
+            <select
+              id="status"
+              value={formData?.status ? 'ativo' : 'inativo'}
+              onChange={(e) =>
+                onChange({
+                  ...formData,
+                  status: e.target.value === 'ativo'
+                })
+              }
+            >
+              <option value="ativo">Ativo</option>
+              <option value="inativo">Inativo</option>
+            </select>
+          </div>
+        )}
+
+
+      </div>
+    );
+  }
+
+  if (step === 2) {
+    return (
+      <div className={styles.qrCodeStep}>
+        <h2>Escaneie o qr code com seu WhatsApp</h2>
+        {qrCode ? <img src={qrCode} alt="QR Code" /> : ''}
+      </div>
+    );
+  }
+
+  return null;
 }
+
+
+
+

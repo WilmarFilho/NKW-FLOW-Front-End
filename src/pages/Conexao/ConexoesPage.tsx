@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { NavLink } from 'react-router-dom';
 // Components
 import Button from '../../components/Gerais/Buttons/Button';
-import AddConnectionModal from '../../components/Conexoes/ConnectionForm';
+import ConnectionForm from '../../components/Conexoes/ConnectionForm';
 import GenericTable from '../../components/Gerais/Tables/GenericTable';
 // Hooks
 import { useConnectionsPage } from '../../hooks/connections/useConnectionsPage';
@@ -14,6 +14,8 @@ import EditIcon from './assets/arrow-circle.svg';
 import DeleteIcon from './assets/x-circle.svg';
 // Type
 import { Connection } from '../../types/connection';
+import Modal from '../../components/Gerais/Modal/Modal';
+import { useAddConnection } from '../../hooks/connections/useAddConnection';
 
 export default function ConexoesPage() {
   const {
@@ -21,6 +23,9 @@ export default function ConexoesPage() {
     activeFilter,
     sortField,
     sortOrder,
+    modalState,
+    formData,
+    setFormData,
     setActiveFilter,
     setSortField,
     setSortOrder,
@@ -28,10 +33,24 @@ export default function ConexoesPage() {
     handleStatusToggle,
     handleEdit,
     openModal,
+    closeModal,
     fetchConnections,
   } = useConnectionsPage();
 
-  const renderConnectionRow = (conn : Connection) => (
+  const { handleStartSession, handleEditConnection, isLoading, step, qrCode } = useAddConnection();
+
+  const handleModalSaveClick = async () => {
+    if (!formData) return alert('Preencha o formulário');
+    if (modalState.editMode) {
+      await handleEditConnection(formData);
+      closeModal()
+      fetchConnections()
+    } else {
+      await handleStartSession(formData);
+    }
+  };
+
+  const renderConnectionRow = (conn: Connection) => (
     <div
       key={conn.id}
       className={tableStyles.tableRow}
@@ -125,7 +144,24 @@ export default function ConexoesPage() {
         </div>
       </div>
 
-      <AddConnectionModal fetchConnections={fetchConnections} />
+      <Modal
+        isOpen={modalState.isOpen}
+        onClose={closeModal}
+        title={modalState.editMode ? 'Editar Conexão' : 'Cadastrar Conexão'}
+        labelSubmit={modalState.editMode ? 'Salvar Alterações' : 'Gerar QR Code'}
+        isSubmitting={isLoading}
+        onSave={handleModalSaveClick}
+        step={step}
+      >
+        <ConnectionForm
+          onChange={setFormData}
+          formData={formData}
+          editMode={modalState.editMode}
+          step={step}
+          qrCode={qrCode}
+        />
+      </Modal>
+
     </div>
   );
 }

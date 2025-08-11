@@ -1,17 +1,19 @@
-// hooks/useAttendantsPage.ts
 import { useState, useMemo } from 'react';
 import { useAttendants } from './/useAttendants';
 import type { Attendant, AttendantFormData } from '../../types/attendant';
 
 export function useAttendantsPage() {
   const { attendants, addAttendant, removeAttendant, editAttendant, updateAttendantStatus } = useAttendants();
-  
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState<'todos' | 'ativo' | 'inativo'>('todos');
   const [sortField, setSortField] = useState<keyof AttendantFormData | null>(null);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [editData, setEditData] = useState<AttendantFormData | null>(null);
   const [editAttendantId, setEditAttendantId] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [formData, setFormData] = useState<AttendantFormData | null>(null);
 
   const handleDelete = async (id: string) => {
     if (window.confirm('Tem certeza?')) {
@@ -40,6 +42,7 @@ export function useAttendantsPage() {
   };
 
   const handleSave = async (data: AttendantFormData) => {
+
     if (editAttendantId) {
       await editAttendant(editAttendantId, data.user_id!, data);
     } else {
@@ -94,6 +97,8 @@ export function useAttendantsPage() {
     activeFilter,
     editData,
     isModalOpen,
+    isSubmitting,
+    formData,
     handleDelete,
     handleEdit,
     handleSave,
@@ -103,5 +108,9 @@ export function useAttendantsPage() {
     setSortOrder,
     openModal,
     closeModal,
+    setFormData,
+    setIsSubmitting,
   };
 }
+
+

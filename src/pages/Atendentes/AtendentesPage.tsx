@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 // Components
 import Button from '../../components/Gerais/Buttons/Button';
 import GenericTable from '../../components/Gerais/Tables/GenericTable';
-import Modal from '../../components/Gerais/ModalForm/Modal';
+import Modal from '../../components/Gerais/Modal/Modal';
 import AttendantForm from '../../components/Atendentes/AttendantForm';
 // Hooks
 import { useAttendantsPage } from '../../hooks/attendants/useAttendantsPage';
@@ -13,7 +13,8 @@ import tableStyles from '../../components/Gerais/Tables/TableStyles.module.css';
 import EditIcon from './assets/arrow-circle.svg';
 import DeleteIcon from './assets/x-circle.svg';
 // Type
-import { Attendant } from '../../types/attendant';
+import { Attendant, AttendantFormData } from '../../types/attendant';
+import { useState } from 'react';
 
 type Column = 'Nome' | 'Email' | 'Número' | 'Status';
 
@@ -25,23 +26,39 @@ const fieldMap: Record<Column, 'nome' | 'email' | 'numero' | 'status'> = {
 };
 
 export default function AtendentesPage() {
+
   const {
     attendants,
+    isModalOpen,
+    editData,
+    isSubmitting,
+    openModal,
+    closeModal,
+    handleSave,
+    handleDelete,
+    handleEdit,
+    handleStatusToggle,
+    setSortField,
+    setSortOrder,
     sortField,
     sortOrder,
     activeFilter,
-    editData,
-    isModalOpen,
-    handleDelete,
-    handleEdit,
-    handleSave,
-    handleStatusToggle,
-    setActiveFilter,
-    setSortField,
-    setSortOrder,
-    openModal,
-    closeModal
+    setActiveFilter
   } = useAttendantsPage();
+
+  const [formData, setFormData] = useState<AttendantFormData | null>(null);
+
+  const handleFormChange = (data: AttendantFormData) => {
+    setFormData(data);
+  };
+
+  const handleModalSaveClick = async () => {
+    if (!formData) {
+      alert('Formulário incompleto');
+      return;
+    }
+    await handleSave(formData);
+  };
 
   const renderRow = (attendant: Attendant) => (
     <div key={attendant.id} className={tableStyles.tableRow} style={{ gridTemplateColumns: '1fr 2fr 2fr 2fr 1fr' }}>
@@ -69,8 +86,6 @@ export default function AtendentesPage() {
         </div>
         <Button label="Adicionar Atendente" onClick={openModal} />
       </motion.header>
-
-
 
       <div className={PageStyles.containerContent}>
         <GenericTable
@@ -103,8 +118,20 @@ export default function AtendentesPage() {
         </div>
       </div>
 
-      <Modal isOpen={isModalOpen} onClose={closeModal} title={editData ? 'Editar Atendente' : 'Cadastrar Novo Atendente'}>
-        <AttendantForm onSave={handleSave} onClose={closeModal} initialData={editData || undefined} editMode={!!editData} />
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        title={editData ? 'Editar Atendente' : 'Cadastrar Novo Atendente'}
+        labelSubmit={editData ? 'Editar Atendente' : 'Cadastrar Atendente'}
+        isSubmitting={isSubmitting}
+        onSave={handleModalSaveClick}
+      >
+        <AttendantForm
+          initialData={editData || undefined}
+          editMode={!!editData}
+          onChange={handleFormChange}
+          isSubmitting={isSubmitting}
+        />
       </Modal>
     </div>
   );

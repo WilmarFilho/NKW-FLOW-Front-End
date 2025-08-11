@@ -89,12 +89,13 @@
   font-weight: 300;
   letter-spacing: 2px;
   line-height: 22px;
+  opacity: .6;
   /* Define um tamanho de fonte base */
   color: var(--color-button-searchbar);
 }
 
 .iaFilterButton:hover {
-  background-color: var(--color-primary);
+  background-color: var(--color-background-tags-hover);
   border: 1px solid var(--color-primary);
   transition: .2s;
   color: var(--color-text-white);

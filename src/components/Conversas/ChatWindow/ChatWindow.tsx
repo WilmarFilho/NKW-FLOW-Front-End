@@ -9,8 +9,7 @@ import { userState, chatsState } from '../../../state/atom';
 // Components
 import MessageBubble from '../MessageBubble/MessageBubble';
 import ChatInput from '../../Gerais/Inputs/ChatInput';
-import Modal from '../../../components/Gerais/ModalForm/Modal';
-import Button from '../../../components/Gerais/Buttons/Button';
+import Modal from '../../Gerais/Modal/Modal';
 import ToggleSwitch from '../../../components/Configuracoes/ToggleSwitch/ToggleSwitch';
 // Types
 import { Chat } from '../../../types/chats';
@@ -30,6 +29,7 @@ import XCircleIcon from '../assets/x-circle.svg';
 import PlayIcon from '../assets/play.svg';
 // Css
 import styles from './ChatWindow.module.css';
+import FormStyles from '../../Gerais/Form/form.module.css'
 
 interface ChatWindowProps {
     activeChat: Chat | null;
@@ -247,7 +247,7 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
                     <div className={styles.contactText}>
                         <h1>{activeChat.contato_nome}</h1>
                         <NavLink to="/agentes">
-                            <span>Agente - {activeChat.connection.agente.tipo_de_agente}</span>
+                            <span>Agente - {activeChat.connection.agente.tipo_de_agente} </span>
                         </NavLink>
                     </div>
                 </div>
@@ -276,7 +276,7 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
 
                     <div className={styles.bottomDetails}>
                         <NavLink to="/agentes">
-                            <p>Agente - {activeChat.connection.agente.tipo_de_agente}</p>
+                            <p>Agente - {activeChat.connection.agente.tipo_de_agente} </p>
                         </NavLink>
                         <strong className={activeChat.ia_ativa ? styles.statusIaActive : styles.statusIaInactive}>
                             {activeChat.ia_ativa ? 'IA Ativa' : 'IA Desativada'}
@@ -285,15 +285,15 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
                 </div>
             </Modal>
 
-            <Modal transparent isOpen={isRenameOpen} onClose={() => setRenameOpen(false)} title="Renomear Chat">
-                <div className={styles.inputGroup}>
+            <Modal onSave={handleRenameChat} labelSubmit='Salvar' transparent isOpen={isRenameOpen} onClose={() => setRenameOpen(false)} title="Renomear Chat">
+                <div className={FormStyles.formGroup}>
+                     <label htmlFor="nome">Nome Atual do Chat</label>
                     <input
                         value={newName}
                         onChange={(e) => setNewName(e.target.value)}
                         placeholder="Novo nome do contato"
                         className={styles.inputEditChat}
                     />
-                    <Button onClick={handleRenameChat} label="Salvar" />
                 </div>
             </Modal>
 
@@ -349,4 +349,3 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
         </motion.section>
     );
 }
-
