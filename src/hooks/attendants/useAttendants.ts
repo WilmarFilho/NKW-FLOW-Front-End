@@ -34,7 +34,6 @@ export const useAttendants = () => {
 
     try {
       // ETAPA 1: Criar o registro de Usuário.
-      console.log(attendantData)
       const userResponse = await post<User[]>('/users', {
         nome: attendantData.nome,
         numero: attendantData.numero,

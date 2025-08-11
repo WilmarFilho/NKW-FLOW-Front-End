@@ -1,0 +1,88 @@
+import { useState, useMemo, useCallback } from 'react';
+import { useRecoilState } from 'recoil';
+import { addConnectionModalState } from '../../state/atom';
+import { useConnections } from './useConnections';
+import type { Connection } from '../../types/connection';
+
+type Filter = 'todos' | 'ativo' | 'inativo';
+type SortField = 'nome' | null;
+type SortOrder = 'asc' | 'desc';
+
+export function useConnectionsPage() {
+  const { connections, removeConnection, updateConnectionStatus, fetchConnections } = useConnections();
+
+  const [activeFilter, setActiveFilter] = useState<Filter>('todos');
+  const [sortField, setSortField] = useState<SortField>(null);
+  const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
+  const [modalState, setModalState] = useRecoilState(addConnectionModalState);
+
+  const handleDelete = useCallback(async (id: string) => {
+    const confirm = window.confirm('Tem certeza que deseja excluir esta conexão?');
+    if (!confirm) return;
+
+    try {
+      await removeConnection(id);
+    } catch (err) {
+      alert('Falha ao excluir: ' + err);
+    }
+  }, [removeConnection]);
+
+  const handleStatusToggle = useCallback(async (connection: Connection) => {
+    const newStatus = connection.status ? 'Inativo' : 'Ativo';
+    const confirm = window.confirm(`Deseja alterar o status da conexão "${connection.nome.split('_')[0]}" para "${newStatus}"?`);
+    if (!confirm) return;
+
+    try {
+      await updateConnectionStatus(connection);
+    } catch {
+      alert('Falha ao alterar o status.');
+    }
+  }, [updateConnectionStatus]);
+
+  const openModal = useCallback((conn?: Connection) => {
+    if (conn) {
+      setModalState({ isOpen: true, initialData: conn, editMode: true });
+    } else {
+      setModalState({ isOpen: true, initialData: null, editMode: false });
+    }
+  }, [setModalState]);
+
+  const handleEdit = useCallback((conn: Connection) => {
+    openModal(conn);
+  }, [openModal]);
+
+  const filteredConnections = useMemo(() => {
+    if (activeFilter === 'todos') return connections;
+    const isActive = activeFilter === 'ativo';
+    return connections.filter(c => c.status === isActive);
+  }, [connections, activeFilter]);
+
+  const sortedConnections = useMemo(() => {
+    if (!sortField) return filteredConnections;
+
+    return [...filteredConnections].sort((a, b) => {
+      const aValue = a[sortField]?.toString().toLowerCase() ?? '';
+      const bValue = b[sortField]?.toString().toLowerCase() ?? '';
+
+      if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
+      if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
+      return 0;
+    });
+  }, [filteredConnections, sortField, sortOrder]);
+
+  return {
+    connections: sortedConnections,
+    activeFilter,
+    sortField,
+    sortOrder,
+    modalState,
+    setActiveFilter,
+    setSortField,
+    setSortOrder,
+    handleDelete,
+    handleStatusToggle,
+    handleEdit,
+    openModal,
+    fetchConnections,
+  };
+}

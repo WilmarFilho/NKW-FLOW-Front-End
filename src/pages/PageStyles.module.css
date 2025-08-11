@@ -156,10 +156,9 @@
   flex-direction: column;
   gap: 20px;
   background-color: var(--color-background-dark);
-  height: 100%;
+  flex: 1;
   border-radius: 16px;
   padding: 20px;
-  min-height: 300px;
 }
 
 .agentsWrapper h2 {

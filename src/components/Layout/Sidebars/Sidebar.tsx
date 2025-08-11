@@ -59,17 +59,17 @@ const Sidebar = () => {
     to: string;
     children: React.ReactNode;
   }) => (
-    <NavLink to={to}>
-      <NavLink
-        to={to}
-        // A classe agora é aplicada diretamente no NavLink (que vira uma tag <a>)
-        className={({ isActive }) =>
-          `MenuItem ${isActive ? 'active-link' : ''}`
-        }
-      >
-        {children}
-      </NavLink>
+
+    <NavLink
+      to={to}
+      // A classe agora é aplicada diretamente no NavLink (que vira uma tag <a>)
+      className={({ isActive }) =>
+        `MenuItem ${isActive ? 'active-link' : ''}`
+      }
+    >
+      {children}
     </NavLink>
+
   );
 
   return (
@@ -103,7 +103,7 @@ const Sidebar = () => {
           {' '}
           <ConfigIcon /> Configuracoes
         </MenuItem>
-         <MenuItem to="/cashback">
+        <MenuItem to="/cashback">
           {' '}
           <GiftIcon /> Recompensas
         </MenuItem>
