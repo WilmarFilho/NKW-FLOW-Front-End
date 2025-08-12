@@ -38,23 +38,29 @@
   gap: 4px;
 }
 
-.sortIcon {
+.sortIcon svg {
   width: 24px;
   height: 24px;
-  opacity: 0.5;
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: transform 0.2s ease, opacity 0.2s ease;
-}
-
-.sortIcon.active {
-  transform: rotate(180deg);
-  opacity: 1;
-}
-
-.sortIcon svg {
   fill: var(--color-text);
+}
+
+.sortIconInactive svg {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  fill: var(--color-text);
+  opacity: .4;
+}
+
+.sortIcon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Responsividade da MOLDURA */

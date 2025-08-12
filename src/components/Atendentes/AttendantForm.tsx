@@ -1,8 +1,6 @@
-// Libs
 import { useState, useEffect } from 'react';
-// Types
 import type { AttendantFormData } from '../../types/attendant';
-// Css
+import { validateAttendantForm } from '../../hooks/utils/useValidator';
 import formStyles from '../Gerais/Form/form.module.css';
 
 interface AttendantFormProps {
@@ -10,6 +8,7 @@ interface AttendantFormProps {
   editMode?: boolean;
   onChange: (data: AttendantFormData) => void;
   isSubmitting: boolean;
+  triggerValidation?: boolean;
 }
 
 export default function AttendantForm({
@@ -17,6 +16,7 @@ export default function AttendantForm({
   editMode = false,
   onChange,
   isSubmitting,
+  triggerValidation = false
 }: AttendantFormProps) {
   const [formData, setFormData] = useState<AttendantFormData>({
     nome: initialData?.nome || '',
@@ -27,6 +27,8 @@ export default function AttendantForm({
     user_id: initialData?.user_id ?? '',
   });
 
+  const [errors, setErrors] = useState<ReturnType<typeof validateAttendantForm>>({});
+
   useEffect(() => {
     setFormData({
       nome: initialData?.nome || '',
@@ -36,60 +38,78 @@ export default function AttendantForm({
       status: initialData?.status ?? true,
       user_id: initialData?.user_id ?? '',
     });
+    setErrors({});
   }, [initialData]);
 
   useEffect(() => {
     onChange(formData);
-  }, [formData, onChange]);
+
+    if (triggerValidation) {
+      setErrors(validateAttendantForm(formData, editMode));
+    } else {
+      setErrors({});
+    }
+  }, [formData, triggerValidation, editMode, onChange]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { id, value } = e.target;
-    setFormData(prev => ({ ...prev, [id]: value }));
+    if (id === 'status') {
+      setFormData(prev => ({ ...prev, status: value === 'ativo' }));
+    } else {
+      setFormData(prev => ({ ...prev, [id]: value }));
+    }
   };
 
   return (
     <form className={formStyles.formContainer} onSubmit={e => e.preventDefault()}>
       <div className={formStyles.formRow}>
-
         <div className={formStyles.formGroup}>
-          <label htmlFor="nome">Nome</label>
+          <label htmlFor="nome">Nome:</label>
           <input
             id="nome"
+            placeholder='Digite o nome completo do atendente.'
             value={formData.nome}
             onChange={handleInputChange}
-            required
             disabled={isSubmitting}
           />
+          {triggerValidation && errors.nome && (
+            <span className={formStyles.errorText}>{errors.nome}</span>
+          )}
         </div>
 
         <div className={formStyles.formGroup}>
-          <label htmlFor="numero">Número</label>
+          <label htmlFor="numero">Número:</label>
           <input
             id="numero"
             type="tel"
+            placeholder='Número para atendente ser notificado.'
             value={formData.numero}
             onChange={handleInputChange}
-            required
             disabled={isSubmitting}
           />
+          {triggerValidation && errors.numero && (
+            <span className={formStyles.errorText}>{errors.numero}</span>
+          )}
         </div>
-
       </div>
 
       <div className={formStyles.formGroup}>
-        <label htmlFor="email">Email</label>
+        <label htmlFor="email">Email:</label>
         <input
           id="email"
           type="email"
+          placeholder='Email para atendente ser notificado.'
           value={formData.email}
           onChange={handleInputChange}
-          required
           disabled={isSubmitting}
         />
+        {triggerValidation && errors.email && (
+          <span className={formStyles.errorText}>{errors.email}</span>
+        )}
       </div>
 
       <div className={formStyles.formGroup}>
-        <label htmlFor="senha_hash">Senha</label>
+        <label htmlFor="senha_hash">Senha:</label>
         <input
           id="senha_hash"
           type="password"
@@ -99,6 +119,9 @@ export default function AttendantForm({
           disabled={isSubmitting}
           required={!editMode}
         />
+        {triggerValidation && errors.senha_hash && (
+          <span className={formStyles.errorText}>{errors.senha_hash}</span>
+        )}
       </div>
 
       {editMode && (

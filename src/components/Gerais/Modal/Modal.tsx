@@ -41,7 +41,7 @@ export default function Modal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title">
-      <div className={transparent ? styles.modalContentTransparent : styles.modalContent} onClick={handleContentClick}>
+      <div className={styles.modalContent} onClick={handleContentClick}>
         <header className={styles.modalHeader}>
           <h2>{title}</h2>
           <button onClick={onClose} className={styles.closeButton} aria-label="Fechar modal">

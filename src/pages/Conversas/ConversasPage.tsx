@@ -17,7 +17,7 @@ export default function ConversasPage() {
         chats={state.chats}
         activeChat={state.activeChat}
         setActiveChat={state.setActiveChat}
-        setIsAddChatOpen={state.setIsAddChatOpen}
+        setIsAddChatOpen={state.openNewChatModal}
         fectchImageProfile={state.fectchImageProfile}
       />
 
@@ -30,7 +30,7 @@ export default function ConversasPage() {
       {state.isAddChatOpen && (
         <Modal
           isOpen={state.isAddChatOpen}
-          labelSubmit='Enviar'
+          labelSubmit="Enviar"
           onSave={state.handleSendMessage}
           onClose={() => state.setIsAddChatOpen(false)}
           title="Começar nova conversa."
@@ -50,10 +50,12 @@ export default function ConversasPage() {
                   </option>
                 ))}
               </select>
+              {state.showErrors && state.errors.selectedConnectionId && (
+                <span className={FormStyles.errorText}>{state.errors.selectedConnectionId}</span>
+              )}
             </div>
 
             <div className={FormStyles.formRow}>
-
               <div className={FormStyles.formGroup}>
                 <label>Número de Telefone</label>
                 <input
@@ -63,6 +65,9 @@ export default function ConversasPage() {
                   className={PageStyles.formInput}
                   onChange={(e) => state.setNewChatNumber(e.target.value)}
                 />
+                {state.showErrors && state.errors.newChatNumber && (
+                  <span className={FormStyles.errorText}>{state.errors.newChatNumber}</span>
+                )}
               </div>
 
               <div className={FormStyles.formGroup}>
@@ -73,8 +78,10 @@ export default function ConversasPage() {
                   value={state.newChatMessage}
                   onChange={(e) => state.setNewChatMessage(e.target.value)}
                 />
+                {state.showErrors && state.errors.newChatMessage && (
+                  <span className={FormStyles.errorText}>{state.errors.newChatMessage}</span>
+                )}
               </div>
-
             </div>
           </div>
         </Modal>
@@ -82,5 +89,3 @@ export default function ConversasPage() {
     </div>
   );
 }
-
-

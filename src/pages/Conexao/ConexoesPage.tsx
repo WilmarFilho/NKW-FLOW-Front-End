@@ -7,6 +7,7 @@ import ConnectionForm from '../../components/Conexoes/ConnectionForm';
 import GenericTable from '../../components/Gerais/Tables/GenericTable';
 // Hooks
 import { useConnectionsPage } from '../../hooks/connections/useConnectionsPage';
+import { validateConnectionForm } from '../../hooks/utils/useValidator'
 // Css e Assets
 import PageStyles from '../PageStyles.module.css';
 import tableStyles from '../../components/Gerais/Tables/TableStyles.module.css';
@@ -25,6 +26,9 @@ export default function ConexoesPage() {
     sortOrder,
     modalState,
     formData,
+    errors,
+    showErrors,
+    setErrors,
     setFormData,
     setActiveFilter,
     setSortField,
@@ -35,18 +39,30 @@ export default function ConexoesPage() {
     openModal,
     closeModal,
     fetchConnections,
+    setShowErrors,
   } = useConnectionsPage();
 
   const { handleStartSession, handleEditConnection, isLoading, step, qrCode } = useAddConnection();
 
   const handleModalSaveClick = async () => {
-    if (!formData) return alert('Preencha o formulário');
-    if (modalState.editMode) {
-      await handleEditConnection(formData);
-      closeModal()
-      fetchConnections()
-    } else {
-      await handleStartSession(formData);
+    const foundErrors = validateConnectionForm(formData);
+    if (Object.keys(foundErrors).length > 0) {
+      setErrors(foundErrors);
+      setShowErrors(true);
+      return;
+    }
+
+    setErrors({});
+    setShowErrors(false);
+
+    if (formData) {
+      if (modalState.editMode) {
+        await handleEditConnection(formData);
+        closeModal();
+        fetchConnections();
+      } else {
+        await handleStartSession(formData);
+      }
     }
   };
 
@@ -159,9 +175,10 @@ export default function ConexoesPage() {
           editMode={modalState.editMode}
           step={step}
           qrCode={qrCode}
+          errors={errors}
+          showErrors={showErrors}
         />
       </Modal>
-
     </div>
   );
 }

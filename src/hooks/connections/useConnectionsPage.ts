@@ -16,6 +16,8 @@ export function useConnectionsPage() {
   const [sortField, setSortField] = useState<SortField>(null);
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
   const [formData, setFormData] = useState<Partial<Connection> | null>(null);
+  const [showErrors, setShowErrors] = useState(false);
+  const [errors, setErrors] = useState<Partial<Record<keyof Connection, string>>>({});
 
   const [modalState, setModalState] = useRecoilState(addConnectionModalState);
 
@@ -43,6 +45,10 @@ export function useConnectionsPage() {
   }, [updateConnectionStatus]);
 
   const openModal = useCallback((conn?: Connection) => {
+
+    setErrors({});
+    setShowErrors(false);
+
     if (conn) {
       setFormData(conn)
       setModalState({ isOpen: true, editMode: true });
@@ -59,7 +65,6 @@ export function useConnectionsPage() {
     setModalState({ isOpen: false, editMode: false });
     setFormData(null);
   }, []);
-
 
   const filteredConnections = useMemo(() => {
     if (activeFilter === 'todos') return connections;
@@ -88,6 +93,8 @@ export function useConnectionsPage() {
     sortOrder,
     modalState,
     formData,
+    errors,
+    showErrors,
     setFormData,
     setModalState,
     setActiveFilter,
@@ -98,5 +105,7 @@ export function useConnectionsPage() {
     handleEdit,
     openModal,
     fetchConnections,
+    setErrors,
+    setShowErrors,
   };
 }

@@ -7,6 +7,7 @@ import Modal from '../../components/Gerais/Modal/Modal';
 import AttendantForm from '../../components/Atendentes/AttendantForm';
 // Hooks
 import { useAttendantsPage } from '../../hooks/attendants/useAttendantsPage';
+import { validateAttendantForm } from '../../hooks/utils/useValidator';
 // Css e Assets
 import PageStyles from '../PageStyles.module.css';
 import tableStyles from '../../components/Gerais/Tables/TableStyles.module.css';
@@ -32,6 +33,7 @@ export default function AtendentesPage() {
     isModalOpen,
     editData,
     isSubmitting,
+    showErrors,
     openModal,
     closeModal,
     handleSave,
@@ -43,7 +45,8 @@ export default function AtendentesPage() {
     sortField,
     sortOrder,
     activeFilter,
-    setActiveFilter
+    setActiveFilter,
+    setShowErrors
   } = useAttendantsPage();
 
   const [formData, setFormData] = useState<AttendantFormData | null>(null);
@@ -53,10 +56,13 @@ export default function AtendentesPage() {
   };
 
   const handleModalSaveClick = async () => {
-    if (!formData) {
-      alert('Formulário incompleto');
-      return;
-    }
+    setShowErrors(true);
+
+    if (!formData) return;
+
+    const foundErrors = validateAttendantForm(formData, !!editData);
+    if (Object.keys(foundErrors).length > 0) return;
+
     await handleSave(formData);
   };
 
@@ -67,9 +73,9 @@ export default function AtendentesPage() {
           {attendant.user.status ? 'Ativo' : 'Inativo'}
         </span>
       </div>
-      <div data-label="Nome">{attendant.user.nome}</div>
-      <div data-label="Email">{attendant.user.email}</div>
-      <div data-label="Número">{attendant.user.numero}</div>
+      <div data-label="Nome" onClick={() => handleEdit(attendant)}>{attendant.user.nome}</div>
+      <div data-label="Email" onClick={() => handleEdit(attendant)}>{attendant.user.email}</div>
+      <div data-label="Número" onClick={() => handleEdit(attendant)}>{attendant.user.numero}</div>
       <div className={tableStyles.actionCell}>
         <button className={tableStyles.actionButtonEdit} onClick={() => handleEdit(attendant)}><EditIcon /></button>
         <button className={tableStyles.actionButtonDelete} onClick={() => handleDelete(attendant.id)}><DeleteIcon /></button>
@@ -131,8 +137,11 @@ export default function AtendentesPage() {
           editMode={!!editData}
           onChange={handleFormChange}
           isSubmitting={isSubmitting}
+          triggerValidation={showErrors}
         />
       </Modal>
     </div>
   );
 }
+
+

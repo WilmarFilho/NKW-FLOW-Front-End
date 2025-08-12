@@ -99,6 +99,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
+  transition: .3s;
 }
 
 .containerColumnSmall {
@@ -110,6 +112,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
+  transition: .3s;
+}
+
+.containerColumnLarge:hover, .containerColumnSmall:hover {
+  transform: scale(.95);
+  transition: .3s;
 }
 
 .headerTitles {

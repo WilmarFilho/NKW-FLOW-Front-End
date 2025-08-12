@@ -88,6 +88,14 @@
   height: 40px;
 }
 
+.visualizerContainer  {
+  flex: 1;
+}
+
+.visualizerContainer span {
+  color: var(--color-text);
+}
+
 .trashButton svg {
   stroke: #e63946; /* Vermelho para a lixeira */
 }

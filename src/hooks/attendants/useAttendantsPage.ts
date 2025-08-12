@@ -4,7 +4,7 @@ import type { Attendant, AttendantFormData } from '../../types/attendant';
 
 export function useAttendantsPage() {
   const { attendants, addAttendant, removeAttendant, editAttendant, updateAttendantStatus } = useAttendants();
-
+  const [showErrors, setShowErrors] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState<'todos' | 'ativo' | 'inativo'>('todos');
   const [sortField, setSortField] = useState<keyof AttendantFormData | null>(null);
@@ -52,6 +52,7 @@ export function useAttendantsPage() {
   };
 
   const openModal = () => {
+    setShowErrors(false)
     setEditAttendantId(null);
     setEditData(null);
     setIsModalOpen(true);
@@ -99,6 +100,7 @@ export function useAttendantsPage() {
     isModalOpen,
     isSubmitting,
     formData,
+    showErrors,
     handleDelete,
     handleEdit,
     handleSave,
@@ -110,7 +112,6 @@ export function useAttendantsPage() {
     closeModal,
     setFormData,
     setIsSubmitting,
+    setShowErrors,
   };
 }
-
-

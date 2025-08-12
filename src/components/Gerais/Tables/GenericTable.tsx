@@ -2,8 +2,11 @@ import React from 'react';
 import { motion } from 'framer-motion';
 // CSS Modules
 import styles from './GenericTable.module.css';
-
-import FunnelIcon from './assets/funnel.svg'
+// Assets
+import FilterIcon from './assets/filter.svg';
+import NotFilterIcon from './assets/notfilter.svg';
+import ArrowUpIcon from './assets/arrowup.svg';
+import ArrowDownIcon from './assets/arrowdown.svg';
 
 interface GenericTableProps<T> {
   columns: string[];
@@ -45,15 +48,22 @@ export default function GenericTable<T>({
               key={i}
               onClick={() => onSortClick?.(col)}
               className={styles.sortableHeader}
+              style={{ cursor: (col === 'Nome' || col === 'Email') ? 'pointer' : 'default' }}
             >
               <span>{col}</span>
 
-              {col === 'Nome' || col === 'Email' ? (
-                <span className={`${styles.sortIcon} ${isActive ? styles.active : ''}`}>
-                  <FunnelIcon />
+              {(col === 'Nome' || col === 'Email') && (
+                <span className={styles.sortIcon}>
+                  {isActive ? (
+                    <>
+                      <span className={styles.sortIcon}><FilterIcon /></span>
+                      {sortOrder === 'asc' ? <ArrowUpIcon /> : <ArrowDownIcon />}
+                    </>
+                  ) : (
+                    <span className={styles.sortIconInactive}><NotFilterIcon /></span>
+                  )}
                 </span>
-              ) : ''}
-
+              )}
 
             </div>
           );

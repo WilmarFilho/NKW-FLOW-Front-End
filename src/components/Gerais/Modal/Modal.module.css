@@ -118,6 +118,12 @@
   cursor: pointer;
   transition: background-color 0.2s, transform 0.1s;
   outline: none;
+  transition: .5;
+}
+
+.cancelButton:hover {
+  background-color: var(--color-background-white);
+  transition: .5;
 }
 
 @keyframes fadeIn {

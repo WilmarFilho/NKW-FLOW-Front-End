@@ -51,6 +51,8 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
     const [isRenameOpen, setRenameOpen] = useState(false);
     const [newName, setNewName] = useState('');
 
+    const [showError, setShowError] = useState(false);
+
     // Drag & drop
     const handleFileDrop = useCallback((file: File) => {
         const reader = new FileReader();
@@ -139,7 +141,13 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
     }, [activeChat, reOpenChat, setActiveChat, setChats]);
 
     const handleRenameChat = useCallback(async () => {
-        if (!activeChat || !newName.trim()) return;
+
+        if (!activeChat || !newName.trim()) {
+            setShowError(true);
+            return;
+        }
+
+        setShowError(false);
 
         await renameChat(activeChat.id, newName.trim());
         setActiveChat({ ...activeChat, contato_nome: newName.trim() });
@@ -287,13 +295,16 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
 
             <Modal onSave={handleRenameChat} labelSubmit='Salvar' transparent isOpen={isRenameOpen} onClose={() => setRenameOpen(false)} title="Renomear Chat">
                 <div className={FormStyles.formGroup}>
-                     <label htmlFor="nome">Nome Atual do Chat</label>
+                    <label htmlFor="nome">Nome Atual do Chat</label>
                     <input
                         value={newName}
                         onChange={(e) => setNewName(e.target.value)}
                         placeholder="Novo nome do contato"
                         className={styles.inputEditChat}
                     />
+                    {showError && !newName.trim() && (
+                        <span className={FormStyles.errorText}>O nome não pode ficar vazio.</span>
+                    )}
                 </div>
             </Modal>
 
