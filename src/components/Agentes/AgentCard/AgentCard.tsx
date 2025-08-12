@@ -7,23 +7,10 @@ import TecnicoIcon from './assets/wrench.svg';
 //Libs
 import React from 'react';
 
-
-/*
-<div className={styles.connectionsContainer}>
-        {connections && connections?.length > 0 && (
-          <ul className={styles.connectionList}>
-            {connections.map((connName, index) => (
-              <li className={styles.connectionItem} key={index}>Conexão: {connName}</li>
-            ))}
-          </ul>
-        )}
-      </div>
-*/
-
 interface AgentCardProps {
   tipo: string;
   description: string;
-  connections?: string[];
+  onViewDetails?: () => void;
 }
 
 const iconMap = {
@@ -33,16 +20,16 @@ const iconMap = {
   Contador: VendedorIcon,
 };
 
-export default function AgentCard({ description, tipo, connections }: AgentCardProps) {
-
+export default function AgentCard({ description, tipo, onViewDetails }: AgentCardProps) {
+  
   const IconComponent = iconMap[tipo as keyof typeof iconMap] as React.ElementType;
 
   return (
-    <div className={styles.card}>
+    <div className={styles.card} onClick={onViewDetails}>
       {IconComponent && <IconComponent className={styles.icon} aria-label={`Ícone de ${tipo}`} />}
       <h4 className={styles.title}>Agente - {tipo}</h4>
       <p className={styles.description}>{description}</p>
-      <button className={styles.buttonCard}>Ver Detalhes</button>
+      <button className={styles.buttonCard} onClick={onViewDetails}>Ver Detalhes</button>
     </div>
   );
 }
