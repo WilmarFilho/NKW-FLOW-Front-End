@@ -277,6 +277,7 @@
   gap: 12px;
   justify-content: space-between;
   width: 100%;
+  flex: 1;
 }
 
 .containerLink {
@@ -285,7 +286,6 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  flex: 1;
 }
 
 .containerLink h4 {
@@ -306,7 +306,7 @@
 
 .boxLink {
   border-radius: 14px;
-  height: 100%;
+  height: 60px;
   background-color: var(--color-background-white);
   width: 100%;
   display: flex;
@@ -360,8 +360,8 @@
   flex-direction: column;
   width: 100%;
   height: 100%;
-  justify-content:   center;
-  align-items:  center ;
+  justify-content: center;
+  align-items: center;
   gap: 12px;
 }
 
@@ -388,15 +388,18 @@
 }
 
 .progressFill.boa {
-  background: #16a34a; /* verde */
+  background: #16a34a;
+  /* verde */
 }
 
 .progressFill.média {
-  background: #facc15; /* amarelo */
+  background: #facc15;
+  /* amarelo */
 }
 
 .progressFill.ruim {
-  background: var(--color-background-red); /* vermelho */
+  background: var(--color-background-red);
+  /* vermelho */
 }
 
 .progressPercent {
@@ -452,10 +455,103 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 90px;
+  gap: 40px;
   border-radius: 16px;
   padding: 40px;
 }
+
+.progressBar {
+  position: relative;
+  height: 42px;
+  background: var(--color-primary);
+  border-radius: 6px;
+  margin: 20px 0;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--color-secundaria);
+  border-radius: 6px;
+  transition: width 0.4s ease;
+}
+
+.progressCheckpoint {
+  position: absolute;
+  top: -6px;
+  width: 56px;
+  height: 56px;
+  background: var(--color-text-white);
+  border: 2px solid #9ca3af;
+  border-radius: 50%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  font-family: var(--font-main);
+  line-height: 20px;
+  transform: translateX(-50%);
+  color: var(--color-text-black);
+}
+
+.progressCheckpoint.completed {
+  background: var(--color-secundaria);
+  border: none;
+  color: var(--color-text-white);
+  outline: none;
+}
+
+.boxLink {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  background: var(--color-background-white);
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin-top: 8px;
+}
+
+.boxLink span {
+  width: 100%;
+}
+
+.boxLink button {
+  background: var(--color-secundaria);
+  color: var(--color-text-white);
+  border: none;
+  font-family: var(--font-main);
+  text-transform: uppercase;
+  padding: 8px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.containerRewards {
+  display: flex;
+  gap: 12px;
+}
+
+.boxReward {
+  height: 100%;
+  background: var(--color-background-white);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.rewardUnlocked {
+  color: #16a34a;
+  font-weight: bold;
+}
+
+.rewardLocked {
+  color: #9ca3af;
+}
+
 
 .cashbackWrapper h2 {
   font-size: 18px;
@@ -534,13 +630,6 @@
   align-items: center;
   height: 100%;
   gap: 12px;
-}
-
-.progressBar {
-  background-color: var(--color-primary);
-  height: 60px;
-  border-radius: 200px;
-  width: 100%;
 }
 
 .labelNomeAtendente {
