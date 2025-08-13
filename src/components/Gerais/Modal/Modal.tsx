@@ -2,6 +2,8 @@
 import type { PropsWithChildren } from 'react';
 // Css
 import styles from './Modal.module.css'
+// Assets
+import SaveIcon from './assets/BxSave.svg'
 
 interface ModalProps {
   isOpen: boolean;
@@ -82,7 +84,9 @@ export default function Modal({
                   Carregando...
                 </>
               ) : (
-                labelSubmit
+                <>
+                {labelSubmit} <SaveIcon />
+                </>
               )}
             </button>
           </footer>

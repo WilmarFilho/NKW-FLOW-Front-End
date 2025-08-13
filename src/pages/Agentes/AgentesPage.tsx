@@ -7,6 +7,7 @@ import { agentsState, connectionsState } from '../../state/atom';
 import { useState } from 'react';
 import PageStyles from '../PageStyles.module.css';
 import ModalStyles from '../../components/Gerais/Modal/Modal.module.css'
+import { Cell, Pie, PieChart, ResponsiveContainer } from 'recharts';
 
 export default function AgentesPage() {
   const connections = useRecoilValue(connectionsState);
@@ -66,10 +67,18 @@ export default function AgentesPage() {
         transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
         className={PageStyles.agentsWrapper}
       >
-        <h2>Informações da base de conhecimento do cliente</h2>
-        <h3>
-          Mostrar Qualidade do Treinamento, botão para solicitar novos treinamentos ...
-        </h3>
+
+        <div className={PageStyles.columnFooterAgent}>
+          <h4>Informações da sua base de conhecimento:</h4>
+          <p>Veja o resumo do que entendemos do seu negocio ou baixe os seus arquivos anexados que usamos de base para responder seus clientes, caso veja algo divergente do seu negocio entre em contato conosco.</p>
+          <div className={PageStyles.contentActionFooter}>
+            <button>Texto</button>
+            <button>Arquivos</button>
+          </div>
+        </div>
+        <div className={PageStyles.columnFooterAgent}>
+          <div className={PageStyles.boxQualidadeConhecimento}> </div>
+        </div>
       </motion.div>
 
       {selectedAgent && (
@@ -80,7 +89,7 @@ export default function AgentesPage() {
           onSave={closeModal}
         >
           <div className={ModalStyles.agentModal}>
-           
+
             <p>{selectedAgent.descricao}</p>
 
             <h3>Conexões vinculadas:</h3>
@@ -89,7 +98,7 @@ export default function AgentesPage() {
                 {connections
                   .filter(conn => conn.agente_id === selectedAgent.id)
                   .map((conn) => (
-                    <li  className={ModalStyles.liConnection} key={conn.id}>{conn.nome}</li>
+                    <li className={ModalStyles.liConnection} key={conn.id}>{conn.nome}</li>
                   ))}
               </ul>
             ) : (

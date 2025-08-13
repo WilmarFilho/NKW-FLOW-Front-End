@@ -116,10 +116,10 @@ export default function AtendentesPage() {
 
         <div className={PageStyles.containerBottom}>
           <button className={`${PageStyles.buttonBase} ${activeFilter === 'ativo' ? PageStyles.activeFilter : ''}`} onClick={() => setActiveFilter('ativo')}>
-            Ver atendentes ativos
+            <span> Ver atendentes ativos</span>
           </button>
           <button className={`${PageStyles.buttonBase} ${activeFilter === 'inativo' ? PageStyles.activeFilter : ''}`} onClick={() => setActiveFilter('inativo')}>
-            Ver atendentes inativos
+            <span>Ver atendentes inativos</span>
           </button>
         </div>
       </div>

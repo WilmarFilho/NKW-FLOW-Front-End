@@ -29,15 +29,34 @@ export default function DashboardPage() {
         transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
         className={PageStyles.cashbackWrapper}
       >
-        
-          <h2>Informações sobre como ganhar cashback, link para compartilhar e quantidade de indicações validas</h2>
 
-          <h2>Gameficação de progresso nas recompensas</h2>
+        <div className={PageStyles.progressBar}>
 
-          <h2>X Convidados com assinatura efetuada ganha X% de desconto no plano ativo</h2>
+        </div>
 
-          <h2>Mostrar o progresso / Mostrar link para convidar / Explicar como funciona</h2>
-        
+        <div className={PageStyles.containerLink}>
+          <h4>Copie seu link</h4>
+          <p>Informações sobre como ganhar cashback, link para compartilhar e quantidade de indicações validas</p>
+          <div className={PageStyles.boxLink}>
+            
+          </div>
+        </div>
+
+        <div className={PageStyles.containerRewards}>
+          <div className={PageStyles.boxReward}>
+            <h4>Recompensa 1</h4>
+          </div>
+          <div className={PageStyles.boxReward}>
+            <h4>Recompensa 2</h4>
+          </div>
+          <div className={PageStyles.boxReward}>
+            <h4>Recompensa 3</h4>
+          </div>
+          <div className={PageStyles.boxReward}>
+            <h4>Recompensa 4</h4>
+          </div>
+        </div>
+
       </motion.div>
 
     </div>

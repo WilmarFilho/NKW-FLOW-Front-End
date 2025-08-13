@@ -89,15 +89,22 @@
   align-items: center;
   gap: 8px;
   background-color: var(--color-secundaria);
-  opacity: .8;
+  opacity: .6;
   color: white;
   border: none;
   border-radius: 8px;
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 18px;
   cursor: pointer;
   transition: .5s;
   outline: none;
+  font-family: var(--font-main);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.submitButton svg {
+  fill: var(--color-text);
+  width: 28px;
 }
 
 .submitButton:hover {
@@ -119,6 +126,7 @@
   transition: background-color 0.2s, transform 0.1s;
   outline: none;
   transition: .5;
+  font-family: var(--font-main);
 }
 
 .cancelButton:hover {
@@ -199,6 +207,7 @@
 }
 
 .agentModal p {
+  opacity: .5;
   text-wrap: balance;
 }
 
@@ -219,4 +228,5 @@
   text-transform: uppercase;
   font-family: var(--font-main);
   letter-spacing: 1px;
+  opacity: .5;
 }
