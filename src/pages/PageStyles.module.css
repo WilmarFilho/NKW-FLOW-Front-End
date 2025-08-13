@@ -107,9 +107,9 @@
 
 .headerBoxDashboard {
   display: flex;
-  width:  100%;
+  width: 100%;
   justify-content: space-between;
-  align-items: center;
+  align-items: start;
 }
 
 .titlesBoxDashboard {
@@ -120,7 +120,7 @@
 }
 
 .titlesBoxDashboard h2 {
-  font-size: 18px;
+  font-size: 20px;
   display: flex;
   gap: 12px;
   font-family: var(--font-main);
@@ -128,18 +128,64 @@
 }
 
 .titlesBoxDashboard h3 {
-  font-size: 32px;
+  font-size: 36px;
   font-family: var(--font-main);
+  color: var(--color-secundaria);
   text-transform: uppercase;
 }
 
 .containerSelect button {
   display: flex;
+  align-items: center;
   gap: 8px;
+  font-size: 14px;
+  padding: 12px 24px;
+  border-radius: 12px;
+  background-color: var(--color-background-filter);
+  color: var(--color-text-filter);
+  cursor: pointer;
+  border: none;
+  outline: none;
+  width: 130px;
+  height: 42px;
+}
+
+.ulDropDown {
+  min-width: 150px;
+  position: absolute;
+  top: 52px;
+  left: 0;
+  background-color: var(--color-background-filter);
+  border-radius: 8px;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 8px;
+  margin: 0;
+  z-index: 100;
+}
+
+.ulDropDown li {
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 12px;
+  background-color: var(--color-background-filter-opacity);
+  color: var(--color-text-filter);
+  opacity: .5;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  transition: .5s;
+}
+
+.ulDropDown li:hover {
+  opacity: 1;
+  transition: .5s;
 }
 
 .containerSelect svg {
-  width: 32px;
+  width: 100%;
 }
 
 .titlesBoxDashboard h2 svg {
@@ -152,15 +198,27 @@
 
 .rodapeNumero {
   display: flex;
+  align-items: center;
   gap: 12px;
 }
 
 .rodapeNumero span {
-  display: flex;
-  gap: 8px;
+  opacity: .5;
 }
 
-.rodapeNumero span svg {
+.rodapeNumero strong {
+  display: flex;
+  gap: 8px;
+  border: 1px solid var(--color-filter-attendants);
+  background-color: var(--color-filter-attendants);
+  align-items: center;
+  border-radius: 100px;
+  opacity: .6;
+  font-size: 14px;
+  padding: 4px 18px;
+}
+
+.rodapeNumero strong svg {
   width: 20px;
 }
 
@@ -179,7 +237,8 @@
   gap: 12px;
 }
 
-.containerColumnLarge:hover, .containerColumnSmall:hover {
+.containerColumnLarge:hover,
+.containerColumnSmall:hover {
   transform: scale(.98);
   transition: .3s;
 }
@@ -412,6 +471,65 @@
   border-radius: 200px;
   width: 100%;
 }
+
+.labelNomeAtendente {
+  fill: var(--color-text-white);
+  font-weight: normal;
+  font-size: 16px;
+  opacity: .5;
+  font-family: var(--font-secundaria);
+}
+
+.labelChatsContagem {
+  fill: var(--color-text);
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.labelChatsContagem tspan {
+  font-family: var(--font-main)
+}
+
+.labelValorConexao tspan {
+  fill: var(--color-secundaria);
+  font-size: 18px;
+  font-weight: bold;
+  font-family: var(--font-main);
+}
+
+.gaugePreenchido {
+  fill: #4f46e5;
+  /* Cor principal */
+}
+
+.gaugeVazio {
+  fill: rgba(79, 70, 229, 0.2);
+  /* Cor de fundo */
+}
+
+.gaugeFooter {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.gaugeNumero {
+  font-size: 28px;
+  font-weight: bold;
+  color: #4f46e5;
+}
+
+.gaugeLabel {
+  font-size: 14px;
+  color: #666;
+  margin-top: 4px;
+}
+
 
 /* === Breakpoint 2: Desktops Padrão === */
 @media (max-width: 1199.98px) {

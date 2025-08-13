@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   BarChart, Bar, XAxis, Tooltip, ResponsiveContainer,
-  LineChart, Line, YAxis, PieChart, Pie, Cell
+  LineChart, Line, YAxis, PieChart, Pie, Cell,
+  LabelList
 } from 'recharts';
 import Button from '../../components/Gerais/Buttons/Button';
 import PageStyles from '../PageStyles.module.css';
@@ -11,6 +12,10 @@ import CalendarIcon from './assets/HeroiconsCalendarDays20Solid.svg';
 import ChatOnIcon from './assets/CarbonChatLaunch.svg';
 import ChatOffIcon from './assets/CarbonChatOff.svg';
 import ArrowIcon from './assets/IcRoundArrowOutward.svg';
+import UserListIcon from './assets/PhUserList.svg'
+import ConnectIcon from './assets/IcRoundCastConnected.svg'
+import CashIcon from './assets/CarbonMoney.svg'
+import { useNavigate } from 'react-router-dom';
 
 type ViewType = 'weekly' | 'monthly';
 type DropdownId = 'novos' | 'fechados' | null;
@@ -19,6 +24,8 @@ export default function DashboardPage() {
   const [viewChatsNovos, setViewChatsNovos] = useState<ViewType>('weekly');
   const [viewChatsFechados, setViewChatsFechados] = useState<ViewType>('weekly');
   const [open, setOpen] = useState<DropdownId>(null);
+
+  const navigate = useNavigate();
 
   const options = [
     { value: 'weekly', label: 'Semanal' },
@@ -51,34 +58,25 @@ export default function DashboardPage() {
 
   // Segunda linha
   const dataConexoes = [
-    { name: 'Conexão 1', value: 12 },
-    { name: 'Conexão 2', value: 8 },
-    { name: 'Conexão 3', value: 15 },
-    { name: 'Conexão 1', value: 12 },
-    { name: 'Conexão 2', value: 8 },
-    { name: 'Conexão 3', value: 15 },
+    { name: 'Principal', value: 32 },
+    { name: 'Unidade Bueno', value: 18 },
+    { name: 'Vila Nova', value: 14 },
+    { name: 'Reserva', value: 20 },
+    { name: 'Empresarial', value: 8 },
   ];
 
   const dataAtendentes = [
-    { name: 'João', value: 20 },
-    { name: 'Maria', value: 15 },
-    { name: 'Pedro', value: 10 },
-    { name: 'João', value: 20 },
-    { name: 'Maria', value: 15 },
-    { name: 'Pedro', value: 10 },
+    { name: 'João', chats: 26 },
+    { name: 'Maria', chats: 15 },
+    { name: 'Pedro', chats: 10 },
+    { name: 'João', chats: 20 },
+    { name: 'Maria', chats: 15 },
+    { name: 'Pedro', chats: 10 },
   ];
 
   const heightAtedentes = dataAtendentes.length * 50
 
   const widthConexoes = Math.max(dataConexoes.length * 120, 300)
-
-  const dataConvidados = [
-    { name: 'Aceitos', value: 45 },
-    { name: 'Pendentes', value: 20 },
-    { name: 'Recusados', value: 5 },
-  ];
-
-  const COLORS = ['#4f46e5', '#22c55e', '#ef4444'];
 
   const renderDropdown = (
     view: ViewType,
@@ -88,17 +86,6 @@ export default function DashboardPage() {
     <div className={PageStyles.containerSelect} style={{ position: 'relative' }}>
       <button
         onClick={() => setOpen(open === id ? null : id)}
-        style={{
-          background: '#f3f4f6',
-          padding: '8px 12px',
-          borderRadius: '8px',
-          border: '1px solid #ddd',
-          cursor: 'pointer',
-          fontSize: '14px',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '6px'
-        }}
       >
         <CalendarIcon />
         {options.find(o => o.value === view)?.label}
@@ -111,19 +98,7 @@ export default function DashboardPage() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -5 }}
             transition={{ duration: 0.15 }}
-            style={{
-              position: 'absolute',
-              top: 40,
-              left: 0,
-              background: '#fff',
-              border: '1px solid #ddd',
-              borderRadius: '8px',
-              listStyle: 'none',
-              padding: '4px 0',
-              margin: 0,
-              boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
-              zIndex: 100
-            }}
+            className={PageStyles.ulDropDown}
           >
             {options.map(opt => (
               <li
@@ -131,12 +106,6 @@ export default function DashboardPage() {
                 onClick={() => {
                   setView(opt.value as ViewType);
                   setOpen(null);
-                }}
-                style={{
-                  padding: '8px 12px',
-                  cursor: 'pointer',
-                  fontSize: '14px',
-                  background: opt.value === view ? '#e0e7ff' : 'transparent'
                 }}
               >
                 {opt.label}
@@ -162,7 +131,7 @@ export default function DashboardPage() {
           <h2>Veja seu resumo</h2>
           <h3>Resumos de produtividade para acompanhamento fácil.</h3>
         </div>
-        <Button label='Quero Ajuda' />
+        <Button onClick={() => navigate('/ajuda')} label="Quero Ajuda" />
       </motion.div>
 
       {/* Linha 1 */}
@@ -172,9 +141,9 @@ export default function DashboardPage() {
           <div className={PageStyles.headerBoxDashboard}>
             <div className={PageStyles.titlesBoxDashboard}>
               <h2><ChatOnIcon /> Chats Novos</h2>
-              <h3>230</h3>
+              <h3>+ 230</h3>
               <div className={PageStyles.rodapeNumero}>
-                <span>12% <ArrowIcon /></span>
+                <strong>12% <ArrowIcon /></strong>
                 <span>+231 comparado ao período anterior</span>
               </div>
             </div>
@@ -194,9 +163,9 @@ export default function DashboardPage() {
           <div className={PageStyles.headerBoxDashboard}>
             <div className={PageStyles.titlesBoxDashboard}>
               <h2><ChatOffIcon /> Chats Fechados</h2>
-              <h3>180</h3>
+              <h3>+ 180</h3>
               <div className={PageStyles.rodapeNumero}>
-                <span>-5% <ArrowIcon /></span>
+                <strong>-5% <ArrowIcon /></strong>
                 <span>-10 comparado ao período anterior</span>
               </div>
             </div>
@@ -218,19 +187,48 @@ export default function DashboardPage() {
         {/* Chats por atendente - scroll vertical */}
         <div className={PageStyles.containerColumnSmall}>
           <div className={PageStyles.titlesBoxDashboard}>
-            <h2><ChatOffIcon /> Chats por Atendentes</h2>
-            <div className={PageStyles.rodapeNumero}>
-              <span>-5% <ArrowIcon /></span>
-              <span>-10 comparado ao período anterior</span>
-            </div>
+            <h2><UserListIcon /> Chats por Atendentes</h2>
           </div>
           <div style={{ height: 200, overflowY: 'auto', paddingRight: 8, width: '100%', scrollbarWidth: 'none' }}>
-            <ResponsiveContainer width="100%" height={heightAtedentes} >
-              <BarChart layout="vertical" data={dataAtendentes}>
+            <ResponsiveContainer width="100%" height={heightAtedentes}>
+              <BarChart
+                layout="vertical"
+                data={dataAtendentes}
+                margin={{ top: 0, right: 60, left: 0, bottom: 0 }} // Ajustei a margem direita para garantir espaço
+                barSize={36}
+              >
                 <XAxis type="number" hide />
-                <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} />
-                <Tooltip />
-                <Bar dataKey="value" className={PageStyles.barraGraficoSecondary} radius={[0, 8, 8, 0]} />
+                <YAxis type="category" dataKey="name" hide />
+
+                <Bar
+                  dataKey="chats"
+                  className={PageStyles.barraGraficoSecondary}
+                  radius={[8, 8, 8, 8]}
+                >
+                  {/* LabelList para os NOMES com className */}
+                  <LabelList
+                    dataKey="name"
+                    position="insideLeft"
+                    offset={10}
+                    // Adicionada a classe CSS
+                    className={PageStyles.labelNomeAtendente}
+                  />
+
+                  {/* LabelList para os NÚMEROS com className */}
+                  <LabelList
+                    dataKey="chats"
+                    position="right"
+                    offset={8}
+                    formatter={(label: unknown) => {
+                      if (typeof label === 'number') {
+                        return `${label} chats`;
+                      }
+                      return null;
+                    }}
+                    // Adicionada a classe CSS
+                    className={PageStyles.labelChatsContagem}
+                  />
+                </Bar>
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -238,14 +236,42 @@ export default function DashboardPage() {
 
         {/* Chats por conexão - scroll horizontal */}
         <div className={PageStyles.containerColumnSmall}>
-          <h2>Chats por conexão</h2>
-          <div style={{ width: '450px', overflowX: 'scroll', height: 200, scrollbarWidth: 'none' }}>
+          <div className={PageStyles.titlesBoxDashboard}>
+            <h2><ConnectIcon /> Chats por Conexões</h2>
+          </div>
+          <div style={{ width: '450px', overflowX: 'auto', height: 200, scrollbarWidth: 'none' }}>
             <ResponsiveContainer width={widthConexoes} height="100%">
-              <LineChart data={dataConexoes}>
-                <XAxis dataKey="name" axisLine={false} tickLine={false} />
+              <LineChart
+                data={dataConexoes}
+                margin={{ top: 60, right: 50, left: 50, bottom: 5 }}
+              >
+                <XAxis interval={0} dataKey="name" axisLine={false} tickLine={false} dy={10} />
                 <YAxis hide />
-                <Tooltip />
-                <Line type="monotone" dataKey="value" stroke="#1b214a90" strokeWidth={3} dot={{ r: 4 }} />
+
+                <Line
+                  type="natural"
+                  dataKey="value"
+                  stroke="#9ca3af"
+                  strokeWidth={3}
+                  dot={{
+                    r: 6,
+                    stroke: '#9ca3af',
+                    strokeWidth: 2,
+                    fill: 'white'
+                  }}
+                  isAnimationActive={false}
+                >
+                  <LabelList
+                    dataKey="value"
+                    position="top"
+                    // 1. ESPAÇAMENTO AUMENTADO:
+                    //    Aumentei o valor para 15 para dar mais "respiro" entre o ponto e o número.
+                    offset={15}
+                    // 2. CLASSE PERSONALIZADA ADICIONADA:
+                    //    Removi o 'style' e adicionei a 'className' para estilização via CSS.
+                    className={PageStyles.labelValorConexao}
+                  />
+                </Line>
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -253,39 +279,49 @@ export default function DashboardPage() {
 
         {/* Convidados - Gauge semicircular */}
         <div className={PageStyles.containerColumnSmall}>
-          <h2>Convidados</h2>
-          <ResponsiveContainer width="100%" height={200}>
-            <PieChart>
-              <Pie
-                data={[
-                  { name: 'preenchido', value: 40 },  // exemplo: 65%
-                  { name: 'vazio', value: 100 - 40 }
-                ]}
-                cx="50%"
-                cy="90%"              // abaixa o centro para virar meia lua
-                innerRadius={60}      // raio interno - controla a espessura
-                outerRadius={100}      // raio externo - controla a espessura
-                startAngle={180}      // começa do lado esquerdo
-                endAngle={0}          // termina do lado direito
-                dataKey="value"
-                stroke="none"
-              >
-                <Cell fill="#4f46e5" />                     {/* parte cheia */}
-                <Cell fill="rgba(79, 70, 229, 0.2)" />      {/* parte vazia */}
-              </Pie>
-            </PieChart>
-          </ResponsiveContainer>
+          <div className={PageStyles.headerBoxDashboard}>
+            <div className={PageStyles.titlesBoxDashboard}>
+              <h2><CashIcon /> Convidados na Semana</h2>
+              <h3>+ 6</h3>
+            </div>
+          </div>
 
-          {/* Texto central */}
-          <div style={{
-            position: 'relative',
-            top: '-60px',
-            textAlign: 'center',
-            fontSize: '18px',
-            fontWeight: 'bold',
-            color: '#4f46e5'
-          }}>
-            40
+          {/* Contêiner do gráfico */}
+          <div
+            style={{
+              width: '100%',
+              height: 160, // altura maior
+              position: 'relative',
+              marginTop: '-20px'
+            }}
+          >
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={[
+                    { name: 'preenchido', value: 40 },
+                    { name: 'vazio', value: 60 }
+                  ]}
+                  cx="50%"
+                  cy="100%" // mais baixo, aumenta o arco
+                  outerRadius="180%" // aumenta a largura e altura do arco
+                  innerRadius="125%"
+                  startAngle={200} // abre mais para os lados
+                  endAngle={-20} // abre mais para os lados
+                  dataKey="value"
+                  stroke="none"
+                >
+                  <Cell className={PageStyles.gaugePreenchido} />
+                  <Cell className={PageStyles.gaugeVazio} />
+                </Pie>
+              </PieChart>
+            </ResponsiveContainer>
+
+            {/* Texto central */}
+            <div className={PageStyles.gaugeFooter}>
+              <div className={PageStyles.gaugeNumero}>+ 40</div>
+              <div className={PageStyles.gaugeLabel}>Para ganhar recompensas</div>
+            </div>
           </div>
         </div>
 

@@ -50,6 +50,12 @@ body.modo-light {
   --color-background-dark: #fcfcfc;
   --color-background-white: #49539b2a;
 
+  /* Página de Resumo */
+
+  --color-background-filter: #101010;
+  --color-background-filter-opacity: #ebebeb76;
+  --color-text-filter: #fafafa;
+
 }
 
 /* Tema Dark */
@@ -101,22 +107,32 @@ body.modo-dark {
   --color-background-dark: #07070777;
   --color-background-white: rgba(255, 255, 255, 0.1);
 
+  /* Página de Resumo */
+
+  --color-background-filter: #fafafa;
+  --color-background-filter-opacity: #ebebeb76;
+  --color-text-filter: #101010;
+
 }
 
 * {
   font-family: var(--font-secundaria);
-   -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: transparent;
 }
 
-button, a {
-  -webkit-tap-highlight-color: transparent; /* Remove o azul no Chrome/Safari mobile */
-  outline: none; /* Remove a borda de foco padrão */
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+  /* Remove o azul no Chrome/Safari mobile */
+  outline: none;
+  /* Remove a borda de foco padrão */
 }
 
 button:focus,
 button:active {
   outline: none;
-  box-shadow: none; /* Remove sombras no clique */
+  box-shadow: none;
+  /* Remove sombras no clique */
 }
 
 /* Remove margens e preenchimentos padrão de todos os elementos principais */
