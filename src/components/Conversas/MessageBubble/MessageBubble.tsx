@@ -12,7 +12,7 @@ interface MessageBubbleProps {
 const renderMessageContent = ({ mimetype, base64, text }: MessageBubbleProps) => {
   const type = mimetype || 'text';
 
-  if (type === 'image' && base64) {
+  if (type === 'image/png' && base64) {
     return (
       <>
         <img
@@ -25,7 +25,7 @@ const renderMessageContent = ({ mimetype, base64, text }: MessageBubbleProps) =>
     );
   }
 
-  if (type === 'sticker' && base64) {
+  if (type === 'image/webp' && base64) {
     return (
       <img
         src={`data:image/webp;base64,${base64}`}

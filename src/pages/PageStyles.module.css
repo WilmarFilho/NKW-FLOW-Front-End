@@ -323,11 +323,11 @@
   background-color: var(--color-background-dark);
   flex: 1;
   border-radius: 16px;
-  padding: 20px 40px;
+  padding: 50px 40px;
 }
 
 .columnFooterAgent {
-  width: 100%;
+  width: 60%;
   display: flex;
   height: 100%;
   flex-direction: column;
@@ -339,16 +339,82 @@
   text-wrap: balance;
 }
 
-.boxQualidadeConhecimento {
-  height: 70%;
-  width: 100%;
-  border-radius: 12px;
-  background-color: var(--color-background-white);
+.columnProgressAgent {
+  width: 40%;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  color: var(--color-text);
+  text-align: center;
+  text-wrap: balance;
 }
+
+.boxQualidadeConhecimento {
+  background: var(--color-background-white);
+  padding: 22px 40px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  justify-content:   center;
+  align-items:  center ;
+  gap: 12px;
+}
+
+.boxQualidadeConhecimento h4 {
+  font-size: 22px;
+  font-family: var(--font-main);
+}
+
+.progressBarAgent {
+  background: var(--color-background-dark);
+  border-radius: 8px;
+  height: 42px;
+  margin-top: 8px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: width 0.4s ease;
+}
+
+.progressFill.boa {
+  background: #16a34a; /* verde */
+}
+
+.progressFill.média {
+  background: #facc15; /* amarelo */
+}
+
+.progressFill.ruim {
+  background: var(--color-background-red); /* vermelho */
+}
+
+.progressPercent {
+  color: var(--color-text-white);
+  opacity: .6;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
 
 .columnFooterAgent h4 {
   font-family: var(--font-main);
   font-size: 26px;
+}
+
+.columnFooterAgent p {
+  line-height: 22px;
+  opacity: .6;
 }
 
 .contentActionFooter {
@@ -360,10 +426,15 @@
   border: none;
   outline: none;
   padding: 12px 32px;
-  background-color: var(--color-background-white);
-  color: var(--color-text);
+  background-color: var(--color-background-messages);
   cursor: pointer;
   border-radius: 10px;
+}
+
+.contentActionFooter button svg {
+  width: 30px;
+  fill: var(--color-text-white);
+  color: var(--color-text-white);
 }
 
 .agentsWrapper h2 {

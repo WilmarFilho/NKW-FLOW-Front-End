@@ -7,7 +7,9 @@ import { agentsState, connectionsState } from '../../state/atom';
 import { useState } from 'react';
 import PageStyles from '../PageStyles.module.css';
 import ModalStyles from '../../components/Gerais/Modal/Modal.module.css'
-import { Cell, Pie, PieChart, ResponsiveContainer } from 'recharts';
+
+import DownloadTextIcon from './assets/dowloadtext.svg'
+import DownloadIcon from './assets/dowload.svg'
 
 export default function AgentesPage() {
   const connections = useRecoilValue(connectionsState);
@@ -25,6 +27,15 @@ export default function AgentesPage() {
     setSelectedAgent(null);
     setIsModalOpen(false);
   };
+
+  // Dados mockados
+  const status = 'Ruim'; // Pode ser 'Boa', 'Média' ou 'Ruim'
+  const progressoMap: Record<string, number> = {
+    'Boa': 100,
+    'Média': 60,
+    'Ruim': 42
+  };
+  const progresso = progressoMap[status];
 
   return (
     <div className={PageStyles.container}>
@@ -67,17 +78,39 @@ export default function AgentesPage() {
         transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
         className={PageStyles.agentsWrapper}
       >
-
+        {/* Coluna Esquerda */}
         <div className={PageStyles.columnFooterAgent}>
-          <h4>Informações da sua base de conhecimento:</h4>
-          <p>Veja o resumo do que entendemos do seu negocio ou baixe os seus arquivos anexados que usamos de base para responder seus clientes, caso veja algo divergente do seu negocio entre em contato conosco.</p>
+          <h4>Sua base de conhecimento é o coração da automação</h4>
+          <p>
+            Aqui reunimos tudo que a nossa IA sabe sobre o seu negócio. É a partir dessas
+            informações que ela responde com precisão aos seus clientes. Mantenha-a atualizada
+            para garantir que cada interação seja fiel à sua marca.
+          </p>
           <div className={PageStyles.contentActionFooter}>
-            <button>Texto</button>
-            <button>Arquivos</button>
+            <button><DownloadTextIcon /></button>
+            <button><DownloadIcon /></button>
           </div>
         </div>
-        <div className={PageStyles.columnFooterAgent}>
-          <div className={PageStyles.boxQualidadeConhecimento}> </div>
+
+        {/* Coluna Direita */}
+        <div className={PageStyles.columnProgressAgent}>
+          <div className={PageStyles.boxQualidadeConhecimento}>
+            <h4>Sua base de conhecimento está: <strong>{status}</strong></h4>
+
+            <div className={PageStyles.progressBarAgent}>
+
+              <div
+                className={`${PageStyles.progressFill} ${PageStyles[status.toLowerCase()]}`}
+                style={{ width: `${progresso}%` }}
+              >
+                <span className={PageStyles.progressPercent}>{progresso}% completa</span>
+
+              </div>
+
+            </div>
+
+
+          </div>
         </div>
       </motion.div>
 
