@@ -56,6 +56,10 @@ body.modo-light {
   --color-background-filter-opacity: #ebebeb76;
   --color-text-filter: #fafafa;
 
+  /* Página de Cashback */
+
+  --color-progress-checkpoint: #070707;
+
 }
 
 /* Tema Dark */
@@ -112,6 +116,10 @@ body.modo-dark {
   --color-background-filter: #fafafa;
   --color-background-filter-opacity: #ebebeb76;
   --color-text-filter: #101010;
+
+  /* Página de Cashback */
+
+  --color-progress-checkpoint: #1b214a;
 
 }
 

@@ -312,7 +312,7 @@
   width: 100%;
   justify-content: start;
   align-items: center;
-  padding-top: 32px;
+  padding-top: 12px;
   flex: 1;
 }
 
@@ -338,6 +338,18 @@
   border-radius: 10px;
 }
 
+.footerContainerRewards {
+  font-size: 18px;
+  font-family: var(--font-secundaria);
+  background-color: var(--color-background-white);
+  padding: 12px 12px;
+  display: flex;
+  justify-content: center;
+  border-radius: 10px;
+  color: var(--color-text-white);
+  width: 100%;
+}
+
 .boxRewardLocked h4,
 .boxRewardUnlock h4 {
   font-size: 34px;
@@ -359,7 +371,7 @@
   text-align: center;
   font-size: 14px;
   text-wrap: balance;
-  color: var(--color-text);
+  color: var(--color-text-white);
 }
 
 .boxRewardUnlock {
@@ -385,6 +397,7 @@
   width: 100%;
   display: flex;
   gap: 12px;
+  opacity: .5;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
@@ -431,6 +444,37 @@
   flex: 1;
   border-radius: 16px;
   padding: 50px 40px;
+}
+
+.progressFillReward {
+  background-color: var(--color-primary);
+  height: 100%;
+  border-radius: 200px;
+}
+
+.containerCountConvites {
+  height: 100%;
+  width: 300px;
+  background-color: var(--color-background-dark);
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.containerCountConvites h2 {
+  font-size: 15px;
+  opacity: .6;
+  color: var(--color-text);
+}
+
+.containerCountConvites p {
+  font-size: 20px;
+  font-family: var(--font-main);
+  text-transform: uppercase;
+  color: var(--color-text);
 }
 
 .columnFooterAgent {
@@ -575,12 +619,7 @@
   margin: 20px 0;
 }
 
-.progressFill {
-  height: 100%;
-  background: var(--color-secundaria);
-  border-radius: 60px;
-  transition: width 0.4s ease;
-}
+
 
 .progressCheckpoint {
   position: absolute;
@@ -605,7 +644,7 @@
 }
 
 .progressCheckpoint.completed {
-  background: var(--color-background-messages);
+  background: var(--color-progress-checkpoint);
   border: none;
   cursor: pointer;
   outline: 2px solid white;

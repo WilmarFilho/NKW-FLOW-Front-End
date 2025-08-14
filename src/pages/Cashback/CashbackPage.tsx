@@ -47,7 +47,12 @@ export default function DashboardPage() {
           <h2>Ganhe cashback convidando amigos</h2>
           <h3>Compartilhe seu link e desbloqueie recompensas incríveis conforme atinge novas metas.</h3>
         </div>
-        <Button label='Cashback' />
+
+        <div className={PageStyles.containerCountConvites}>
+          <h2>Suas indicações:</h2>
+          <p>12 confirmadas</p>
+        </div>
+
       </motion.div>
 
       <motion.div
@@ -100,13 +105,17 @@ export default function DashboardPage() {
 
               </div>
 
+              <div className={PageStyles.footerContainerRewards}>
+                {totalIndicacoes >= reward.goal ? 'Desbloqueado' : 'Bloqueado'}
+              </div>
+
             </div>
           ))}
         </div>
 
         {/* Barra de progresso com checkpoints */}
         < div className={PageStyles.progressBar} >
-          <div className={PageStyles.progressFill} style={{ width: `${progresso}%` }}></div>
+          <div className={PageStyles.progressFillReward} style={{ width: `${progresso}%` }}></div>
           {
             rewards.map((reward) => (
               <div
