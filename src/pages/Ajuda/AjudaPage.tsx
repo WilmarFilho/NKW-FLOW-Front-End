@@ -12,32 +12,33 @@ import { helpChatState } from '../../state/atom';
 import InstaIcon from './assets/insta.svg'
 import InfoIcon from './assets/info.svg'
 // Css
-import PageStyles from '../PageStyles.module.css'
+import GlobalStyles from '../../global.module.css'
+import AjudaStyles from './AjudaPage.module.css'
 
 export default function AjudaPage() {
   const messages = useRecoilValue(helpChatState);
   const { sendMessage } = useSendHelpMessage();
 
   return (
-    <div className={PageStyles.container}>
+    <div className={GlobalStyles.pageContainer}>
 
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
-        className={PageStyles.containerHeader}
+        className={GlobalStyles.pageHeader}
       >
 
-        <div className={PageStyles.headerTitles}>
+        <div className={GlobalStyles.pageHeaderTitles}>
           <h2>Página de Ajuda</h2>
           <h3>Pergunte qualquer coisa que estiver com dúvidas sobre o NKW FLOW.</h3>
         </div>
 
-        <div className={PageStyles.wrapperIconsAjuda}>
-          <div className={PageStyles.boxIcon} >
+        <div className={AjudaStyles.helpHeaderIcons}>
+          <div className={AjudaStyles.helpHeaderIconBox} >
             <a href='https://google.com' target='_blank'><InstaIcon></InstaIcon></a>
           </div>
-          <div className={PageStyles.boxIcon}>
+          <div className={AjudaStyles.helpHeaderIconBox}>
             <a href='https://google.com' target='_blank'><InfoIcon></InfoIcon></a>
           </div>
         </div>
@@ -49,15 +50,13 @@ export default function AjudaPage() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
-        className={PageStyles.helpChat}
-
-
+        className={AjudaStyles.aiChatWindow}
       >
 
         {messages.map((msg, idx) => (
           <div
             key={idx}
-            className={`${PageStyles.helpMessage} ${msg.from === 'user' ? PageStyles.user : PageStyles.bot}`}
+            className={`${AjudaStyles.aiChatMessage} ${msg.from === 'user' ? AjudaStyles.user : AjudaStyles.bot}`}
           >
             <ReactMarkdown>
               {msg.content.text}

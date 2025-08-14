@@ -123,6 +123,8 @@ body.modo-dark {
 
 }
 
+/*  RESET CSS  */
+
 * {
   font-family: var(--font-secundaria);
   -webkit-tap-highlight-color: transparent;

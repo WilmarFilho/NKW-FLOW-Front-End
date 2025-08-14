@@ -14,6 +14,8 @@ export const useAuth = () => {
 
   const login = async (email: string, senha: string) => {
 
+    console.log('oi')
+
     const token = '123' +  email + senha
     const userId = '419da23a-5461-470c-a837-d79fa2bb2f0c'
 

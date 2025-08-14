@@ -1,13 +1,18 @@
+// Libs
 import { motion } from 'framer-motion';
+import { useRecoilValue } from 'recoil';
+import { useState } from 'react';
+// Components
 import Button from '../../components/Gerais/Buttons/Button';
 import AgentCard from '../../components/Agentes/AgentCard/AgentCard';
 import Modal from '../../components/Gerais/Modal/Modal';
-import { useRecoilValue } from 'recoil';
+// Recoil
 import { agentsState, connectionsState } from '../../state/atom';
-import { useState } from 'react';
-import PageStyles from '../PageStyles.module.css';
+// Css
+import GlobalStyles from '../../global.module.css';
 import ModalStyles from '../../components/Gerais/Modal/Modal.module.css'
-
+import AgentsStyles from './AgentsPage.module.css'
+// Assets
 import DownloadTextIcon from './assets/dowloadtext.svg'
 import DownloadIcon from './assets/dowload.svg'
 
@@ -38,14 +43,14 @@ export default function AgentesPage() {
   const progresso = progressoMap[status];
 
   return (
-    <div className={PageStyles.container}>
+    <div className={GlobalStyles.pageContainer}>
       <motion.div
         initial={{ opacity: 0, y: 0 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
-        className={PageStyles.containerHeader}
+        className={GlobalStyles.pageHeader}
       >
-        <div className={PageStyles.headerTitles}>
+        <div className={GlobalStyles.pageHeaderTitles}>
           <h2>Vejas seus agentes disponíveis</h2>
           <h3>
             Ao adicionar uma nova conexão você seleciona um desses para responder por você. Para contratar mais agentes entre em contato.
@@ -58,7 +63,7 @@ export default function AgentesPage() {
         initial={{ opacity: 0, y: 0 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
-        className={PageStyles.agentsList}
+        className={AgentsStyles.agentsList}
       >
         {agents.map((agent) => {
           return (
@@ -76,39 +81,39 @@ export default function AgentesPage() {
         initial={{ opacity: 0, y: 0 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
-        className={PageStyles.agentsWrapper}
+        className={AgentsStyles.agentsFooter}
       >
         {/* Coluna Esquerda */}
-        <div className={PageStyles.columnFooterAgent}>
+        <div className={AgentsStyles.columnTitlesConhecimento}>
           <h4>Sua base de conhecimento é o coração da automação</h4>
           <p>
             Aqui reunimos tudo que a nossa IA sabe sobre o seu negócio. É a partir dessas
             informações que ela responde com precisão aos seus clientes. Mantenha-a atualizada
             para garantir que cada interação seja fiel à sua marca.
           </p>
-          <div className={PageStyles.contentActionFooter}>
+          <div className={AgentsStyles.contentActions}>
             <button><DownloadTextIcon /></button>
             <button><DownloadIcon /></button>
           </div>
         </div>
 
         {/* Coluna Direita */}
-        <div className={PageStyles.columnProgressAgent}>
-          <div className={PageStyles.boxQualidadeConhecimento}>
+        <div className={AgentsStyles.columnProgressConhecimento}>
+          <div className={AgentsStyles.wrapperProgressConhecimento}>
+
             <h4>Sua base de conhecimento está: <strong>{status}</strong></h4>
 
-            <div className={PageStyles.progressBarAgent}>
+            <div className={AgentsStyles.progressBarAgent}>
 
               <div
-                className={`${PageStyles.progressFill} ${PageStyles[status.toLowerCase()]}`}
+                className={`${AgentsStyles.progressFill} ${AgentsStyles[status.toLowerCase()]}`}
                 style={{ width: `${progresso}%` }}
               >
-                <span className={PageStyles.progressPercent}>{progresso}% completa</span>
+                <span className={AgentsStyles.progressPercent}>{progresso}% completa</span>
 
               </div>
 
             </div>
-
 
           </div>
         </div>

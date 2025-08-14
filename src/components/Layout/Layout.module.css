@@ -20,11 +20,6 @@
     url("./assets/bgLight.webp") lightgray 10% / cover no-repeat;
 }
 
-/*.light {
-  background: #F3F5F7;
-}*/
-
-
 .contentArea {
   width: 100%;
   padding: 12px 50px;

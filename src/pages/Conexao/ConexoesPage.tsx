@@ -9,8 +9,8 @@ import GenericTable from '../../components/Gerais/Tables/GenericTable';
 import { useConnectionsPage } from '../../hooks/connections/useConnectionsPage';
 import { validateConnectionForm } from '../../hooks/utils/useValidator'
 // Css e Assets
-import PageStyles from '../PageStyles.module.css';
-import tableStyles from '../../components/Gerais/Tables/TableStyles.module.css';
+import GlobalStyles from '../../global.module.css';
+import TableStyles from '../../components/Gerais/Tables/TableStyles.module.css';
 import EditIcon from './assets/arrow-circle.svg';
 import DeleteIcon from './assets/x-circle.svg';
 // Type
@@ -69,7 +69,7 @@ export default function ConexoesPage() {
   const renderConnectionRow = (conn: Connection) => (
     <div
       key={conn.id}
-      className={tableStyles.tableRow}
+      className={TableStyles.tableRow}
       style={{ gridTemplateColumns: '1fr 2fr 2fr 2fr 1fr' }}
       role="row"
       tabIndex={0}
@@ -78,13 +78,13 @@ export default function ConexoesPage() {
       <div
         data-label="Status"
         onClick={() => handleStatusToggle(conn)}
-        className={tableStyles.clickableStatus}
+        className={TableStyles.clickableStatus}
         role="button"
         tabIndex={0}
         onKeyDown={(e) => e.key === 'Enter' && handleStatusToggle(conn)}
         aria-pressed={conn.status}
       >
-        <span className={`${tableStyles.statusChip} ${conn.status ? tableStyles.active : tableStyles.inactive}`}>
+        <span className={`${TableStyles.statusChip} ${conn.status ? TableStyles.active : TableStyles.inactive}`}>
           {conn.status ? 'Ativo' : 'Inativo'}
         </span>
       </div>
@@ -101,11 +101,11 @@ export default function ConexoesPage() {
         <NavLink to="/agentes">{conn.agente?.tipo_de_agente || 'Nenhum'}</NavLink>
       </div>
 
-      <div className={tableStyles.actionCell}>
-        <button className={tableStyles.actionButtonEdit} onClick={() => handleEdit(conn)} aria-label="Editar">
+      <div className={TableStyles.actionCell}>
+        <button className={TableStyles.actionButtonEdit} onClick={() => handleEdit(conn)} aria-label="Editar">
           <EditIcon />
         </button>
-        <button className={tableStyles.actionButtonDelete} onClick={() => handleDelete(conn.id)} aria-label="Deletar">
+        <button className={TableStyles.actionButtonDelete} onClick={() => handleDelete(conn.id)} aria-label="Deletar">
           <DeleteIcon />
         </button>
       </div>
@@ -113,16 +113,16 @@ export default function ConexoesPage() {
   );
 
   return (
-    <div className={PageStyles.container}>
-      <motion.header initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className={PageStyles.containerHeader}>
-        <div className={PageStyles.headerTitles}>
+    <div className={GlobalStyles.pageContainer}>
+      <motion.header initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className={GlobalStyles.pageHeader}>
+        <div className={GlobalStyles.pageHeaderTitles}>
           <h2>Suas conexões do WhatsApp</h2>
           <h3>Verifique, adicione ou desative suas conexões do WhatsApp.</h3>
         </div>
         <Button label="Adicionar Conexão" onClick={() => openModal()} />
       </motion.header>
 
-      <div className={PageStyles.containerContent}>
+      <div className={GlobalStyles.pageContent}>
         <GenericTable
           columns={['Status', 'Nome', 'Número', 'Agente', '']}
           data={connections}
@@ -144,15 +144,15 @@ export default function ConexoesPage() {
           sortOrder={sortOrder}
         />
 
-        <div className={PageStyles.containerBottom}>
+        <div className={GlobalStyles.filterControls}>
           <button
-            className={`${PageStyles.buttonBase} ${activeFilter === 'ativo' ? PageStyles.activeFilter : ''}`}
+            className={`${GlobalStyles.button} ${activeFilter === 'ativo' ? GlobalStyles.buttonActive : ''}`}
             onClick={() => setActiveFilter('ativo')}
           >
             <span>Ver conexões ativas</span>
           </button>
           <button
-            className={`${PageStyles.buttonBase} ${activeFilter === 'inativo' ? PageStyles.activeFilter : ''}`}
+            className={`${GlobalStyles.button} ${activeFilter === 'inativo' ? GlobalStyles.buttonActive : ''}`}
             onClick={() => setActiveFilter('inativo')}
           >
             <span>Ver conexões inativas</span>

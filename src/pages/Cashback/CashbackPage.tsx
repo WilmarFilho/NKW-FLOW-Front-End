@@ -1,10 +1,9 @@
 // Libs
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-// Components
-import Button from '../../components/Gerais/Buttons/Button';
 // Css
-import PageStyles from '../PageStyles.module.css';
+import GlobalStyles from '../../global.module.css';
+import CashbackStyles from './CashbackPage.module.css'
 // Assets 
 import CopyIcon from './assets/copy.svg'
 import MedalIcon from './assets/medal.svg'
@@ -34,21 +33,21 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className={PageStyles.container}>
+    <div className={GlobalStyles.pageContainer}>
 
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: 0 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
-        className={PageStyles.containerHeader}
+        className={GlobalStyles.pageHeader}
       >
-        <div className={PageStyles.headerTitles}>
+        <div className={GlobalStyles.pageHeaderTitles}>
           <h2>Ganhe cashback convidando amigos</h2>
           <h3>Compartilhe seu link e desbloqueie recompensas incríveis conforme atinge novas metas.</h3>
         </div>
 
-        <div className={PageStyles.containerCountConvites}>
+        <div className={CashbackStyles.containerCountConvites}>
           <h2>Suas indicações:</h2>
           <p>12 confirmadas</p>
         </div>
@@ -59,16 +58,14 @@ export default function DashboardPage() {
         initial={{ opacity: 0, y: 0 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
-        className={PageStyles.cashbackWrapper}
+        className={GlobalStyles.pageContent}
       >
 
-
-
         {/* Caixa do link */}
-        <div className={PageStyles.containerLink}>
+        <div className={CashbackStyles.containerLink}>
           <h4>Seu link de indicação</h4>
           <p>Envie este link para seus amigos. A cada indicação válida você avança na barra e desbloqueia recompensas.</p>
-          <div onClick={copiarLink} className={PageStyles.boxLink}>
+          <div onClick={copiarLink} className={CashbackStyles.boxLink}>
             <button >Copiar</button>
             <span>{link}</span>
             <CopyIcon />
@@ -76,28 +73,28 @@ export default function DashboardPage() {
         </div>
 
         {/* Lista de recompensas */}
-        <div className={PageStyles.containerRewards}>
+        <div className={CashbackStyles.containerRewards}>
           {rewards.map((reward) => (
-            <div key={reward.tier} className={totalIndicacoes >= reward.goal ? PageStyles.boxRewardUnlock : PageStyles.boxRewardLocked}>
-              <div className={PageStyles.rowContainerRewards}>
+            <div key={reward.tier} className={`${CashbackStyles.boxReward} ${totalIndicacoes >= reward.goal ? CashbackStyles.boxRewardUnlock : CashbackStyles.boxRewardLocked}`}>
+              <div className={CashbackStyles.rowContainerRewards}>
                 <MedalIcon />
                 <h2>{reward.goal} indicações</h2>
               </div>
 
-              <div className={PageStyles.bodyContainerRewards}>
+              <div className={CashbackStyles.bodyContainerRewards}>
 
-                <div className={PageStyles.rowBodyContainerRewards}>
+                <div className={CashbackStyles.rowBodyContainerRewards}>
                   <h4>{reward.name}</h4>
                   <span> -------------- Recompensas: -------------- </span>
                 </div>
 
-                <div className={PageStyles.containerLiRewards}>
-                  <div className={PageStyles.rowLiRewards}>
+                <div className={CashbackStyles.containerLiRewards}>
+                  <div className={CashbackStyles.rowLiRewards}>
                     <CheckIcon />
                     <p>{reward.casbackPercentual}% de desconto</p>
                   </div>
                   {reward.rewardBonus ?
-                    <div className={PageStyles.rowLiRewards}>
+                    <div className={CashbackStyles.rowLiRewards}>
                       <CheckIcon />
                       <p>{reward.rewardBonus}</p>
                     </div> : ''}
@@ -105,7 +102,7 @@ export default function DashboardPage() {
 
               </div>
 
-              <div className={PageStyles.footerContainerRewards}>
+              <div className={CashbackStyles.footerContainerRewards}>
                 {totalIndicacoes >= reward.goal ? 'Desbloqueado' : 'Bloqueado'}
               </div>
 
@@ -114,13 +111,13 @@ export default function DashboardPage() {
         </div>
 
         {/* Barra de progresso com checkpoints */}
-        < div className={PageStyles.progressBar} >
-          <div className={PageStyles.progressFillReward} style={{ width: `${progresso}%` }}></div>
+        < div className={CashbackStyles.progressBar} >
+          <div className={CashbackStyles.progressFillReward} style={{ width: `${progresso}%` }}></div>
           {
             rewards.map((reward) => (
               <div
                 key={reward.tier}
-                className={`${PageStyles.progressCheckpoint} ${totalIndicacoes >= reward.goal ? PageStyles.completed : ''}`}
+                className={`${CashbackStyles.progressCheckpoint} ${totalIndicacoes >= reward.goal ? CashbackStyles.completed : ''}`}
                 style={{ left: `${(reward.goal / rewards[rewards.length - 1].goal) * 100}%` }}
                 title={`${reward.name} - ${reward.goal} indicações`}
               >

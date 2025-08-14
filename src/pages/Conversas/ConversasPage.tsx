@@ -1,5 +1,5 @@
 // Css
-import PageStyles from '../PageStyles.module.css';
+import ConversasStyles from './ConversasPage.module.css'
 import FormStyles from '../../components/Gerais/Form/form.module.css'
 // Components
 import ChatSidebar from '../../components/Conversas/ChatSideBar/ChatSideBar';
@@ -12,7 +12,7 @@ export default function ConversasPage() {
   const state = useConversasPage();
 
   return (
-    <div className={PageStyles.conversationsContainer}>
+    <div className={ConversasStyles.conversationsContainer}>
       <ChatSidebar
         chats={state.chats}
         activeChat={state.activeChat}
@@ -40,7 +40,6 @@ export default function ConversasPage() {
               <label>Conexão para disparar mensagem</label>
               <select
                 value={state.selectedConnectionId}
-                className={PageStyles.formSelect}
                 onChange={(e) => state.setSelectedConnectionId(e.target.value)}
               >
                 <option value="">Selecione a conexão</option>
@@ -62,7 +61,6 @@ export default function ConversasPage() {
                   type="text"
                   placeholder="Número com DDD (ex: 11999999999)"
                   value={state.newChatNumber}
-                  className={PageStyles.formInput}
                   onChange={(e) => state.setNewChatNumber(e.target.value)}
                 />
                 {state.showErrors && state.errors.newChatNumber && (
@@ -74,7 +72,6 @@ export default function ConversasPage() {
                 <label>Primeira Mensagem</label>
                 <input
                   placeholder="Primeira mensagem"
-                  className={PageStyles.formInput}
                   value={state.newChatMessage}
                   onChange={(e) => state.setNewChatMessage(e.target.value)}
                 />

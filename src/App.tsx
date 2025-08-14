@@ -5,9 +5,6 @@ import { Suspense, lazy } from 'react';
 import Layout from './components/Layout/Layout';
 // Routes
 import { ProtectedRoute, PublicRoute } from './routes/ProtectedRoute';
-// CSS
-import './main.css';
-
 // Lazy imports das páginas
 const ConversasPage = lazy(() => import('./pages/Conversas/ConversasPage'));
 const AtendentesPage = lazy(() => import('./pages/Atendentes/AtendentesPage'));

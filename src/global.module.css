@@ -1,0 +1,115 @@
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 40px 0; 
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.pageHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 32px;
+}
+
+.pageHeaderTitles {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pageHeaderTitles h2 {
+  font-family: var(--font-main);
+  font-size: 40px;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.pageHeaderTitles h3 {
+  font-size: 24px;
+  color: var(--color-text);
+  line-height: 1.5;
+  opacity: 0.6;
+  text-wrap: balance;
+  margin: 0;
+}
+
+.pageContent {
+  background-color: var(--color-background-dark);
+  display: flex;
+  padding: 32px;
+  gap: 32px;
+  flex-direction: column;
+  flex: 1;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.pageRow {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+}
+
+.filterControls {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  margin-top: auto; 
+}
+
+.filterControls .button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  border: none;
+  outline: none;
+  background-color: var(--color-filter-attendants);
+  padding: 24px 0;
+  border-radius: 12px;
+  color: var(--color-text);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+.filterControls .button:hover {
+  color: var(--color-text-white);
+  background-color: var(--color-filter-hover-attendants);
+}
+
+.filterControls .buttonActive {
+  color: var(--color-text-white);
+  background-color: var(--color-filter-hover-attendants);
+}
+
+@media (max-width: 1199.98px) {
+  .page-header__titles h2 {
+    font-size: 32px;
+  }
+  .page-header__titles h3 {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .page-header {
+    flex-direction: column;
+    align-items: start;
+    gap: 24px;
+  }
+  .page-header__titles h2 {
+    font-size: 26px;
+  }
+  .page-header__titles h3 {
+    font-size: 18px;
+  }
+  .page-row {
+    flex-direction: column;
+  }
+}
