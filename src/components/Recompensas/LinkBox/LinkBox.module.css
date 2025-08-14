@@ -1,0 +1,42 @@
+.containerLink {
+    width: 100%;
+    color: var(--color-text);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.containerLink h4 {
+    font-size: 30px;
+    font-family: var(--font-main);
+}
+
+.boxLink {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  background: var(--color-background-white);
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin-top: 8px;
+}
+
+.boxLink span {
+  width: 100%;
+}
+
+.boxLink button {
+  background: var(--color-secundaria);
+  color: var(--color-text-white);
+  border: none;
+  font-family: var(--font-main);
+  text-transform: uppercase;
+  padding: 8px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.boxLink svg {
+    width: 40px;
+}

@@ -12,9 +12,9 @@ const AgentesPage = lazy(() => import('./pages/AgentesPage'));
 const ConexoesPage = lazy(() => import('./pages/ConexoesPage'));
 const ConfiguracoesPage = lazy(() => import('./pages/ConfiguracoesPage'));
 const AjudaPage = lazy(() => import('./pages/AjudaPage'));
-const LoginPage = lazy(() => import('./pages/Login'));
+const LoginPage = lazy(() => import('./pages/LoginPage'));
 const ResumoPage = lazy(() => import('./pages/ResumoPage'));
-const RecompensasPage = lazy(() => import('./pages/Recompensas/RecompensasPage'));
+const RecompensasPage = lazy(() => import('./pages/RecompensasPage'));
 
 function App() {
   return (
