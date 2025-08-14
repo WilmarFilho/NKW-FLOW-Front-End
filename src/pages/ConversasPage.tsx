@@ -1,5 +1,5 @@
 // Css
-import FormStyles from '../../components/Gerais/Form/form.module.css'
+import FormStyles from '../components/Gerais/Form/form.module.css'
 // Components
 import ChatSidebar from '../components/Conversas/ChatSideBar/ChatSideBar';
 import ChatWindow from '../components/Conversas/ChatWindow/ChatWindow';

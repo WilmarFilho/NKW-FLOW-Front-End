@@ -11,7 +11,7 @@ import LineMetricChart from '../components/Resumo/LineMetricChart/LineMetricChar
 import GaugeMetricChart from '../components/Resumo/GaugeMetricChart/GaugeMetricChart';
 
 // Css
-import GlobalStyles from '../../global.module.css';
+import GlobalStyles from '../global.module.css';
 
 // Assets
 import Icon from '../components/Gerais/Icons/Icons';

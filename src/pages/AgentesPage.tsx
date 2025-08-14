@@ -13,8 +13,8 @@ import KnowledgeBaseProgress from '../components/Agentes/KnowledgeBaseProgress/K
 import { agentsState, connectionsState } from '../state/atom';
 
 // Css
-import GlobalStyles from '../../global.module.css';
-import ModalStyles from '../../components/Gerais/Modal/Modal.module.css';
+import GlobalStyles from '../global.module.css';
+import ModalStyles from '../components/Gerais/Modal/Modal.module.css';
 
 export default function AgentesPage() {
   const connections = useRecoilValue(connectionsState);

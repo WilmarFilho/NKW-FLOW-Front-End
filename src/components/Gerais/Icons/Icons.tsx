@@ -10,6 +10,10 @@ import ChatOnIcon from './assets/chatOn.svg';
 import ConnectIcon from './assets/connect.svg';
 import MoneyIcon from './assets/money.svg';
 import UserListIcon from './assets/userList.svg';
+import LogoIcon from './assets/logo.svg';
+import CopyIcon from './assets/copy.svg';
+import MedalIcon from './assets/medal.svg';
+import CheckIcon from './assets/check.svg'
 
 const iconMap = {
   arrow: ArrowIcon,
@@ -21,6 +25,10 @@ const iconMap = {
   connect: ConnectIcon,
   money: MoneyIcon,
   userlist: UserListIcon,
+  logo: LogoIcon,
+  copy: CopyIcon,
+  medal: MedalIcon,
+  check: CheckIcon,
 };
 
 type IconName = keyof typeof iconMap;

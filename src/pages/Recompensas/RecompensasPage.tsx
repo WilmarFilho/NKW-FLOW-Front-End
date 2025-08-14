@@ -4,10 +4,8 @@ import { useState } from 'react';
 // Css
 import GlobalStyles from '../../global.module.css';
 import RecompensasStyles from './RecompensasPage.module.css'
-// Assets 
-import CopyIcon from './assets/copy.svg'
-import MedalIcon from './assets/medal.svg'
-import CheckIcon from './assets/TablerCircleCheck.svg'
+// Icons 
+import Icon from '../../components/Gerais/Icons/Icons';
 
 export default function DashboardPage() {
   // Dados mockados
@@ -18,7 +16,7 @@ export default function DashboardPage() {
     { tier: 4, name: 'Lenda do FLOW', goal: 25, casbackPercentual: 40, rewardBonus: 'desconto em outros serviços' }
   ];
 
-  const totalIndicacoes = 8; // Mock: quantidade de indicações atuais
+  const totalIndicacoes = 8;
 
   const progresso = Math.min(
     (totalIndicacoes / rewards[rewards.length - 1].goal) * 100,
@@ -68,7 +66,7 @@ export default function DashboardPage() {
           <div onClick={copiarLink} className={RecompensasStyles.boxLink}>
             <button >Copiar</button>
             <span>{link}</span>
-            <CopyIcon />
+            <Icon nome='copy' />
           </div>
         </div>
 
@@ -77,7 +75,7 @@ export default function DashboardPage() {
           {rewards.map((reward) => (
             <div key={reward.tier} className={`${RecompensasStyles.boxReward} ${totalIndicacoes >= reward.goal ? RecompensasStyles.boxRewardUnlock : RecompensasStyles.boxRewardLocked}`}>
               <div className={RecompensasStyles.rowContainerRewards}>
-                <MedalIcon />
+                <Icon nome='medal' />
                 <h2>{reward.goal} indicações</h2>
               </div>
 
@@ -90,12 +88,12 @@ export default function DashboardPage() {
 
                 <div className={RecompensasStyles.containerLiRewards}>
                   <div className={RecompensasStyles.rowLiRewards}>
-                    <CheckIcon />
+                    <Icon nome='check'/>
                     <p>{reward.casbackPercentual}% de desconto</p>
                   </div>
                   {reward.rewardBonus ?
                     <div className={RecompensasStyles.rowLiRewards}>
-                      <CheckIcon />
+                      <Icon nome='check' />
                       <p>{reward.rewardBonus}</p>
                     </div> : ''}
                 </div>

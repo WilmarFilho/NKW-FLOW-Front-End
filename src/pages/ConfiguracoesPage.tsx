@@ -4,7 +4,7 @@ import { useState } from 'react';
 import TabsHeader from '../components/Configuracoes/TabsHeader/TabsHeader';
 import SettingsContent from '../components/Configuracoes/SettingsContent/SettingsContent';
 // Css
-import GlobalStyles from '../../global.module.css'
+import GlobalStyles from '../global.module.css'
 
 const tabs = ['Conta', 'Preferências'];
 
