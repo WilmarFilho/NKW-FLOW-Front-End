@@ -5,17 +5,21 @@ import { useState } from 'react';
 import Button from '../../components/Gerais/Buttons/Button';
 // Css
 import PageStyles from '../PageStyles.module.css';
+// Assets 
+import CopyIcon from './assets/copy.svg'
+import MedalIcon from './assets/medal.svg'
+import CheckIcon from './assets/TablerCircleCheck.svg'
 
 export default function DashboardPage() {
   // Dados mockados
   const rewards = [
-    { tier: 1, name: 'Recompensa 1', goal: 2 },
-    { tier: 2, name: 'Recompensa 2', goal: 5 },
-    { tier: 3, name: 'Recompensa 3', goal: 10 },
-    { tier: 4, name: 'Recompensa 4', goal: 20 }
+    { tier: 1, name: 'Novato', goal: 2, casbackPercentual: 5 },
+    { tier: 2, name: 'Engajado', goal: 4, casbackPercentual: 15 },
+    { tier: 3, name: 'Influenciador', goal: 10, casbackPercentual: 25 },
+    { tier: 4, name: 'Lenda do FLOW', goal: 25, casbackPercentual: 40, rewardBonus: 'desconto em outros serviços' }
   ];
 
-  const totalIndicacoes = 12; // Mock: quantidade de indicações atuais
+  const totalIndicacoes = 8; // Mock: quantidade de indicações atuais
 
   const progresso = Math.min(
     (totalIndicacoes / rewards[rewards.length - 1].goal) * 100,
@@ -59,41 +63,62 @@ export default function DashboardPage() {
         <div className={PageStyles.containerLink}>
           <h4>Seu link de indicação</h4>
           <p>Envie este link para seus amigos. A cada indicação válida você avança na barra e desbloqueia recompensas.</p>
-          <div className={PageStyles.boxLink}>
-            <button onClick={copiarLink}>Copiar</button>
+          <div onClick={copiarLink} className={PageStyles.boxLink}>
+            <button >Copiar</button>
             <span>{link}</span>
-
+            <CopyIcon />
           </div>
         </div>
 
         {/* Lista de recompensas */}
         <div className={PageStyles.containerRewards}>
           {rewards.map((reward) => (
-            <div key={reward.tier} className={PageStyles.boxReward}>
-              <h4>{reward.name}</h4>
-              <p>Alcance {reward.goal} indicações</p>
-              {totalIndicacoes >= reward.goal ? (
-                <span className={PageStyles.rewardUnlocked}>✔ Desbloqueada</span>
-              ) : (
-                <span className={PageStyles.rewardLocked}>🔒 Bloqueada</span>
-              )}
+            <div key={reward.tier} className={totalIndicacoes >= reward.goal ? PageStyles.boxRewardUnlock : PageStyles.boxRewardLocked}>
+              <div className={PageStyles.rowContainerRewards}>
+                <MedalIcon />
+                <h2>{reward.goal} indicações</h2>
+              </div>
+
+              <div className={PageStyles.bodyContainerRewards}>
+
+                <div className={PageStyles.rowBodyContainerRewards}>
+                  <h4>{reward.name}</h4>
+                  <span> -------------- Recompensas: -------------- </span>
+                </div>
+
+                <div className={PageStyles.containerLiRewards}>
+                  <div className={PageStyles.rowLiRewards}>
+                    <CheckIcon />
+                    <p>{reward.casbackPercentual}% de desconto</p>
+                  </div>
+                  {reward.rewardBonus ?
+                    <div className={PageStyles.rowLiRewards}>
+                      <CheckIcon />
+                      <p>{reward.rewardBonus}</p>
+                    </div> : ''}
+                </div>
+
+              </div>
+
             </div>
           ))}
         </div>
 
         {/* Barra de progresso com checkpoints */}
-        <div className={PageStyles.progressBar}>
+        < div className={PageStyles.progressBar} >
           <div className={PageStyles.progressFill} style={{ width: `${progresso}%` }}></div>
-          {rewards.map((reward) => (
-            <div
-              key={reward.tier}
-              className={`${PageStyles.progressCheckpoint} ${totalIndicacoes >= reward.goal ? PageStyles.completed : ''}`}
-              style={{ left: `${(reward.goal / rewards[rewards.length - 1].goal) * 100}%` }}
-              title={`${reward.name} - ${reward.goal} indicações`}
-            >
-              {reward.tier}
-            </div>
-          ))}
+          {
+            rewards.map((reward) => (
+              <div
+                key={reward.tier}
+                className={`${PageStyles.progressCheckpoint} ${totalIndicacoes >= reward.goal ? PageStyles.completed : ''}`}
+                style={{ left: `${(reward.goal / rewards[rewards.length - 1].goal) * 100}%` }}
+                title={`${reward.name} - ${reward.goal} indicações`}
+              >
+                {reward.tier}
+              </div>
+            ))
+          }
         </div>
 
       </motion.div>

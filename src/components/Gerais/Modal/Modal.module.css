@@ -222,7 +222,7 @@
 
 .liConnection {
   padding: 14px 24px;
-  background-color: var(--color-background-white);
+  background-color: var(--color-secundaria);
   border-radius: 14px;
   cursor: pointer;
   text-transform: uppercase;

@@ -293,15 +293,117 @@
   font-family: var(--font-main);
 }
 
-.boxReward {
-  height: 200px;
+.rowContainerRewards {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.rowContainerRewards svg {
+  width: 40px;
+  height: 45px;
+}
+
+.bodyContainerRewards {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  justify-content: start;
+  align-items: center;
+  padding-top: 32px;
+  flex: 1;
+}
+
+.rowLiRewards {
+  display: flex;
+  gap: 6px;
+  font-family: var(--font-main);
+  text-transform: uppercase;
+  align-items: center;
+}
+
+.rowLiRewards svg {
+  width: 24px;
+  color: var(--color-secundaria);
+}
+
+.rowContainerRewards h2 {
+  font-size: 34px;
+  font-family: var(--font-main);
+  text-transform: uppercase;
+  background-color: var(--color-background-white);
+  padding: 8px 12px;
+  border-radius: 10px;
+}
+
+.boxRewardLocked h4,
+.boxRewardUnlock h4 {
+  font-size: 34px;
+  font-family: var(--font-main);
+  text-transform: uppercase;
+}
+
+.containerLiRewards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: start;
+  justify-content: start;
+  width: 100%;
+  text-align: start;
+}
+
+.containerLiRewards p {
+  text-align: center;
+  font-size: 14px;
+  text-wrap: balance;
+  color: var(--color-text);
+}
+
+.boxRewardUnlock {
+  height: 100%;
+  position: relative;
+  border-radius: 14px;
+  background-color: var(--color-primary);
+  gap: 12px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--color-text-white);
+  padding: 22px 22px;
+}
+
+.boxRewardLocked {
+  height: 100%;
+  position: relative;
   border-radius: 14px;
   background-color: var(--color-background-white);
   width: 100%;
   display: flex;
-  justify-content: center;
+  gap: 12px;
+  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
   color: var(--color-text);
+  padding: 22px 22px;
+}
+
+
+.rowBodyContainerRewards {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+}
+
+.rowBodyContainerRewards span {
+  opacity: .4;
+  font-size: 12px;
 }
 
 .boxLink {
@@ -313,6 +415,11 @@
   justify-content: center;
   align-items: center;
   color: var(--color-text);
+  cursor: pointer;
+}
+
+.boxLink svg {
+  width: 40px;
 }
 
 .agentsWrapper {
@@ -462,24 +569,25 @@
 
 .progressBar {
   position: relative;
-  height: 42px;
-  background: var(--color-primary);
-  border-radius: 6px;
+  height: 22px;
+  background: var(--color-background-row-hover);
+  border-radius: 60px;
   margin: 20px 0;
 }
 
 .progressFill {
   height: 100%;
   background: var(--color-secundaria);
-  border-radius: 6px;
+  border-radius: 60px;
   transition: width 0.4s ease;
 }
 
 .progressCheckpoint {
   position: absolute;
-  top: -6px;
-  width: 56px;
-  height: 56px;
+  top: -10px;
+  width: 48px;
+  height: 48px;
+  cursor: pointer;
   background: var(--color-text-white);
   border: 2px solid #9ca3af;
   border-radius: 50%;
@@ -492,13 +600,17 @@
   line-height: 20px;
   transform: translateX(-50%);
   color: var(--color-text-black);
+  outline: 2px solid var(--color-background-messages);
+  outline-offset: -10px;
 }
 
 .progressCheckpoint.completed {
-  background: var(--color-secundaria);
+  background: var(--color-background-messages);
   border: none;
+  cursor: pointer;
+  outline: 2px solid white;
+  outline-offset: -10px;
   color: var(--color-text-white);
-  outline: none;
 }
 
 .boxLink {
