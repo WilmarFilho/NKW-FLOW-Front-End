@@ -2,23 +2,23 @@
 import { motion } from 'framer-motion';
 import { NavLink } from 'react-router-dom';
 // Components
-import Button from '../../components/Gerais/Buttons/Button';
-import ConnectionForm from '../../components/Conexoes/ConnectionForm';
-import GenericTable from '../../components/Gerais/Tables/GenericTable';
+import Button from '../components/Gerais/Buttons/Button';
+import ConnectionForm from '../components/Conexoes/ConnectionForm';
+import GenericTable from '../components/Gerais/Tables/GenericTable';
+import GenericEntityRow from '../components/Gerais/Tables/GenericEntityRow';
+import Modal from '../components/Gerais/Modal/Modal';
 // Hooks
-import { useConnectionsPage } from '../../hooks/connections/useConnectionsPage';
-import { validateConnectionForm } from '../../hooks/utils/useValidator'
-// Css e Assets
-import GlobalStyles from '../../global.module.css';
-import TableStyles from '../../components/Gerais/Tables/TableStyles.module.css';
-import EditIcon from './assets/arrow-circle.svg';
-import DeleteIcon from './assets/x-circle.svg';
+import { useConnectionsPage } from '../hooks/connections/useConnectionsPage';
+import { validateConnectionForm } from '../hooks/utils/useValidator';
+import { useAddConnection } from '../hooks/connections/useAddConnection';
+// Css
+import GlobalStyles from '../global.module.css';
+import TableStyles from '../components/Gerais/Tables/TableStyles.module.css';
 // Type
-import { Connection } from '../../types/connection';
-import Modal from '../../components/Gerais/Modal/Modal';
-import { useAddConnection } from '../../hooks/connections/useAddConnection';
+import { Connection } from '../types/connection';
 
 export default function ConexoesPage() {
+
   const {
     connections,
     activeFilter,
@@ -66,51 +66,39 @@ export default function ConexoesPage() {
     }
   };
 
-  const renderConnectionRow = (conn: Connection) => (
-    <div
-      key={conn.id}
-      className={TableStyles.tableRow}
-      style={{ gridTemplateColumns: '1fr 2fr 2fr 2fr 1fr' }}
-      role="row"
-      tabIndex={0}
-      aria-label={`Conexão ${conn.nome.split('_')[0]}`}
-    >
-      <div
-        data-label="Status"
-        onClick={() => handleStatusToggle(conn)}
-        className={TableStyles.clickableStatus}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => e.key === 'Enter' && handleStatusToggle(conn)}
-        aria-pressed={conn.status}
-      >
-        <span className={`${TableStyles.statusChip} ${conn.status ? TableStyles.active : TableStyles.inactive}`}>
+  const columnTemplate = '1fr 2fr 2fr 2fr 1fr';
+
+  const columns = [
+    {
+      key: 'status',
+      label: 'Status',
+      render: (conn: Connection) => (
+        <span
+          className={`${TableStyles.statusChip} ${conn.status ? TableStyles.active : TableStyles.inactive}`}
+        >
           {conn.status ? 'Ativo' : 'Inativo'}
         </span>
-      </div>
-
-      <div data-label="Nome" onClick={() => handleEdit(conn)} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && handleEdit(conn)}>
-        {conn.nome.split('_')[0]}
-      </div>
-
-      <div data-label="Número" onClick={() => handleEdit(conn)} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && handleEdit(conn)}>
-        {conn.numero || 'N/A'}
-      </div>
-
-      <div data-label="Agente">
-        <NavLink to="/agentes">{conn.agente?.tipo_de_agente || 'Nenhum'}</NavLink>
-      </div>
-
-      <div className={TableStyles.actionCell}>
-        <button className={TableStyles.actionButtonEdit} onClick={() => handleEdit(conn)} aria-label="Editar">
-          <EditIcon />
-        </button>
-        <button className={TableStyles.actionButtonDelete} onClick={() => handleDelete(conn.id)} aria-label="Deletar">
-          <DeleteIcon />
-        </button>
-      </div>
-    </div>
-  );
+      ),
+      onClick: handleStatusToggle, // só status
+    },
+    {
+      key: 'nome',
+      label: 'Nome',
+      render: (conn: Connection) => conn.nome.split('_')[0],
+      onClick: handleEdit, // qualquer clique na coluna chama edit
+    },
+    {
+      key: 'numero',
+      label: 'Número',
+      render: (conn: Connection) => conn.numero || 'N/A',
+      onClick: handleEdit,
+    },
+    {
+      key: 'agente',
+      label: 'Agente',
+      render: (conn: Connection) => <NavLink to="/agentes">{conn.agente?.tipo_de_agente || 'Nenhum'}</NavLink>,
+    },
+  ];
 
   return (
     <div className={GlobalStyles.pageContainer}>
@@ -124,10 +112,19 @@ export default function ConexoesPage() {
 
       <div className={GlobalStyles.pageContent}>
         <GenericTable
-          columns={['Status', 'Nome', 'Número', 'Agente', '']}
+          columns={columns.map(c => c.label || '')}
           data={connections}
-          renderRow={renderConnectionRow}
-          gridTemplateColumns="1fr 2fr 2fr 2fr 1fr"
+          renderRow={(conn) => (
+            <GenericEntityRow
+              key={conn.id}
+              item={conn}
+              columns={columns}
+              columnTemplate={columnTemplate}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
+          )}
+          gridTemplateColumns={columnTemplate}
           onSortClick={(col) => {
             const fieldMap: Record<string, 'nome'> = { Nome: 'nome' };
             const selectedField = fieldMap[col];

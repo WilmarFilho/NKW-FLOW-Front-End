@@ -1,18 +1,24 @@
 // Css
-import ConversasStyles from './ConversasPage.module.css'
 import FormStyles from '../../components/Gerais/Form/form.module.css'
 // Components
-import ChatSidebar from '../../components/Conversas/ChatSideBar/ChatSideBar';
-import ChatWindow from '../../components/Conversas/ChatWindow/ChatWindow';
-import Modal from '../../components/Gerais/Modal/Modal';
+import ChatSidebar from '../components/Conversas/ChatSideBar/ChatSideBar';
+import ChatWindow from '../components/Conversas/ChatWindow/ChatWindow';
+import Modal from '../components/Gerais/Modal/Modal';
 // Hook da Página
-import { useConversasPage } from '../../hooks/chats/useConversasPage';
+import { useConversasPage } from '../hooks/chats/useConversasPage';
 
 export default function ConversasPage() {
   const state = useConversasPage();
 
   return (
-    <div className={ConversasStyles.conversationsContainer}>
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100%',
+        gap: '12px',
+      }}>
       <ChatSidebar
         chats={state.chats}
         activeChat={state.activeChat}

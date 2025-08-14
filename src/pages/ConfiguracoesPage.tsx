@@ -1,8 +1,8 @@
 // Libbs
 import { useState } from 'react';
 // Components
-import TabsHeader from '../../components/Configuracoes/TabsHeader/TabsHeader';
-import SettingsContent from '../../components/Configuracoes/SettingsContent/SettingsContent';
+import TabsHeader from '../components/Configuracoes/TabsHeader/TabsHeader';
+import SettingsContent from '../components/Configuracoes/SettingsContent/SettingsContent';
 // Css
 import GlobalStyles from '../../global.module.css'
 

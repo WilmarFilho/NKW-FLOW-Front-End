@@ -21,12 +21,12 @@ export function useConnectionsPage() {
 
   const [modalState, setModalState] = useRecoilState(addConnectionModalState);
 
-  const handleDelete = useCallback(async (id: string) => {
+  const handleDelete = useCallback(async (id: string | number) => {
     const confirm = window.confirm('Tem certeza que deseja excluir esta conexão?');
     if (!confirm) return;
 
     try {
-      await removeConnection(id);
+      await removeConnection(id.toString());
     } catch (err) {
       alert('Falha ao excluir: ' + err);
     }

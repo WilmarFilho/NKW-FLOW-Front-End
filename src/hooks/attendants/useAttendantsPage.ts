@@ -15,10 +15,9 @@ export function useAttendantsPage() {
 
   const [formData, setFormData] = useState<AttendantFormData | null>(null);
 
-  const handleDelete = async (id: string) => {
-    if (window.confirm('Tem certeza?')) {
-      await removeAttendant(id).catch(err => alert('Falha ao excluir: ' + err));
-    }
+  const handleDelete = async (id: string | number) => {
+    if (!window.confirm('Tem certeza?')) return;
+    await removeAttendant(id.toString());
   };
 
   const handleStatusToggle = async (attendant: Attendant) => {

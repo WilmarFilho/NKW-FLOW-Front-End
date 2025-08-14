@@ -8,9 +8,8 @@ import { useSendHelpMessage } from '../../hooks/help/useSendHelpMessage';
 import ChatInput from '../../components/Gerais/Inputs/ChatInput';
 // Atom
 import { helpChatState } from '../../state/atom';
-// Assets
-import InstaIcon from './assets/insta.svg'
-import InfoIcon from './assets/info.svg'
+// Icons
+import Icon from '../../components/Gerais/Icons/Icons';
 // Css
 import GlobalStyles from '../../global.module.css'
 import AjudaStyles from './AjudaPage.module.css'
@@ -36,10 +35,10 @@ export default function AjudaPage() {
 
         <div className={AjudaStyles.helpHeaderIcons}>
           <div className={AjudaStyles.helpHeaderIconBox} >
-            <a href='https://google.com' target='_blank'><InstaIcon></InstaIcon></a>
+            <a href='https://google.com' target='_blank'><Icon nome='info'/></a>
           </div>
           <div className={AjudaStyles.helpHeaderIconBox}>
-            <a href='https://google.com' target='_blank'><InfoIcon></InfoIcon></a>
+            <a href='https://google.com' target='_blank'><Icon nome='insta'/></a>
           </div>
         </div>
 

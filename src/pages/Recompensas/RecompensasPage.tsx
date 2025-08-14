@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 // Css
 import GlobalStyles from '../../global.module.css';
-import CashbackStyles from './CashbackPage.module.css'
+import RecompensasStyles from './RecompensasPage.module.css'
 // Assets 
 import CopyIcon from './assets/copy.svg'
 import MedalIcon from './assets/medal.svg'
@@ -47,7 +47,7 @@ export default function DashboardPage() {
           <h3>Compartilhe seu link e desbloqueie recompensas incríveis conforme atinge novas metas.</h3>
         </div>
 
-        <div className={CashbackStyles.containerCountConvites}>
+        <div className={RecompensasStyles.containerCountConvites}>
           <h2>Suas indicações:</h2>
           <p>12 confirmadas</p>
         </div>
@@ -62,10 +62,10 @@ export default function DashboardPage() {
       >
 
         {/* Caixa do link */}
-        <div className={CashbackStyles.containerLink}>
+        <div className={RecompensasStyles.containerLink}>
           <h4>Seu link de indicação</h4>
           <p>Envie este link para seus amigos. A cada indicação válida você avança na barra e desbloqueia recompensas.</p>
-          <div onClick={copiarLink} className={CashbackStyles.boxLink}>
+          <div onClick={copiarLink} className={RecompensasStyles.boxLink}>
             <button >Copiar</button>
             <span>{link}</span>
             <CopyIcon />
@@ -73,28 +73,28 @@ export default function DashboardPage() {
         </div>
 
         {/* Lista de recompensas */}
-        <div className={CashbackStyles.containerRewards}>
+        <div className={RecompensasStyles.containerRewards}>
           {rewards.map((reward) => (
-            <div key={reward.tier} className={`${CashbackStyles.boxReward} ${totalIndicacoes >= reward.goal ? CashbackStyles.boxRewardUnlock : CashbackStyles.boxRewardLocked}`}>
-              <div className={CashbackStyles.rowContainerRewards}>
+            <div key={reward.tier} className={`${RecompensasStyles.boxReward} ${totalIndicacoes >= reward.goal ? RecompensasStyles.boxRewardUnlock : RecompensasStyles.boxRewardLocked}`}>
+              <div className={RecompensasStyles.rowContainerRewards}>
                 <MedalIcon />
                 <h2>{reward.goal} indicações</h2>
               </div>
 
-              <div className={CashbackStyles.bodyContainerRewards}>
+              <div className={RecompensasStyles.bodyContainerRewards}>
 
-                <div className={CashbackStyles.rowBodyContainerRewards}>
+                <div className={RecompensasStyles.rowBodyContainerRewards}>
                   <h4>{reward.name}</h4>
                   <span> -------------- Recompensas: -------------- </span>
                 </div>
 
-                <div className={CashbackStyles.containerLiRewards}>
-                  <div className={CashbackStyles.rowLiRewards}>
+                <div className={RecompensasStyles.containerLiRewards}>
+                  <div className={RecompensasStyles.rowLiRewards}>
                     <CheckIcon />
                     <p>{reward.casbackPercentual}% de desconto</p>
                   </div>
                   {reward.rewardBonus ?
-                    <div className={CashbackStyles.rowLiRewards}>
+                    <div className={RecompensasStyles.rowLiRewards}>
                       <CheckIcon />
                       <p>{reward.rewardBonus}</p>
                     </div> : ''}
@@ -102,7 +102,7 @@ export default function DashboardPage() {
 
               </div>
 
-              <div className={CashbackStyles.footerContainerRewards}>
+              <div className={RecompensasStyles.footerContainerRewards}>
                 {totalIndicacoes >= reward.goal ? 'Desbloqueado' : 'Bloqueado'}
               </div>
 
@@ -111,13 +111,13 @@ export default function DashboardPage() {
         </div>
 
         {/* Barra de progresso com checkpoints */}
-        < div className={CashbackStyles.progressBar} >
-          <div className={CashbackStyles.progressFillReward} style={{ width: `${progresso}%` }}></div>
+        < div className={RecompensasStyles.progressBar} >
+          <div className={RecompensasStyles.progressFillReward} style={{ width: `${progresso}%` }}></div>
           {
             rewards.map((reward) => (
               <div
                 key={reward.tier}
-                className={`${CashbackStyles.progressCheckpoint} ${totalIndicacoes >= reward.goal ? CashbackStyles.completed : ''}`}
+                className={`${RecompensasStyles.progressCheckpoint} ${totalIndicacoes >= reward.goal ? RecompensasStyles.completed : ''}`}
                 style={{ left: `${(reward.goal / rewards[rewards.length - 1].goal) * 100}%` }}
                 title={`${reward.name} - ${reward.goal} indicações`}
               >

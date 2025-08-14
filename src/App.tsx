@@ -6,15 +6,15 @@ import Layout from './components/Layout/Layout';
 // Routes
 import { ProtectedRoute, PublicRoute } from './routes/ProtectedRoute';
 // Lazy imports das páginas
-const ConversasPage = lazy(() => import('./pages/Conversas/ConversasPage'));
-const AtendentesPage = lazy(() => import('./pages/Atendentes/AtendentesPage'));
-const AgentesPage = lazy(() => import('./pages/Agentes/AgentesPage'));
-const ConexoesPage = lazy(() => import('./pages/Conexao/ConexoesPage'));
-const ConfiguracoesPage = lazy(() => import('./pages/Configuracoes/ConfiguracoesPage'));
+const ConversasPage = lazy(() => import('./pages/ConversasPage'));
+const AtendentesPage = lazy(() => import('./pages/AtendentesPage'));
+const AgentesPage = lazy(() => import('./pages/AgentesPage'));
+const ConexoesPage = lazy(() => import('./pages/ConexoesPage'));
+const ConfiguracoesPage = lazy(() => import('./pages/ConfiguracoesPage'));
 const AjudaPage = lazy(() => import('./pages/Ajuda/AjudaPage'));
 const LoginPage = lazy(() => import('./pages/Login/Login'));
-const DashboardPage = lazy(() => import('./pages/Dashboard/DashboardPage'));
-const CashbackPage = lazy(() => import('./pages/Cashback/CashbackPage'));
+const ResumoPage = lazy(() => import('./pages/ResumoPage'));
+const RecompensasPage = lazy(() => import('./pages/Recompensas/RecompensasPage'));
 
 function App() {
   return (
@@ -48,7 +48,7 @@ function App() {
             path="dashboard"
             element={
              <Suspense fallback={''}>
-                <DashboardPage />
+                <ResumoPage />
               </Suspense>
             }
           />
@@ -96,7 +96,7 @@ function App() {
             path="cashback"
             element={
               <Suspense fallback={''}>
-                <CashbackPage />
+                <RecompensasPage />
               </Suspense>
             }
           />
