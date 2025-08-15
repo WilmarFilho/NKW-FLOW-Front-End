@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 // Hooks
-import { useAudioRecorder } from '../../../hooks/chats/useAudioRecorder';
+import { useAudioRecorder } from '../../../hooks/utils/useAudioRecorder';
 // Css
 import styles from './ChatInput.module.css';
 // Icons

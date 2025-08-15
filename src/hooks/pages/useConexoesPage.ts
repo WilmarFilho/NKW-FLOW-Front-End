@@ -3,7 +3,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { addConnectionModalState, connectionsState } from '../../state/atom';
 import { useConnections } from '../connections/useConnections';
 import type { Connection } from '../../types/connection';
-import { useAddConnection } from '../connections/useAddConnection';
+import { useConnectionsActions } from '../connections/useConnectionsActions';
 import { validateConnectionForm } from '../utils/useValidator';
 
 type Filter = 'todos' | 'ativo' | 'inativo';
@@ -14,9 +14,10 @@ export function useConexoesPage() {
 
   const connections = useRecoilValue(connectionsState)
 
-  const { handleStartSession, handleEditConnection, isLoading, step, qrCode  } = useAddConnection();
+  const { removeConnection, updateConnectionStatus, handleStartSession, handleEditConnection, isLoading, step, qrCode  } = useConnectionsActions();
 
-  const { removeConnection, updateConnectionStatus, fetchConnections } = useConnections();
+  const { fetchConnections } = useConnections();
+
   const [activeFilter, setActiveFilter] = useState<Filter>('todos');
   const [sortField, setSortField] = useState<SortField>(null);
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');

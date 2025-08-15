@@ -15,9 +15,9 @@ import ToggleSwitch from '../../Configuracoes/ToggleSwitch/ToggleSwitch';
 import { Chat } from '../../../types/chats';
 import { Message } from '../../../types/message';
 // Hooks
-import useSendMessage from '../../../hooks/chats/useSendMessage';
+import useMessagesActions from '../../../hooks/chats/useMessagesActions';
 import useChatActions from '../../../hooks/chats/useChatActions';
-import { useDragAndDropFile } from '../../../hooks/chats/useDragAndDropFile';
+import { useDragAndDropFile } from '../../../hooks/utils/useDragAndDropFile';
 // Assets
 import defaultAvatar from '../assets/default.webp';
 // Icons
@@ -38,7 +38,7 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
     const setChats = useSetRecoilState(chatsState);
 
     // Custom hooks
-    const { sendMessage } = useSendMessage();
+    const { sendMessage } = useMessagesActions();
     const { reOpenChat, deleteChat, renameChat, toggleIA } = useChatActions();
 
     // Modals

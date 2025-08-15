@@ -4,7 +4,7 @@ import { useRecoilValue } from 'recoil';
 // Hooks
 import useChats from '../chats/useChats';
 import useMessages from '../../hooks/chats/useMessages';
-import useSendMessage from '../../hooks/chats/useSendMessage';
+import useSendMessage from '../chats/useMessagesActions';
 // Recoil
 import { chatsState, connectionsState } from '../../state/atom';
 // Type

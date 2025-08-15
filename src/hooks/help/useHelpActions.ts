@@ -11,7 +11,7 @@ interface HelpChatResponse {
   reply: string;
 }
 
-export function useSendHelpMessage() {
+export function useHelpActions() {
 
   const { post } = useApi();
   const setMessages = useSetRecoilState(helpChatState);

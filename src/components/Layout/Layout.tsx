@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import SidebarWrapper from './Sidebars/SidebarWrapper';
 
 // Hooks
-import { useRealtimeEvents } from '../../hooks/events/useRealtimeEvents';
+import { useRealtimeEvents } from '../../hooks/utils/useRealtimeEvents';
 import { useUser } from '../../hooks/auth/useUser';
 
 // State

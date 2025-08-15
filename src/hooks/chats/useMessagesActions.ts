@@ -11,11 +11,10 @@ interface SendMessagePayload {
   connection_id?: string;
 }
 
-export default function useSendMessage() {
+export default function useMessagesActions() {
   const { post } = useApi();
 
   const sendMessage = async (payload: SendMessagePayload) => {
-     console.log(payload)
     const apiPayload = {
       ...payload,
       remetente: 'cliente',
