@@ -1,6 +1,10 @@
+// Libs
 import { useState, useEffect } from 'react';
+// Types
 import type { AttendantFormData } from '../../types/attendant';
+// Hooks
 import { validateAttendantForm } from '../../hooks/utils/useValidator';
+// Css
 import formStyles from '../Gerais/Form/form.module.css';
 
 interface AttendantFormProps {

@@ -20,6 +20,7 @@ const renderMessageContent = ({ mimetype, base64, text }: MessageBubbleProps) =>
           src={`data:image/jpeg;base64,${base64}`}
           alt="Imagem enviada na conversa"
           className={styles.messageImage}
+          loading='lazy'
         />
         {text && <p>{text}</p>}
       </>
@@ -32,6 +33,7 @@ const renderMessageContent = ({ mimetype, base64, text }: MessageBubbleProps) =>
         src={`data:image/webp;base64,${base64}`}
         alt="Figurinha (sticker) enviada na conversa"
         className={styles.stickerImage}
+        loading='lazy'
       />
     );
   }

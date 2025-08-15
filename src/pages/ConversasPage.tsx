@@ -20,7 +20,12 @@ export default function ConversasPage() {
       <ChatWindow
         activeChat={state.activeChat}
         messages={state.messages}
-        setActiveChat={state.setActiveChat}
+        onSendMessage={state.handleSendMessage}
+        onToggleIA={state.handleToggleIA}
+        onDeleteChat={state.handleDeleteChat}
+        onToggleChatStatus={state.handleToggleChatStatus}
+        onRenameChat={state.handleRenameChat}
+        onDropFile={state.handleFileDrop}
       />
 
       {state.isAddChatOpen && (

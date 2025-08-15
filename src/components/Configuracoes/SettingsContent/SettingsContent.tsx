@@ -24,7 +24,7 @@ type Props = {
 
 export default function SettingsContent({ tabIndex }: Props) {
   const user = useRecoilValue(userState);
-  const { updateUser, uploadProfileImage, loading } = useUserAction();
+  const { updateUser, uploadProfileImage } = useUserAction();
 
   // Nomes de estado mais descritivos
   const [showNameInMessages, setShowNameInMessages] = useState(false);
@@ -120,8 +120,8 @@ export default function SettingsContent({ tabIndex }: Props) {
                     src={user.foto_perfil || '/default-avatar.png'}
                     alt="Foto de Perfil"
                     className={styles.profileImage}
-                    onClick={() => !loading && document.getElementById('profileImageInput')?.click()}
-                    style={{ cursor: loading ? 'wait' : 'pointer' }}
+                    onClick={() => document.getElementById('profileImageInput')?.click()}
+                    style={{ cursor: 'pointer' }}
                   />
                   <span className={styles.overlayText}>Editar</span>
                   <input
@@ -130,7 +130,6 @@ export default function SettingsContent({ tabIndex }: Props) {
                     accept="image/*"
                     style={{ display: 'none' }}
                     onChange={handleImageUpload}
-                    disabled={loading}
                   />
                 </div>
                 <div className={styles.userInfoMain}>
@@ -261,5 +260,3 @@ export default function SettingsContent({ tabIndex }: Props) {
     </>
   );
 }
-
-

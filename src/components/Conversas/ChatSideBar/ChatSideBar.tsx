@@ -70,13 +70,13 @@ function ChatSidebar({
   setIsAddChatOpen,
   fectchImageProfile,
 }: ChatSidebarProps) {
-  // Props de Filtro
+  
   const [iaStatusFilter, setIaStatusFilter] = useState<'todos' | 'ativa' | 'desativada'>('todos');
   const [statusFilter, setStatusFilter] = useState<'Open' | 'Close'>('Open');
   const [searchQuery, setSearchQuery] = useState('');
   const debouncedSearch = useDebounce(searchQuery, 300);
   const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
-  // Carregando Agents para as Tags
+ 
   const agents = useRecoilValue(agentsState)
 
   const filteredChats = useMemo(

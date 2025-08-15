@@ -1,7 +1,7 @@
 // Components
 import LoginForm from '../components/Login/LoginForm';
 // Assets
-import bgImage from '../../components/Layout/assets/bgDark.webp';
+import bgImage from '../components/Layout/assets/bgDark.webp';
 
 export default function LoginPage() {
   return (

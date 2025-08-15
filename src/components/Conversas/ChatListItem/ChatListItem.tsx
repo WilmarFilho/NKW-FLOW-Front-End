@@ -70,6 +70,7 @@ function ChatListItem({
         onError={handleImageError}
         alt={`Avatar de ${name}`}
         className={styles.avatar}
+        loading='lazy'
       />
       <div className={styles.textContainer}>
         <strong>{name}</strong>

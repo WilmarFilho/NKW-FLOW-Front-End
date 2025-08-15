@@ -129,6 +129,7 @@ body.modo-dark {
 
 * {
   font-family: var(--font-secundaria);
+  font-display: swap;
   -webkit-tap-highlight-color: transparent;
 }
 

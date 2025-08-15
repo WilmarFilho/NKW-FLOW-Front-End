@@ -1,91 +1,134 @@
-// Libs
-import { useState } from 'react';
-import { useRecoilValue } from 'recoil';
-// Hooks
+import { useState, useCallback } from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { useChats } from '../chats/useChats';
 import { useMessages } from '../../hooks/chats/useMessages';
 import useSendMessage from '../chats/useMessagesActions';
-// Recoil
-import { chatsState, connectionsState } from '../../state/atom';
-// Type
-import { Chat } from '../../types/chats';
+import useChatActions from '../chats/useChatActions';
+import { chatsState, connectionsState, userState } from '../../state/atom';
+import type { Chat } from '../../types/chats';
 
 export function useConversasPage() {
-
-    // Carregar Dados
     const connections = useRecoilValue(connectionsState);
-    const chats = useRecoilValue(chatsState)
-    const { fectchImageProfile } = useChats();
+    const chats = useRecoilValue(chatsState);
+    const user = useRecoilValue(userState);
+    const setChats = useSetRecoilState(chatsState);
 
-    // Carregar Hooks
+    const { fectchImageProfile } = useChats();
     const { sendMessage } = useSendMessage();
-    // Carrega Mensagens do Chat Ativo
+    const { reOpenChat, deleteChat, renameChat, toggleIA } = useChatActions();
+
     const [activeChat, setActiveChat] = useState<Chat | null>(null);
     const { messages } = useMessages(activeChat?.id || null);
-    // Modal para Começar Chat (VEJO MELHORIAS)
+
     const [isAddChatOpen, setIsAddChatOpen] = useState(false);
     const [newChatNumber, setNewChatNumber] = useState('');
     const [newChatMessage, setNewChatMessage] = useState('');
     const [selectedConnectionId, setSelectedConnectionId] = useState('');
-
-    // Estado para controlar se já tentou enviar
     const [showErrors, setShowErrors] = useState(false);
-
-    // Estado para erros específicos do formulário
-    const [errors, setErrors] = useState<{
-        selectedConnectionId?: string;
-        newChatNumber?: string;
-        newChatMessage?: string;
-    }>({});
+    const [errors, setErrors] = useState<{ selectedConnectionId?: string; newChatNumber?: string; newChatMessage?: string }>({});
 
     const openNewChatModal = () => {
         setNewChatNumber('');
         setNewChatMessage('');
-        setNewChatMessage('');
-        setShowErrors(false)
+        setShowErrors(false);
         setIsAddChatOpen(true);
-    }
+    };
 
     const validateForm = () => {
         const newErrors: typeof errors = {};
-
-        if (!selectedConnectionId) {
-            newErrors.selectedConnectionId = 'Selecione uma conexão.';
-        }
-
-        // Exemplo simples para número: deve ser só números e ter 10-15 dígitos
-        if (!/^\d{10,15}$/.test(newChatNumber)) {
-            newErrors.newChatNumber = 'Número inválido. Use apenas dígitos entre 10 e 15 caracteres.';
-        }
-
-        if (!newChatMessage.trim()) {
-            newErrors.newChatMessage = 'A mensagem não pode ficar vazia.';
-        }
-
+        if (!selectedConnectionId) newErrors.selectedConnectionId = 'Selecione uma conexão.';
+        if (!/^\d{10,15}$/.test(newChatNumber)) newErrors.newChatNumber = 'Número inválido.';
+        if (!newChatMessage.trim()) newErrors.newChatMessage = 'A mensagem não pode ficar vazia.';
         setErrors(newErrors);
-
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSendMessage = async () => {
+    const handleSendMessage = useCallback(
+        async (text?: string, mimetype?: string, base64?: string) => {
+            const messageText = text ?? newChatMessage;
 
-        setShowErrors(true);
+            if (!activeChat) {
+                // Novo chat via modal
+                setShowErrors(true);
+                if (!validateForm()) return;
+                const result = await sendMessage({ mensagem: newChatMessage, number: newChatNumber, connection_id: selectedConnectionId });
+                if (result) {
+                    setIsAddChatOpen(false);
+                    setNewChatNumber('');
+                    setNewChatMessage('');
+                    setSelectedConnectionId('');
+                }
+                return;
+            }
 
-        if (!validateForm()) return;
+            // Mensagem em chat existente
+            const result = await sendMessage({
+                chat_id: activeChat.id,
+                mensagem: messageText,
+                user_id: user?.id,
+                mimetype,
+                base64,
+            });
 
-        const result = await sendMessage({
-            mensagem: newChatMessage,
-            number: newChatNumber,
-            connection_id: selectedConnectionId,
-        });
+            if (result) {
+                const lastMessageText =
+                    messageText ||
+                    (mimetype?.startsWith('image/') ? '📷 Imagem' : mimetype?.startsWith('audio/') ? '🎙️ Áudio' : '📄 Documento');
+                const updatedChat = { ...activeChat, ultima_mensagem: lastMessageText };
+                setActiveChat(updatedChat);
+                setChats(prev => prev.map(chat => (chat.id === updatedChat.id ? updatedChat : chat)));
+            }
+        },
+        [activeChat, newChatMessage, newChatNumber, selectedConnectionId, sendMessage, setChats, user?.id]
+    );
 
-        if (result) {
-            setIsAddChatOpen(false);
-            setNewChatNumber('');
-            setNewChatMessage('');
-            setSelectedConnectionId('');
+    const handleToggleIA = useCallback(async () => {
+        if (!activeChat) return;
+        const updatedIaStatus = await toggleIA(activeChat.id, activeChat.ia_ativa);
+
+        if (typeof updatedIaStatus === 'boolean') {
+            const updatedChat: Chat = { ...activeChat, ia_ativa: updatedIaStatus };
+            setActiveChat(updatedChat);
+            setChats((prev: Chat[]) =>
+                prev.map((chat: Chat) => (chat.id === updatedChat.id ? updatedChat : chat))
+            );
         }
-    };
+    }, [activeChat, toggleIA, setChats]);
+
+    const handleDeleteChat = useCallback(async () => {
+        if (!activeChat) return;
+        if (window.confirm('Tem certeza?')) {
+            await deleteChat(activeChat.id);
+            setActiveChat(null);
+        }
+    }, [activeChat, deleteChat]);
+
+    const handleToggleChatStatus = useCallback(async () => {
+        if (!activeChat) return;
+        const newStatus = activeChat.status === 'Open' ? 'Close' : 'Open';
+        const result = await reOpenChat(activeChat.id, newStatus);
+        if (result) {
+            const updatedChat = { ...activeChat, status: newStatus };
+            setActiveChat(updatedChat);
+            setChats(prev => prev.map(chat => (chat.id === updatedChat.id ? updatedChat : chat)));
+        }
+    }, [activeChat, reOpenChat, setChats]);
+
+    const handleRenameChat = useCallback((newName: string) => {
+        if (!activeChat || !newName.trim()) return;
+        renameChat(activeChat.id, newName.trim());
+        setActiveChat({ ...activeChat, contato_nome: newName.trim() });
+    }, [activeChat, renameChat]);
+
+    const handleFileDrop = useCallback((file: File) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+            const base64 = (reader.result as string).split(',')[1];
+            const messageText = file.type.startsWith('image/') ? '' : file.name;
+            handleSendMessage(messageText, file.type, base64);
+        };
+        reader.readAsDataURL(file);
+    }, [handleSendMessage]);
 
     return {
         chats,
@@ -106,5 +149,10 @@ export function useConversasPage() {
         setSelectedConnectionId,
         handleSendMessage,
         messages,
+        handleToggleIA,
+        handleDeleteChat,
+        handleToggleChatStatus,
+        handleRenameChat,
+        handleFileDrop
     };
 }
