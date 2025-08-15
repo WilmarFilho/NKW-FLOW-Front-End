@@ -9,8 +9,6 @@ import GenericEntityRow from '../components/Gerais/Tables/GenericEntityRow';
 import Modal from '../components/Gerais/Modal/Modal';
 // Hooks
 import { useConnectionsPage } from '../hooks/connections/useConnectionsPage';
-import { validateConnectionForm } from '../hooks/utils/useValidator';
-import { useAddConnection } from '../hooks/connections/useAddConnection';
 // Css
 import GlobalStyles from '../global.module.css';
 import TableStyles from '../components/Gerais/Tables/TableStyles.module.css';
@@ -28,7 +26,6 @@ export default function ConexoesPage() {
     formData,
     errors,
     showErrors,
-    setErrors,
     setFormData,
     setActiveFilter,
     setSortField,
@@ -38,33 +35,11 @@ export default function ConexoesPage() {
     handleEdit,
     openModal,
     closeModal,
-    fetchConnections,
-    setShowErrors,
+    handleModalSaveClick,
+    isLoading,
+    step,
+    qrCode,
   } = useConnectionsPage();
-
-  const { handleStartSession, handleEditConnection, isLoading, step, qrCode } = useAddConnection();
-
-  const handleModalSaveClick = async () => {
-    const foundErrors = validateConnectionForm(formData);
-    if (Object.keys(foundErrors).length > 0) {
-      setErrors(foundErrors);
-      setShowErrors(true);
-      return;
-    }
-
-    setErrors({});
-    setShowErrors(false);
-
-    if (formData) {
-      if (modalState.editMode) {
-        await handleEditConnection(formData);
-        closeModal();
-        fetchConnections();
-      } else {
-        await handleStartSession(formData);
-      }
-    }
-  };
 
   const columnTemplate = '1fr 2fr 2fr 2fr 1fr';
 

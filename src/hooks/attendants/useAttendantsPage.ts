@@ -1,9 +1,11 @@
 import { useState, useMemo } from 'react';
-import { useAttendants } from './/useAttendants';
+import { useAttendants } from './useAttendants';
+import { validateAttendantForm } from '../utils/useValidator';
 import type { Attendant, AttendantFormData } from '../../types/attendant';
 
 export function useAttendantsPage() {
   const { attendants, addAttendant, removeAttendant, editAttendant, updateAttendantStatus } = useAttendants();
+
   const [showErrors, setShowErrors] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState<'todos' | 'ativo' | 'inativo'>('todos');
@@ -12,7 +14,6 @@ export function useAttendantsPage() {
   const [editData, setEditData] = useState<AttendantFormData | null>(null);
   const [editAttendantId, setEditAttendantId] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const [formData, setFormData] = useState<AttendantFormData | null>(null);
 
   const handleDelete = async (id: string | number) => {
@@ -37,23 +38,38 @@ export function useAttendantsPage() {
       status: attendant.user.status,
       numero: attendant.user.numero,
     });
+    setFormData({
+      id: attendant.id,
+      user_id: attendant.user_id,
+      nome: attendant.user.nome,
+      email: attendant.user.email,
+      status: attendant.user.status,
+      numero: attendant.user.numero,
+    });
     setIsModalOpen(true);
   };
 
-  const handleSave = async (data: AttendantFormData) => {
+  const handleFormChange = (data: AttendantFormData) => setFormData(data);
+
+  const handleModalSaveClick = async () => {
+    setShowErrors(true);
+    if (!formData) return;
+    const foundErrors = validateAttendantForm(formData, !!editData);
+    if (Object.keys(foundErrors).length > 0) return;
 
     if (editAttendantId) {
-      await editAttendant(editAttendantId, data.user_id!, data);
+      await editAttendant(editAttendantId, formData.user_id!, formData);
     } else {
-      await addAttendant(data);
+      await addAttendant(formData);
     }
     closeModal();
   };
 
   const openModal = () => {
-    setShowErrors(false)
+    setShowErrors(false);
     setEditAttendantId(null);
     setEditData(null);
+    setFormData(null);
     setIsModalOpen(true);
   };
 
@@ -102,15 +118,13 @@ export function useAttendantsPage() {
     showErrors,
     handleDelete,
     handleEdit,
-    handleSave,
+    handleSave: handleModalSaveClick,
     handleStatusToggle,
+    handleFormChange,
     setActiveFilter,
     setSortField,
     setSortOrder,
     openModal,
     closeModal,
-    setFormData,
-    setIsSubmitting,
-    setShowErrors,
   };
 }

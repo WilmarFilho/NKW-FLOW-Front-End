@@ -1,55 +1,40 @@
 // Libs
-import { useState } from 'react';
 import { motion } from 'framer-motion';
+// Css
+import GlobalStyles from '../global.module.css';
+import TableStyles from '../components/Gerais/Tables/TableStyles.module.css';
 // Components
 import GenericEntityRow from '../components/Gerais/Tables/GenericEntityRow';
 import GenericTable from '../components/Gerais/Tables/GenericTable';
 import Modal from '../components/Gerais/Modal/Modal';
 import AttendantForm from '../components/Atendentes/AttendantForm';
 import Button from '../components/Gerais/Buttons/Button';
-// Css
-import GlobalStyles from '../global.module.css'
-import TableStyles from '../components/Gerais/Tables/TableStyles.module.css';
 // Hooks
 import { useAttendantsPage } from '../hooks/attendants/useAttendantsPage';
-import { validateAttendantForm } from '../hooks/utils/useValidator';
-// Types
-import { Attendant, AttendantFormData } from '../types/attendant';
+// Type
+import type { Attendant } from '../types/attendant';
 
 export default function AtendentesPage() {
-
   const {
     attendants,
     isModalOpen,
     editData,
     isSubmitting,
     showErrors,
-    openModal,
-    closeModal,
-    handleSave,
     handleDelete,
     handleEdit,
+    handleSave,
     handleStatusToggle,
-    setSortField,
-    setSortOrder,
+    handleFormChange,
+    openModal,
+    closeModal,
     sortField,
     sortOrder,
+    setSortField,
+    setSortOrder,
     activeFilter,
     setActiveFilter,
-    setShowErrors,
   } = useAttendantsPage();
-
-  const [formData, setFormData] = useState<AttendantFormData | null>(null);
-
-  const handleFormChange = (data: AttendantFormData) => setFormData(data);
-
-  const handleModalSaveClick = async () => {
-    setShowErrors(true);
-    if (!formData) return;
-    const foundErrors = validateAttendantForm(formData, !!editData);
-    if (Object.keys(foundErrors).length > 0) return;
-    await handleSave(formData);
-  };
 
   const columnTemplate = '1fr 2fr 2fr 2fr 1fr';
 
@@ -59,32 +44,16 @@ export default function AtendentesPage() {
       label: 'Status',
       render: (item: Attendant) => (
         <span
-          className={`${TableStyles.statusChip} ${item.user.status ? TableStyles.active : TableStyles.inactive
-            }`}
-          onClick={() => handleStatusToggle(item)} // só status
+          className={`${TableStyles.statusChip} ${item.user.status ? TableStyles.active : TableStyles.inactive}`}
+          onClick={() => handleStatusToggle(item)}
         >
           {item.user.status ? 'Ativo' : 'Inativo'}
         </span>
       ),
     },
-    {
-      key: 'user',
-      label: 'Nome',
-      render: (item: Attendant) => item.user.nome,
-      onClick: handleEdit, 
-    },
-    {
-      key: 'user',
-      label: 'Email',
-      render: (item: Attendant) => item.user.email,
-      onClick: handleEdit,
-    },
-    {
-      key: 'user',
-      label: 'Número',
-      render: (item: Attendant) => item.user.numero,
-      onClick: handleEdit,
-    },
+    { key: 'user', label: 'Nome', render: (item: Attendant) => item.user.nome, onClick: handleEdit },
+    { key: 'user', label: 'Email', render: (item: Attendant) => item.user.email, onClick: handleEdit },
+    { key: 'user', label: 'Número', render: (item: Attendant) => item.user.numero, onClick: handleEdit },
   ];
 
   return (
@@ -150,7 +119,7 @@ export default function AtendentesPage() {
         title={editData ? 'Editar Atendente' : 'Cadastrar Novo Atendente'}
         labelSubmit={editData ? 'Editar Atendente' : 'Cadastrar Atendente'}
         isSubmitting={isSubmitting}
-        onSave={handleModalSaveClick}
+        onSave={handleSave}
       >
         <AttendantForm
           initialData={editData || undefined}

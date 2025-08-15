@@ -3,6 +3,8 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { addConnectionModalState, connectionsState } from '../../state/atom';
 import { useConnections } from './useConnections';
 import type { Connection } from '../../types/connection';
+import { useAddConnection } from './useAddConnection';
+import { validateConnectionForm } from '../utils/useValidator';
 
 type Filter = 'todos' | 'ativo' | 'inativo';
 type SortField = 'nome' | null;
@@ -11,6 +13,9 @@ type SortOrder = 'asc' | 'desc';
 export function useConnectionsPage() {
 
   const connections = useRecoilValue(connectionsState)
+
+  const { handleStartSession, handleEditConnection, isLoading, step, qrCode  } = useAddConnection();
+
   const { removeConnection, updateConnectionStatus, fetchConnections } = useConnections();
   const [activeFilter, setActiveFilter] = useState<Filter>('todos');
   const [sortField, setSortField] = useState<SortField>(null);
@@ -66,6 +71,35 @@ export function useConnectionsPage() {
     setFormData(null);
   }, []);
 
+  const handleModalSaveClick = useCallback(async () => {
+    const foundErrors = validateConnectionForm(formData);
+    if (Object.keys(foundErrors).length > 0) {
+      setErrors(foundErrors);
+      setShowErrors(true);
+      return;
+    }
+
+    setErrors({});
+    setShowErrors(false);
+
+    if (formData) {
+      if (modalState.editMode) {
+        await handleEditConnection(formData);
+        closeModal();
+        fetchConnections();
+      } else {
+        await handleStartSession(formData);
+      }
+    }
+  }, [
+    formData,
+    modalState.editMode,
+    handleEditConnection,
+    closeModal,
+    fetchConnections,
+    handleStartSession
+  ]);
+
   const filteredConnections = useMemo(() => {
     if (activeFilter === 'todos') return connections;
     const isActive = activeFilter === 'ativo';
@@ -106,6 +140,10 @@ export function useConnectionsPage() {
     openModal,
     fetchConnections,
     setErrors,
+    handleModalSaveClick,
+    isLoading,
     setShowErrors,
+    step,
+    qrCode,
   };
 }
