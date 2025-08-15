@@ -1,16 +1,16 @@
 import { useState, useMemo, useCallback } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { addConnectionModalState, connectionsState } from '../../state/atom';
-import { useConnections } from './useConnections';
+import { useConnections } from '../connections/useConnections';
 import type { Connection } from '../../types/connection';
-import { useAddConnection } from './useAddConnection';
+import { useAddConnection } from '../connections/useAddConnection';
 import { validateConnectionForm } from '../utils/useValidator';
 
 type Filter = 'todos' | 'ativo' | 'inativo';
 type SortField = 'nome' | null;
 type SortOrder = 'asc' | 'desc';
 
-export function useConnectionsPage() {
+export function useConexoesPage() {
 
   const connections = useRecoilValue(connectionsState)
 

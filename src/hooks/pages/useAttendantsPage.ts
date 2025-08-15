@@ -1,9 +1,9 @@
 import { useState, useMemo } from 'react';
-import { useAttendants } from './useAttendants';
+import { useAttendants } from '../attendants/useAttendants';
 import { validateAttendantForm } from '../utils/useValidator';
 import type { Attendant, AttendantFormData } from '../../types/attendant';
 
-export function useAttendantsPage() {
+export function useAtendentesPage() {
   const { attendants, addAttendant, removeAttendant, editAttendant, updateAttendantStatus } = useAttendants();
 
   const [showErrors, setShowErrors] = useState(false);

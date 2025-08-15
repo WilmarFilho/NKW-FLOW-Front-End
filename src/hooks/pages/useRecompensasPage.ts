@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback } from 'react';
 
-export function useRecompensaPage() {
+export function useRecompensasPage() {
   const rewards = useMemo(
     () => [
       { tier: 1, name: 'Novato', goal: 2, casbackPercentual: 5 },

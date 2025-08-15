@@ -2,7 +2,7 @@ import Modal from '../components/Gerais/Modal/Modal';
 import ChatSidebar from '../components/Conversas/ChatSideBar/ChatSideBar';
 import ChatWindow from '../components/Conversas/ChatWindow/ChatWindow';
 import NewChatForm from '../components/Conversas/NewChatForm/NewChatForm';
-import { useConversasPage } from '../hooks/chats/useConversasPage';
+import { useConversasPage } from '../hooks/pages/useConversasPage';
 
 export default function ConversasPage() {
   const state = useConversasPage();

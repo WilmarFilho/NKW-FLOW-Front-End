@@ -10,7 +10,7 @@ import Modal from '../components/Gerais/Modal/Modal';
 import AttendantForm from '../components/Atendentes/AttendantForm';
 import Button from '../components/Gerais/Buttons/Button';
 // Hooks
-import { useAttendantsPage } from '../hooks/attendants/useAttendantsPage';
+import { useAtendentesPage } from '../hooks/pages/useAttendantsPage';
 // Type
 import type { Attendant } from '../types/attendant';
 
@@ -34,7 +34,7 @@ export default function AtendentesPage() {
     setSortOrder,
     activeFilter,
     setActiveFilter,
-  } = useAttendantsPage();
+  } = useAtendentesPage();
 
   const columnTemplate = '1fr 2fr 2fr 2fr 1fr';
 

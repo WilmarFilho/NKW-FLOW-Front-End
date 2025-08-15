@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 // Hooks
-import useChats from './useChats';
+import useChats from '../chats/useChats';
 import useMessages from '../../hooks/chats/useMessages';
 import useSendMessage from '../../hooks/chats/useSendMessage';
 // Recoil

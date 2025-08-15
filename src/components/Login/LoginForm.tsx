@@ -1,5 +1,6 @@
 // Libs
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 // Hooks
 import { useAuth } from '../../hooks/auth/useAuth';
 // Css
@@ -14,12 +15,13 @@ interface LoginFormProps {
 export default function LoginForm({ onSuccess }: LoginFormProps) {
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
+    const navigate = useNavigate();
     const { login } = useAuth();
 
     const handleLogin = async () => {
         try {
             await login(email, senha);
-            if (onSuccess) onSuccess();
+            if (onSuccess) navigate('/conexoes');
         } catch (err) {
             alert('Falha ao fazer login: ' + err);
         }

@@ -1,14 +1,9 @@
-// Libs
-import { useNavigate } from 'react-router-dom';
 // Components
 import LoginForm from '../components/Login/LoginForm';
 // Assets
 import bgImage from '../../components/Layout/assets/bgDark.webp';
 
 export default function LoginPage() {
-
-  const navigate = useNavigate();
-
   return (
     <div
       style={{
@@ -23,7 +18,7 @@ export default function LoginPage() {
         fontFamily: 'var(--font-main)',
       }}
     >
-      <LoginForm onSuccess={() => navigate('/conexoes')} />
+      <LoginForm />
     </div>
   );
 }

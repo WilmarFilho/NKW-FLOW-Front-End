@@ -1,15 +1,11 @@
-// Libbs
-import { useState } from 'react';
-// Components
+import { useConfiguracoesPage } from '../hooks/pages/useConfiguracoesPage';
 import TabsHeader from '../components/Configuracoes/TabsHeader/TabsHeader';
 import SettingsContent from '../components/Configuracoes/SettingsContent/SettingsContent';
-// Css
-import GlobalStyles from '../global.module.css'
-
-const tabs = ['Conta', 'Preferências'];
+import GlobalStyles from '../global.module.css';
 
 export default function ConfiguracoesPage() {
-  const [activeTab, setActiveTab] = useState(0);
+
+  const { activeTab, tabs, setActiveTab } = useConfiguracoesPage();
 
   return (
     <div className={GlobalStyles.pageContainer}>

@@ -8,7 +8,7 @@ import GenericTable from '../components/Gerais/Tables/GenericTable';
 import GenericEntityRow from '../components/Gerais/Tables/GenericEntityRow';
 import Modal from '../components/Gerais/Modal/Modal';
 // Hooks
-import { useConnectionsPage } from '../hooks/connections/useConnectionsPage';
+import { useConexoesPage } from '../hooks/pages/useConexoesPage';
 // Css
 import GlobalStyles from '../global.module.css';
 import TableStyles from '../components/Gerais/Tables/TableStyles.module.css';
@@ -39,7 +39,7 @@ export default function ConexoesPage() {
     isLoading,
     step,
     qrCode,
-  } = useConnectionsPage();
+  } = useConexoesPage();
 
   const columnTemplate = '1fr 2fr 2fr 2fr 1fr';
 

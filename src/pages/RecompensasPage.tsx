@@ -4,11 +4,11 @@ import ConvitesCount from '../components/Recompensas/ConvitesCount/ConvitesCount
 import LinkBox from '../components/Recompensas/LinkBox/LinkBox';
 import RewardsList from '../components/Recompensas/RewardsList/RewardsList';
 import ProgressBar from '../components/Recompensas/ProgressBar/ProgressBar';
-import { useRecompensaPage } from '../hooks/recompensas/useRecompensaPage';
+import { useRecompensasPage } from '../hooks/pages/useRecompensasPage';
 
 export default function RecompensaPage() {
 
-  const { rewards, totalIndicacoes, progresso, link, copiarLink } = useRecompensaPage();
+  const { rewards, totalIndicacoes, progresso, link, copiarLink } = useRecompensasPage();
 
   return (
     <div className={GlobalStyles.pageContainer}>

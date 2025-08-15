@@ -8,7 +8,7 @@ import LineMetricChart from '../components/Resumo/LineMetricChart/LineMetricChar
 import GaugeMetricChart from '../components/Resumo/GaugeMetricChart/GaugeMetricChart';
 import GlobalStyles from '../global.module.css';
 import Icon from '../components/Gerais/Icons/Icons';
-import { useResumoPage } from '../hooks/resumo/useResumoPage';
+import { useResumoPage } from '../hooks/pages/useResumoPage';
 
 export default function ResumoPage() {
   const navigate = useNavigate();
