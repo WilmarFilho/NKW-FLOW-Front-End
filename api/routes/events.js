@@ -241,7 +241,7 @@ router.post('/dispatch', async (req, res) => {
     }
 });
 
-module.exports = {
+export {
     router,
     eventClientsByUser
 };
