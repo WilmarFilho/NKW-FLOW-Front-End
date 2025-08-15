@@ -1,10 +1,10 @@
 import { useState, useMemo } from 'react';
-import { useAttendants } from '../attendants/useAttendants';
+import { useAttendantsActions } from '../attendants/useAttendantsActions';
 import { validateAttendantForm } from '../utils/useValidator';
 import type { Attendant, AttendantFormData } from '../../types/attendant';
 
 export function useAtendentesPage() {
-  const { attendants, addAttendant, removeAttendant, editAttendant, updateAttendantStatus } = useAttendants();
+  const { attendants, addAttendant, removeAttendant, editAttendant, updateAttendantStatus } = useAttendantsActions();
 
   const [showErrors, setShowErrors] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
