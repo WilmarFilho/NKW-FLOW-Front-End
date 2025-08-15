@@ -1,8 +1,9 @@
-const router = express.Router();
 import express from 'express';
 import { createClient } from '@supabase/supabase-js';
 
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
+
+const router = express.Router();
 
 // Criar atendente
 router.post('/', async (req, res) => {
@@ -138,3 +139,5 @@ router.delete('/:id', async (req, res) => {
 });
 
 export default router;
+
+
