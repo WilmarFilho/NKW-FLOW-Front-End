@@ -1,20 +1,23 @@
-//  Libs
+// Libs
 import { useEffect, useMemo } from 'react';
 import { useRecoilState } from 'recoil';
-// Atom
+// Recoil
 import { messagesState } from '../../state/atom';
-// Utils
+// Hooks
 import { useApi } from '../utils/useApi';
 // Types
 import type { Message } from '../../types/message';
 
 export default function useMessages(chatId: string | null) {
 
+  // Carrega atom das messages
   const [allMessages, setMessages] = useRecoilState(messagesState);
 
+  // Carrega Metodos do hook da api
   const { get } = useApi();
 
   useEffect(() => {
+
     if (!chatId) return;
 
     const fetchMessages = async () => {
@@ -24,14 +27,12 @@ export default function useMessages(chatId: string | null) {
     };
 
     fetchMessages();
-  }, [chatId, get, setMessages]);
 
+  }, [chatId, get, setMessages]);
 
   const filteredMessages = useMemo(() => {
     return allMessages.filter(msg => msg.chat_id === chatId);
   }, [allMessages, chatId]);
 
-  return {
-    messages: filteredMessages
-  };
+  return { messages: filteredMessages };
 }

@@ -1,70 +1,49 @@
-// Libs
-import { useState } from 'react';
+// Recoil
 import { useRecoilState } from 'recoil';
-// Atom
-import { authTokenState } from '../../state/atom';
+import { userState } from '../../state/atom';
+// Hooks
+import { useApi } from '../utils/useApi';
 import { useUser } from './useUser'
 // Types
 import type { User } from '../../types/user';
 import type { Upload } from '../../types/upload';
-// Utils
-import { useApi } from '../utils/useApi';
 
 export function useUserAction() {
+
+    // Carrega metodos do user
+    const [user] = useRecoilState(userState);
     const { fetchUser } = useUser();
-    const [token] = useRecoilState(authTokenState);
-    const { put } = useApi();
-    const { post } = useApi();
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
 
-    const userId = localStorage.getItem('userId');
+    // Carrega Metodos do hook da api
+    const { post, put } = useApi();
 
-    // Atualiza o usuário
     const updateUser = async (updates: Partial<User>): Promise<User | null> => {
-        if (!token || !userId) return null;
 
-        try {
-            const updatedUser = await put<User>(`/users/${userId}`, updates);
+        if (!user) return null;
 
-            await fetchUser({ force: true });
+        const updatedUser = await put<User>(`/users/${user.id}`, updates);
 
-            return updatedUser;
-        } catch (err) {
-            console.error('Erro ao atualizar usuário:', err);
-            return null;
-        }
+        await fetchUser({ force: true });
+
+        return updatedUser;
+
     };
 
-    // Atualiza foto do usuário
     const uploadProfileImage = async (file: File): Promise<string | null> => {
-        if (!token) return null;
+
+        if (!user) return null;
 
         const formData = new FormData();
+
         formData.append('arquivo', file);
 
-        setLoading(true);
-        setError(null);
+        const result = await post<Upload>(`/upload/user/${user.id}`, formData);
 
-        try {
-            const responseURL = await post<Upload>(`/upload/user/${userId}`, formData);
+        if (!result) return null
 
-            if (!responseURL) return null
+        return result.url;
 
-            return responseURL.url;
-
-        } catch (err) {
-            console.error('Erro ao fazer upload da imagem:', err);
-            setError('Erro ao enviar imagem.');
-            return null;
-        } finally {
-            setLoading(false);
-        }
     };
 
-    return { updateUser, uploadProfileImage, loading, error };
+    return { updateUser, uploadProfileImage };
 }
-
-
-
-

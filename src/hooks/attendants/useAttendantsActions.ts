@@ -1,9 +1,8 @@
 // Libs
 import { useCallback } from 'react';
 import { useRecoilState } from 'recoil';
-import { toast } from 'react-toastify';
 // Recoil
-import { attendantsState, userState } from '../../state/atom';
+import { userState } from '../../state/atom';
 // Hooks
 import { useApi } from '../utils/useApi';
 import { useAttendants } from './useAttendants';
@@ -11,66 +10,53 @@ import { useAttendants } from './useAttendants';
 import type { Attendant, AttendantFormData } from '../../types/attendant';
 import { User } from '../../types/user';
 
-
 export const useAttendantsActions = () => {
 
     // Carrega Usuário
     const [user] = useRecoilState(userState)
 
-    // Carrega Atendentes
-    const [attendants, setAttendants] = useRecoilState(attendantsState);
+    // Carrega o fetch de Atendentes
     const { fetchAttendants } = useAttendants();
 
     // Carrega Metodos do hook da api
     const { post, del, put } = useApi();
 
     const addAttendant = async (attendantData: Partial<User>) => {
-        if (!user) {
-            console.error('Usuário administrador não encontrado. Ação cancelada.');
-            return;
-        }
 
-        try {
-            // ETAPA 1: Criar o registro de Usuário.
-            const userResponse = await post<User[]>('/users', {
-                nome: attendantData.nome,
-                numero: attendantData.numero,
-                email: attendantData.email,
-                senha_hash: attendantData.senha_hash,
-                tipo_de_usuario: 'atendente',
-                status: true,
-            });
+        if (!user) return;
 
-            // Validação robusta da resposta da API.
-            const createdUserId = userResponse?.[0]?.id;
-            if (!createdUserId) {
-                toast.error('com API de Usuário');
-                throw new Error('A API de usuários não retornou um ID válido.');
-            }
+        // ETAPA 1: Criar o registro de Usuário.
+        const userResponse = await post<User[]>('/users', {
+            nome: attendantData.nome,
+            numero: attendantData.numero,
+            email: attendantData.email,
+            senha_hash: attendantData.senha_hash,
+            tipo_de_usuario: 'atendente',
+            status: true,
+        });
 
-            // ETAPA 2: Criar o registro de Atendente.
-            await post('/attendants', {
-                user_id: createdUserId,
-                user_admin_id: user.id
-            });
+        const createdUserId = userResponse?.[0]?.id;
 
-            // ETAPA 3: Atualizar a lista de atendentes após o sucesso.
-            await fetchAttendants();
+        // ETAPA 2: Criar o registro de Atendente.
+        await post('/attendants', {
+            user_id: createdUserId,
+            user_admin_id: user.id
+        });
 
-        } catch (err) {
-            console.error('Falha ao adicionar atendente:', err);
-            throw err;
-        }
+        await fetchAttendants();
+
     };
 
     const removeAttendant = async (id: string) => {
-        try {
-            await del(`/attendants/${id}`);
+
+        if (!user) return;
+
+        const result = await del(`/attendants/${id}`);
+
+        if (result) {
             await fetchAttendants();
-        } catch (err) {
-            console.error('Falha ao deletar atendente:', err);
-            throw err;
         }
+
     };
 
     const editAttendant = async (
@@ -78,41 +64,35 @@ export const useAttendantsActions = () => {
         userId: string,
         updatedData: Partial<AttendantFormData>
     ) => {
-        try {
-            const userUpdatePayload: Partial<User> = {
-                nome: updatedData.nome,
-                email: updatedData.email,
-                senha_hash: updatedData.senha_hash,
-                numero: updatedData.numero,
-                status: updatedData.status,
-            };
 
-            // Atualiza usuário
-            await put(`/users/${userId}`, userUpdatePayload);
+        if (!user) return;
+
+        const userUpdatePayload: Partial<User> = {
+            nome: updatedData.nome,
+            email: updatedData.email,
+            senha_hash: updatedData.senha_hash,
+            numero: updatedData.numero,
+            status: updatedData.status,
+        };
+
+        const result = await put(`/users/${userId}`, userUpdatePayload);
+
+        if (result) {
             await fetchAttendants();
-            toast.success('Alteração salva com sucesso!');
-        } catch (err) {
-            console.error('Falha ao editar atendente:', err);
-            throw err;
         }
+
     };
 
     const updateAttendantStatus = useCallback(async (attendant: Attendant) => {
 
-        if (!attendant.user || !attendant.user.id) {
-            throw new Error('Dados do usuário do atendente estão incompletos.');
-        }
-        try {
+        if (!user) return;
 
-            const newStatus = !attendant.user.status;
+        const result = await put(`/users/${attendant.user.id}`, { status: !attendant.user.status });
 
-            await put(`/users/${attendant.user.id}`, { status: newStatus });
+        if (result) {
             await fetchAttendants();
-            toast.success('Alteração salva com sucesso!');
-        } catch (err) {
-            console.error('Falha ao atualizar o status do atendente:', err);
-            throw err;
         }
+
     }, [put, fetchAttendants]);
 
     return {

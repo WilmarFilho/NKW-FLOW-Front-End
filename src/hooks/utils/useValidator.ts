@@ -1,3 +1,4 @@
+// Types
 import { Connection } from '../../types/connection';
 import { AttendantFormData } from '../../types/attendant';
 

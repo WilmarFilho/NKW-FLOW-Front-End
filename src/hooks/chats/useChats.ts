@@ -9,7 +9,7 @@ import { useApi } from '../utils/useApi';
 import type { Chat } from '../../types/chats';
 import { User } from '../../types/user';
 
-export const useChats = () => {
+export default function useChats() {
 
   // Carrega Usuário
   const [user] = useRecoilState(userState)

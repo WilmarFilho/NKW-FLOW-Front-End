@@ -1,40 +1,43 @@
 // Libs
 import { useCallback, useState } from 'react';
+// Recoil
 import { useRecoilState } from 'recoil';
-// Utils
+import { connectionsState, userState } from '../../state/atom';
+// Hooks
 import { useApi } from '../utils/useApi';
+import { useConnections } from './useConnections';
 // Types
 import { Connection } from '../../types/connection';
-// Atom
-import { connectionsState, userState } from '../../state/atom';
-import { useConnections } from './useConnections';
 
 export const useConnectionsActions = () => {
 
+  // Carrega metodos de conexões
   const { fetchConnections } = useConnections();
-
-  const [user] = useRecoilState(userState);
   const [connections, setConnections] = useRecoilState(connectionsState);
+
+  // Carrega o usuário
+  const [user] = useRecoilState(userState);
+
+  // Variaveis de controle de cadastro
   const [step, setStep] = useState<1 | 2>(1);
   const [qrCode, setQrCode] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  // Carrega Metodos do hook da api
   const { post, put, del } = useApi();
 
   const handleStartSession = async (connection: Partial<Connection>) => {
 
-    setIsLoading(true)
-
     if (!user) return;
 
-    const payload = {
+    setIsLoading(true)
+
+    const qrcode = await post<string>('/connections', {
       user_id: user.id,
       nome: connection.nome,
       status: false,
       agente_id: connection.agente_id,
-    };
-
-    const qrcode = await post<string>('/connections', payload);
+    });
 
     setQrCode(qrcode);
     setIsLoading(false)
@@ -43,34 +46,44 @@ export const useConnectionsActions = () => {
   };
 
   const handleEditConnection = async (connection: Partial<Connection>) => {
-    await put<Connection>(`/connections/${connection.id}`, {
+
+    if (!user) return;
+
+    const result = await put<Connection>(`/connections/${connection.id}`, {
       nome: connection.nome,
       agente_id: connection.agente_id,
       status: connection.status,
     });
+
+    if (result) {
+      fetchConnections();
+    }
+
   };
 
   const removeConnection = useCallback(async (id: string) => {
+
+    if (!user) return;
+
     const result = await del(`/connections/${id}`);
-    if (result !== null) {
+
+    if (result) {
       fetchConnections();
     }
+
   }, [del, setConnections]);
 
   const updateConnectionStatus = useCallback(async (connection: Connection) => {
 
-    const newStatus = !connection.status;
+    if (!user) return;
 
-    // Payload para a requisição, mantendo os outros dados
-    const payload = {
+    const result = await put<Connection>(`/connections/${connection.id}`, {
       nome: connection.nome,
       agente_id: connection.agente_id,
-      status: newStatus,
-    };
+      status: !connection.status,
+    });
 
-    const updatedConnection = await put<Connection>(`/connections/${connection.id}`, payload);
-
-    if (updatedConnection) {
+    if (result) {
       fetchConnections();
     }
 

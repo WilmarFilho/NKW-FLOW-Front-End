@@ -119,14 +119,14 @@ export const useAudioRecorder = (
 
       for (let i = 0; i < bufferLength; i++) {
         const barHeight = Math.pow(dataArray[i] / 255, 2.5) * canvas.height;
-        canvasCtx.fillStyle = '#52f2b73a'; // Cor das barras
+        canvasCtx.fillStyle = '#52f2b73a'; 
         canvasCtx.fillRect(x, (canvas.height - barHeight) / 2, barWidth, barHeight);
         x += barWidth + 2;
       }
     };
 
     draw();
-  }, [isRecording]); // Dependência adicionada para reavaliar a função se o estado de gravação mudar
+  }, [isRecording]); 
 
   return { isRecording, startRecording, sendRecording, cancelRecording, initVisualizer };
 };

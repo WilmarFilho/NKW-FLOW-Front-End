@@ -1,8 +1,10 @@
+// Libs
 import { useState, useCallback } from 'react';
 
-const tabs = ['Conta', 'Preferências'];
-
 export function useConfiguracoesPage() {
+
+  const tabs = ['Conta', 'Preferências'];
+
   const [activeTab, setActiveTab] = useState(0);
 
   const handleTabChange = useCallback((index: number) => {

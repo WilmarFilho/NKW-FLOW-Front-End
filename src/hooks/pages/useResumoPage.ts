@@ -1,4 +1,6 @@
+// Libs
 import { useState } from 'react';
+// Components
 import { ViewType, DropdownId } from '../../components/Resumo/DropdownPeriod/DropdownPeriod';
 
 export function useResumoPage() {

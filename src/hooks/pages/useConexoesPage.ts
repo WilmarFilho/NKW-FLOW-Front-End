@@ -14,7 +14,7 @@ export function useConexoesPage() {
 
   const connections = useRecoilValue(connectionsState)
 
-  const { removeConnection, updateConnectionStatus, handleStartSession, handleEditConnection, isLoading, step, qrCode  } = useConnectionsActions();
+  const { removeConnection, updateConnectionStatus, handleStartSession, handleEditConnection, isLoading, step, qrCode } = useConnectionsActions();
 
   const { fetchConnections } = useConnections();
 
@@ -28,26 +28,16 @@ export function useConexoesPage() {
   const [modalState, setModalState] = useRecoilState(addConnectionModalState);
 
   const handleDelete = useCallback(async (id: string | number) => {
+
     const confirm = window.confirm('Tem certeza que deseja excluir esta conexão?');
     if (!confirm) return;
 
-    try {
-      await removeConnection(id.toString());
-    } catch (err) {
-      alert('Falha ao excluir: ' + err);
-    }
+    await removeConnection(id.toString());
+
   }, [removeConnection]);
 
   const handleStatusToggle = useCallback(async (connection: Connection) => {
-    const newStatus = connection.status ? 'Inativo' : 'Ativo';
-    const confirm = window.confirm(`Deseja alterar o status da conexão "${connection.nome.split('_')[0]}" para "${newStatus}"?`);
-    if (!confirm) return;
-
-    try {
-      await updateConnectionStatus(connection);
-    } catch {
-      alert('Falha ao alterar o status.');
-    }
+    await updateConnectionStatus(connection);
   }, [updateConnectionStatus]);
 
   const openModal = useCallback((conn?: Connection) => {
@@ -73,7 +63,9 @@ export function useConexoesPage() {
   }, []);
 
   const handleModalSaveClick = useCallback(async () => {
+
     const foundErrors = validateConnectionForm(formData);
+
     if (Object.keys(foundErrors).length > 0) {
       setErrors(foundErrors);
       setShowErrors(true);
@@ -87,7 +79,6 @@ export function useConexoesPage() {
       if (modalState.editMode) {
         await handleEditConnection(formData);
         closeModal();
-        fetchConnections();
       } else {
         await handleStartSession(formData);
       }

@@ -1,28 +1,22 @@
-// Utils
+// Hooks
 import { useApi } from '../utils/useApi';
-
-interface SendMessagePayload {
-  chat_id?: string;
-  user_id?: string;
-  mensagem: string;
-  mimetype?: string;
-  base64?: string;
-  number?: string;
-  connection_id?: string;
-}
+// Types
+import { SendMessagePayload } from '../../types/message';
 
 export default function useMessagesActions() {
+
+  // Carrega Metodos do hook da api
   const { post } = useApi();
 
   const sendMessage = async (payload: SendMessagePayload) => {
-    const apiPayload = {
+
+    const result = await post('/messages/', {
       ...payload,
       remetente: 'cliente',
-    };
-
-    const result = await post('/messages/', apiPayload);
+    });
 
     return result;
+    
   };
 
   return { sendMessage };
