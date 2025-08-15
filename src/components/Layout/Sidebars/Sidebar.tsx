@@ -1,56 +1,16 @@
 //Libbs
-import { NavLink, useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-//Hooks
-import { useAuth } from '../../../hooks/auth/useAuth';
+import { NavLink } from 'react-router-dom';
 //Css
 import './sidebar.css';
-//Assets
-import LogoIcon from '../assets/logo.svg';
-import ConversasIcon from '../assets/chat.svg';
-import AtendenteIcon from '../assets/atendentes.svg';
-import AgenteIcon from '../assets/bot.svg';
-import ConexaoIcon from '../assets/conexao.svg';
-import ConfigIcon from '../assets/config.svg';
-import AjudaIcon from '../assets/ajuda.svg';
-import DashIcon from '../assets/dash.svg'
-import GiftIcon from '../assets/gift.svg'
-import LogoutIcon from '../assets/logout.svg';
+//Icons
+import Icon from '../../../components/Gerais/Icons/Icons';
+//Atom
 import { useRecoilState } from 'recoil';
 import { userState } from '../../../state/atom';
 
 const Sidebar = () => {
 
   const [user] = useRecoilState(userState)
-
-  const navigate = useNavigate();
-  const { logout } = useAuth();
-
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
-
-
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
-  useEffect(() => {
-    const sidebarElement = document.querySelector('.sidebar');
-    const sidebarClosedElement = document.querySelector('.sidebarclosed');
-    if (sidebarElement) {
-      if (isSidebarOpen) {
-        sidebarElement.classList.add('sidebar-is-open');
-        sidebarClosedElement?.classList.add('sidebarclosed-is-open');
-      } else {
-        sidebarElement.classList.remove('sidebar-is-open');
-        sidebarClosedElement?.classList.remove('sidebarclosed-is-open');
-      }
-    }
-  }, [isSidebarOpen]);
 
   const MenuItem = ({
     to,
@@ -62,7 +22,6 @@ const Sidebar = () => {
 
     <NavLink
       to={to}
-      // A classe agora é aplicada diretamente no NavLink (que vira uma tag <a>)
       className={({ isActive }) =>
         `MenuItem ${isActive ? 'active-link' : ''}`
       }
@@ -75,25 +34,25 @@ const Sidebar = () => {
   return (
     <>
       <div className="box-logo">
-        <LogoIcon />
+        <Icon nome='logo' />
       </div>
 
       <nav className="principal-menu">
         <h4>Menu Principal</h4>
         <MenuItem to="/dashboard">
-          <DashIcon /> Resumo
+          <Icon nome='resumopage' /> Resumo
         </MenuItem>
         <MenuItem to="/conversas">
-          <ConversasIcon /> Conversas
+          <Icon nome='conversaspage' /> Conversas
         </MenuItem>
         <MenuItem to="/atendentes">
-          <AtendenteIcon /> Atendentes
+          <Icon nome='atendentespage' /> Atendentes
         </MenuItem>
         <MenuItem to="/agentes">
-          <AgenteIcon /> Agentes
+          <Icon nome='agentespage' /> Agentes
         </MenuItem>
         <MenuItem to="/conexoes">
-          <ConexaoIcon /> Conexões
+          <Icon nome='conexaopage' /> Conexões
         </MenuItem>
       </nav>
 
@@ -101,15 +60,15 @@ const Sidebar = () => {
         <h4>Suporte</h4>
         <MenuItem to="/configuracoes">
           {' '}
-          <ConfigIcon /> Configuracoes
+          <Icon nome='configpage' /> Configuracoes
         </MenuItem>
         <MenuItem to="/cashback">
           {' '}
-          <GiftIcon /> Recompensas
+          <Icon nome='recompensapage' /> Recompensas
         </MenuItem>
         <MenuItem to="/ajuda">
           {' '}
-          <AjudaIcon /> Ajuda
+          <Icon nome='ajudapage' /> Ajuda
         </MenuItem>
       </nav>
 

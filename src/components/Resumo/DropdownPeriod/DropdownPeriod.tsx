@@ -2,8 +2,8 @@
 import { motion, AnimatePresence } from 'framer-motion';
 // Css
 import Styles from './DropdownPeriod.module.css'
-// Assets
-import CalendarIcon from './assets/HeroiconsCalendarDays20Solid.svg';
+// Icon
+import Icon from '../../../components/Gerais/Icons/Icons';
 
 export type ViewType = 'weekly' | 'monthly';
 export type DropdownId = string | null;
@@ -34,7 +34,7 @@ export default function DropdownPeriod({
         className={Styles.dropdownSelectButton}
         onClick={() => setOpenId(openId === id ? null : id)}
       >
-        <CalendarIcon />
+        <Icon nome='calendar' />
         {options.find(o => o.value === value)?.label}
       </button>
 

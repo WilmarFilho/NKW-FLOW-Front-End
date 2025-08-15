@@ -2,6 +2,7 @@
 import TableStyles from './TableStyles.module.css';
 // Icons
 import Icon from '../Icons/Icons';
+// Libs
 import React from 'react';
 
 interface GenericEntityRowProps<T extends { id: string | number }> {

@@ -1,24 +1,22 @@
+// Libs
 import React, { useState, useMemo, useCallback } from 'react';
+import { useRecoilValue } from 'recoil';
 import { motion } from 'framer-motion';
-
 // Hooks
 import { useDebounce } from '../../../hooks/utils/useDebounce';
-
 // Components
 import SearchBar from '../SearchBar/Searchbar';
 import Tag from '../Tags/Tag';
 import ChatListItem from '../ChatListItem/ChatListItem';
-
 // Types
 import { Chat } from '../../../types/chats';
-
 // CSS Modules
 import styles from './ChatSideBar.module.css';
-
-// Assets
-import AddChatIcon from '../assets/addchat.svg';
+// Atom
 import { agentsState } from '../../../state/atom';
-import { useRecoilValue } from 'recoil';
+// Icons
+import Icon from '../../../components/Gerais/Icons/Icons';
+
 
 interface ChatSidebarProps {
   chats: Chat[];
@@ -106,7 +104,7 @@ function ChatSidebar({
       <div className={styles.wrapperSearchBar}>
         <SearchBar onSearch={setSearchQuery} />
         <button onClick={() => setIsAddChatOpen(true)} className={styles.buttonAddChat}>
-          <AddChatIcon />
+          <Icon nome='addchat' />
         </button>
       </div>
 

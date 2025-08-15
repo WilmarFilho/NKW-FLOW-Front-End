@@ -2,15 +2,8 @@
 import { NavLink } from 'react-router-dom';
 //Css
 import './sidebarclosed.css';
-//Assets
-import ConversasIcon from '../assets/chat.svg';
-import AtendenteIcon from '../assets/atendentes.svg';
-import AgenteIcon from '../assets/bot.svg';
-import ConexaoIcon from '../assets/conexao.svg';
-import ConfigIcon from '../assets/config.svg';
-import AjudaIcon from '../assets/ajuda.svg';
-import DashIcon from '../assets/dash.svg'
-import GiftIcon from '../assets/gift.svg'
+//Icons
+import Icon from '../../../components/Gerais/Icons/Icons';
 
 const SidebarClosed = () => {
   const MenuItem = ({
@@ -30,40 +23,39 @@ const SidebarClosed = () => {
     </NavLink>
   );
 
-
   return (
     <>
       <nav className="menu-principal-closed">
         <div className='itens-list-menu'>
 
           <MenuItem to="/dashboard">
-            <DashIcon />
+            <Icon nome='resumopage' />
           </MenuItem>
 
           <MenuItem to="/conversas">
-            <ConversasIcon />
+            <Icon nome='conversaspage' />
           </MenuItem>
 
           <MenuItem to="/atendentes">
-            <AtendenteIcon />
+            <Icon nome='atendentespage' />
           </MenuItem>
 
           <MenuItem to="/agentes">
-            <AgenteIcon />
+            <Icon nome='agentespage' />
           </MenuItem>
 
           <MenuItem to="/conexoes">
-            <ConexaoIcon />
+            <Icon nome='conexaopage' />
           </MenuItem>
 
           <MenuItem to="/configuracoes">
-            <ConfigIcon />
+            <Icon nome='configpage' />
           </MenuItem>
           <MenuItem to="/cashback">
-            <GiftIcon />
+            <Icon nome='recompensapage' />
           </MenuItem>
           <MenuItem to="/ajuda">
-            <AjudaIcon />
+            <Icon nome='ajudapage' />
           </MenuItem>
         </div>
       </nav>

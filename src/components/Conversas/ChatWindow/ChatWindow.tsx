@@ -10,7 +10,7 @@ import { userState, chatsState } from '../../../state/atom';
 import MessageBubble from '../MessageBubble/MessageBubble';
 import ChatInput from '../../Gerais/Inputs/ChatInput';
 import Modal from '../../Gerais/Modal/Modal';
-import ToggleSwitch from '../../../components/Configuracoes/ToggleSwitch/ToggleSwitch';
+import ToggleSwitch from '../../Configuracoes/ToggleSwitch/ToggleSwitch';
 // Types
 import { Chat } from '../../../types/chats';
 import { Message } from '../../../types/message';
@@ -20,13 +20,8 @@ import useChatActions from '../../../hooks/chats/useChatActions';
 import { useDragAndDropFile } from '../../../hooks/chats/useDragAndDropFile';
 // Assets
 import defaultAvatar from '../assets/default.webp';
-import DotsIcon from '../assets/dots.svg';
-import EditIcon from '../assets/pencil.svg';
-import TrashIcon from '../assets/trash.svg';
-import InfoIcon from '../assets/info.svg';
-import BotIcon from '../assets/bot.svg';
-import XCircleIcon from '../assets/x-circle.svg';
-import PlayIcon from '../assets/play.svg';
+// Icons
+import Icon from '../../Gerais/Icons/Icons';
 // Css
 import styles from './ChatWindow.module.css';
 import FormStyles from '../../Gerais/Form/form.module.css'
@@ -180,7 +175,7 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
                             }}
                             className={active ? styles.activeOption : ''}
                         >
-                            <EditIcon />
+                            <Icon nome='pencil' />
                             Renomear a conversa.
                         </button>
                     )}
@@ -192,7 +187,7 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
                             onClick={handleDeleteChat}
                             className={active ? styles.activeOption : ''}
                         >
-                            <TrashIcon />
+                            <Icon nome='trash' />
                             Apagar conversa.
                         </button>
                     )}
@@ -204,7 +199,7 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
                             onClick={() => setDetailsOpen(true)}
                             className={active ? styles.activeOption : ''}
                         >
-                            <InfoIcon />
+                            <Icon nome='info' />
                             Dados da conversa.
                         </button>
                     )}
@@ -218,12 +213,12 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
                         >
                             {activeChat.status === 'Open' ? (
                                 <>
-                                    <XCircleIcon />
+                                    <Icon nome='close' />
                                     Fechar conversa.
                                 </>
                             ) : (
                                 <>
-                                    <PlayIcon />
+                                    <Icon nome='play' />
                                     Reabrir conversa.
                                 </>
                             )}
@@ -264,7 +259,7 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
                     {({ open }) => (
                         <>
                             <MenuButton className={styles.optionsButton}>
-                                <DotsIcon />
+                                <Icon nome='dots' />
                             </MenuButton>
 
                             <AnimatePresence>
@@ -342,7 +337,7 @@ export default function ChatWindow({ activeChat, messages, setActiveChat }: Chat
                     <div className={styles.inputArea}>
                         <div className={styles.toggleIaButton}>
                             <div className={styles.headerToggleIa}>
-                                <BotIcon /> {activeChat.ia_ativa ? 'Ativado' : 'Desativado'}
+                                <Icon nome='agentespage' /> {activeChat.ia_ativa ? 'Ativado' : 'Desativado'}
                             </div>
                             <ToggleSwitch variant="secondary" isOn={activeChat.ia_ativa} onToggle={handleToggleIA} />
                         </div>

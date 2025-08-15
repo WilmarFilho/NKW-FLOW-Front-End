@@ -1,5 +1,6 @@
-// CSS Modules
+// Libs
 import React from 'react';
+// Css
 import styles from './Tag.module.css';
 
 interface TagProps {

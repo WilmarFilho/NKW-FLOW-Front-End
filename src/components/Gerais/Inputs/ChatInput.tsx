@@ -1,15 +1,12 @@
+// Libs
 import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-
 // Hooks
 import { useAudioRecorder } from '../../../hooks/chats/useAudioRecorder';
-
-// Estilos e Ícones
+// Css
 import styles from './ChatInput.module.css';
-import UploadIcon from './assets/upload.svg';
-import MicIcon from './assets/mic.svg';
-import TrashIcon from './assets/trash.svg';
-import SendIcon from './assets/send.svg';
+// Icons
+import Icon from '../Icons/Icons';
 
 type ChatInputProps = {
   placeholder?: string;
@@ -65,7 +62,7 @@ export default function ChatInput({ placeholder = 'Digite sua mensagem...', onSe
           aria-label="Cancelar gravação"
           onClick={cancelRecording}
         >
-          <TrashIcon />
+          <Icon nome='trash' />
         </button>
         {/* 👇 MELHORIA: Contêiner para a label e o canvas */}
         <div className={styles.visualizerContainer}>
@@ -78,7 +75,7 @@ export default function ChatInput({ placeholder = 'Digite sua mensagem...', onSe
           aria-label="Enviar gravação"
           onClick={sendRecording}
         >
-          <SendIcon />
+          <Icon nome='send' />
         </button>
       </div>
     );
@@ -109,21 +106,21 @@ export default function ChatInput({ placeholder = 'Digite sua mensagem...', onSe
         aria-label="Anexar arquivo"
         onClick={() => fileInputRef.current?.click()}
       >
-        <UploadIcon />
+        <Icon nome='upload' />
       </button>
 
       {/* Lógica condicional para os botões da direita */}
       {input.trim() ? (
         // Se estiver digitando, mostra apenas o botão de enviar texto
         <button type="submit" className={styles.sendButton} aria-label="Enviar mensagem">
-          <SendIcon />
+          <Icon nome='send' />
         </button>
       ) : (
         // Se o input estiver vazio, mostra os botões de upload e de gravar
         <>
 
           <button type="button" className={styles.sendButton} aria-label="Gravar áudio" onClick={startRecording}>
-            <MicIcon />
+            <Icon nome='mic' />
           </button>
         </>
       )}

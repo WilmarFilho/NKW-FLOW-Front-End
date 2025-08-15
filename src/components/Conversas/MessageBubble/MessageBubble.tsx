@@ -1,3 +1,4 @@
+// Libs
 import { motion } from 'framer-motion';
 // CSS Modules
 import styles from './MessageBubble.module.css';

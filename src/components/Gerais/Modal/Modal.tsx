@@ -3,7 +3,7 @@ import type { PropsWithChildren } from 'react';
 // Css
 import styles from './Modal.module.css'
 // Assets
-import SaveIcon from './assets/BxSave.svg'
+import Icon from '../Icons/Icons';
 
 interface ModalProps {
   isOpen: boolean;
@@ -85,7 +85,7 @@ export default function Modal({
                 </>
               ) : (
                 <>
-                {labelSubmit} <SaveIcon />
+                {labelSubmit} <Icon nome='save' />
                 </>
               )}
             </button>
@@ -95,4 +95,3 @@ export default function Modal({
     </div>
   );
 }
-

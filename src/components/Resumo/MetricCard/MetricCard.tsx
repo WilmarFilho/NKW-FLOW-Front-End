@@ -2,8 +2,8 @@
 import { ReactNode } from 'react';
 // Css
 import Styles from './MetricCard.module.css';
-// Assets 
-import ArrowIcon from './assets/IcRoundArrowOutward.svg';
+// Icon 
+import Icon from '../../../components/Gerais/Icons/Icons';
 
 interface MetricCardProps {
   title: string;
@@ -36,7 +36,7 @@ export default function MetricCard({
           {value && <h3>{value}</h3>}
           {variation && variationText && (
             <div className={Styles.metricCardFooterStat}>
-              <strong>{variation}<ArrowIcon /></strong>
+              <strong>{variation}<Icon nome='arrowfine' /></strong>
               <span>{variationText}</span>
             </div>
           )}

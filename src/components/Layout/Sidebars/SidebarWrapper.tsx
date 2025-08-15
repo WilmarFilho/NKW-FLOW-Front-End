@@ -1,6 +1,9 @@
+// Libs
 import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
+// Atom
 import { userState } from '../../../state/atom';
+// Components
 import Sidebar from './Sidebar';
 import SidebarClosed from './SidebarClosed';
 

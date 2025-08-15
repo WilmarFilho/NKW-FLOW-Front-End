@@ -1,6 +1,5 @@
-// Assets
-import SearchIcon from '../assets/search.svg';
-
+// Icon
+import Icon from '../../../components/Gerais/Icons/Icons';
 // CSS Modules
 import styles from './Searchbar.module.css';
 
@@ -12,7 +11,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
   return (
     <div className={styles.searchContainer} role="search">
       <div className={styles.iconWrapper}>
-        <SearchIcon />
+        <Icon nome='search' />
       </div>
 
       <input

@@ -1,12 +1,10 @@
+// Libs
 import React from 'react';
 import { motion } from 'framer-motion';
 // CSS Modules
 import styles from './GenericTable.module.css';
-// Assets
-import FilterIcon from './assets/filter.svg';
-import NotFilterIcon from './assets/notfilter.svg';
-import ArrowUpIcon from './assets/arrowup.svg';
-import ArrowDownIcon from './assets/arrowdown.svg';
+// Icons
+import Icon from '../Icons/Icons';
 
 interface GenericTableProps<T> {
   columns: string[];
@@ -56,11 +54,11 @@ export default function GenericTable<T>({
                 <span className={styles.sortIcon}>
                   {isActive ? (
                     <>
-                      <span className={styles.sortIcon}><FilterIcon /></span>
-                      {sortOrder === 'asc' ? <ArrowUpIcon /> : <ArrowDownIcon />}
+                      <span className={styles.sortIcon}><Icon nome='filter' /></span>
+                      {sortOrder === 'asc' ? <Icon nome='arrowup' /> : <Icon nome='arrowdown' />}
                     </>
                   ) : (
-                    <span className={styles.sortIconInactive}><NotFilterIcon /></span>
+                    <span className={styles.sortIconInactive}><Icon nome='notfilter' /></span>
                   )}
                 </span>
               )}
@@ -77,5 +75,3 @@ export default function GenericTable<T>({
     </motion.section>
   );
 }
-
-

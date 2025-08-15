@@ -1,7 +1,7 @@
+// Libs
 import Styles from './KnowledgeBaseInfo.module.css';
-// Assets
-import DownloadTextIcon from './assets/dowloadtext.svg';
-import DownloadIcon from './assets/dowload.svg';
+// Icon
+import Icon from '../../Gerais/Icons/Icons';
 
 export default function KnowledgeBaseInfo() {
   return (
@@ -13,8 +13,8 @@ export default function KnowledgeBaseInfo() {
         para garantir que cada interação seja fiel à sua marca.
       </p>
       <div className={Styles.contentActions}>
-        <button><DownloadTextIcon /></button>
-        <button><DownloadIcon /></button>
+        <button><Icon nome='downloadtext' /></button>
+        <button><Icon nome='download' /></button>
       </div>
     </div>
   );
