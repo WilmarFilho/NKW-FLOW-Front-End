@@ -8,7 +8,7 @@ import { useApi } from '../utils/useApi';
 // Types
 import type { Message } from '../../types/message';
 
-export default function useMessages(chatId: string | null) {
+export const useMessages = (chatId: string | null) => {
 
   // Carrega atom das messages
   const [allMessages, setMessages] = useRecoilState(messagesState);

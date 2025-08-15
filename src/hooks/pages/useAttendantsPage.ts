@@ -1,16 +1,31 @@
+// Libs
 import { useState, useMemo } from 'react';
-import { useAttendantsActions } from '../attendants/useAttendantsActions';
+import { useRecoilValue } from 'recoil';
+// Hooks
 import { validateAttendantForm } from '../utils/useValidator';
+import { useAttendantsActions } from '../attendants/useAttendantsActions';
+// Types
 import type { Attendant, AttendantFormData } from '../../types/attendant';
+import type { FilterStatus, SortOrder, SortField } from '../../types/table';
+// Atom
+import { attendantsState } from '../../state/atom';
 
 export function useAtendentesPage() {
-  const { attendants, addAttendant, removeAttendant, editAttendant, updateAttendantStatus } = useAttendantsActions();
 
+  // Carrega atendentes e seus metodos
+  const attendants = useRecoilValue(attendantsState)
+  const { addAttendant, removeAttendant, editAttendant, updateAttendantStatus } = useAttendantsActions();
+
+  // Controle de Filtro e Ordenação
+  const [activeFilter, setActiveFilter] = useState<FilterStatus>('todos');
+  const [sortField, setSortField] = useState<SortField<AttendantFormData>>(null);
+  const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
+
+  // Controle de Erros
   const [showErrors, setShowErrors] = useState(false);
+
+  // Controle de Modal de edição / adição
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeFilter, setActiveFilter] = useState<'todos' | 'ativo' | 'inativo'>('todos');
-  const [sortField, setSortField] = useState<keyof AttendantFormData | null>(null);
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [editData, setEditData] = useState<AttendantFormData | null>(null);
   const [editAttendantId, setEditAttendantId] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -22,14 +37,13 @@ export function useAtendentesPage() {
   };
 
   const handleStatusToggle = async (attendant: Attendant) => {
-    if (window.confirm('Deseja alterar o status do atendente?')) {
       await updateAttendantStatus(attendant);
-    }
   };
 
   const handleEdit = (attendant: Attendant) => {
-    if (!attendant.user) return;
+ 
     setEditAttendantId(attendant.id);
+
     setEditData({
       id: attendant.id,
       user_id: attendant.user_id,
@@ -38,6 +52,7 @@ export function useAtendentesPage() {
       status: attendant.user.status,
       numero: attendant.user.numero,
     });
+
     setFormData({
       id: attendant.id,
       user_id: attendant.user_id,
@@ -46,15 +61,21 @@ export function useAtendentesPage() {
       status: attendant.user.status,
       numero: attendant.user.numero,
     });
+
     setIsModalOpen(true);
+
   };
 
   const handleFormChange = (data: AttendantFormData) => setFormData(data);
 
   const handleModalSaveClick = async () => {
+
     setShowErrors(true);
+
     if (!formData) return;
+
     const foundErrors = validateAttendantForm(formData, !!editData);
+
     if (Object.keys(foundErrors).length > 0) return;
 
     if (editAttendantId) {
@@ -62,7 +83,9 @@ export function useAtendentesPage() {
     } else {
       await addAttendant(formData);
     }
+
     closeModal();
+    
   };
 
   const openModal = () => {

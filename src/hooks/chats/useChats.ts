@@ -1,7 +1,7 @@
 // Libs
 import { useCallback } from 'react';
 import { useRecoilState } from 'recoil';
-// Recoil
+// Recoilt
 import { chatsState, userState } from '../../state/atom';
 // Hooks
 import { useApi } from '../utils/useApi';
@@ -9,7 +9,7 @@ import { useApi } from '../utils/useApi';
 import type { Chat } from '../../types/chats';
 import { User } from '../../types/user';
 
-export default function useChats() {
+export const useChats = () => {
 
   // Carrega Usuário
   const [user] = useRecoilState(userState)

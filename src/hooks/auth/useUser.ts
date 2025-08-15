@@ -13,7 +13,7 @@ import { useAgents } from '../agents/useAgents';
 import { useConnections } from '../connections/useConnections';
 import { useChats } from '../chats/useChats';
 
-export function useUser() {
+export const useUser = () => {
 
   // Carrega Usuário
   const [user, setUser] = useRecoilState(userState);

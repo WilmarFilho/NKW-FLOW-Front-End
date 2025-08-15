@@ -2,8 +2,8 @@
 import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 // Hooks
-import useChats from '../chats/useChats';
-import useMessages from '../../hooks/chats/useMessages';
+import { useChats } from '../chats/useChats';
+import { useMessages } from '../../hooks/chats/useMessages';
 import useSendMessage from '../chats/useMessagesActions';
 // Recoil
 import { chatsState, connectionsState } from '../../state/atom';
@@ -71,7 +71,7 @@ export function useConversasPage() {
 
         setShowErrors(true);
 
-        if (!validateForm()) return; // impede envio se erros
+        if (!validateForm()) return;
 
         const result = await sendMessage({
             mensagem: newChatMessage,

@@ -1,35 +1,36 @@
+// Libs
 import { useState, useMemo, useCallback } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
+// Atom
 import { addConnectionModalState, connectionsState } from '../../state/atom';
-import { useConnections } from '../connections/useConnections';
-import type { Connection } from '../../types/connection';
-import { useConnectionsActions } from '../connections/useConnectionsActions';
+// Hooks
 import { validateConnectionForm } from '../utils/useValidator';
-
-type Filter = 'todos' | 'ativo' | 'inativo';
-type SortField = 'nome' | null;
-type SortOrder = 'asc' | 'desc';
+import { useConnectionsActions } from '../connections/useConnectionsActions';
+// Types
+import type { Connection } from '../../types/connection';
+import type { FilterStatus, SortOrder, SortField } from '../../types/table';
 
 export function useConexoesPage() {
 
+  // Carrega Conezões e seus Metodos
   const connections = useRecoilValue(connectionsState)
-
   const { removeConnection, updateConnectionStatus, handleStartSession, handleEditConnection, isLoading, step, qrCode } = useConnectionsActions();
 
-  const { fetchConnections } = useConnections();
-
-  const [activeFilter, setActiveFilter] = useState<Filter>('todos');
-  const [sortField, setSortField] = useState<SortField>(null);
+  // Controle de Filtro e Ordenação
+  const [activeFilter, setActiveFilter] = useState<FilterStatus>('todos');
+  const [sortField, setSortField] = useState<SortField<Connection>>(null);
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
+
+  // Controle de Erros e Modal
+  const [modalState, setModalState] = useRecoilState(addConnectionModalState);
   const [formData, setFormData] = useState<Partial<Connection> | null>(null);
   const [showErrors, setShowErrors] = useState(false);
   const [errors, setErrors] = useState<Partial<Record<keyof Connection, string>>>({});
 
-  const [modalState, setModalState] = useRecoilState(addConnectionModalState);
-
   const handleDelete = useCallback(async (id: string | number) => {
 
     const confirm = window.confirm('Tem certeza que deseja excluir esta conexão?');
+
     if (!confirm) return;
 
     await removeConnection(id.toString());
@@ -43,6 +44,7 @@ export function useConexoesPage() {
   const openModal = useCallback((conn?: Connection) => {
 
     setErrors({});
+
     setShowErrors(false);
 
     if (conn) {
@@ -73,6 +75,7 @@ export function useConexoesPage() {
     }
 
     setErrors({});
+
     setShowErrors(false);
 
     if (formData) {
@@ -83,12 +86,12 @@ export function useConexoesPage() {
         await handleStartSession(formData);
       }
     }
+
   }, [
     formData,
     modalState.editMode,
     handleEditConnection,
     closeModal,
-    fetchConnections,
     handleStartSession
   ]);
 
@@ -130,7 +133,6 @@ export function useConexoesPage() {
     handleStatusToggle,
     handleEdit,
     openModal,
-    fetchConnections,
     setErrors,
     handleModalSaveClick,
     isLoading,
