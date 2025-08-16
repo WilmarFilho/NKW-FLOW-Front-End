@@ -32,7 +32,8 @@ import DownnloadTextIcon from './assets/dowloadtext.svg';
 import SearchIcon from './assets/search.svg';
 import PlayIcon from  './assets/play.svg';
 import AddChatIcon from './assets/addchat.svg';
-// Assets Sidebar
+import ArrowSimpleIcon from './assets/arrowsimple.svg'
+// Assets Sidebar 
 import ConversasIcon from './assets/chat.svg';
 import AtendenteIcon from './assets/atendentes.svg';
 import AgenteIcon from './assets/bot.svg';
@@ -82,6 +83,7 @@ const iconMap = {
   arrowup: ArrowUp,
   arrowdown: ArrowDown,
   save: SaveIcon,
+  arrowsimple: ArrowSimpleIcon,
 };
 
 type IconName = keyof typeof iconMap;

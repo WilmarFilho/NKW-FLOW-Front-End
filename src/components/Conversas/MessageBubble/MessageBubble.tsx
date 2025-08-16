@@ -1,5 +1,5 @@
 // Libs
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 // CSS Modules
 import styles from './MessageBubble.module.css';
@@ -98,10 +98,70 @@ const renderMessageContent = ({ mimetype, base64, text }: MessageBubbleProps) =>
 };
 
 export default function MessageBubble(props: MessageBubbleProps) {
-  const { sender, mimetype, onReply, quote } = props;
 
+  const { sender, mimetype, onReply, quote } = props;
   const [isHovered, setIsHovered] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+  const [menuPosition, setMenuPosition] = useState<'top' | 'bottom'>('bottom');
+  const bubbleRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLUListElement>(null);
+
+  // Verificar espaço e definir posição do menu
+  useEffect(() => {
+    if (showMenu && bubbleRef.current && menuRef.current) {
+      const bubbleRect = bubbleRef.current.getBoundingClientRect();
+      const menuHeight = menuRef.current.offsetHeight;
+      const messageList = bubbleRef.current.closest(`.${styles.messageList}`);
+
+      if (messageList) {
+        const listRect = messageList.getBoundingClientRect();
+
+        // Calcula espaço considerando o container scrollável
+        const spaceBelow = listRect.bottom - bubbleRect.bottom;
+        const spaceAbove = bubbleRect.top - listRect.top;
+
+        // Adiciona uma margem de segurança (20px)
+        if (spaceBelow < menuHeight + 20 && spaceAbove > menuHeight + 20) {
+          setMenuPosition('top');
+        } else {
+          setMenuPosition('bottom');
+        }
+      } else {
+        // Fallback para cálculo sem container scrollável
+        const spaceBelow = window.innerHeight - bubbleRect.bottom;
+        const spaceAbove = bubbleRect.top;
+
+        if (spaceBelow < menuHeight + 20 && spaceAbove > menuHeight + 20) {
+          setMenuPosition('top');
+        } else {
+          setMenuPosition('bottom');
+        }
+      }
+    }
+  }, [showMenu]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (bubbleRef.current && !bubbleRef.current.contains(event.target as Node)) {
+        setShowMenu(false);
+        setIsHovered(false); // Adicionado para esconder a seta também
+      }
+    };
+
+    if (showMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showMenu]);
+
+  const handleButtonClick = () => {
+    setShowMenu(prev => !prev); // Alterna o estado do menu
+    setIsHovered(true); // Mantém o hover ativo após o clique
+  };
 
   const bubbleClasses = [
     styles.messageBubble,
@@ -111,14 +171,17 @@ export default function MessageBubble(props: MessageBubbleProps) {
 
   return (
     <motion.div
+      ref={bubbleRef}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1, duration: 0.3, ease: 'easeOut' }}
       className={bubbleClasses}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => {
-        setIsHovered(false);
-        setShowMenu(false);
+        // Só remove o hover se o menu não estiver aberto
+        if (!showMenu) {
+          setIsHovered(false);
+        }
       }}
     >
       {quote && (
@@ -135,33 +198,39 @@ export default function MessageBubble(props: MessageBubbleProps) {
         </div>
       )}
 
-      {/* Conteúdo da mensagem */}
       {renderMessageContent(props)}
 
-      {/* Ícone de ações (aparece só no hover) */}
-      {isHovered && (
+      {/* Ícone de ações (aparece só no hover ou quando o menu está aberto) */}
+      {(isHovered || showMenu) && (
         <div className={styles.messageActions}>
           <button
-            className={styles.actionButton}
-            onClick={() => setShowMenu((prev) => !prev)}
+            ref={buttonRef}
+            className={`${styles.actionButton} ${showMenu ? styles.menuOpen : ''}`}
+            onClick={handleButtonClick}
+            onMouseEnter={() => setIsHovered(true)}
           >
-            <Icon nome='arrowdown'/>
+            <Icon nome='arrowdown' />
           </button>
 
           <AnimatePresence>
             {showMenu && (
               <motion.ul
-                className={styles.messageMenu}
-                initial={{ opacity: 0, y: -5 }}
+                ref={menuRef}
+                className={`${styles.messageMenu} ${sender === 'me' ? styles.menuRight : styles.menuLeft
+                  } ${menuPosition === 'top' ? styles.menuTop : ''}`}
+                initial={{ opacity: 0, y: menuPosition === 'top' ? 5 : -5 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -5 }}
+                exit={{ opacity: 0, y: menuPosition === 'top' ? 5 : -5 }}
                 transition={{ duration: 0.15 }}
+                onClick={(e) => e.stopPropagation()}
               >
                 <li>
                   <button
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.stopPropagation();
                       onReply?.();
                       setShowMenu(false);
+                      setIsHovered(false);
                     }}
                   >
                     Responder mensagem

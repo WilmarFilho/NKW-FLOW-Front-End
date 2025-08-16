@@ -43,7 +43,6 @@ export default function ChatWindow({
   onSetReplyingTo,
   replyingTo,
   isExiting,
-  setIsExiting,
   handleCloseReply,
 }: ChatWindowProps) {
   const [isDetailsOpen, setDetailsOpen] = useState(false);
