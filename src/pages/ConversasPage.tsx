@@ -26,6 +26,11 @@ export default function ConversasPage() {
         onToggleChatStatus={state.handleToggleChatStatus}
         onRenameChat={state.handleRenameChat}
         onDropFile={state.handleFileDrop}
+        onSetReplyingTo={state.setReplyingTo}
+        replyingTo={state.replyingTo}
+        isExiting={state.isExiting}
+        setIsExiting={state.setIsExiting}
+        handleCloseReply={state.handleCloseReply}
       />
 
       {state.isAddChatOpen && (

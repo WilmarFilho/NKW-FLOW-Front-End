@@ -10,6 +10,7 @@ export interface Message {
   file_name: string;
   quote_id: string;
   user_id: string;
+  quote_message: Message;
 }
 
 export interface SendMessagePayload {
@@ -19,5 +20,6 @@ export interface SendMessagePayload {
   mimetype?: string;
   base64?: string;
   number?: string;
+  quote_id?: string;
   connection_id?: string;
 }

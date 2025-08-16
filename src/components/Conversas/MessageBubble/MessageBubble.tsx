@@ -1,13 +1,17 @@
 // Libs
-import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 // CSS Modules
 import styles from './MessageBubble.module.css';
+import Icon from '../../../components/Gerais/Icons/Icons';
 
 interface MessageBubbleProps {
   text?: string | null;
   sender: 'me' | 'other';
   mimetype?: string;
   base64?: string;
+  quote?: { mensagem?: string | null; mimetype?: string; remetente: 'cliente' | 'humano' };
+  onReply?: () => void;
 }
 
 const renderMessageContent = ({ mimetype, base64, text }: MessageBubbleProps) => {
@@ -20,7 +24,7 @@ const renderMessageContent = ({ mimetype, base64, text }: MessageBubbleProps) =>
           src={`data:image/jpeg;base64,${base64}`}
           alt="Imagem enviada na conversa"
           className={styles.messageImage}
-          loading='lazy'
+          loading="lazy"
         />
         {text && <p>{text}</p>}
       </>
@@ -31,9 +35,9 @@ const renderMessageContent = ({ mimetype, base64, text }: MessageBubbleProps) =>
     return (
       <img
         src={`data:image/webp;base64,${base64}`}
-        alt="Figurinha (sticker) enviada na conversa"
+        alt="Figurinha (sticker)"
         className={styles.stickerImage}
-        loading='lazy'
+        loading="lazy"
       />
     );
   }
@@ -53,7 +57,7 @@ const renderMessageContent = ({ mimetype, base64, text }: MessageBubbleProps) =>
         <span className={styles.documentIcon}>📄</span>
         <a
           href={`data:${mimetype};base64,${base64}`}
-          download={text || 'arquivo'} // 'text' contém o nome do arquivo ou legenda
+          download={text || 'arquivo'}
           className={styles.documentLink}
         >
           {text || 'Baixar Documento'}
@@ -65,10 +69,7 @@ const renderMessageContent = ({ mimetype, base64, text }: MessageBubbleProps) =>
   if (!text) return null;
 
   const rawLines = text.split('\n');
-
-  const lines = rawLines
-    .map((l) => l.trim())
-    .filter((l) => l !== '');
+  const lines = rawLines.map((l) => l.trim()).filter((l) => l !== '');
 
   return (
     <p className={styles.messageText}>
@@ -96,9 +97,11 @@ const renderMessageContent = ({ mimetype, base64, text }: MessageBubbleProps) =>
   );
 };
 
-
 export default function MessageBubble(props: MessageBubbleProps) {
-  const { sender, mimetype } = props;
+  const { sender, mimetype, onReply, quote } = props;
+
+  const [isHovered, setIsHovered] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
 
   const bubbleClasses = [
     styles.messageBubble,
@@ -112,8 +115,63 @@ export default function MessageBubble(props: MessageBubbleProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1, duration: 0.3, ease: 'easeOut' }}
       className={bubbleClasses}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => {
+        setIsHovered(false);
+        setShowMenu(false);
+      }}
     >
+      {quote && (
+        <div className={styles.quotedMessage}>
+          <span className={styles.quotedSender}>
+            {quote.remetente === 'cliente' ? 'Você' : 'Contato'}
+          </span>
+          <p className={styles.quotedText}>
+            {quote.mensagem ||
+              (quote.mimetype?.startsWith('image/')
+                ? '📷 Imagem'
+                : 'Mensagem')}
+          </p>
+        </div>
+      )}
+
+      {/* Conteúdo da mensagem */}
       {renderMessageContent(props)}
+
+      {/* Ícone de ações (aparece só no hover) */}
+      {isHovered && (
+        <div className={styles.messageActions}>
+          <button
+            className={styles.actionButton}
+            onClick={() => setShowMenu((prev) => !prev)}
+          >
+            <Icon nome='arrowdown'/>
+          </button>
+
+          <AnimatePresence>
+            {showMenu && (
+              <motion.ul
+                className={styles.messageMenu}
+                initial={{ opacity: 0, y: -5 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -5 }}
+                transition={{ duration: 0.15 }}
+              >
+                <li>
+                  <button
+                    onClick={() => {
+                      onReply?.();
+                      setShowMenu(false);
+                    }}
+                  >
+                    Responder mensagem
+                  </button>
+                </li>
+              </motion.ul>
+            )}
+          </AnimatePresence>
+        </div>
+      )}
     </motion.div>
   );
 }

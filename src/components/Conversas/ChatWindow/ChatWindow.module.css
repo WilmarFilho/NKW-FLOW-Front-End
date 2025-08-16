@@ -10,6 +10,107 @@
   position: relative;
 }
 
+@keyframes fadeInContent {
+  from {
+    height: 0px;
+  }
+
+  to {
+    height: 100px;
+  }
+}
+
+@keyframes animateRow {
+
+  /* Estado inicial: transparente e 15px abaixo */
+  from {
+    grid-template-rows: 0fr auto;
+  }
+
+  /* Estado final: totalmente visível e na posição original */
+  to {
+    grid-template-rows: 1fr auto;
+  }
+}
+
+@keyframes animateReplay {
+
+  /* Estado inicial: transparente e 15px abaixo */
+  from {
+    height: 0;
+  }
+
+  /* Estado final: totalmente visível e na posição original */
+  to {
+    height: 100px;
+
+  }
+}
+
+@keyframes animateInverseReplay {
+
+  /* Estado inicial: transparente e 15px abaixo */
+  from {
+    height: 100px;
+  }
+
+  /* Estado final: totalmente visível e na posição original */
+  to {
+    height: 0;
+
+  }
+}
+
+.inputAreaWrapper {
+  display: grid;
+  animation: animateRow 4s;
+  padding: 12px 20px;
+  border-top: 1px solid var(--color-borders);
+}
+
+/* 3. A Caixa de Resposta */
+.replyPreview {
+  overflow: hidden;
+  animation: animateReplay .6s forwards;
+  background-color: var(--color-background-white);
+  color: white;
+  border-radius: 12px;
+  position: relative;
+}
+
+.replyPreview div {
+  gap: 12px;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 26px;
+}
+
+.replyPreview.isExiting {
+  animation: animateInverseReplay .6s forwards;
+}
+
+/* 4. A Área de Input (não precisa de mudanças) */
+.inputArea {
+  display: flex;
+  margin-top: 12px;
+  gap: 12px;
+  height: 0;
+  animation: fadeInContent 1.5s forwards;
+}
+
+.replyPreview button {
+  top: 12px;
+  right: 12px;
+  position: absolute;
+  border-radius: 100px;
+  background-color: var(--color-background-dark);
+  border: none;
+  padding: 12px;
+  color: var(--color-text-white);
+  cursor: pointer;
+  outline: none;
+}
+
 /* --- Header --- */
 .chatHeader {
   display: flex;
@@ -56,7 +157,6 @@
   text-align: left;
 }
 
-
 .menuItems button svg {
   fill: var(--color-text);
   width: 24px;
@@ -83,7 +183,6 @@
   outline: none;
   border: none;
 }
-
 
 .contactInfo {
   display: flex;
@@ -152,7 +251,6 @@
   outline: 2px solid var(--color-secundaria);
   outline-offset: 1px;
 }
-
 
 .dragOverlay {
   position: absolute;
@@ -236,7 +334,6 @@
   font-size: 20px;
 }
 
-
 /* --- Message List --- */
 .messageList {
   flex: 1;
@@ -251,24 +348,14 @@
   display: none;
 }
 
-/* --- Input Area --- */
-.inputAreaWrapper {
-  padding: 12px 20px;
-  border-top: 1px solid var(--color-borders);
-}
-
-.inputArea {
-  display: flex;
-  gap: 12px;
-}
-
 .toggleIaButton {
   background-color: var(--color-background-white);
   border-radius: 12px;
   border: none;
-  min-width: 160px;
+  width: 200px;
+  height: 100%;
+  overflow: hidden;
   flex-shrink: 0;
-  padding: 12px 20px;
   font-family: var(--font-main);
   display: flex;
   flex-direction: column;
@@ -277,7 +364,7 @@
   align-items: center;
   color: var(--color-text);
   opacity: .8;
-  transition: background-color 0.3s, color 0.3s, outline-offset 0.1s;
+  padding: 12px 40px;
   outline: none;
 }
 

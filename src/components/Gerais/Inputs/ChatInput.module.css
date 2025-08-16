@@ -4,11 +4,11 @@
   gap: 12px;
   border-radius: 12px;
   width: 100%;
-  padding: 8px 8px 8px 20px;
+  height: 100%;
+  padding: 0 16px;
+  overflow: hidden;
   background-color: var(--color-background-white);
   color: var(--color-text-table);
-  border: 1px solid transparent;
-  transition: border-color 0.2s ease;
 }
 
 .chatInputForm:focus-within {
