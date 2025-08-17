@@ -1,12 +1,16 @@
 // Libs
 import { useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 // CSS Modules
 import styles from './MessageBubble.module.css';
 import Icon from '../../../components/Gerais/Icons/Icons';
+import { DropdownMenu } from '../../../components/Gerais/Dropdown/DropdownMenu';
+import { useDropdownMenu } from '../../../components/Gerais/Dropdown/DropdownMenuContext';
 
 interface MessageBubbleProps {
+  id: string;
   text?: string | null;
+  senderName: string;
   sender: 'me' | 'other';
   mimetype?: string;
   base64?: string;
@@ -98,69 +102,97 @@ const renderMessageContent = ({ mimetype, base64, text }: MessageBubbleProps) =>
 };
 
 export default function MessageBubble(props: MessageBubbleProps) {
+  const { id, sender, mimetype, onReply, quote, senderName } = props;
 
-  const { sender, mimetype, onReply, quote } = props;
   const [isHovered, setIsHovered] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [menuPosition, setMenuPosition] = useState<'top' | 'bottom'>('bottom');
+
   const bubbleRef = useRef<HTMLDivElement>(null);
-  const buttonRef = useRef<HTMLButtonElement>(null);
-  const menuRef = useRef<HTMLUListElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
-  // Verificar espaço e definir posição do menu
-  useEffect(() => {
-    if (showMenu && bubbleRef.current && menuRef.current) {
-      const bubbleRect = bubbleRef.current.getBoundingClientRect();
-      const menuHeight = menuRef.current.offsetHeight;
-      const messageList = bubbleRef.current.closest(`.${styles.messageList}`);
+  const { openMenuId } = useDropdownMenu();
 
-      if (messageList) {
-        const listRect = messageList.getBoundingClientRect();
+  const menuHeightRef = useRef<number>(0);
 
-        // Calcula espaço considerando o container scrollável
-        const spaceBelow = listRect.bottom - bubbleRect.bottom;
-        const spaceAbove = bubbleRect.top - listRect.top;
+  const computePosition = () => {
+    if (!bubbleRef.current) return;
 
-        // Adiciona uma margem de segurança (20px)
-        if (spaceBelow < menuHeight + 20 && spaceAbove > menuHeight + 20) {
-          setMenuPosition('top');
-        } else {
-          setMenuPosition('bottom');
-        }
-      } else {
-        // Fallback para cálculo sem container scrollável
-        const spaceBelow = window.innerHeight - bubbleRect.bottom;
-        const spaceAbove = bubbleRect.top;
+    const bubbleRect = bubbleRef.current.getBoundingClientRect();
+    const maybeEl = bubbleRef.current.closest('[data-scroll="messages"]');
+    const scroller: HTMLElement | Window =
+      maybeEl instanceof HTMLElement ? maybeEl : window;
 
-        if (spaceBelow < menuHeight + 20 && spaceAbove > menuHeight + 20) {
-          setMenuPosition('top');
-        } else {
-          setMenuPosition('bottom');
-        }
-      }
+    const scrollerRect =
+      scroller instanceof Window
+        ? ({ top: 0, bottom: window.innerHeight } as DOMRect)
+        : scroller.getBoundingClientRect();
+
+    // só mede uma vez
+    if (menuRef.current && !menuHeightRef.current) {
+      menuHeightRef.current = menuRef.current.offsetHeight;
     }
-  }, [showMenu]);
 
+    const estimatedMenuHeight = menuHeightRef.current || 200;
+
+    const spaceBelow = scrollerRect.bottom - bubbleRect.bottom;
+    const spaceAbove = bubbleRect.top - scrollerRect.top;
+
+    const shouldUseTop = spaceBelow < estimatedMenuHeight && spaceAbove > spaceBelow;
+
+    setMenuPosition(shouldUseTop ? 'top' : 'bottom');
+  };
+
+
+  // listeners só enquanto este menu está aberto (evita loops)
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (bubbleRef.current && !bubbleRef.current.contains(event.target as Node)) {
-        setShowMenu(false);
-        setIsHovered(false); // Adicionado para esconder a seta também
-      }
+    const isOpenHere = openMenuId === `message-${id}`;
+    if (!isOpenHere) return;
+
+    // Mede após montar (e novamente no próximo frame para pegar animações)
+    const tick = () => {
+      computePosition();
+      requestAnimationFrame(computePosition);
     };
+    const t = setTimeout(tick, 0);
 
-    if (showMenu) {
-      document.addEventListener('mousedown', handleClickOutside);
+    const maybeEl = bubbleRef.current?.closest('[data-scroll="messages"]');
+    const scroller: HTMLElement | Window =
+      maybeEl instanceof HTMLElement ? maybeEl : window;
+
+    const onScrollOrResize = () => requestAnimationFrame(computePosition);
+
+    window.addEventListener('resize', onScrollOrResize);
+    if (scroller instanceof Window) {
+      scroller.addEventListener('scroll', onScrollOrResize, { passive: true });
+    } else {
+      scroller.addEventListener('scroll', onScrollOrResize, { passive: true });
     }
+
+    const ro = new ResizeObserver(() => requestAnimationFrame(computePosition));
+    if (menuRef.current) ro.observe(menuRef.current);
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      clearTimeout(t);
+      window.removeEventListener('resize', onScrollOrResize);
+      if (scroller instanceof Window) {
+        scroller.removeEventListener('scroll', onScrollOrResize);
+      } else {
+        scroller.removeEventListener('scroll', onScrollOrResize);
+      }
+      ro.disconnect();
     };
-  }, [showMenu]);
+  }, [openMenuId, id]);
 
-  const handleButtonClick = () => {
-    setShowMenu(prev => !prev); // Alterna o estado do menu
-    setIsHovered(true); // Mantém o hover ativo após o clique
+  // sincroniza visual (hover/mostrar trigger) com estado global
+  useEffect(() => {
+    const isOpenHere = openMenuId === `message-${id}`;
+    setShowMenu(isOpenHere);
+    if (!isOpenHere) setIsHovered(false);
+  }, [openMenuId, id]);
+
+  const handleTriggerClick = () => {
+    setIsHovered(true);
   };
 
   const bubbleClasses = [
@@ -178,68 +210,56 @@ export default function MessageBubble(props: MessageBubbleProps) {
       className={bubbleClasses}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => {
-        // Só remove o hover se o menu não estiver aberto
-        if (!showMenu) {
-          setIsHovered(false);
-        }
+        if (!showMenu) setIsHovered(false);
       }}
     >
       {quote && (
         <div className={styles.quotedMessage}>
           <span className={styles.quotedSender}>
-            {quote.remetente === 'cliente' ? 'Você' : 'Contato'}
+            {quote.remetente === 'cliente' ? 'Você' : senderName}
           </span>
           <p className={styles.quotedText}>
             {quote.mensagem ||
-              (quote.mimetype?.startsWith('image/')
-                ? '📷 Imagem'
-                : 'Mensagem')}
+              (quote.mimetype?.startsWith('image/') ? '📷 Imagem' : 'Mensagem')}
           </p>
         </div>
       )}
 
       {renderMessageContent(props)}
 
-      {/* Ícone de ações (aparece só no hover ou quando o menu está aberto) */}
       {(isHovered || showMenu) && (
-        <div className={styles.messageActions}>
+        <DropdownMenu
+          menuRef={menuRef}
+          id={`message-${id}`}
+          variant="message"
+          position={menuPosition}
+          direction={sender === 'me' ? 'right' : 'left'}
+          trigger={
+            <button className={styles.actionButton} onClick={handleTriggerClick}>
+              <Icon nome="arrowdown" />
+            </button>
+          }
+          className={`${styles.messageMenu} ${sender === 'me' ? styles.menuRight : styles.menuLeft
+            }`}
+        >
           <button
-            ref={buttonRef}
-            className={`${styles.actionButton} ${showMenu ? styles.menuOpen : ''}`}
-            onClick={handleButtonClick}
-            onMouseEnter={() => setIsHovered(true)}
+            onClick={() => {
+              onReply?.();
+            }}
           >
-            <Icon nome='arrowdown' />
+            <Icon nome="arrow" /> Responder Mensagem
           </button>
 
-          <AnimatePresence>
-            {showMenu && (
-              <motion.ul
-                ref={menuRef}
-                className={`${styles.messageMenu} ${sender === 'me' ? styles.menuRight : styles.menuLeft
-                  } ${menuPosition === 'top' ? styles.menuTop : ''}`}
-                initial={{ opacity: 0, y: menuPosition === 'top' ? 5 : -5 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: menuPosition === 'top' ? 5 : -5 }}
-                transition={{ duration: 0.15 }}
-                onClick={(e) => e.stopPropagation()}
-              >
-                <li>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onReply?.();
-                      setShowMenu(false);
-                      setIsHovered(false);
-                    }}
-                  >
-                    Responder mensagem
-                  </button>
-                </li>
-              </motion.ul>
-            )}
-          </AnimatePresence>
-        </div>
+          {props.text && (
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(props.text || '');
+              }}
+            >
+              <Icon nome="copy" /> Copiar mensagem
+            </button>
+          )}
+        </DropdownMenu>
       )}
     </motion.div>
   );

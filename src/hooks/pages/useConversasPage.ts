@@ -30,7 +30,7 @@ export function useConversasPage() {
         const timer = setTimeout(() => {
             setReplyingTo(undefined);
             setIsExiting(false);
-        }, 900);
+        }, 50);
 
         return () => clearTimeout(timer);
 

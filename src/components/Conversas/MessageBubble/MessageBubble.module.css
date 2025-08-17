@@ -25,7 +25,6 @@
   font-weight: bold;
 }
 
-
 .isMe {
   background-color: var(--color-secundaria);
   color: var(--color-text-white);
@@ -63,9 +62,6 @@
   width: 270px;
   max-width: 100%;
 }
-
-
-/* Adicione estas classes ao final do seu arquivo MessageBubble.module.css */
 
 .documentContainer {
   display: flex;
@@ -108,134 +104,4 @@
 .quotedText {
   font-style: italic;
   color: var(--color-text-white);
-}
-
-
-
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-
-
-.messageActions {
-  position: absolute;
-  top: -9px;
-  right: -9px;
-  display: flex;
-  animation: fadeIn .2s forwards;
-  align-items: center;
-  z-index: 10;
-}
-
-/* Estilo base do botão da seta */
-.actionButton {
-  background: rgba(255, 255, 255, 0.9); /* Fundo semi-transparente */
-  backdrop-filter: blur(4px); /* Efeito de blur no fundo */
-  -webkit-backdrop-filter: blur(4px); /* Para compatibilidade com Safari */
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 50%;
-  width: 26px;
-  height: 26px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  opacity: 0.9;
-}
-
-/* Efeitos de hover e estados */
-.actionButton:hover {
-  background: rgba(255, 255, 255, 1);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  opacity: 1;
-  transform: scale(1.05);
-}
-
-.actionButton:active {
-  background: rgba(255, 255, 255, 0.9);
-  transform: scale(0.95);
-}
-
-/* Quando o menu está aberto */
-.actionButton.menuOpen {
-  background: rgba(255, 255, 255, 0.9);
-}
-
-/* Ícone dentro do botão */
-.actionButton svg {
-  width: 16px;
-  height: 16px;
-  transition: transform 0.2s ease;
-}
-
-/* Animação de rotação quando o menu abre/fecha */
-.actionButton.menuOpen svg {
-  transform: rotate(180deg);
-}
-
-.messageMenu {
-  position: absolute;
-  top: 32px;
-  background: var(--color-chat-dropdown);
-  border-radius: 8px;
-  list-style: none;
-  padding: 12px 12px 100px 12px;
-  margin: 0;
-  z-index: 10;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-/* Posição padrão (abaixo) */
-.menuRight {
-  right: 20px;
-  top: 100%;
-  margin-top: 8px;
-}
-
-.menuLeft {
-  left: 20px;
-  top: 100%;
-  margin-top: 8px;
-}
-
-/* Quando posicionado acima */
-.menuTop {
-  bottom: 100%;
-  top: auto;
-  margin-top: 0;
-  margin-bottom: 8px;
-}
-
-.messageMenu li {
-  z-index: 100;
-  width: 200px;
-}
-
-.messageMenu button {
-  background-color: var(--color-background-chats-options);
-  border: none;
-  padding: 20px 20px;
-  width: 100%;
-  text-align: left;
-  border-radius: 8px;
-  color: var(--color-text);
-  font-size: 14px;
-  cursor: pointer;
-  z-index: 100;
-  transition: .3s;
-}
-
-.messageMenu button:hover {
-  background-color: var(--color-background-white);
-  transition: .3s;
 }

@@ -3,6 +3,7 @@ import ChatSidebar from '../components/Conversas/ChatSideBar/ChatSideBar';
 import ChatWindow from '../components/Conversas/ChatWindow/ChatWindow';
 import NewChatForm from '../components/Conversas/NewChatForm/NewChatForm';
 import { useConversasPage } from '../hooks/pages/useConversasPage';
+import { DropdownMenuProvider } from '../components/Gerais/Dropdown/DropdownMenuContext';
 
 export default function ConversasPage() {
   const state = useConversasPage();
@@ -16,22 +17,23 @@ export default function ConversasPage() {
         setIsAddChatOpen={state.openNewChatModal}
         fectchImageProfile={state.fectchImageProfile}
       />
-
-      <ChatWindow
-        activeChat={state.activeChat}
-        messages={state.messages}
-        onSendMessage={state.handleSendMessage}
-        onToggleIA={state.handleToggleIA}
-        onDeleteChat={state.handleDeleteChat}
-        onToggleChatStatus={state.handleToggleChatStatus}
-        onRenameChat={state.handleRenameChat}
-        onDropFile={state.handleFileDrop}
-        onSetReplyingTo={state.setReplyingTo}
-        replyingTo={state.replyingTo}
-        isExiting={state.isExiting}
-        setIsExiting={state.setIsExiting}
-        handleCloseReply={state.handleCloseReply}
-      />
+      <DropdownMenuProvider>
+        <ChatWindow
+          activeChat={state.activeChat}
+          messages={state.messages}
+          onSendMessage={state.handleSendMessage}
+          onToggleIA={state.handleToggleIA}
+          onDeleteChat={state.handleDeleteChat}
+          onToggleChatStatus={state.handleToggleChatStatus}
+          onRenameChat={state.handleRenameChat}
+          onDropFile={state.handleFileDrop}
+          onSetReplyingTo={state.setReplyingTo}
+          replyingTo={state.replyingTo}
+          isExiting={state.isExiting}
+          setIsExiting={state.setIsExiting}
+          handleCloseReply={state.handleCloseReply}
+        />
+      </DropdownMenuProvider>
 
       {state.isAddChatOpen && (
         <Modal

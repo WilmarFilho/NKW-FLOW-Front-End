@@ -14,6 +14,7 @@ import Icon from '../../Gerais/Icons/Icons';
 import defaultAvatar from '../assets/default.webp';
 import styles from './ChatWindow.module.css';
 import FormStyles from '../../Gerais/Form/form.module.css';
+import { DropdownMenu } from '../../../components/Gerais/Dropdown/DropdownMenu';
 
 interface ChatWindowProps {
   activeChat: Chat | null;
@@ -125,69 +126,23 @@ export default function ChatWindow({
           </div>
         </div>
 
-        {/* Menu Dropdown */}
-        <Menu as="div" className={styles.dropdown}>
-          {({ open }) => (
-            <>
-              <MenuButton className={styles.optionsButton}>
-                <Icon nome="dots" />
-              </MenuButton>
-              <AnimatePresence>
-                {open && (
-                  <MenuItems static>
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.95, y: -5 }}
-                      animate={{ opacity: 1, scale: 1, y: 0 }}
-                      exit={{ opacity: 0, scale: 0.95, y: -5 }}
-                      transition={{ duration: 0.15, ease: 'easeOut' }}
-                      className={styles.menuItems}
-                    >
-                      <MenuItem>
-                        {() => (
-                          <button
-                            onClick={() => {
-                              setNewName(activeChat.contato_nome || '');
-                              setRenameOpen(true);
-                            }}
-                          >
-                            <Icon nome="pencil" />
-                            Renomear Chat
-                          </button>
-                        )}
-                      </MenuItem>
-                      <MenuItem>
-                        {() => (
-                          <button onClick={onDeleteChat}>
-                            <Icon nome="trash" />
-                            Apagar Chat
-                          </button>
-                        )}
-                      </MenuItem>
-                      <MenuItem>
-                        {() => (
-                          <button onClick={() => setDetailsOpen(true)}>
-                            <Icon nome="info" />
-                            Detalhes do Chat
-                          </button>
-                        )}
-                      </MenuItem>
-                      <MenuItem>
-                        {() => (
-                          <button onClick={onToggleChatStatus}>
-                            <Icon nome="close" />
-                            {activeChat.status === 'Open'
-                              ? 'Fechar Chat'
-                              : 'Reabrir Chat'}
-                          </button>
-                        )}
-                      </MenuItem>
-                    </motion.div>
-                  </MenuItems>
-                )}
-              </AnimatePresence>
-            </>
-          )}
-        </Menu>
+        <DropdownMenu
+          id="chat-header"
+          trigger={<button className={styles.optionsButton}><Icon nome="dots" /></button>}
+        >
+          <button onClick={() => { setNewName(activeChat.contato_nome || ''); setRenameOpen(true); }}>
+            <Icon nome="pencil" /> Renomear Chat
+          </button>
+          <button onClick={onDeleteChat}>
+            <Icon nome="trash" /> Apagar Chat
+          </button>
+          <button onClick={() => setDetailsOpen(true)}>
+            <Icon nome="info" /> Detalhes do Chat
+          </button>
+          <button onClick={onToggleChatStatus}>
+            <Icon nome="close" /> {activeChat.status === 'Open' ? 'Fechar Chat' : 'Reabrir Chat'}
+          </button>
+        </DropdownMenu>
       </header>
 
       {/* Modals */}
@@ -242,10 +197,13 @@ export default function ChatWindow({
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
+        data-scroll="messages"  
       >
         {messages.map((msg) => (
           <MessageBubble
             key={msg.id}
+            id={msg.id}
+            senderName={activeChat.contato_nome}
             text={msg.mensagem}
             mimetype={msg.mimetype}
             base64={msg.base64}
@@ -321,3 +279,5 @@ export default function ChatWindow({
     </motion.section>
   );
 }
+
+

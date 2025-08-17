@@ -42,7 +42,7 @@
 
   /* Estado final: totalmente visível e na posição original */
   to {
-    height: 100px;
+    height: 80px;
 
   }
 }
@@ -51,7 +51,7 @@
 
   /* Estado inicial: transparente e 15px abaixo */
   from {
-    height: 100px;
+    height: 80px;
   }
 
   /* Estado final: totalmente visível e na posição original */
@@ -63,7 +63,7 @@
 
 .inputAreaWrapper {
   display: grid;
-  animation: animateRow 4s;
+  animation: animateRow .4s;
   padding: 12px 20px;
   border-top: 1px solid var(--color-borders);
 }
@@ -71,7 +71,7 @@
 /* 3. A Caixa de Resposta */
 .replyPreview {
   overflow: hidden;
-  animation: animateReplay .6s forwards;
+  animation: animateReplay .1s forwards;
   background-color: var(--color-background-white);
   color: white;
   border-radius: 12px;
@@ -86,7 +86,7 @@
 }
 
 .replyPreview.isExiting {
-  animation: animateInverseReplay .6s forwards;
+  animation: animateInverseReplay .1s forwards;
 }
 
 /* 4. A Área de Input (não precisa de mudanças) */
@@ -120,51 +120,6 @@
   padding: 14px 20px;
   border-bottom: 1px solid var(--color-borders);
   flex-shrink: 0;
-}
-
-.dropdown {
-  position: relative;
-}
-
-.menuItems {
-  position: absolute;
-  right: 0;
-  margin-top: 0.5rem;
-  background: var(--color-chat-dropdown);
-  padding: 12px 12px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  width: 285px;
-}
-
-.menuItems button {
-  padding: 20px 20px;
-  width: 100%;
-  color: var(--color-text);
-  cursor: pointer;
-  border: none;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 12px;
-  border-radius: 8px;
-  outline: none;
-  background-color: var(--color-background-chats-options);
-  text-align: left;
-}
-
-.menuItems button svg {
-  fill: var(--color-text);
-  width: 24px;
-}
-
-.menuItems button:hover {
-  background-color: var(--color-background-white);
-  transition: .3s;
 }
 
 .inputGroup {
