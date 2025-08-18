@@ -26,11 +26,9 @@ export const useRealtimeEvents = (userId: string | undefined) => {
       try {
 
         const payload = JSON.parse(event.data);
-        const { event: tipo, connection, message, state } = payload;
 
-       
+        const { event: tipo, connection, message, state, deletedMessage } = payload;
 
-        // ===== Atualizações de conexão =====
         if (tipo === 'connection.update') {
           if (state === 'close') {
             setConnections((prev) => prev.filter((c) => c.id !== connection.id));
@@ -46,7 +44,6 @@ export const useRealtimeEvents = (userId: string | undefined) => {
           }
         }
 
-        // ===== Mensagens recebidas/enviadas =====
         if ((tipo === 'messages.upsert' || tipo === 'send.message') && message) {
           const chatId = message.chat_id;
 
@@ -102,6 +99,19 @@ export const useRealtimeEvents = (userId: string | undefined) => {
           setChats((prevChats) =>
             prevChats.map((c) =>
               c.id === chatId ? { ...c, unread_count: 0 } : c
+            )
+          );
+        }
+
+        if (tipo === 'messages.delete' && deletedMessage) {
+
+          console.log(`🗑️ Recebido evento para excluir mensagem: ${deletedMessage}`);
+
+          setMessages((prevMessages) =>
+            prevMessages.map((m) =>
+              m.id === deletedMessage.id
+                ? { ...m, excluded: true } 
+                : m
             )
           );
         }

@@ -385,6 +385,15 @@
   color: var(--color-text-white);
 }
 
+.dateDivider {
+  background-color: var(--color-background-white);
+  padding: 12px 32px;
+  margin: 40px 0;
+  color: var(--color-text-white);
+  border-radius: 32px;
+  align-self: center;
+}
+
 /* --- Media Queries --- */
 @media (max-width: 991.98px) {
 

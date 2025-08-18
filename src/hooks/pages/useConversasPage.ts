@@ -57,14 +57,14 @@ export function useConversasPage() {
     setIsAddChatOpen(true);
   };
 
-  const validateForm = () => {
+  const validateForm = useCallback(() => {
     const newErrors: typeof errors = {};
     if (!selectedConnectionId) newErrors.selectedConnectionId = 'Selecione uma conexão.';
     if (!/^\d{10,15}$/.test(newChatNumber)) newErrors.newChatNumber = 'Número inválido.';
     if (!newChatMessage.trim()) newErrors.newChatMessage = 'A mensagem não pode ficar vazia.';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+  }, [selectedConnectionId, newChatNumber, newChatMessage]);
 
   const handleSendMessage = useCallback(
     async (text?: string, mimetype?: string, base64?: string) => {
@@ -91,7 +91,6 @@ export function useConversasPage() {
         return;
       }
 
-      // Mensagem em chat existente
       const result = await sendMessage({
         chat_id: activeChat.id,
         mensagem: messageText,
@@ -102,7 +101,6 @@ export function useConversasPage() {
       });
 
       if (result) {
-        
         if (replyingTo) {
           setIsExiting(true);
           setTimeout(() => {
@@ -110,7 +108,6 @@ export function useConversasPage() {
             setIsExiting(false);
           }, 900);
         }
-
       }
     },
     [
@@ -122,6 +119,7 @@ export function useConversasPage() {
       setChats,
       user?.id,
       replyingTo,
+      validateForm, 
     ]
   );
 
@@ -204,3 +202,5 @@ export function useConversasPage() {
     handleCloseReply
   };
 }
+
+

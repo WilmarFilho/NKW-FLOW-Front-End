@@ -105,3 +105,12 @@
   font-style: italic;
   color: var(--color-text-white);
 }
+
+.time {
+  text-align: end;
+  font-size: 12px;
+}
+
+.isExcluded {
+  background-color: var(--color-background-dark);
+}

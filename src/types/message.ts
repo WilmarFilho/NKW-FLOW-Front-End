@@ -11,6 +11,7 @@ export interface Message {
   quote_id: string;
   user_id: string;
   quote_message: Message;
+  excluded: boolean;
 }
 
 export interface SendMessagePayload {
