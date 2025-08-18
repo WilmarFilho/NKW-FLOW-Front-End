@@ -24,8 +24,11 @@ export const useRealtimeEvents = (userId: string | undefined) => {
 
     eventSource.onmessage = (event) => {
       try {
+
         const payload = JSON.parse(event.data);
         const { event: tipo, connection, message, state } = payload;
+
+       
 
         // ===== Atualizações de conexão =====
         if (tipo === 'connection.update') {
@@ -57,7 +60,7 @@ export const useRealtimeEvents = (userId: string | undefined) => {
           fetch(`${apiConfig.node}/chats/${chatId}`)
             .then((res) => res.json())
             .then((chat) => {
-            
+
               setChats((prevChats) => {
                 const exists = prevChats.find((c) => c.id === chatId);
                 let updatedChats;
@@ -79,7 +82,7 @@ export const useRealtimeEvents = (userId: string | undefined) => {
                     : 0;
                   return dateB - dateA;
                 });
-                
+
                 return sorted;
               });
             })
@@ -90,6 +93,20 @@ export const useRealtimeEvents = (userId: string | undefined) => {
               );
             });
         }
+
+        if (tipo === 'chats.upsert' && payload.chat) {
+          const chatId = payload.chat.id;
+
+          console.log(payload)
+
+          setChats((prevChats) =>
+            prevChats.map((c) =>
+              c.id === chatId ? { ...c, unread_count: 0 } : c
+            )
+          );
+        }
+
+
       } catch (err) {
         console.error('[SSE] Erro ao processar evento:', err);
       }

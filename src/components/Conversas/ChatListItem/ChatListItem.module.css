@@ -69,6 +69,10 @@
   gap: 10px;
 }
 
+.columnLeft {
+   width: 70%;
+}
+
 .columnRight {
   justify-content: start;
   align-items: center;
