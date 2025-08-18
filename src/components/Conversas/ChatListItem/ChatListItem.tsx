@@ -8,6 +8,8 @@ import { useState } from 'react';
 import React from 'react';
 // Types
 import { Chat } from '../../../types/chats';
+// Utils
+import { useFormatDate } from '../../../hooks/utils/useFormatDate';
 
 interface ChatListItemProps {
   name: string;
@@ -16,6 +18,8 @@ interface ChatListItemProps {
   chatId: string;
   isActive: boolean;
   onClick: () => void;
+  unreadCount: number;
+  mensagemData?: string | null;
   fectchImageProfile: (chatId: string) => Promise<Chat | null>;
 }
 
@@ -32,11 +36,11 @@ function ChatListItem({
   onClick,
   chatId,
   fectchImageProfile,
+  mensagemData,
+  unreadCount,
 }: ChatListItemProps) {
-
   const [avatarUrl, setAvatarUrl] = useState(avatar || defaultAvatar);
   const [hasError, setHasError] = useState(false);
-  
 
   const handleImageError = async () => {
     if (!hasError) {
@@ -70,11 +74,35 @@ function ChatListItem({
         onError={handleImageError}
         alt={`Avatar de ${name}`}
         className={styles.avatar}
-        loading='lazy'
+        loading="lazy"
       />
+
       <div className={styles.textContainer}>
-        <strong>{name}</strong>
-        <p>{cleanedMessage}</p>
+        {/* Linha superior: nome + data */}
+        <div className={styles.columnLeft}>
+          <strong>{name}</strong>
+          <p className={styles.message}>{cleanedMessage}</p>
+
+        </div>
+
+        {/* Linha inferior: última mensagem + badge de não lido */}
+        <div className={styles.columnRight}>
+          {mensagemData && (
+            <span
+              className={
+                unreadCount > 0
+                  ? styles.headerActiveCount
+                  : styles.headerCount
+              }
+            >
+              {useFormatDate(mensagemData)}
+            </span>
+          )}
+          {unreadCount > 0 && (
+            <span className={styles.countUnread}>{unreadCount}</span>
+          )}
+        </div>
+
       </div>
     </motion.button>
   );

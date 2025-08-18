@@ -17,7 +17,7 @@ export const useAuth = () => {
     console.log('oi')
 
     const token = '123' +  email + senha
-    const userId = '419da23a-5461-470c-a837-d79fa2bb2f0c'
+    const userId = '807cc327-34ec-43b7-abc1-7f4def7d15c6'
 
     const fetchedUser = await get<User>(`/users/${userId}`);
 

@@ -18,4 +18,5 @@ export interface Chat {
     id: string,
     nome: string
   };
+  unread_count: number;
 }

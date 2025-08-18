@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   width: 100%; 
-  padding: 10px 12px;
+  padding: 10px 20px 10px 12px;
   gap: 12px;
   border-radius: 10px;
   cursor: pointer;
@@ -40,13 +40,13 @@
 
 .textContainer {
   display: flex;
-  flex-direction: column;
-  gap: 8px; 
+  justify-content: space-between;
   overflow: hidden; 
+  width: 100%;
   color: var(--color-text);
 }
 
-.textContainer strong {
+.columnLeft strong {
   font-size: 14px;
   font-family: var(--font-main);
   white-space: nowrap; 
@@ -54,13 +54,47 @@
   text-overflow: ellipsis;
 }
 
-.textContainer p {
+.columnLeft p {
   font-family: var(--font-secundaria);
   font-size: 12px;
   opacity: .6;
   white-space: nowrap; 
   overflow: hidden;
   text-overflow: ellipsis; 
+}
+
+.columnLeft, .columnRight {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.columnRight {
+  justify-content: start;
+  align-items: center;
+}
+
+.headerActiveCount {
+  font-size: 12px;
+  opacity: .6;
+  color: var(--color-secundaria);
+}
+
+.headerCount {
+  font-size: 12px;
+  opacity: .6;
+}
+
+.countUnread {
+  color: var(--color-text-white);
+  font-size: 12px;
+  background-color: var(--color-secundaria);
+  width: 22px;
+  height: 22px;
+  border-radius: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* === Breakpoint 3: Tablets em Paisagem / Desktops Pequenos === */

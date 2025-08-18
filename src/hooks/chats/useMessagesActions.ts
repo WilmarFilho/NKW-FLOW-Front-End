@@ -12,7 +12,6 @@ export default function useMessagesActions() {
 
     const result = await post('/messages/', {
       ...payload,
-      remetente: 'cliente',
     });
 
     return result;

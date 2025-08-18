@@ -207,7 +207,7 @@ export default function ChatWindow({
             text={msg.mensagem}
             mimetype={msg.mimetype}
             base64={msg.base64}
-            sender={msg.remetente === 'cliente' ? 'me' : 'other'}
+            sender={msg.remetente === 'Usuário' ? 'me' : 'other'}
             quote={
               msg.quote_message
                 ? {

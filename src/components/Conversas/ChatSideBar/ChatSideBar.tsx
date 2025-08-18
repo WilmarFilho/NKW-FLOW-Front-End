@@ -76,6 +76,7 @@ function ChatSidebar({
   const [searchQuery, setSearchQuery] = useState('');
   const debouncedSearch = useDebounce(searchQuery, 300);
   const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
+
  
   const agents = useRecoilValue(agentsState)
 
@@ -144,6 +145,8 @@ function ChatSidebar({
         {filteredChats.map((chat) => (
           <ChatListItem
             key={chat.id}
+            unreadCount={chat.unread_count}  
+            mensagemData={chat.mensagem_data}
             chatId={chat.id}
             isActive={activeChat?.id === chat.id}
             name={chat.contato_nome}
@@ -169,3 +172,5 @@ function ChatSidebar({
 }
 
 export default React.memo(ChatSidebar);
+
+
