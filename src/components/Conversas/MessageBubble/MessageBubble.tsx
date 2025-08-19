@@ -1,3 +1,7 @@
+
+
+
+
 // MessageBubble.tsx
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -17,6 +21,7 @@ interface MessageBubbleProps {
   onReply?: () => void;
   createdAt: string;
   excluded: boolean;
+  onDelete?: (id: string) => void;
 }
 
 const renderMessageContent = ({ mimetype, base64, text }: MessageBubbleProps) => {
@@ -67,7 +72,7 @@ const renderMessageContent = ({ mimetype, base64, text }: MessageBubbleProps) =>
     );
   }
 
-   if (type === 'texto' && !text) {
+  if (type === 'texto' && !text) {
     return (
       <div className={styles.documentContainer}>
         Seu navegador não suporta esse tipo de mensagem.
@@ -238,7 +243,12 @@ export default function MessageBubble(props: MessageBubbleProps) {
               <Icon nome="copy" /> Copiar mensagem
             </button>
           )}
+
+          <button onClick={() => props.onDelete?.(id)}>
+            <Icon nome="trash" /> Apagar mensagem
+          </button>
         </DropdownMenu>
+
       )}
     </motion.div>
   );

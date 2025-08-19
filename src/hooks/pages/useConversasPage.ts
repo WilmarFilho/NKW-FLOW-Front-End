@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { useChats } from '../chats/useChats';
 import { useMessages } from '../../hooks/chats/useMessages';
-import useSendMessage from '../chats/useMessagesActions';
+import useMessagesActions from '../chats/useMessagesActions';
 import useChatActions from '../chats/useChatActions';
 import { chatsState, connectionsState, userState } from '../../state/atom';
 import type { Chat } from '../../types/chats';
@@ -37,7 +37,8 @@ export function useConversasPage() {
   }, [isExiting, setReplyingTo]);
 
   const { fectchImageProfile } = useChats();
-  const { sendMessage } = useSendMessage();
+  const { sendMessage, deleteMessage } = useMessagesActions();
+
   const { reOpenChat, deleteChat, renameChat, toggleIA } = useChatActions();
 
   const [activeChat, setActiveChat] = useState<Chat | null>(null);
@@ -199,7 +200,8 @@ export function useConversasPage() {
     replyingTo,
     setIsExiting,
     isExiting,
-    handleCloseReply
+    handleCloseReply,
+    handleDeleteMessage: deleteMessage
   };
 }
 

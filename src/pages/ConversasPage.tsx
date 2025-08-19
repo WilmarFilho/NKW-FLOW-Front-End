@@ -1,3 +1,5 @@
+
+
 import Modal from '../components/Gerais/Modal/Modal';
 import ChatSidebar from '../components/Conversas/ChatSideBar/ChatSideBar';
 import ChatWindow from '../components/Conversas/ChatWindow/ChatWindow';
@@ -20,6 +22,7 @@ export default function ConversasPage() {
       <DropdownMenuProvider>
         <ChatWindow
           activeChat={state.activeChat}
+          onDeleteMessage={state.handleDeleteMessage}
           messages={state.messages}
           onSendMessage={state.handleSendMessage}
           onToggleIA={state.handleToggleIA}
@@ -59,4 +62,6 @@ export default function ConversasPage() {
     </div>
   );
 }
+
+
 

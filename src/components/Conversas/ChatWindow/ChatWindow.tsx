@@ -1,3 +1,6 @@
+
+
+
 // ChatWindow.tsx
 import { useState, useRef, useEffect, useMemo } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -29,6 +32,7 @@ interface ChatWindowProps {
   isExiting: boolean;
   setIsExiting: React.Dispatch<React.SetStateAction<boolean>>;
   handleCloseReply: () => void;
+  onDeleteMessage: (id: string) => void;
 }
 
 export default function ChatWindow({
@@ -43,6 +47,7 @@ export default function ChatWindow({
   onSetReplyingTo,
   replyingTo,
   isExiting,
+  onDeleteMessage,
   handleCloseReply,
 }: ChatWindowProps) {
   const [isDetailsOpen, setDetailsOpen] = useState(false);
@@ -59,9 +64,9 @@ export default function ChatWindow({
     }
   }, [replyingTo]);
 
-   useEffect(() => {
-    onSetReplyingTo(undefined); 
-  }, [activeChat]); 
+  useEffect(() => {
+    onSetReplyingTo(undefined);
+  }, [activeChat]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -162,6 +167,7 @@ export default function ChatWindow({
             : undefined
         }
         onReply={() => onSetReplyingTo(msg)}
+        onDelete={onDeleteMessage}
       />
     );
   });
@@ -240,7 +246,7 @@ export default function ChatWindow({
             {replyingTo && (
               <div className={`${styles.replyPreview} ${isExiting ? styles.isExiting : ''}`}>
                 <div>
-                  <span>{replyingTo.remetente === 'cliente' ? 'Você' : 'Contato'}</span>
+                  <span>{replyingTo.remetente === 'Usuário' ? 'Você' : 'Contato'}</span>
                   <p>{replyingTo.mensagem || (replyingTo.mimetype?.startsWith('image/') ? '📷 Imagem' : 'Mensagem')}</p>
                   <button onClick={handleCloseReply}>✖</button>
                 </div>

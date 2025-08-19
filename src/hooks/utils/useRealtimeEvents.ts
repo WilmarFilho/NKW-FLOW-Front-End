@@ -107,6 +107,8 @@ export const useRealtimeEvents = (userId: string | undefined) => {
 
           console.log(`🗑️ Recebido evento para excluir mensagem: ${deletedMessage}`);
 
+          console.log(deletedMessage)
+
           setMessages((prevMessages) =>
             prevMessages.map((m) =>
               m.id === deletedMessage.id
@@ -132,3 +134,5 @@ export const useRealtimeEvents = (userId: string | undefined) => {
     };
   }, [userId]);
 };
+
+
