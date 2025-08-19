@@ -70,9 +70,15 @@ export const useRealtimeEvents = (userId: string | undefined) => {
                 }
 
                 if (message.remetente === 'Contato') {
-                  const unreadCount = updatedChats.filter((c) => c.unread_count > 0).length;
-                  console.log(unreadCount)
-                  document.title = unreadCount > 0 ? `(${unreadCount}) WhatsApp - NKW FLOW` : 'WhatsApp - NKW FLOW';
+                  const unreadCount = updatedChats.filter(c => c.unread_count > 0).length;
+                  document.title = unreadCount > 0
+                    ? `(${unreadCount}) WhatsApp - NKW FLOW`
+                    : 'WhatsApp - NKW FLOW';
+                }
+
+                if (message.remetente === 'Contato' && chat.ia_ativa === false) {
+                  const audio = new Audio('/sounds/ding.mp3');
+                  audio.play().catch(err => console.warn('Erro ao tocar notificação', err));
                 }
 
                 const sorted = [...updatedChats].sort((a, b) => {
