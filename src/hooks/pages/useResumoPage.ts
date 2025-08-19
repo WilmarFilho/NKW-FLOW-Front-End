@@ -5,10 +5,18 @@ import { useApi } from '../utils/useApi';
 // Components
 import { ViewType, DropdownId } from '../../components/Resumo/DropdownPeriod/DropdownPeriod';
 
-// Tipos para os dados
-interface ChatsMetric {
+// Tipos
+interface ChatsMetricLabel {
   name: string;
   chats: number;
+}
+
+interface ChatsMetricResponse {
+  labels: ChatsMetricLabel[];
+  total: number;
+  previous_total: number;
+  diff: number;
+  percent: number;
 }
 
 interface ConnectionsMetric {
@@ -23,55 +31,51 @@ export function useResumoPage() {
   const [viewChatsFechados, setViewChatsFechados] = useState<ViewType>('weekly');
   const [openDropdown, setOpenDropdown] = useState<DropdownId>(null);
 
-  const [dataNovos, setDataNovos] = useState<ChatsMetric[]>([]);
-  const [dataFechados, setDataFechados] = useState<ChatsMetric[]>([]);
+  const [dataNovos, setDataNovos] = useState<ChatsMetricResponse | null>(null);
+  const [dataFechados, setDataFechados] = useState<ChatsMetricResponse | null>(null);
   const [dataConexoes, setDataConexoes] = useState<ConnectionsMetric[]>([]);
-  const [dataAtendentes, setDataAtendentes] = useState<ChatsMetric[]>([]);
+  const [dataAtendentes, setDataAtendentes] = useState<ChatsMetricLabel[]>([]);
+
 
   // 📊 Buscar chats novos
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // CORREÇÃO 1: A tipagem de 'res' foi ajustada para o dado real, não para AxiosResponse
-        const res: ChatsMetric[] | null = await api.get(
+        const res: ChatsMetricResponse | null = await api.get(
           `/metrics/chats/novos?period=${viewChatsNovos}`
         );
-       
-        // CORREÇÃO 2: Usamos 'res || []' para garantir que o estado seja sempre um array
-        setDataNovos(res || []);
+        setDataNovos(res || null);
       } catch (err) {
         console.error('Erro ao carregar chats novos:', err);
-        setDataNovos([]);
+        setDataNovos(null);
       }
     };
     fetchData();
   }, [viewChatsNovos]);
 
+
   // 📊 Buscar chats fechados
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res: ChatsMetric[] | null = await api.get(
+        const res: ChatsMetricResponse | null = await api.get(
           `/metrics/chats/fechados?period=${viewChatsFechados}`
         );
-        // CORREÇÃO 3: Chamando o setter correto -> setDataFechados
-        setDataFechados(res || []);
+        setDataFechados(res || null);
       } catch (err) {
         console.error('Erro ao carregar chats fechados:', err);
-        setDataFechados([]);
+        setDataFechados(null);
       }
     };
     fetchData();
   }, [viewChatsFechados]);
 
+
   // 📊 Buscar chats por atendente
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res: ChatsMetric[] | null = await api.get(
-          '/metrics/chats/atendentes'
-        );
-        // CORREÇÃO 3: Chamando o setter correto -> setDataAtendentes
+        const res: ChatsMetricLabel[] | null = await api.get('/metrics/chats/atendentes');
         setDataAtendentes(res || []);
       } catch (err) {
         console.error('Erro ao carregar atendentes:', err);
@@ -118,3 +122,5 @@ export function useResumoPage() {
     widthConexoes,
   };
 }
+
+

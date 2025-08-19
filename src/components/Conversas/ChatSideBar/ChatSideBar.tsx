@@ -191,14 +191,14 @@ function ChatSidebar({
           className={styles.buttonAlterActiveChats}
           onClick={toggleStatusFilter}
         >
-          {statusFilter === 'Open' ? 'Chats Fechados' : 'Chats Abertos'}
+          {statusFilter === 'Open' ? 'Exibindo:  Chats Abertos' : 'Exibindo:  Chats Fechados'}
         </button>
 
         <button
           className={styles.buttonAlterActiveChats}
           onClick={toggleOwnerFilter}
         >
-          {ownerFilter === 'all' ? 'Meus Chats' : 'Todos Chats'}
+          {ownerFilter === 'all' ? 'Exibindo:  Todos Chats' : 'Exibindo:  Meus Chats'}
         </button>
       </div>
     </motion.aside>

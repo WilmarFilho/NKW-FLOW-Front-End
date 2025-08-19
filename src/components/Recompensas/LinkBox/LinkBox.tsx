@@ -1,5 +1,4 @@
 import Styles from './LinkBox.module.css';
-import Icon from '../../../components/Gerais/Icons/Icons';
 
 interface LinkBoxProps {
   link: string;

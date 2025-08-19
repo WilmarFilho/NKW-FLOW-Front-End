@@ -12,7 +12,7 @@ import { useResumoPage } from '../hooks/pages/useResumoPage';
 
 export default function ResumoPage() {
   const navigate = useNavigate();
-  
+
   const {
     viewChatsNovos,
     setViewChatsNovos,
@@ -52,9 +52,9 @@ export default function ResumoPage() {
         <MetricCard
           title="Chats Novos"
           icon={<Icon nome='chaton' />}
-          value="+ 230"
-          variation="12% "
-          variationText="+231 comparado ao período anterior"
+          value={`+ ${dataNovos?.total ?? 0}`}
+          variation={`${dataNovos?.percent.toFixed(1) ?? 0}%`}
+          variationText={`${(dataNovos?.diff ?? 0) >= 0 ? '+' : ''}${dataNovos?.diff ?? 0} comparado ao período anterior`}
           dropdown={
             <DropdownPeriod
               value={viewChatsNovos}
@@ -65,15 +65,16 @@ export default function ResumoPage() {
             />
           }
         >
-          <BarMetricChart data={dataNovos} dataKey="chats" />
+          <BarMetricChart data={dataNovos?.labels || []} dataKey="chats" />
         </MetricCard>
+
 
         <MetricCard
           title="Chats Fechados"
           icon={<Icon nome='chatoff' />}
-          value="+ 180"
-          variation="-5% "
-          variationText="-10 comparado ao período anterior"
+          value={`+ ${dataFechados?.total ?? 0}`}
+          variation={`${dataFechados?.percent.toFixed(1) ?? 0}%`}
+          variationText={`${(dataFechados?.diff ?? 0) >= 0 ? '+' : ''}${dataFechados?.diff ?? 0} comparado ao período anterior`}
           dropdown={
             <DropdownPeriod
               value={viewChatsFechados}
@@ -84,8 +85,9 @@ export default function ResumoPage() {
             />
           }
         >
-          <BarMetricChart data={dataFechados} dataKey="chats" />
+          <BarMetricChart data={dataFechados?.labels || []} dataKey="chats" />
         </MetricCard>
+
       </motion.div>
 
       <motion.div className={GlobalStyles.pageRow}>
@@ -118,13 +120,13 @@ export default function ResumoPage() {
         <MetricCard
           title="Convidados na Semana"
           icon={<Icon nome='money' />}
-          value="+ 6"
+          value="+0"
           small
         >
           <GaugeMetricChart
-            filled={40}
-            empty={60}
-            valueText="+ 40"
+            filled={0}
+            empty={100}
+            valueText="+ 0"
             labelText="Para ganhar recompensas"
           />
         </MetricCard>
@@ -132,4 +134,8 @@ export default function ResumoPage() {
     </div>
   );
 }
+
+
+
+
 
