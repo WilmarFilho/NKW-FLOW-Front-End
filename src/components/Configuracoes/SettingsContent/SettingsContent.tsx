@@ -138,7 +138,7 @@ export default function SettingsContent({ tabIndex }: Props) {
                 </div>
                 <div className={styles.userInfoMain}>
                   <h1>Cargo</h1>
-                  <h2>Administrador</h2>
+                  <h2>{user.tipo_de_usuario}</h2>
                 </div>
               </div>
 
@@ -154,15 +154,15 @@ export default function SettingsContent({ tabIndex }: Props) {
                   <div className={styles.headerAccountWrapper}>
                     <div className={styles.userInfo}>
                       <h1>Cidade</h1>
-                      <h2>Goiânia</h2>
+                      <h2>{user.cidade}</h2>
                     </div>
                     <div className={styles.userInfo}>
                       <h1>Endereço</h1>
-                      <h2>Rua 9 Qd 9 Lt 2</h2>
+                      <h2>{user.endereco}</h2>
                     </div>
                     <div className={styles.userInfo}>
                       <h1>Número</h1>
-                      <h2>(64) 99243-4104</h2>
+                      <h2>{user.numero}</h2>
                     </div>
 
                   </div>

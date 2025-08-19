@@ -28,6 +28,7 @@ export const useChats = () => {
     const data = await get<Chat[]>(`/chats/connections/chats/${currentUser.id}`);
 
     if (data) {
+      
       setChats(data);
     }
     

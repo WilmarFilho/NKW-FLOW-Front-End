@@ -29,28 +29,31 @@ export const useUser = () => {
 
   // Auth
   const [token] = useRecoilState(authTokenState);
-  const userId = localStorage.getItem('userId');
+  const userId = token?.userId;
 
   const fetchUser = useCallback(async (opts?: { force?: boolean }) => {
 
+  
     if (!token || !userId) return null;
 
+    
+
+    // evita re-fetch sem necessidade
     if (!opts?.force && user) return user;
 
     const fetchedUser = await get<User>(`/users/${userId}`);
 
     if (fetchedUser) {
-
       setUser(fetchedUser);
-      
+
       fetchAttendants(fetchedUser);
       fetchAgents();
       fetchConnections(fetchedUser);
       fetchChats(fetchedUser);
-      
     }
+  }, [token, userId, setUser, get, fetchAttendants, fetchAgents, fetchConnections, fetchChats]);
 
-  }, [token, userId, user, setUser, get]);
 
   return { fetchUser };
 }
+

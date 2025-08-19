@@ -2,7 +2,8 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
 import Layout from './components/Layout/Layout';
 import LoadingScreen from './components/Layout/LoadingScreen';
-import { ProtectedRoute, PublicRoute } from './routes/ProtectedRoute';
+import { ProtectedRouteByRole, PublicRoute } from './routes/ProtectedRoute';
+import { AuthInitializer } from './components/Login/AuthInitializer';
 
 const ConversasPage = lazy(() => import('./pages/ConversasPage'));
 const AtendentesPage = lazy(() => import('./pages/AtendentesPage'));
@@ -15,44 +16,112 @@ const ResumoPage = lazy(() => import('./pages/ResumoPage'));
 const RecompensasPage = lazy(() => import('./pages/RecompensasPage'));
 
 function App() {
- 
+
   return (
     <BrowserRouter future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
-    
-      <Routes>
-        <Route
-          path="/login"
-          element={
-            <PublicRoute>
-              <Suspense fallback={<LoadingScreen />}>
-                <LoginPage />
-              </Suspense>
-            </PublicRoute>
-          }
-        />
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <Layout />
-            </ProtectedRoute>
-          }
-        >
-          <Route index element={<Navigate to="/conexoes" replace />} />
-          <Route path="dashboard" element={<Suspense fallback={<LoadingScreen />}><ResumoPage /></Suspense>} />
-          <Route path="conversas" element={<Suspense fallback={<LoadingScreen />}><ConversasPage /></Suspense>} />
-          <Route path="atendentes" element={<Suspense fallback={<LoadingScreen />}><AtendentesPage /></Suspense>} />
-          <Route path="agentes" element={<Suspense fallback={<LoadingScreen />}><AgentesPage /></Suspense>} />
-          <Route path="conexoes" element={<Suspense fallback={<LoadingScreen />}><ConexoesPage /></Suspense>} />
-          <Route path="configuracoes" element={<Suspense fallback={<LoadingScreen />}><ConfiguracoesPage /></Suspense>} />
-          <Route path="cashback" element={<Suspense fallback={<LoadingScreen />}><RecompensasPage /></Suspense>} />
-          <Route path="ajuda" element={<Suspense fallback={<LoadingScreen />}><AjudaPage /></Suspense>} />
-        </Route>
-        <Route path="*" element={<Navigate to="/login" replace />} />
-      </Routes>
+      <AuthInitializer> {/* <--- Envolva suas rotas aqui */}
+
+        <Routes>
+
+          <Route
+            path="/login"
+            element={
+              <PublicRoute>
+                <Suspense fallback={<LoadingScreen />}>
+                  <LoginPage />
+                </Suspense>
+              </PublicRoute>
+            }
+          />
+
+          <Route
+            path="/"
+            element={
+              <ProtectedRouteByRole allowedRoles={['admin', 'atendente']}>
+                <Layout />
+              </ProtectedRouteByRole>
+            }
+          >
+            {/* ATENDENTES */}
+            <Route
+              path="conversas"
+              element={
+                <ProtectedRouteByRole allowedRoles={['atendente', 'admin']}>
+                  <Suspense fallback={<LoadingScreen />}><ConversasPage /></Suspense>
+                </ProtectedRouteByRole>
+              }
+            />
+            <Route
+              path="configuracoes"
+              element={
+                <ProtectedRouteByRole allowedRoles={['atendente', 'admin']}>
+                  <Suspense fallback={<LoadingScreen />}><ConfiguracoesPage /></Suspense>
+                </ProtectedRouteByRole>
+              }
+            />
+            <Route
+              path="ajuda"
+              element={
+                <ProtectedRouteByRole allowedRoles={['atendente', 'admin']}>
+                  <Suspense fallback={<LoadingScreen />}><AjudaPage /></Suspense>
+                </ProtectedRouteByRole>
+              }
+            />
+
+            {/* ADMINS */}
+            <Route
+              path="dashboard"
+              element={
+                <ProtectedRouteByRole allowedRoles={['admin']}>
+                  <Suspense fallback={<LoadingScreen />}><ResumoPage /></Suspense>
+                </ProtectedRouteByRole>
+              }
+            />
+            <Route
+              path="atendentes"
+              element={
+                <ProtectedRouteByRole allowedRoles={['admin']}>
+                  <Suspense fallback={<LoadingScreen />}><AtendentesPage /></Suspense>
+                </ProtectedRouteByRole>
+              }
+            />
+            <Route
+              path="agentes"
+              element={
+                <ProtectedRouteByRole allowedRoles={['admin']}>
+                  <Suspense fallback={<LoadingScreen />}><AgentesPage /></Suspense>
+                </ProtectedRouteByRole>
+              }
+            />
+            <Route
+              path="conexoes"
+              element={
+                <ProtectedRouteByRole allowedRoles={['admin']}>
+                  <Suspense fallback={<LoadingScreen />}><ConexoesPage /></Suspense>
+                </ProtectedRouteByRole>
+              }
+            />
+            <Route
+              path="cashback"
+              element={
+                <ProtectedRouteByRole allowedRoles={['admin']}>
+                  <Suspense fallback={<LoadingScreen />}><RecompensasPage /></Suspense>
+                </ProtectedRouteByRole>
+              }
+            />
+          </Route>
+
+          <Route path="*" element={<Navigate to="/login" replace />} />
+
+        </Routes>
+
+      </AuthInitializer>
 
     </BrowserRouter>
   );
 }
 
 export default App;
+
+
+

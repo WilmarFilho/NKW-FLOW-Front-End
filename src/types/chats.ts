@@ -20,4 +20,5 @@ export interface Chat {
   };
   unread_count: number;
   ia_desligada_em?: string | null;
+  user_nome?: string | null;
 }

@@ -6,6 +6,8 @@ import { userState } from '../../../state/atom';
 // Components
 import Sidebar from './Sidebar';
 import SidebarClosed from './SidebarClosed';
+import './sidebarclosed.css'
+import './sidebar.css'
 
 const SidebarWrapper = () => {
     const user = useRecoilValue(userState);
@@ -42,3 +44,5 @@ const SidebarWrapper = () => {
 };
 
 export default SidebarWrapper;
+
+

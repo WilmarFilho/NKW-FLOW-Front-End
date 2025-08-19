@@ -102,3 +102,5 @@ export default function Icon({ nome, ...props }: IconProps) {
 
   return <IconToRender {...props} />;
 }
+
+export type { IconProps };

@@ -1,91 +1,63 @@
-//Libbs
 import { NavLink } from 'react-router-dom';
-//Css
-import './sidebar.css';
-//Icons
 import Icon from '../../../components/Gerais/Icons/Icons';
-//Atom
-import { useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { userState } from '../../../state/atom';
+import { menuItems } from '../../../hooks/utils/useMenuItens';
 
 const Sidebar = () => {
-
-  const [user] = useRecoilState(userState)
-
-  const MenuItem = ({
-    to,
-    children,
-  }: {
-    to: string;
-    children: React.ReactNode;
-  }) => (
-
-    <NavLink
-      to={to}
-      className={({ isActive }) =>
-        `MenuItem ${isActive ? 'active-link' : ''}`
-      }
-    >
+  const user = useRecoilValue(userState);
+  if(!user) return
+ 
+  const MenuItem = ({ to, children }: { to: string; children: React.ReactNode }) => (
+    <NavLink to={to} className={({ isActive }) => `MenuItem ${isActive ? 'active-link' : ''}`}>
       {children}
     </NavLink>
+  );
 
+  const principalItems = menuItems.filter(
+    (item) => item.section === 'principal' && item.roles.includes(user?.tipo_de_usuario)
+  );
+
+  const suporteItems = menuItems.filter(
+    (item) => item.section === 'suporte' && item.roles.includes(user?.tipo_de_usuario)
   );
 
   return (
     <>
-      <div className="box-logo">
+      <div className='box-logo'>
         <Icon nome='logo' />
       </div>
 
-      <nav className="principal-menu">
+      <nav className='principal-menu'>
         <h4>Menu Principal</h4>
-        <MenuItem to="/dashboard">
-          <Icon nome='resumopage' /> Resumo
-        </MenuItem>
-        <MenuItem to="/conversas">
-          <Icon nome='conversaspage' /> Conversas
-        </MenuItem>
-        <MenuItem to="/atendentes">
-          <Icon nome='atendentespage' /> Atendentes
-        </MenuItem>
-        <MenuItem to="/agentes">
-          <Icon nome='agentespage' /> Agentes
-        </MenuItem>
-        <MenuItem to="/conexoes">
-          <Icon nome='conexaopage' /> Conexões
-        </MenuItem>
+        {principalItems.map((item) => (
+          <MenuItem key={item.key} to={item.to}>
+            <Icon nome={item.icon} /> {item.label}
+          </MenuItem>
+        ))}
       </nav>
 
-      <nav className="suporte-menu">
+      <nav className='suporte-menu'>
         <h4>Suporte</h4>
-        <MenuItem to="/configuracoes">
-          {' '}
-          <Icon nome='configpage' /> Configuracoes
-        </MenuItem>
-        <MenuItem to="/cashback">
-          {' '}
-          <Icon nome='recompensapage' /> Recompensas
-        </MenuItem>
-        <MenuItem to="/ajuda">
-          {' '}
-          <Icon nome='ajudapage' /> Ajuda
-        </MenuItem>
+        {suporteItems.map((item) => (
+          <MenuItem key={item.key} to={item.to}>
+            <Icon nome={item.icon} /> {item.label}
+          </MenuItem>
+        ))}
       </nav>
 
-      <div className="user-menu">
-        <div className="column-info">
+      <div className='user-menu'>
+        <div className='column-info'>
           <NavLink to='/configuracoes'>
-            <div className="MenuImage">
-              <img src={user?.foto_perfil} alt={user?.nome} className="user-avatar" />
+            <div className='MenuImage'>
+              <img src={user?.foto_perfil} alt={user?.nome} className='user-avatar' />
             </div>
           </NavLink>
-
-          <div className="user-info">
-            <p className="user-name">{user?.nome}</p>
-            <p className="user-email">{user?.email}</p>
+          <div className='user-info'>
+            <p className='user-name'>{user?.nome}</p>
+            <p className='user-email'>{user?.email}</p>
           </div>
         </div>
-
       </div>
     </>
   );

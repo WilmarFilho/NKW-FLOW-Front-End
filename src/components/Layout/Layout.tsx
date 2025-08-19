@@ -1,30 +1,17 @@
 import { Outlet } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { ToastContainer } from 'react-toastify';
-import { useEffect } from 'react';
-
 // Components
 import SidebarWrapper from './Sidebars/SidebarWrapper';
-
 // Hooks
 import { useRealtimeEvents } from '../../hooks/utils/useRealtimeEvents';
-import { useUser } from '../../hooks/auth/useUser';
-
 // State
 import { userState } from '../../state/atom';
-
 // Estilos
 import styles from './Layout.module.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function Layout() {
-
-  const { fetchUser } = useUser();
-
-  useEffect(() => {
-    fetchUser();
-
-  }, [fetchUser]);
 
   const user = useRecoilValue(userState);
 

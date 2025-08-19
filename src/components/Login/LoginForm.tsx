@@ -1,6 +1,5 @@
 // Libs
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 // Hooks
 import { useAuth } from '../../hooks/auth/useAuth';
 // Css
@@ -8,23 +7,20 @@ import styles from './LoginForm.module.css';
 // Icon
 import Icon from '../Gerais/Icons/Icons';
 
-interface LoginFormProps {
-    onSuccess?: () => void; 
-}
+export default function LoginForm() {
 
-export default function LoginForm({ onSuccess }: LoginFormProps) {
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
-    const navigate = useNavigate();
+
     const { login } = useAuth();
 
     const handleLogin = async () => {
         try {
             await login(email, senha);
-            if (onSuccess) navigate('/conexoes');
         } catch (err) {
             alert('Falha ao fazer login: ' + err);
         }
+        
     };
 
     return (
@@ -35,16 +31,16 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
             </div>
 
             <input
-                type="email"
+                type='email'
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="E-mail"
+                placeholder='E-mail'
             />
             <input
-                type="password"
+                type='password'
                 value={senha}
                 onChange={(e) => setSenha(e.target.value)}
-                placeholder="Senha"
+                placeholder='Senha'
             />
             <button onClick={handleLogin}>Entrar</button>
         </div>

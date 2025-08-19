@@ -17,6 +17,8 @@ import defaultAvatar from '../assets/default.webp';
 import styles from './ChatWindow.module.css';
 import FormStyles from '../../Gerais/Form/form.module.css';
 import { DropdownMenu } from '../../../components/Gerais/Dropdown/DropdownMenu';
+import { useRecoilValue } from 'recoil';
+import { userState } from '../../../state/atom';
 
 interface ChatWindowProps {
   activeChat: Chat | null;
@@ -56,6 +58,10 @@ export default function ChatWindow({
   const [showError, setShowError] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const user = useRecoilValue(userState);
+
+  const isOwner = !activeChat?.user_id || activeChat?.user_id === user?.id;
 
   useEffect(() => {
     if (replyingTo && inputRef.current) {
@@ -195,19 +201,24 @@ export default function ChatWindow({
           id="chat-header"
           trigger={<button className={styles.optionsButton}><Icon nome="dots" /></button>}
         >
-          <button onClick={() => { setNewName(activeChat.contato_nome || ''); setRenameOpen(true); }}>
-            <Icon nome="pencil" /> Renomear Chat
-          </button>
-          <button onClick={onDeleteChat}>
-            <Icon nome="trash" /> Apagar Chat
-          </button>
+          {isOwner && (
+            <>
+              <button onClick={() => { setNewName(activeChat.contato_nome || ''); setRenameOpen(true); }}>
+                <Icon nome="pencil" /> Renomear Chat
+              </button>
+              <button onClick={onDeleteChat}>
+                <Icon nome="trash" /> Apagar Chat
+              </button>
+              <button onClick={onToggleChatStatus}>
+                <Icon nome="close" /> {activeChat.status === 'Open' ? 'Fechar Chat' : 'Reabrir Chat'}
+              </button>
+            </>
+          )}
           <button onClick={() => setDetailsOpen(true)}>
             <Icon nome="info" /> Detalhes do Chat
           </button>
-          <button onClick={onToggleChatStatus}>
-            <Icon nome="close" /> {activeChat.status === 'Open' ? 'Fechar Chat' : 'Reabrir Chat'}
-          </button>
         </DropdownMenu>
+
       </header>
 
       {/* Modals */}
@@ -241,39 +252,46 @@ export default function ChatWindow({
 
       {/* Input */}
       <div className={styles.inputAreaWrapper}>
-        {activeChat.status === 'Open' ? (
-          <>
-            {replyingTo && (
-              <div className={`${styles.replyPreview} ${isExiting ? styles.isExiting : ''}`}>
-                <div>
-                  <span>{replyingTo.remetente === 'Usuário' ? 'Você' : 'Contato'}</span>
-                  <p>{replyingTo.mensagem || (replyingTo.mimetype?.startsWith('image/') ? '📷 Imagem' : 'Mensagem')}</p>
-                  <button onClick={handleCloseReply}>✖</button>
+        {isOwner ? (
+          activeChat.status === 'Open' ? (
+            <>
+              {replyingTo && (
+                <div className={`${styles.replyPreview} ${isExiting ? styles.isExiting : ''}`}>
+                  <div>
+                    <span>{replyingTo.remetente === 'Usuário' ? 'Você' : 'Contato'}</span>
+                    <p>{replyingTo.mensagem || (replyingTo.mimetype?.startsWith('image/') ? '📷 Imagem' : 'Mensagem')}</p>
+                    <button onClick={handleCloseReply}>✖</button>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            <div className={styles.inputArea}>
-              <div className={styles.toggleIaButton}>
-                <div className={styles.headerToggleIa}>
-                  <Icon nome="agentespage" /> {activeChat.ia_ativa ? 'Ativado' : 'Desativado'}
+              <div className={styles.inputArea}>
+                <div className={styles.toggleIaButton}>
+                  <div className={styles.headerToggleIa}>
+                    <Icon nome="agentespage" /> {activeChat.ia_ativa ? 'Ativado' : 'Desativado'}
+                  </div>
+                  <ToggleSwitch variant="secondary" isOn={activeChat.ia_ativa} onToggle={onToggleIA} />
                 </div>
-                <ToggleSwitch variant="secondary" isOn={activeChat.ia_ativa} onToggle={onToggleIA} />
-              </div>
 
-              <ChatInput
-                ref={inputRef}
-                placeholder="Digite uma mensagem"
-                onSend={(text, mimetype, base64) => onSendMessage(text, mimetype, base64)}
-              />
+                <ChatInput
+                  ref={inputRef}
+                  placeholder="Digite uma mensagem"
+                  onSend={(text, mimetype, base64) => onSendMessage(text, mimetype, base64)}
+                />
+              </div>
+            </>
+          ) : (
+            <div className={styles.chatClosedBanner}>
+              <button className={styles.buttonReOpen} onClick={onToggleChatStatus}>Reabrir Chat</button>
             </div>
-          </>
+          )
         ) : (
           <div className={styles.chatClosedBanner}>
-            <button className={styles.buttonReOpen} onClick={onToggleChatStatus}>Reabrir Chat</button>
+            <button className={styles.buttonReOpen} onClick={onToggleChatStatus}>Chat em andamento por: {activeChat.user_nome}</button>
           </div>
         )}
       </div>
+
     </motion.section>
   );
 }

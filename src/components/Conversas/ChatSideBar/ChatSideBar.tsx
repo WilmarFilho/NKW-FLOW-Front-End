@@ -91,8 +91,6 @@ function ChatSidebar({
   const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
   const user = useRecoilValue(userState) 
 
-  console.log(user?.id)
-
   const agents = useRecoilValue(agentsState);
 
   const currentUserId = user?.id ? user.id : null; 
