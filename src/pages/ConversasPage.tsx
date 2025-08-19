@@ -18,6 +18,7 @@ export default function ConversasPage() {
         setActiveChat={state.setActiveChat}
         setIsAddChatOpen={state.openNewChatModal}
         fectchImageProfile={state.fectchImageProfile}
+        connections={state.connections}
       />
       <DropdownMenuProvider>
         <ChatWindow

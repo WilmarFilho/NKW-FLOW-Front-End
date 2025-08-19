@@ -27,7 +27,7 @@ export const useMessages = (chatId: string | null) => {
 
       // 2. Verifica o unread_count antes de marcar como lido
       const chat = chats.find((c) => c.id === chatId);
-      
+
       if (chat && chat.unread_count > 0) {
         await post(`/chats_reads/${chatId}`);
 
@@ -37,6 +37,15 @@ export const useMessages = (chatId: string | null) => {
             c.id === chatId ? { ...c, unread_count: 0 } : c
           )
         );
+
+        // 4. Atualizar o título da aba
+        const updatedChats = chats.map((c) =>
+          c.id === chatId ? { ...c, unread_count: 0 } : c
+        );
+        const unreadCount = updatedChats.filter(c => c.unread_count > 0).length;
+        document.title = unreadCount > 0
+          ? `(${unreadCount}) WhatsApp - NKW FLOW`
+          : 'WhatsApp - NKW FLOW';
       }
     };
 

@@ -30,6 +30,7 @@ export const useChats = () => {
     if (data) {
       
       setChats(data);
+      return data; 
     }
     
   }, [get, setChats]);

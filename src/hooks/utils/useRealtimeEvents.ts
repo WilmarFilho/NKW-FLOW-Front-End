@@ -57,7 +57,6 @@ export const useRealtimeEvents = (userId: string | undefined) => {
           fetch(`${apiConfig.node}/chats/${chatId}`)
             .then((res) => res.json())
             .then((chat) => {
-
               setChats((prevChats) => {
                 const exists = prevChats.find((c) => c.id === chatId);
                 let updatedChats;
@@ -68,6 +67,12 @@ export const useRealtimeEvents = (userId: string | undefined) => {
                   );
                 } else {
                   updatedChats = [...prevChats, chat];
+                }
+
+                if (message.remetente === 'Contato') {
+                  const unreadCount = updatedChats.filter((c) => c.unread_count > 0).length;
+                  console.log(unreadCount)
+                  document.title = unreadCount > 0 ? `(${unreadCount}) WhatsApp - NKW FLOW` : 'WhatsApp - NKW FLOW';
                 }
 
                 const sorted = [...updatedChats].sort((a, b) => {
@@ -94,13 +99,17 @@ export const useRealtimeEvents = (userId: string | undefined) => {
         if (tipo === 'chats.upsert' && payload.chat) {
           const chatId = payload.chat.id;
 
-          console.log(payload)
-
-          setChats((prevChats) =>
-            prevChats.map((c) =>
+          setChats((prevChats) => {
+            const updatedChats = prevChats.map((c) =>
               c.id === chatId ? { ...c, unread_count: 0 } : c
-            )
-          );
+            );
+
+            // Atualiza o título da aba
+            const unreadCount = updatedChats.filter((c) => c.unread_count > 0).length;
+            document.title = unreadCount > 0 ? `(${unreadCount}) WhatsApp - NKW FLOW` : 'WhatsApp - NKW FLOW';
+
+            return updatedChats;
+          });
         }
 
         if (tipo === 'messages.delete' && deletedMessage) {
@@ -112,12 +121,11 @@ export const useRealtimeEvents = (userId: string | undefined) => {
           setMessages((prevMessages) =>
             prevMessages.map((m) =>
               m.id === deletedMessage.id
-                ? { ...m, excluded: true } 
+                ? { ...m, excluded: true }
                 : m
             )
           );
         }
-
 
       } catch (err) {
         console.error('[SSE] Erro ao processar evento:', err);

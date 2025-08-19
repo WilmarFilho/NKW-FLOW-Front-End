@@ -13,13 +13,14 @@ import { Chat } from '../../../types/chats';
 // CSS Modules
 import styles from './ChatSideBar.module.css';
 // Atom
-import { agentsState, userState } from '../../../state/atom';
+import { userState } from '../../../state/atom';
 // Icons
 import Icon from '../../../components/Gerais/Icons/Icons';
 
 
 interface ChatSidebarProps {
   chats: Chat[];
+  connections: { id: string; nome?: string }[];
   activeChat: Chat | null;
   setActiveChat: (chat: Chat) => void;
   setIsAddChatOpen: (value: boolean) => void;
@@ -35,7 +36,7 @@ const containerVariants = {
 function filterChats(
   chats: Chat[],
   query: string,
-  selectedAgentId: string | null,
+  selectedConnectionId: string | null,
   iaStatusFilter: 'todos' | 'ativa' | 'desativada',
   statusFilter: 'Open' | 'Close',
   ownerFilter: 'all' | 'mine',
@@ -48,8 +49,8 @@ function filterChats(
       chat.contato_nome?.toLowerCase().includes(lowerQuery) ||
       chat.contato_numero?.includes(lowerQuery);
 
-    const matchesAgent = selectedAgentId
-      ? chat.connection?.agente_id === selectedAgentId
+    const matchesConnection = selectedConnectionId
+      ? chat.connection.id === selectedConnectionId
       : true;
 
     const matchesIAStatus =
@@ -68,7 +69,7 @@ function filterChats(
 
     return (
       matchesSearch &&
-      matchesAgent &&
+      matchesConnection &&
       matchesIAStatus &&
       matchesStatus &&
       matchesOwner
@@ -82,16 +83,15 @@ function ChatSidebar({
   setActiveChat,
   setIsAddChatOpen,
   fectchImageProfile,
+  connections,
 }: ChatSidebarProps) {
   const [iaStatusFilter, setIaStatusFilter] = useState<'todos' | 'ativa' | 'desativada'>('todos');
   const [statusFilter, setStatusFilter] = useState<'Open' | 'Close'>('Open');
   const [ownerFilter, setOwnerFilter] = useState<'all' | 'mine'>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const debouncedSearch = useDebounce(searchQuery, 300);
-  const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
+  const [selectedConnectionId, setSelectedConnectionId] = useState<string | null>(null);
   const user = useRecoilValue(userState)
-
-  const agents = useRecoilValue(agentsState);
 
   const currentUserId = user?.id ? user.id : null;
 
@@ -105,13 +105,13 @@ function ChatSidebar({
     return filterChats(
       chats,
       debouncedSearch,
-      selectedAgentId,
+      selectedConnectionId,
       effectiveIaFilter,
       statusFilter,
       ownerFilter,
       currentUserId
     );
-  }, [chats, debouncedSearch, selectedAgentId, iaStatusFilter, statusFilter, ownerFilter, currentUserId]);
+  }, [chats, debouncedSearch, selectedConnectionId, iaStatusFilter, statusFilter, ownerFilter, currentUserId]);
 
   const toggleStatusFilter = useCallback(() => {
     setStatusFilter((prev) => (prev === 'Open' ? 'Close' : 'Open'));
@@ -121,8 +121,8 @@ function ChatSidebar({
     setOwnerFilter((prev) => (prev === 'all' ? 'mine' : 'all'));
   }, []);
 
-  const handleAgentSelect = useCallback((agentId: string | null) => {
-    setSelectedAgentId(agentId);
+  const handleConnectionSelect = useCallback((connectionId: string | null) => {
+    setSelectedConnectionId(connectionId);
   }, []);
 
   return (
@@ -170,15 +170,15 @@ function ChatSidebar({
       <div className={styles.tagsContainer}>
         <Tag
           label="Todos"
-          active={selectedAgentId === null}
-          onClick={() => handleAgentSelect(null)}
+          active={selectedConnectionId === null}
+          onClick={() => handleConnectionSelect(null)}
         />
-        {agents.map((agent) => (
+        {connections.map((connection) => (
           <Tag
-            key={agent.id}
-            label={agent.tipo_de_agente}
-            active={selectedAgentId === agent.id}
-            onClick={() => handleAgentSelect(agent.id)}
+            key={connection.id}
+            label={connection.nome}
+            active={selectedConnectionId === connection.id}
+            onClick={() => handleConnectionSelect(connection.id)}
           />
         ))}
       </div>

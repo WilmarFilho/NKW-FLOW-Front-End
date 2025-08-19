@@ -4,7 +4,7 @@ import React from 'react';
 import styles from './Tag.module.css';
 
 interface TagProps {
-  label: string;
+  label?: string | null;
   active?: boolean;
   onClick?: () => void;
 }
