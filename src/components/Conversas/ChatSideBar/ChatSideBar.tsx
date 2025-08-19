@@ -13,7 +13,7 @@ import { Chat } from '../../../types/chats';
 // CSS Modules
 import styles from './ChatSideBar.module.css';
 // Atom
-import { agentsState } from '../../../state/atom';
+import { agentsState, userState } from '../../../state/atom';
 // Icons
 import Icon from '../../../components/Gerais/Icons/Icons';
 
@@ -37,7 +37,9 @@ function filterChats(
   query: string,
   selectedAgentId: string | null,
   iaStatusFilter: 'todos' | 'ativa' | 'desativada',
-  statusFilter: 'Open' | 'Close'
+  statusFilter: 'Open' | 'Close',
+  ownerFilter: 'all' | 'mine',
+  currentUserId: string | null
 ) {
   const lowerQuery = query.toLowerCase();
 
@@ -59,7 +61,18 @@ function filterChats(
 
     const matchesStatus = chat.status === statusFilter;
 
-    return matchesSearch && matchesAgent && matchesIAStatus && matchesStatus;
+    const matchesOwner =
+      ownerFilter === 'all'
+        ? true
+        : chat.user_id === currentUserId;
+
+    return (
+      matchesSearch &&
+      matchesAgent &&
+      matchesIAStatus &&
+      matchesStatus &&
+      matchesOwner
+    );
   });
 }
 
@@ -70,24 +83,40 @@ function ChatSidebar({
   setIsAddChatOpen,
   fectchImageProfile,
 }: ChatSidebarProps) {
-  
   const [iaStatusFilter, setIaStatusFilter] = useState<'todos' | 'ativa' | 'desativada'>('todos');
   const [statusFilter, setStatusFilter] = useState<'Open' | 'Close'>('Open');
+  const [ownerFilter, setOwnerFilter] = useState<'all' | 'mine'>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const debouncedSearch = useDebounce(searchQuery, 300);
   const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
+  const user = useRecoilValue(userState) 
 
- 
-  const agents = useRecoilValue(agentsState)
+  console.log(user?.id)
+
+  const agents = useRecoilValue(agentsState);
+
+  const currentUserId = user?.id ? user.id : null; 
 
   const filteredChats = useMemo(
     () =>
-      filterChats(chats, debouncedSearch, selectedAgentId, iaStatusFilter, statusFilter),
-    [chats, debouncedSearch, selectedAgentId, iaStatusFilter, statusFilter]
+      filterChats(
+        chats,
+        debouncedSearch,
+        selectedAgentId,
+        iaStatusFilter,
+        statusFilter,
+        ownerFilter,
+        currentUserId
+      ),
+    [chats, debouncedSearch, selectedAgentId, iaStatusFilter, statusFilter, ownerFilter, currentUserId]
   );
 
   const toggleStatusFilter = useCallback(() => {
     setStatusFilter((prev) => (prev === 'Open' ? 'Close' : 'Open'));
+  }, []);
+
+  const toggleOwnerFilter = useCallback(() => {
+    setOwnerFilter((prev) => (prev === 'all' ? 'mine' : 'all'));
   }, []);
 
   const handleAgentSelect = useCallback((agentId: string | null) => {
@@ -145,7 +174,7 @@ function ChatSidebar({
         {filteredChats.map((chat) => (
           <ChatListItem
             key={chat.id}
-            unreadCount={chat.unread_count}  
+            unreadCount={chat.unread_count}
             mensagemData={chat.mensagem_data}
             chatId={chat.id}
             isActive={activeChat?.id === chat.id}
@@ -158,13 +187,20 @@ function ChatSidebar({
         ))}
       </div>
 
-      {/* Alternar chats abertos/fechados */}
+      {/* Alternar filtros no footer */}
       <div className={styles.statusToggleContainer}>
         <button
           className={styles.buttonAlterActiveChats}
           onClick={toggleStatusFilter}
         >
-          {statusFilter === 'Open' ? 'Ver Chats Fechados' : 'Ver Chats Abertos'}
+          {statusFilter === 'Open' ? 'Chats Fechados' : 'Chats Abertos'}
+        </button>
+
+        <button
+          className={styles.buttonAlterActiveChats}
+          onClick={toggleOwnerFilter}
+        >
+          {ownerFilter === 'all' ? 'Meus Chats' : 'Todos Chats'}
         </button>
       </div>
     </motion.aside>

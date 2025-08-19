@@ -134,6 +134,11 @@
   display: none;
 }
 
+.statusToggleContainer {
+  display: flex;
+  gap: 12px;
+}
+
 /* === Media Queries === */
 
 @media (max-width: 1111.98px) {
