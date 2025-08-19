@@ -33,12 +33,8 @@ export const useUser = () => {
 
   const fetchUser = useCallback(async (opts?: { force?: boolean }) => {
 
-  
     if (!token || !userId) return null;
 
-    
-
-    // evita re-fetch sem necessidade
     if (!opts?.force && user) return user;
 
     const fetchedUser = await get<User>(`/users/${userId}`);
@@ -56,4 +52,3 @@ export const useUser = () => {
 
   return { fetchUser };
 }
-

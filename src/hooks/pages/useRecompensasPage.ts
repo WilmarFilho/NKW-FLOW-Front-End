@@ -18,7 +18,7 @@ export function useRecompensasPage() {
     []
   );
 
-  const totalIndicacoes = 8;
+  const totalIndicacoes = 0;
 
   const progresso = useMemo(
     () =>

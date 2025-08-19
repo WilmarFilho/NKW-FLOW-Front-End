@@ -1,6 +1,6 @@
 .sidebarclosed {
   display: flex;
-  width: 140px;
+  width: 8%;
   padding: 40px 12px;
   background-color: var(--color-background-sidebar);
   backdrop-filter: blur(10px);

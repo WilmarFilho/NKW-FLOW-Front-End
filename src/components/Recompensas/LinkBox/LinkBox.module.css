@@ -18,12 +18,13 @@
   gap: 12px;
   background: var(--color-background-white);
   border-radius: 8px;
-  padding: 8px 12px;
+  padding: 18px 12px;
   margin-top: 8px;
 }
 
 .boxLink span {
   width: 100%;
+  color: var(--color-background-red);
 }
 
 .boxLink button {

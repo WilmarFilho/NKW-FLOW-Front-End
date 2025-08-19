@@ -6,7 +6,14 @@ interface LinkBoxProps {
   onCopy: () => void;
 }
 
-export default function LinkBox({ link, onCopy }: LinkBoxProps) {
+/*
+
+<button>Copiar</button>
+<Icon nome="copy" />
+
+*/
+
+export default function LinkBox({ onCopy }: LinkBoxProps) {
   return (
     <div className={Styles.containerLink}>
       <h4>Seu link de indicação</h4>
@@ -14,9 +21,9 @@ export default function LinkBox({ link, onCopy }: LinkBoxProps) {
         Envie este link para seus amigos. A cada indicação válida você avança na barra e desbloqueia recompensas.
       </p>
       <div onClick={onCopy} className={Styles.boxLink}>
-        <button>Copiar</button>
-        <span>{link}</span>
-        <Icon nome="copy" />
+        
+        <span>EM BREVE. POR ENQUANTO FALE COM NOSSO SUPORTE PARA VERIFICAR CONDIÇÔES PARA INDICAR UM AMIGO</span>
+        
       </div>
     </div>
   );

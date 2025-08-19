@@ -25,7 +25,7 @@ export default function RecompensaPage() {
             atinge novas metas.
           </h3>
         </div>
-        <ConvitesCount confirmados={12} />
+        <ConvitesCount confirmados={totalIndicacoes} />
       </motion.div>
 
       <motion.div

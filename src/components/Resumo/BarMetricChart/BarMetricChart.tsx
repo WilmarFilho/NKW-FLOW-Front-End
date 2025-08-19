@@ -39,7 +39,7 @@ export default function BarMetricChart({
         <Bar dataKey={dataKey} className={Styles.chartBarPrimary} radius={[8, 8, 0, 0]}>
           {vertical && (
             <>
-              <LabelList dataKey="name" position="insideLeft" offset={10} className={Styles.chartLabelAttendantName} />
+              <LabelList dataKey="name" position="insideLeft" offset={30} className={Styles.chartLabelAttendantName} />
               <LabelList dataKey={dataKey} position="right" offset={8} className={Styles.chartLabelChatCount} />
             </>
           )}

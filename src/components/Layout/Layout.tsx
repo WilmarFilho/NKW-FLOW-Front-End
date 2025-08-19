@@ -17,6 +17,8 @@ export default function Layout() {
 
   const modoTela = user?.modo_tela || 'dark';
 
+  const modoSideBar = user?.modo_side_bar || 'Full';
+
   useRealtimeEvents(user?.id);
 
   const body = document.body;
@@ -39,7 +41,7 @@ export default function Layout() {
 
       <SidebarWrapper />
 
-      <main className={styles.contentArea}>
+      <main className={`${modoSideBar === 'Full' ? styles.contentAreaMinimal : styles.contentArea}`}>
         <Outlet />
       </main>
     </div>

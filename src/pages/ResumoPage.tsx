@@ -12,6 +12,7 @@ import { useResumoPage } from '../hooks/pages/useResumoPage';
 
 export default function ResumoPage() {
   const navigate = useNavigate();
+  
   const {
     viewChatsNovos,
     setViewChatsNovos,
@@ -26,6 +27,11 @@ export default function ResumoPage() {
     heightAtedentes,
     widthConexoes
   } = useResumoPage();
+
+  console.log(dataNovos)
+  console.log(dataFechados)
+  console.log(dataConexoes)
+  console.log(dataAtendentes)
 
   return (
     <div className={GlobalStyles.pageContainer}>
@@ -126,3 +132,4 @@ export default function ResumoPage() {
     </div>
   );
 }
+

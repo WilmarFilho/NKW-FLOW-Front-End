@@ -1,8 +1,6 @@
 import { useRecoilState } from 'recoil';
 // Recoil
 import { authTokenState, userState } from '../../state/atom';
-// Hooks
-import { useUser } from './useUser';
 
 export const useAuth = () => {
 
@@ -34,7 +32,3 @@ export const useAuth = () => {
 
   return { token, isAuthenticated, login, logout, user };
 };
-
-
-
-
