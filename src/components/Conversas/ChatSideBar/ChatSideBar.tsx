@@ -89,25 +89,29 @@ function ChatSidebar({
   const [searchQuery, setSearchQuery] = useState('');
   const debouncedSearch = useDebounce(searchQuery, 300);
   const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
-  const user = useRecoilValue(userState) 
+  const user = useRecoilValue(userState)
 
   const agents = useRecoilValue(agentsState);
 
-  const currentUserId = user?.id ? user.id : null; 
+  const currentUserId = user?.id ? user.id : null;
 
-  const filteredChats = useMemo(
-    () =>
-      filterChats(
-        chats,
-        debouncedSearch,
-        selectedAgentId,
-        iaStatusFilter,
-        statusFilter,
-        ownerFilter,
-        currentUserId
-      ),
-    [chats, debouncedSearch, selectedAgentId, iaStatusFilter, statusFilter, ownerFilter, currentUserId]
-  );
+  const filteredChats = useMemo(() => {
+    // Se status é Close ou ownerFilter é 'mine', força IA desativada
+    const effectiveIaFilter =
+      statusFilter === 'Close' || ownerFilter === 'mine'
+        ? 'desativada'
+        : iaStatusFilter;
+
+    return filterChats(
+      chats,
+      debouncedSearch,
+      selectedAgentId,
+      effectiveIaFilter,
+      statusFilter,
+      ownerFilter,
+      currentUserId
+    );
+  }, [chats, debouncedSearch, selectedAgentId, iaStatusFilter, statusFilter, ownerFilter, currentUserId]);
 
   const toggleStatusFilter = useCallback(() => {
     setStatusFilter((prev) => (prev === 'Open' ? 'Close' : 'Open'));
@@ -138,17 +142,29 @@ function ChatSidebar({
 
       {/* Filtros IA */}
       <div className={styles.iaFilterContainer}>
-        {['ativa', 'desativada'].map((status) => (
+        {statusFilter === 'Open' && ownerFilter === 'all' ? (
+          ['ativa', 'desativada'].map((status) => (
+            <button
+              key={status}
+              type="button"
+              className={`${styles.iaFilterButton} ${iaStatusFilter === status ? styles.active : ''}`}
+              onClick={() => setIaStatusFilter(status as 'ativa' | 'desativada')}
+            >
+              {status === 'ativa' ? 'Agente Ativado' : 'Agente Desativado'}
+            </button>
+          ))
+        ) : (
           <button
-            key={status}
             type="button"
-            className={`${styles.iaFilterButton} ${iaStatusFilter === status ? styles.active : ''}`}
-            onClick={() => setIaStatusFilter(status as 'ativa' | 'desativada')}
+            className={`${styles.iaFilterButton} ${styles.active}`} // já ativo
+            onClick={() => setIaStatusFilter('desativada')}
           >
-            {status === 'ativa' ? 'Agente Ativado' : 'Agente Desativado'}
+            Agente Desativado
           </button>
-        ))}
+        )}
       </div>
+
+
 
       {/* Tags */}
       <div className={styles.tagsContainer}>

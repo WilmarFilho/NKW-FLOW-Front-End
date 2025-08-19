@@ -56,29 +56,22 @@ export default function useChatActions() {
 
   };
 
-   const toggleIA = useCallback(async (chatId: string, currentStatus: boolean) => {
+  const toggleIA = useCallback(async (chatId: string, currentStatus: boolean) => {
     const body: Partial<Chat> = { ia_ativa: !currentStatus };
 
-    // desligando → grava timestamp; ligando → zera timestamp
     if (currentStatus === true) {
+      // IA estava ativa → agora vai desligar
       body.ia_desligada_em = new Date().toISOString();
     } else {
+      // IA estava desativada → agora vai ativar
       body.ia_desligada_em = null;
+      body.user_id = null; // limpar o dono do chat
     }
 
     const updated = await put<Chat>(`/chats/${chatId}`, body);
-    if (updated) {
-      setChats(prev =>
-        prev.map(c =>
-          c.id === chatId
-            ? { ...c, ia_ativa: updated.ia_ativa, ia_desligada_em: updated.ia_desligada_em }
-            : c
-        )
-      );
-  
-      return updated; // << retorna o chat inteiro
-    }
-    return null;
+
+    return updated
+
   }, [put, setChats]);
 
   const claimChatOwner = async (chatId: string, userId: string) => {
@@ -93,4 +86,6 @@ export default function useChatActions() {
 
   return { deleteChat, renameChat, reOpenChat, toggleIA, claimChatOwner };
 }
+
+
 

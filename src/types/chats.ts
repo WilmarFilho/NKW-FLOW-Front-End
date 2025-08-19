@@ -2,7 +2,7 @@ import { Agent } from './agent';
 
 export interface Chat {
   status: string;
-  user_id: string;
+  user_id: string | null;
   connection_id: string;
   contato_nome: string;
   contato_numero: string;

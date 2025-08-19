@@ -159,24 +159,33 @@ export function useConversasPage() {
     ]
   );
 
-
-  // useConversasPage.ts
   const handleToggleIA = useCallback(async () => {
     if (!activeChat) return;
 
     const updated = await toggleIA(activeChat.id, activeChat.ia_ativa);
     if (updated) {
-      // sincroniza o chat ativo e a lista
-      setActiveChat(prev => prev ? {
-        ...prev,
-        ia_ativa: updated.ia_ativa,
-        ia_desligada_em: updated.ia_desligada_em
-      } : prev);
+      // sincroniza o chat ativo
+      setActiveChat(prev =>
+        prev
+          ? {
+            ...prev,
+            ia_ativa: updated.ia_ativa,
+            ia_desligada_em: updated.ia_desligada_em,
+            user_id: updated.user_id ?? prev.user_id, // atualiza o user_id local
+          }
+          : prev
+      );
 
+      // sincroniza a lista de chats
       setChats(prev =>
         prev.map(c =>
           c.id === updated.id
-            ? { ...c, ia_ativa: updated.ia_ativa, ia_desligada_em: updated.ia_desligada_em }
+            ? {
+              ...c,
+              ia_ativa: updated.ia_ativa,
+              ia_desligada_em: updated.ia_desligada_em,
+              user_id: updated.user_id
+            }
             : c
         )
       );
@@ -194,14 +203,38 @@ export function useConversasPage() {
 
   const handleToggleChatStatus = useCallback(async () => {
     if (!activeChat) return;
+
+    const currentUserId = user?.id;
     const newStatus = activeChat.status === 'Open' ? 'Close' : 'Open';
+
+    // Regras para fechar chat
+    if (
+      newStatus === 'Close' &&
+      (activeChat.ia_ativa || !activeChat.user_id || activeChat.user_id !== currentUserId)
+    ) {
+      let message = 'Não é possível fechar este chat devido a:';
+
+      if (activeChat.ia_ativa) message += '\n- A IA ainda está ativa';
+
+      if (!activeChat.user_id) {
+        message += '\n- Nenhum atendente assumiu a conversa';
+      } else if (activeChat.user_id !== currentUserId) {
+        message += '\n- Outro atendente está assumindo essa conversa';
+      }
+
+      alert(message); // ou toast
+      return;
+    }
+
     const result = await reOpenChat(activeChat.id, newStatus);
     if (result) {
       const updatedChat = { ...activeChat, status: newStatus };
       setActiveChat(updatedChat);
       setChats(prev => prev.map(chat => (chat.id === updatedChat.id ? updatedChat : chat)));
     }
-  }, [activeChat, reOpenChat, setChats]);
+  }, [activeChat, reOpenChat, setChats, user?.id]);
+
+
 
   const handleRenameChat = useCallback((newName: string) => {
     if (!activeChat || !newName.trim()) return;
