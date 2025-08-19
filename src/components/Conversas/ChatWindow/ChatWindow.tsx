@@ -2,8 +2,8 @@
 
 
 // ChatWindow.tsx
-import { useState, useRef, useEffect, useMemo } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { useState, useRef, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { NavLink } from 'react-router-dom';
 import { Chat } from '../../../types/chats';
 import { Message } from '../../../types/message';
@@ -270,8 +270,7 @@ export default function ChatWindow({
           </>
         ) : (
           <div className={styles.chatClosedBanner}>
-            <p>Este chat está fechado.</p>
-            <button onClick={onToggleChatStatus}>Reabrir</button>
+            <button className={styles.buttonReOpen} onClick={onToggleChatStatus}>Reabrir Chat</button>
           </div>
         )}
       </div>

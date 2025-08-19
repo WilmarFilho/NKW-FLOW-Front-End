@@ -63,7 +63,7 @@
 
 .inputAreaWrapper {
   display: grid;
-  animation: animateRow .4s;
+  animation: animateRow .1s;
   padding: 12px 20px;
   border-top: 1px solid var(--color-borders);
 }
@@ -95,7 +95,7 @@
   margin-top: 12px;
   gap: 12px;
   height: 0;
-  animation: fadeInContent 1.5s forwards;
+  animation: fadeInContent .3s forwards;
 }
 
 .replyPreview button {

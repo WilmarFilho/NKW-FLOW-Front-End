@@ -39,7 +39,7 @@ export function useConversasPage() {
   const { fectchImageProfile } = useChats();
   const { sendMessage, deleteMessage } = useMessagesActions();
 
-  const { reOpenChat, deleteChat, renameChat, toggleIA } = useChatActions();
+  const { reOpenChat, deleteChat, renameChat, toggleIA, claimChatOwner } = useChatActions();
 
   const [activeChat, setActiveChat] = useState<Chat | null>(null);
   const { messages } = useMessages(activeChat?.id || null);
@@ -71,6 +71,7 @@ export function useConversasPage() {
     async (text?: string, mimetype?: string, base64?: string) => {
       const messageText = text ?? newChatMessage;
 
+      // CASO: criando um chat novo do zero
       if (!activeChat) {
         setShowErrors(true);
 
@@ -92,6 +93,35 @@ export function useConversasPage() {
         return;
       }
 
+      // 1. Bloqueio se IA ativa
+      if (activeChat.ia_ativa) {
+        alert('⚠️ Não é possível enviar mensagem enquanto a IA está ativa.');
+        return;
+      }
+
+      const cooldownMin = 2;
+
+      if (activeChat.ia_desligada_em) {
+        let iso = activeChat.ia_desligada_em;
+
+        if (!iso.endsWith('Z') && !iso.includes('+')) {
+          iso += 'Z';
+        }
+
+        const desligadaEm = new Date(iso);
+        const desligadaMs = desligadaEm.getTime();
+        const agoraMs = Date.now();
+        const diff = agoraMs - desligadaMs;
+
+        if (diff < cooldownMin * 60 * 1000) {
+          alert('⚠️ Aguarde alguns minutos antes de assumir o chat após desligar a IA.');
+          return;
+        }
+      }
+
+
+
+      // 3. Envia mensagem
       const result = await sendMessage({
         chat_id: activeChat.id,
         mensagem: messageText,
@@ -102,6 +132,11 @@ export function useConversasPage() {
       });
 
       if (result) {
+
+        if (!activeChat.user_id && user?.id) {
+          await claimChatOwner(activeChat.id, user.id);
+        }
+
         if (replyingTo) {
           setIsExiting(true);
           setTimeout(() => {
@@ -120,22 +155,34 @@ export function useConversasPage() {
       setChats,
       user?.id,
       replyingTo,
-      validateForm, 
+      validateForm,
     ]
   );
 
+
+  // useConversasPage.ts
   const handleToggleIA = useCallback(async () => {
     if (!activeChat) return;
-    const updatedIaStatus = await toggleIA(activeChat.id, activeChat.ia_ativa);
 
-    if (typeof updatedIaStatus === 'boolean') {
-      const updatedChat: Chat = { ...activeChat, ia_ativa: updatedIaStatus };
-      setActiveChat(updatedChat);
-      setChats((prev: Chat[]) =>
-        prev.map((chat: Chat) => (chat.id === updatedChat.id ? updatedChat : chat))
+    const updated = await toggleIA(activeChat.id, activeChat.ia_ativa);
+    if (updated) {
+      // sincroniza o chat ativo e a lista
+      setActiveChat(prev => prev ? {
+        ...prev,
+        ia_ativa: updated.ia_ativa,
+        ia_desligada_em: updated.ia_desligada_em
+      } : prev);
+
+      setChats(prev =>
+        prev.map(c =>
+          c.id === updated.id
+            ? { ...c, ia_ativa: updated.ia_ativa, ia_desligada_em: updated.ia_desligada_em }
+            : c
+        )
       );
     }
   }, [activeChat, toggleIA, setChats]);
+
 
   const handleDeleteChat = useCallback(async () => {
     if (!activeChat) return;
@@ -204,5 +251,7 @@ export function useConversasPage() {
     handleDeleteMessage: deleteMessage
   };
 }
+
+
 
 

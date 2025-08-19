@@ -56,17 +56,41 @@ export default function useChatActions() {
 
   };
 
-  const toggleIA = useCallback(async (chatId: string, currentStatus: boolean) => {
+   const toggleIA = useCallback(async (chatId: string, currentStatus: boolean) => {
+    const body: Partial<Chat> = { ia_ativa: !currentStatus };
 
-    const result = await put<Chat>(`/chats/${chatId}`, {
-      ia_ativa: !currentStatus,
-    });
-
-    if (result) {
-      return result.ia_ativa;
+    // desligando → grava timestamp; ligando → zera timestamp
+    if (currentStatus === true) {
+      body.ia_desligada_em = new Date().toISOString();
+    } else {
+      body.ia_desligada_em = null;
     }
 
-  }, [put]);
+    const updated = await put<Chat>(`/chats/${chatId}`, body);
+    if (updated) {
+      setChats(prev =>
+        prev.map(c =>
+          c.id === chatId
+            ? { ...c, ia_ativa: updated.ia_ativa, ia_desligada_em: updated.ia_desligada_em }
+            : c
+        )
+      );
+  
+      return updated; // << retorna o chat inteiro
+    }
+    return null;
+  }, [put, setChats]);
 
-  return { deleteChat, renameChat, reOpenChat, toggleIA };
+  const claimChatOwner = async (chatId: string, userId: string) => {
+    const result = await put(`/chats/${chatId}`, { user_id: userId });
+    if (result) {
+      setChats((prev) =>
+        prev.map((chat) => (chat.id === chatId ? { ...chat, user_id: userId } : chat))
+      );
+    }
+    return result;
+  };
+
+  return { deleteChat, renameChat, reOpenChat, toggleIA, claimChatOwner };
 }
+
