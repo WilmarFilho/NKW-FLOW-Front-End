@@ -6,6 +6,25 @@ import Icon from '../../Gerais/Icons/Icons';
 import GlobalStyles from '../../../global.module.css'
 import HelpHeaderStyles from './HelpHeader.module.css';
 
+/*
+
+
+ <div className={HelpHeaderStyles.helpHeaderIcons}>
+        <div className={HelpHeaderStyles.helpHeaderIconBox}>
+          <a href="https://google.com" target="_blank" rel="noreferrer">
+            <Icon nome="info" />
+          </a>
+        </div>
+        <div className={HelpHeaderStyles.helpHeaderIconBox}>
+          <a href="https://google.com" target="_blank" rel="noreferrer">
+            <Icon nome="insta" />
+          </a>
+        </div>
+      </div>
+
+
+*/
+
 export default function HelpHeader() {
   return (
     <motion.div
@@ -19,18 +38,7 @@ export default function HelpHeader() {
         <h3>Pergunte qualquer coisa que estiver com dúvidas sobre o NKW FLOW.</h3>
       </div>
 
-      <div className={HelpHeaderStyles.helpHeaderIcons}>
-        <div className={HelpHeaderStyles.helpHeaderIconBox}>
-          <a href="https://google.com" target="_blank" rel="noreferrer">
-            <Icon nome="info" />
-          </a>
-        </div>
-        <div className={HelpHeaderStyles.helpHeaderIconBox}>
-          <a href="https://google.com" target="_blank" rel="noreferrer">
-            <Icon nome="insta" />
-          </a>
-        </div>
-      </div>
+     
     </motion.div>
   );
 }

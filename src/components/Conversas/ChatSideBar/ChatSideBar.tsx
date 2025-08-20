@@ -169,7 +169,7 @@ function ChatSidebar({
       {/* Tags */}
       <div className={styles.tagsContainer}>
         <Tag
-          label="Todos"
+          label="Todas"
           active={selectedConnectionId === null}
           onClick={() => handleConnectionSelect(null)}
         />

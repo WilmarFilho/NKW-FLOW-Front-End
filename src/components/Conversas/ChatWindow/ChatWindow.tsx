@@ -258,75 +258,62 @@ export default function ChatWindow({
       transition={{ delay: 0.4, duration: 0.6 }}
     >
 
-      <header className={styles.chatHeader}>
-        <div
-          className={styles.contactInfo}
-          onClick={() => setDetailsOpen(true)}
-          style={{ cursor: 'pointer' }}
-        >
-          <img
-            src={activeChat.foto_perfil || defaultAvatar}
-            alt={`Avatar de ${activeChat.contato_nome}`}
-          />
-          <div className={styles.contactText}>
-            <h1>{activeChat.contato_nome}</h1>
-            <NavLink to='/agentes'>
-              <span>
-                Agente - {activeChat.connection.agente.tipo_de_agente}
-              </span>
-            </NavLink>
-          </div>
-        </div>
-
-        <DropdownMenu
-          id='chat-header'
-          trigger={
-            <button className={styles.optionsButton}>
-              <Icon nome='dots' />
-            </button>
-          }
-        >
-          {isOwner && (
-            <>
-              <button
-                onClick={() => {
-                  setNewName(activeChat.contato_nome || '');
-                  setRenameOpen(true);
-                }}
-              >
-                <Icon nome='pencil' /> Renomear Chat
-              </button>
-              <button onClick={onDeleteChat}>
-                <Icon nome='trash' /> Apagar Chat
-              </button>
-              <button onClick={onToggleChatStatus}>
-                <Icon nome='close' />{' '}
-                {activeChat.status === 'Open'
-                  ? 'Fechar Chat'
-                  : 'Reabrir Chat'}
-              </button>
-            </>
-          )}
-          <button onClick={() => setDetailsOpen(true)}>
-            <Icon nome='info' /> Detalhes do Chat
-          </button>
-        </DropdownMenu>
-
-        {/* Só renderiza no header se tela < 992px */}
-        {isSmallScreen && (
-          <div className={styles.toggleIaButton}>
-            <div className={styles.headerToggleIa}>
-              <Icon nome='agentespage' />{' '}
-            </div>
-            <ToggleSwitch
-              variant='secondary'
-              isOn={activeChat.ia_ativa}
-              onToggle={onToggleIA}
+      {!isSmallScreen && (
+        <header className={styles.chatHeader}>
+          <div
+            className={styles.contactInfo}
+            onClick={() => setDetailsOpen(true)}
+            style={{ cursor: 'pointer' }}
+          >
+            <img
+              src={activeChat.foto_perfil || defaultAvatar}
+              alt={`Avatar de ${activeChat.contato_nome}`}
             />
+            <div className={styles.contactText}>
+              <h1>{activeChat.contato_nome}</h1>
+              <NavLink to='/agentes'>
+                <span>
+                  Agente - {activeChat.connection.agente.tipo_de_agente}
+                </span>
+              </NavLink>
+            </div>
           </div>
-        )}
 
-      </header>
+          <DropdownMenu
+            id='chat-header'
+            trigger={
+              <button className={styles.optionsButton}>
+                <Icon nome='dots' />
+              </button>
+            }
+          >
+            {isOwner && (
+              <>
+                <button
+                  onClick={() => {
+                    setNewName(activeChat.contato_nome || '');
+                    setRenameOpen(true);
+                  }}
+                >
+                  <Icon nome='pencil' /> Renomear Chat
+                </button>
+                <button onClick={onDeleteChat}>
+                  <Icon nome='trash' /> Apagar Chat
+                </button>
+                <button onClick={onToggleChatStatus}>
+                  <Icon nome='close' />{' '}
+                  {activeChat.status === 'Open'
+                    ? 'Fechar Chat'
+                    : 'Reabrir Chat'}
+                </button>
+              </>
+            )}
+            <button onClick={() => setDetailsOpen(true)}>
+              <Icon nome='info' /> Detalhes do Chat
+            </button>
+          </DropdownMenu>
+        </header>
+      )}
 
       <Modal
         transparent
@@ -426,6 +413,20 @@ export default function ChatWindow({
                   </div>
                 )}
 
+                {/* Só renderiza no header se tela < 992px */}
+                {isSmallScreen && (
+                  <div className={styles.toggleIaButton}>
+                    <div className={styles.headerToggleIa}>
+                      <Icon nome='agentespage' />{' '}
+                    </div>
+                    <ToggleSwitch
+                      variant='secondary'
+                      isOn={activeChat.ia_ativa}
+                      onToggle={onToggleIA}
+                    />
+                  </div>
+                )}
+
                 <ChatInput
                   ref={inputRef}
                   placeholder='Digite uma mensagem'
@@ -433,6 +434,43 @@ export default function ChatWindow({
                     onSendMessage(text, mimetype, base64)
                   }
                 />
+                {/* Dropdown vai para o footer se for tela pequena */}
+                {isSmallScreen && (
+                  <DropdownMenu
+                    id='chat-footer'
+                    trigger={
+                      <button className={styles.optionsButton}>
+                        <Icon nome='dots' />
+                      </button>
+                    }
+                  >
+                    {isOwner && (
+                      <>
+                        <button
+                          onClick={() => {
+                            setNewName(activeChat.contato_nome || '');
+                            setRenameOpen(true);
+                          }}
+                        >
+                          <Icon nome='pencil' /> Renomear Chat
+                        </button>
+                        <button onClick={onDeleteChat}>
+                          <Icon nome='trash' /> Apagar Chat
+                        </button>
+                        <button onClick={onToggleChatStatus}>
+                          <Icon nome='close' />{' '}
+                          {activeChat.status === 'Open'
+                            ? 'Fechar Chat'
+                            : 'Reabrir Chat'}
+                        </button>
+                      </>
+                    )}
+                    <button onClick={() => setDetailsOpen(true)}>
+                      <Icon nome='info' /> Detalhes do Chat
+                    </button>
+                  </DropdownMenu>
+                )}
+                
               </div>
 
             </>

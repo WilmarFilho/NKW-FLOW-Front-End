@@ -8,52 +8,46 @@
   color: var(--color-text);
   transition: background-color 0.2s, transform 0.2s;
 }
+
 .tableRow:hover {
   background-color: var(--color-background-row-hover);
 }
-.tableRow > div {
+
+.columnsTable {
   text-align: start;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
-/* Estilos para células de nome com avatar */
-.cellName {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.cellName img {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-/* Estilos para o Status Chip */
 .statusChip {
   display: block;
   padding: 8px 16px;
   border-radius: 20px;
   font-size: 13px;
-  width: 75%;
+  width: 100%;
   font-weight: bold;
   text-align: center;
 }
+
 .statusChip.active {
-  background-color:var(--color-secundaria);
+  background-color: var(--color-secundaria);
   color: var(--color-text-white);
 }
+
 .statusChip.inactive {
   background-color: var(--color-background-red);
   color: var(--color-text-white);
 }
 
-/* Estilos para botões de ação (Editar, Deletar) */
 .actionCell {
   display: flex;
   gap: 10px;
   justify-content: flex-start;
 }
-.actionButtonEdit, .actionButtonDelete {
+
+.actionButtonEdit,
+.actionButtonDelete {
   background-color: var(--color-background-row-hover);
   border: none;
   border-radius: 8px;
@@ -66,12 +60,7 @@
   cursor: pointer;
 }
 
-.actionButtonDelete svg {
-  width: 28px;
-  height: 28px;
-  fill: #a0a0a0;
-  transition: fill 0.2s;
-}
+.actionButtonDelete svg,
 .actionButtonEdit svg {
   width: 28px;
   height: 28px;
@@ -79,63 +68,97 @@
   transition: fill 0.2s;
 }
 
-
-
 .actionButtonEdit:hover {
-  background-color: var( --color-background-tags-hover);
+  background-color: var(--color-background-tags-hover);
 }
+
 .actionButtonDelete:hover {
   background-color: var(--color-background-red);
 }
 
-
-.actionButtonEdit:hover svg, .actionButtonDelete:hover svg {
+.actionButtonEdit:hover svg,
+.actionButtonDelete:hover svg {
   fill: #fff;
 }
-.actionButtonEdit:focus-visible, .actionButtonDelete:focus-visible {
+
+.actionButtonEdit:focus-visible,
+.actionButtonDelete:focus-visible {
   outline: 2px solid var(--color-primary);
 }
 
-
-
-
-
-
-.clickableStatus {
-  cursor: pointer;
+.statusWithActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
+.statusChipDesktop {
+  display: block;
+}
 
+.statusChipMobile {
+  display: none;
+}
 
+.inlineActions {
+  display: none;
+  gap: 8px;
+}
 
-/* Responsividade do CONTEÚDO */
 @media (max-width: 991.98px) {
+
+  .statusChipDesktop {
+    display: none;
+  }
+
+  .statusChipMobile {
+    display: block;
+  }
+
+  .inlineActions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .actionCell {
+    display: none;
+  }
+
+  .statusWithActions {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
   .tableRow {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
     padding: 16px;
+    background-color: var(--color-background-row-hover);
   }
-  .tableRow > div {
+
+  .columnsTable {
     display: flex;
     justify-content: space-between;
     width: 100%;
     padding: 8px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   }
-  .tableRow > div:last-child {
-      border-bottom: none;
-  }
-  /* Adiciona um pseudo-elemento para simular o label da coluna */
-  .tableRow > div::before {
-    content: attr(data-label); /* Lê o label do atributo data-label */
-    font-weight: bold;
+
+  .tableRow>div::before {
+    content: attr(data-label);
+    font-weight: 400;
     color: var(--color-text);
   }
-  .actionCell {
-      justify-content: center;
-  }
-  .actionCell::before {
-      content: 'Ações'; /* Label fixo para ações */
+
+  .statusChip {
+    padding: 8px 34px;
   }
 }

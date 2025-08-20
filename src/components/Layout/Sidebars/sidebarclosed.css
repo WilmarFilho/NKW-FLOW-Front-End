@@ -69,6 +69,13 @@ MenuItem.active-link:focus {
   .sidebarclosed {
     width: 12%;
   }
+  .menu-principal-closed svg {
+    width: 100%;
+    height: 24px;
+  }
+  .MenuItem {
+    padding: 0;
+  }
 }
 
 @media (max-width: 599.98px) {
@@ -77,10 +84,7 @@ MenuItem.active-link:focus {
   }
 
   .menu-principal-closed svg {
-    width: 100%;
     height: 22px;
   }
-  .MenuItem {
-    padding: 0;
-  }
+  
 }

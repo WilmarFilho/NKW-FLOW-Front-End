@@ -17,7 +17,7 @@ export default function BarMetricChart({
   dataKey,
   vertical = false,
   barSize = 60,
-  height = 200,
+  height = 150,
 }: BarMetricChartProps) {
   return (
     <ResponsiveContainer width="100%" height={height}>

@@ -15,7 +15,7 @@ export default function LoadingScreen({ onFinish } : LoadingScreenProps) {
       if (onFinish) {
         setTimeout(onFinish, 500); 
       }
-    }, 1000); // tempo mínimo do loading
+    }, 10000); // tempo mínimo do loading
 
     return () => clearTimeout(timer);
   }, [onFinish]);

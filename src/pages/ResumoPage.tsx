@@ -112,7 +112,7 @@ export default function ResumoPage() {
           icon={<Icon nome='connect' />}
           small
         >
-          <div style={{ width: '450px', overflowX: 'auto', height: 200, scrollbarWidth: 'none' }}>
+          <div style={{ width: '420px', overflowX: 'auto', height: 200, scrollbarWidth: 'none' }}>
             <LineMetricChart data={dataConexoes} dataKey="value" width={widthConexoes} />
           </div>
         </MetricCard>

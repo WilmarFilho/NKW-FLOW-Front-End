@@ -197,4 +197,9 @@
     overflow-x: auto;
     overflow-y: hidden;
   }
+
+  .buttonAlterActiveChats {
+    justify-content: center;
+    padding: 0px;
+  }
 }

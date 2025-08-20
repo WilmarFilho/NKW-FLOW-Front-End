@@ -10,7 +10,7 @@
   display: flex;
   flex-direction: column;
   gap: 32px;
-  padding: 32px 0 12px 0;
+  padding: 12px 0 12px 0;
   height: 100%;
   box-sizing: border-box;
 }
@@ -97,6 +97,15 @@
   background-color: var(--color-filter-hover-attendants);
 }
 
+@media (max-width: 1399.98px) {
+  .pageHeaderTitles h2 {
+    font-size: 32px;
+  }
+
+  .pageHeaderTitles h3 {
+    font-size: 20px;
+  }
+}
 
 @media (max-width: 1211.98px) {
   .conversasContainer {
@@ -105,12 +114,12 @@
 }
 
 @media (max-width: 1199.98px) {
-  .page-header__titles h2 {
-    font-size: 32px;
+  .pageHeaderTitles h2 {
+    font-size: 28px;
   }
 
-  .page-header__titles h3 {
-    font-size: 20px;
+  .pageHeaderTitles h3 {
+    font-size: 18px;
   }
 }
 
@@ -127,12 +136,12 @@
     gap: 24px;
   }
 
-  .page-header__titles h2 {
-    font-size: 26px;
+  .pageHeaderTitles h2 {
+    font-size: 22px;
   }
 
-  .page-header__titles h3 {
-    font-size: 18px;
+  .pageHeaderTitles h3 {
+    font-size: 16px;
   }
 
   .page-row {

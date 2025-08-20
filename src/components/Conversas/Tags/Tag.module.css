@@ -2,8 +2,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 18px 24px; 
-  flex-shrink: 0; 
+  padding: 18px 24px;
+  flex-shrink: 0;
   flex-grow: 0;
   background-color: var(--color-background-white);
   color: var(--color-text);
@@ -26,8 +26,8 @@
 }
 
 .tag:not(.active):hover {
-    background-color: var(--color-background-tags-hover);
-    color: var(--color-text-white);
+  background-color: var(--color-background-tags-hover);
+  color: var(--color-text-white);
 }
 
 .tag:focus-visible {
@@ -38,5 +38,11 @@
 @media (max-width: 1211.98px) {
   .tag {
     font-size: 12px;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .tag.active {
+    flex: 1;
   }
 }

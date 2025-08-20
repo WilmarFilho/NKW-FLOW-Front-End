@@ -51,7 +51,7 @@ export default function AgentesPage() {
           backgroundColor: 'var(--color-background-dark)',
           flex: 1,
           borderRadius: '16px',
-          padding: '50px 40px',
+          padding: '26px 40px',
         }}
       >
         <KnowledgeBaseInfo />

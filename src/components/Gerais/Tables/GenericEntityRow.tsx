@@ -30,22 +30,71 @@ export default function GenericEntityRow<T extends { id: string | number }>({
             className={TableStyles.tableRow}
             style={{ gridTemplateColumns: columnTemplate }}
         >
+            {columns.map((col, idx) => {
+                // Caso seja a coluna de Status, renderizamos diferente
+                if (col.label === 'Status') {
+                    return (
+                        <div
+                            key={idx}
+                            data-label={col.label}
+                            onClick={() => col.onClick?.(item)}
+                            className={TableStyles.statusWithActions}
+                        >
+                            {/* Chip normal (desktop only) */}
+                            <div className={TableStyles.statusChipDesktop}>
+                                {col.render?.(item)}
+                            </div>
 
-            {columns.map((col, idx) => (
-                <div key={idx} data-label={col.label} onClick={() => col.onClick?.(item)}>
-                    {col.render?.(item) ?? null}
-                </div>
-            ))}
+                            {/* Chip + botões (mobile only) */}
+                            <div className={TableStyles.inlineActions}>
+                                <div className={TableStyles.statusChipMobile}>
+                                    {col.render?.(item)}
+                                </div>
 
+                                {onEdit && (
+                                    <button
+                                        className={TableStyles.actionButtonEdit}
+                                        onClick={() => onEdit(item)}
+                                    >
+                                        <Icon nome="arrow" />
+                                    </button>
+                                )}
+                                {onDelete && (
+                                    <button
+                                        className={TableStyles.actionButtonDelete}
+                                        onClick={() => onDelete(item.id)}
+                                    >
+                                        <Icon nome="close" />
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                    );
+                }
+
+                return (
+                    <div className={TableStyles.columnsTable} key={idx} data-label={col.label} onClick={() => col.onClick?.(item)}>
+                        {col.render?.(item) ?? null}
+                    </div>
+                );
+            })}
+
+            {/* Celula de ações normal, mas só aparece em telas grandes */}
             <div className={TableStyles.actionCell}>
                 {onEdit && (
-                    <button className={TableStyles.actionButtonEdit} onClick={() => onEdit(item)}>
-                        <Icon nome="arrow" />
+                    <button
+                        className={TableStyles.actionButtonEdit}
+                        onClick={() => onEdit(item)}
+                    >
+                        <Icon nome='arrow' />
                     </button>
                 )}
                 {onDelete && (
-                    <button className={TableStyles.actionButtonDelete} onClick={() => onDelete(item.id)}>
-                        <Icon nome="close" />
+                    <button
+                        className={TableStyles.actionButtonDelete}
+                        onClick={() => onDelete(item.id)}
+                    >
+                        <Icon nome='close' />
                     </button>
                 )}
             </div>
