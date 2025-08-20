@@ -185,9 +185,9 @@ export default function MessageBubble(props: MessageBubbleProps) {
   return (
     <motion.div
       ref={bubbleRef}
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.05, duration: 0.3, ease: 'easeOut' }}
+      transition={{ delay: 0, duration: 0.1, ease: 'linear' }}
       className={bubbleClasses}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => !showMenu && setIsHovered(false)}

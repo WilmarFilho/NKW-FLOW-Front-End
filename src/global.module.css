@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   gap: 32px;
-  padding: 40px 0; 
+  padding: 32px 0 12px 0; 
   height: 100%;
   box-sizing: border-box;
 }
@@ -49,6 +49,7 @@
 }
 
 .pageRow {
+  flex: 1;
   display: flex;
   flex-direction: row;
   gap: 24px;
@@ -112,4 +113,22 @@
   .page-row {
     flex-direction: column;
   }
+}
+
+
+
+
+.InputForm {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-radius: 12px;
+  width: 100%;
+  border: none;
+  outline: none;
+  height: 60%;
+  padding: 0 16px;
+  overflow: hidden;
+  background-color: var(--color-background-white);
+  color: var(--color-text-table);
 }

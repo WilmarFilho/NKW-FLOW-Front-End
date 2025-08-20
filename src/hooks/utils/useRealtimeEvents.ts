@@ -14,7 +14,7 @@ import { apiConfig } from '../../config/api';
 export const useRealtimeEvents = (userId: string | undefined) => {
   const setConnections = useSetRecoilState(connectionsState);
   const setChats = useSetRecoilState(chatsState);
-  const setMessages = useSetRecoilState(messagesState);
+  const setMessagesByChat = useSetRecoilState(messagesState);
   const setModalState = useSetRecoilState(addConnectionModalState);
 
   useEffect(() => {
@@ -24,7 +24,6 @@ export const useRealtimeEvents = (userId: string | undefined) => {
 
     eventSource.onmessage = (event) => {
       try {
-
         const payload = JSON.parse(event.data);
 
         const { event: tipo, connection, message, state, deletedMessage } = payload;
@@ -47,10 +46,14 @@ export const useRealtimeEvents = (userId: string | undefined) => {
         if ((tipo === 'messages.upsert' || tipo === 'send.message') && message) {
           const chatId = message.chat_id;
 
-          // 1. Atualiza apenas mensagens no estado
-          setMessages((prev) => {
-            const exists = prev.find((m) => m.id === message.id);
-            return exists ? prev : [...prev, message];
+          // 1. Atualiza apenas mensagens do chat específico
+          setMessagesByChat((prev) => {
+            const current = prev[chatId] || [];
+            const exists = current.find((m) => m.id === message.id);
+            return {
+              ...prev,
+              [chatId]: exists ? current : [...current, message],
+            };
           });
 
           // 2. Sempre busca o chat completo no backend
@@ -119,18 +122,20 @@ export const useRealtimeEvents = (userId: string | undefined) => {
         }
 
         if (tipo === 'messages.delete' && deletedMessage) {
+          console.log('🗑️ Recebido evento para excluir mensagem:', deletedMessage);
 
-          console.log(`🗑️ Recebido evento para excluir mensagem: ${deletedMessage}`);
+          const chatId = deletedMessage.chat_id;
+          if (!chatId) return;
 
-          console.log(deletedMessage)
-
-          setMessages((prevMessages) =>
-            prevMessages.map((m) =>
-              m.id === deletedMessage.id
-                ? { ...m, excluded: true }
-                : m
-            )
-          );
+          setMessagesByChat((prev) => {
+            const current = prev[chatId] || [];
+            return {
+              ...prev,
+              [chatId]: current.map((m) =>
+                m.id === deletedMessage.id ? { ...m, excluded: true } : m
+              ),
+            };
+          });
         }
 
       } catch (err) {
@@ -148,5 +153,3 @@ export const useRealtimeEvents = (userId: string | undefined) => {
     };
   }, [userId]);
 };
-
-

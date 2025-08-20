@@ -19,10 +19,9 @@ export const chatsState = atom<Chat[]>({
   default: [],
 });
 
-// Estado das mensagens WhatsApp
-export const messagesState = atom<Message[]>({
+export const messagesState = atom<Record<string, Message[]>>({
   key: 'messagesState',
-  default: [],
+  default: {},
 });
 
 // Controle do modal de adicionar nova conversa

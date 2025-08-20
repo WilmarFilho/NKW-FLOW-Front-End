@@ -42,7 +42,8 @@ export function useConversasPage() {
   const { reOpenChat, deleteChat, renameChat, toggleIA, claimChatOwner } = useChatActions();
 
   const [activeChat, setActiveChat] = useState<Chat | null>(null);
-  const { messages } = useMessages(activeChat?.id || null);
+  const { messages, fetchMoreMessages, hasMore, isLoading } = useMessages(activeChat?.id || null);
+
 
   const [isAddChatOpen, setIsAddChatOpen] = useState(false);
   const [newChatNumber, setNewChatNumber] = useState('');
@@ -281,9 +282,13 @@ export function useConversasPage() {
     setIsExiting,
     isExiting,
     handleCloseReply,
-    handleDeleteMessage: deleteMessage
+    handleDeleteMessage: deleteMessage,
+    fetchMoreMessages,
+    hasMore,
+    isLoading,
   };
 }
+
 
 
 

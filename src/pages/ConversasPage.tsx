@@ -11,7 +11,7 @@ export default function ConversasPage() {
   const state = useConversasPage();
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', gap: '12px' }}>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', gap: '40px' }}>
       <ChatSidebar
         chats={state.chats}
         activeChat={state.activeChat}
@@ -36,6 +36,9 @@ export default function ConversasPage() {
           isExiting={state.isExiting}
           setIsExiting={state.setIsExiting}
           handleCloseReply={state.handleCloseReply}
+          fetchMoreMessages={state.fetchMoreMessages}
+          hasMore={state.hasMore}
+          isLoading={state.isLoading}
         />
       </DropdownMenuProvider>
 
@@ -63,6 +66,8 @@ export default function ConversasPage() {
     </div>
   );
 }
+
+
 
 
 

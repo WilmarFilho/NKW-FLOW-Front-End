@@ -1,6 +1,6 @@
 // Libs
-import { useEffect, useMemo } from 'react';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 // Recoil
 import { messagesState, chatsState } from '../../state/atom';
 // Hooks
@@ -9,52 +9,87 @@ import { useApi } from '../utils/useApi';
 import type { Message } from '../../types/message';
 
 export const useMessages = (chatId: string | null) => {
-  // Carrega atom das messages
-  const [allMessages, setMessages] = useRecoilState(messagesState);
-  const chats = useRecoilValue(chatsState);
+  // Agora cada chat tem seu próprio array de mensagens
+  const [messagesByChat, setMessagesByChat] = useRecoilState(messagesState);
   const setChats = useSetRecoilState(chatsState);
 
-  // Carrega métodos do hook da api
   const { get, post } = useApi();
 
+  const [nextCursor, setNextCursor] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Carregar primeiras mensagens
   useEffect(() => {
     if (!chatId) return;
 
-    const fetchMessagesAndMarkRead = async () => {
-      // 1. Buscar mensagens
-      const data = await get<Message[]>(`/messages/chat/${chatId}`);
-      if (data) setMessages(data);
+    // Reseta mensagens só do chat atual
+    setMessagesByChat((prev) => ({ ...prev, [chatId]: [] }));
+    setNextCursor(null);
 
-      // 2. Verifica o unread_count antes de marcar como lido
-      const chat = chats.find((c) => c.id === chatId);
+    const fetchInitialMessages = async () => {
+      setIsLoading(true);
+      const data = await get<{ messages: Message[]; nextCursor: string | null }>(
+        `/messages/chat/${chatId}?limit=20`
+      );
 
-      if (chat && chat.unread_count > 0) {
-        await post(`/chats_reads/${chatId}`);
+      if (data) {
+        setMessagesByChat((prev) => ({
+          ...prev,
+          [chatId]: data.messages.reverse(),
+        }));
+        setNextCursor(data.nextCursor || null);
 
-        // 3. Atualizar localmente o unread_count = 0
-        setChats((prev) =>
-          prev.map((c) =>
-            c.id === chatId ? { ...c, unread_count: 0 } : c
-          )
-        );
-
-        // 4. Atualizar o título da aba
-        const updatedChats = chats.map((c) =>
-          c.id === chatId ? { ...c, unread_count: 0 } : c
-        );
-        const unreadCount = updatedChats.filter(c => c.unread_count > 0).length;
-        document.title = unreadCount > 0
-          ? `(${unreadCount}) WhatsApp - NKW FLOW`
-          : 'WhatsApp - NKW FLOW';
+        // --- Marca como lido ---
+        setChats((currentChats) => {
+          const chat = currentChats.find((c) => c.id === chatId);
+          if (chat && chat.unread_count > 0) {
+            post(`/chats_reads/${chatId}`);
+            return currentChats.map((c) =>
+              c.id === chatId ? { ...c, unread_count: 0 } : c
+            );
+          }
+          return currentChats;
+        });
       }
+      setIsLoading(false);
     };
 
-    fetchMessagesAndMarkRead();
-  }, [chatId, get, post, setMessages, setChats, chats]);
+    fetchInitialMessages();
+  }, [chatId, get, post, setMessagesByChat, setChats]);
 
-  const filteredMessages = useMemo(() => {
-    return allMessages.filter((msg) => msg.chat_id === chatId);
-  }, [allMessages, chatId]);
+  // Carregar mais mensagens (scroll para cima)
+  const fetchMoreMessages = useCallback(async () => {
+    if (!chatId || !nextCursor || isLoading) return;
+    setIsLoading(true);
 
-  return { messages: filteredMessages };
+    const data = await get<{ messages: Message[]; nextCursor: string | null }>(
+      `/messages/chat/${chatId}?limit=20&cursor=${nextCursor}`
+    );
+
+    if (data && data.messages.length > 0) {
+      setMessagesByChat((prev) => ({
+        ...prev,
+        [chatId]: [
+          ...data.messages.reverse(),
+          ...(prev[chatId] || []),
+        ],
+      }));
+      setNextCursor(data.nextCursor || null);
+    } else if (data) {
+      setNextCursor(null);
+    }
+    setIsLoading(false);
+  }, [chatId, nextCursor, get, setMessagesByChat, isLoading]);
+
+  // Mensagens só do chat atual
+  const messages = useMemo(() => {
+    return chatId ? messagesByChat[chatId] ?? [] : [];
+  }, [messagesByChat, chatId]);
+
+  return {
+    messages,
+    fetchMoreMessages,
+    hasMore: nextCursor !== null,
+    isLoading,
+  };
 };
