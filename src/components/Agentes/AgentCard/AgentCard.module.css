@@ -27,11 +27,7 @@
   fill: white;
 }
 
-.title {
-  font-size: 22px;
-  color: var(--color-text-white);
-  font-family: var(--font-main);
-}
+
 
 .description {
   font-size: 14px;
@@ -84,4 +80,36 @@
   transition: .4s;
   background-color: var(--color-background-dark);
   color: var(--color-text-white);
+}
+
+.title {
+  display: flex;
+  font-size: 22px;
+  color: var(--color-text-white);
+  font-family: var(--font-main);
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* Por padrão, em telas grandes, fica inline */
+.label, 
+.tipo {
+  display: inline;
+}
+
+/* Quando for menor que 1400px, quebra em linhas */
+@media (max-width: 1399.98px) {
+  .title {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px; /* menor espaço entre linhas */
+  }
+
+  .label, 
+  .tipo {
+    display: block;
+  }
 }

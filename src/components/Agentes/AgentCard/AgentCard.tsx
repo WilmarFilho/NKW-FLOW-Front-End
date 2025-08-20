@@ -21,13 +21,18 @@ const iconMap = {
 };
 
 export default function AgentCard({ description, tipo, onViewDetails }: AgentCardProps) {
-  
+
   const IconComponent = iconMap[tipo as keyof typeof iconMap] as React.ElementType;
 
   return (
     <div className={styles.card} onClick={onViewDetails}>
       {IconComponent && <IconComponent className={styles.icon} aria-label={`Ícone de ${tipo}`} />}
-      <h4 className={styles.title}>Agente - {tipo}</h4>
+      
+      <h4 className={styles.title}>
+        <span className={styles.label}>Agente:</span>
+        <span className={styles.tipo}>{tipo}</span>
+      </h4>
+
       <p className={styles.description}>{description}</p>
       <button className={styles.buttonCard} onClick={onViewDetails}>Ver Detalhes</button>
     </div>
