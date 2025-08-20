@@ -24,7 +24,7 @@ export function useAgentesPage() {
     setIsModalOpen(false);
   };
 
-  const status: 'Boa' | 'Média' | 'Ruim' = 'Ruim';
+  const status: 'Boa' | 'Média' | 'Ruim' = 'Boa';
 
   return {
     connections,

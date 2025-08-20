@@ -5,7 +5,6 @@ import Button from '../components/Gerais/Buttons/Button';
 import Modal from '../components/Gerais/Modal/Modal';
 import AgentList from '../components/Agentes/AgentList/AgentList';
 import KnowledgeBaseInfo from '../components/Agentes/KnowledgeBaseInfo/KnowledgeBaseInfo';
-import KnowledgeBaseProgress from '../components/Agentes/KnowledgeBaseProgress/KnowledgeBaseProgress';
 // Hooks
 import { useAgentesPage } from '../hooks/pages/useAgentesPage';
 // Css
@@ -15,6 +14,7 @@ import ModalStyles from '../components/Gerais/Modal/Modal.module.css';
 import { Connection } from '@/types/connection';
 
 export default function AgentesPage() {
+
   const state = useAgentesPage();
 
   return (
@@ -51,11 +51,12 @@ export default function AgentesPage() {
           backgroundColor: 'var(--color-background-dark)',
           flex: 1,
           borderRadius: '16px',
-          padding: '26px 40px',
+          padding: '26px 20px',
         }}
       >
-        <KnowledgeBaseInfo />
-        <KnowledgeBaseProgress status={state.status} />
+
+        <KnowledgeBaseInfo status={state.status} />
+      
       </motion.div>
 
       {/* Modal de Detalhes */}
@@ -83,7 +84,6 @@ export default function AgentesPage() {
           </div>
         </Modal>
       )}
-
     </div>
   );
 }
