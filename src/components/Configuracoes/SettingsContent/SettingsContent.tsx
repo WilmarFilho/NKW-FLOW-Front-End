@@ -26,6 +26,15 @@ export default function SettingsContent({ tabIndex }: Props) {
   const user = useRecoilValue(userState);
   const { updateUser, uploadProfileImage } = useUserAction();
 
+  const [isDesktop, setIsDesktop] = useState(true);
+
+  useEffect(() => {
+    const checkScreen = () => setIsDesktop(window.innerWidth >= 992);
+    checkScreen(); // checa no load
+    window.addEventListener('resize', checkScreen);
+    return () => window.removeEventListener('resize', checkScreen);
+  }, []);
+
   // Nomes de estado mais descritivos
   const [showNameInMessages, setShowNameInMessages] = useState(false);
   const [notifyAttendant, setNotifyAttendant] = useState(false);
@@ -118,16 +127,16 @@ export default function SettingsContent({ tabIndex }: Props) {
                 <div className={styles.profileImageWrapper}>
                   <img
                     src={user.foto_perfil || '/default-avatar.png'}
-                    alt="Foto de Perfil"
+                    alt='Foto de Perfil'
                     className={styles.profileImage}
                     onClick={() => document.getElementById('profileImageInput')?.click()}
                     style={{ cursor: 'pointer' }}
                   />
                   <span className={styles.overlayText}>Editar</span>
                   <input
-                    type="file"
-                    id="profileImageInput"
-                    accept="image/*"
+                    type='file'
+                    id='profileImageInput'
+                    accept='image/*'
                     style={{ display: 'none' }}
                     onChange={handleImageUpload}
                   />
@@ -147,24 +156,30 @@ export default function SettingsContent({ tabIndex }: Props) {
 
                   <div className={styles.headerAccountWrapper}>
                     <div className={styles.userInfo}><h1>E-mail</h1><h2>{user.email}</h2></div>
-                    <div className={styles.userInfo}><h1>Senha</h1><h2>***********</h2></div>
-                    <div className={styles.userInfo}><h1>Plano Contradado</h1><h2>Premium</h2></div>
+                    <div className={styles.userInfo}><h1>Senha</h1><h2>*******</h2></div>
+
+                    {isDesktop && (
+                      <div className={styles.userInfo}>
+                        <h1>Plano Contradado</h1>
+                        <h2>Premium</h2>
+                      </div>
+                    )}
+
                   </div>
 
                   <div className={styles.headerAccountWrapper}>
                     <div className={styles.userInfo}>
                       <h1>Cidade</h1>
-                      <h2>{user.cidade}</h2>
+                      <h2>{user.cidade ?? '------'}</h2>
                     </div>
                     <div className={styles.userInfo}>
                       <h1>Endereço</h1>
-                      <h2>{user.endereco}</h2>
+                      <h2>{user.endereco ?? '------'}</h2>
                     </div>
                     <div className={styles.userInfo}>
                       <h1>Número</h1>
-                      <h2>{user.numero}</h2>
+                      <h2>{user.numero ?? '------'}</h2>
                     </div>
-
                   </div>
 
                 </div>

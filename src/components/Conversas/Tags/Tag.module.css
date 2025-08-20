@@ -23,6 +23,7 @@
   color: var(--color-text-white);
   font-weight: 350;
   opacity: 1;
+   flex: 1;
 }
 
 .tag:not(.active):hover {
@@ -38,11 +39,5 @@
 @media (max-width: 1211.98px) {
   .tag {
     font-size: 12px;
-  }
-}
-
-@media (max-width: 991.98px) {
-  .tag.active {
-    flex: 1;
   }
 }

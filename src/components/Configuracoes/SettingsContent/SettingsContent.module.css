@@ -9,7 +9,6 @@
   color: var(--color-text);
   overflow-y: auto;
   scrollbar-width: none;
-  /* Firefox */
 }
 
 .settingsContentAccount {
@@ -26,7 +25,6 @@
 
 .settingsContent::-webkit-scrollbar {
   display: none;
-  /* Chrome, Safari, and Opera */
 }
 
 /* --- Seção de Perfil (Aba 0) --- */
@@ -102,6 +100,8 @@
   flex-direction: column;
   gap: 16px;
   width: 100%;
+  height: 100%;
+  justify-content: space-between;
 }
 
 .userInfo h1 {
@@ -148,7 +148,6 @@
   height: 100%;
   gap: 24px;
   justify-content: space-between;
-  padding: 20px 0;
 }
 
 .headerAccountWrapper {
@@ -215,4 +214,81 @@
   color: var(--color-subtext-2);
   line-height: 1.5;
   text-wrap: balance;
+}
+
+
+@media (max-width: 1175.98px) {
+  .headerAccountWrapper {
+    padding: 38px 24px;
+  }
+
+  .userInfo h1 {
+    font-size: 14px;
+  }
+
+  .userInfo h2 {
+    font-size: 20px;
+  }
+
+  .userInfoMain h1 {
+    font-size: 24px;
+  }
+
+  .userInfoMain h2 {
+    font-size: 30px;
+  }
+
+  .profileImage {
+    width: 200px;
+    height: 200px;
+    right: 0;
+  }
+}
+
+@media (max-width: 991.98px) {
+
+  .settingsContentAccount,
+  .settingsContent {
+    padding: 22px;
+  }
+
+  .settingRow {
+    padding: 16px;
+  }
+
+  .settingLabel {
+    font-size: 18px;
+  }
+
+  .settingDescription {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .userInfoMain h1 {
+    font-size: 20px;
+  }
+
+  .userInfoMain h2 {
+    font-size: 26px;
+  }
+
+  .mainHeaderAccountWrapper {
+    gap: 0;
+  }
+
+  .infoGrid {
+    justify-content: center;
+  }
+
+  .settingsContentAccount {
+    padding: 40px 20px 20px 20px;
+  }
+
+  .profileImage {
+    width: 180px;
+    height: 180px;
+    right: -16px;
+  }
 }
