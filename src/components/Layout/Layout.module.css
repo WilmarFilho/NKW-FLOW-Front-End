@@ -21,7 +21,7 @@
 }
 
 .contentArea {
-  width: 92%;
+  width: 90%;
   padding: 12px 40px;
 }
 
@@ -43,19 +43,31 @@
   .contentArea {
     padding: 20px 32px;
   }
+
+  .contentAreaMinimal {
+    padding: 12px 50px;
+  }
 }
 
-/* === Breakpoint 2: Desktops Padrão === */
-@media (max-width: 1199.98px) {
+/* === Breakpoint 1: Telas Grandes (ex: Laptops Maiores) === */
+@media (max-width: 1175.98px) {
   .contentArea {
-    padding: 20px 32px;
+    width: 90%;
+  }
+
+  .contentAreaMinimal {
+    width: 90%;
   }
 }
 
 /* === Breakpoint 3: Tablets em Paisagem / Desktops Pequenos === */
 @media (max-width: 991.98px) {
   .contentArea {
-    padding: 12px 24px;
+    width: 88%;
+  }
+
+  .contentAreaMinimal {
+    width: 88%;
   }
 }
 

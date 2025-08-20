@@ -1,17 +1,16 @@
-
-
 import Modal from '../components/Gerais/Modal/Modal';
 import ChatSidebar from '../components/Conversas/ChatSideBar/ChatSideBar';
 import ChatWindow from '../components/Conversas/ChatWindow/ChatWindow';
 import NewChatForm from '../components/Conversas/NewChatForm/NewChatForm';
 import { useConversasPage } from '../hooks/pages/useConversasPage';
 import { DropdownMenuProvider } from '../components/Gerais/Dropdown/DropdownMenuContext';
+import GlobalStyles from '../global.module.css'
 
 export default function ConversasPage() {
   const state = useConversasPage();
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', gap: '40px' }}>
+    <div className={GlobalStyles.conversasContainer}>
       <ChatSidebar
         chats={state.chats}
         activeChat={state.activeChat}
@@ -66,8 +65,3 @@ export default function ConversasPage() {
     </div>
   );
 }
-
-
-
-
-

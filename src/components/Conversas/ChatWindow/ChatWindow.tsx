@@ -1,4 +1,3 @@
-// ChatWindow.tsx
 import { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import { motion } from 'framer-motion';
 import { NavLink } from 'react-router-dom';
@@ -142,6 +141,18 @@ export default function ChatWindow({
     }
   }, [replyingTo]);
 
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 991.98px)');
+    setIsSmallScreen(mediaQuery.matches);
+
+    const handler = (e: MediaQueryListEvent) => setIsSmallScreen(e.matches);
+    mediaQuery.addEventListener('change', handler);
+
+    return () => mediaQuery.removeEventListener('change', handler);
+  }, []);
+
   useEffect(() => onSetReplyingTo(undefined), [activeChat]);
 
   useEffect(() => {
@@ -226,11 +237,11 @@ export default function ChatWindow({
         quote={
           msg.quote_message
             ? {
-                mensagem: msg.quote_message.mensagem,
-                mimetype: msg.quote_message.mimetype,
-                remetente: msg.quote_message
-                  .remetente as 'Usuário' | 'Contato' | 'IA',
-              }
+              mensagem: msg.quote_message.mensagem,
+              mimetype: msg.quote_message.mimetype,
+              remetente: msg.quote_message
+                .remetente as 'Usuário' | 'Contato' | 'IA',
+            }
             : undefined
         }
         onReply={() => onSetReplyingTo(msg)}
@@ -242,10 +253,11 @@ export default function ChatWindow({
   return (
     <motion.section
       className={styles.chatWindow}
-      initial={{ opacity: 0, x: 30 }}
-      animate={{ opacity: 1, x: 0 }}
+      initial={isSmallScreen ? { opacity: 0 } : { opacity: 0, x: 30 }}
+      animate={isSmallScreen ? { opacity: 1 } : { opacity: 1, x: 0 }}
       transition={{ delay: 0.4, duration: 0.6 }}
     >
+
       <header className={styles.chatHeader}>
         <div
           className={styles.contactInfo}
@@ -258,7 +270,7 @@ export default function ChatWindow({
           />
           <div className={styles.contactText}>
             <h1>{activeChat.contato_nome}</h1>
-            <NavLink to="/agentes">
+            <NavLink to='/agentes'>
               <span>
                 Agente - {activeChat.connection.agente.tipo_de_agente}
               </span>
@@ -267,10 +279,10 @@ export default function ChatWindow({
         </div>
 
         <DropdownMenu
-          id="chat-header"
+          id='chat-header'
           trigger={
             <button className={styles.optionsButton}>
-              <Icon nome="dots" />
+              <Icon nome='dots' />
             </button>
           }
         >
@@ -282,13 +294,13 @@ export default function ChatWindow({
                   setRenameOpen(true);
                 }}
               >
-                <Icon nome="pencil" /> Renomear Chat
+                <Icon nome='pencil' /> Renomear Chat
               </button>
               <button onClick={onDeleteChat}>
-                <Icon nome="trash" /> Apagar Chat
+                <Icon nome='trash' /> Apagar Chat
               </button>
               <button onClick={onToggleChatStatus}>
-                <Icon nome="close" />{' '}
+                <Icon nome='close' />{' '}
                 {activeChat.status === 'Open'
                   ? 'Fechar Chat'
                   : 'Reabrir Chat'}
@@ -296,16 +308,31 @@ export default function ChatWindow({
             </>
           )}
           <button onClick={() => setDetailsOpen(true)}>
-            <Icon nome="info" /> Detalhes do Chat
+            <Icon nome='info' /> Detalhes do Chat
           </button>
         </DropdownMenu>
+
+        {/* Só renderiza no header se tela < 992px */}
+        {isSmallScreen && (
+          <div className={styles.toggleIaButton}>
+            <div className={styles.headerToggleIa}>
+              <Icon nome='agentespage' />{' '}
+            </div>
+            <ToggleSwitch
+              variant='secondary'
+              isOn={activeChat.ia_ativa}
+              onToggle={onToggleIA}
+            />
+          </div>
+        )}
+
       </header>
 
       <Modal
         transparent
         isOpen={isDetailsOpen}
         onClose={() => setDetailsOpen(false)}
-        title="Detalhes do Chat"
+        title='Detalhes do Chat'
       >
         <div className={styles.chatDetails}>
           <img
@@ -319,17 +346,17 @@ export default function ChatWindow({
 
       <Modal
         onSave={handleRenameClick}
-        labelSubmit="Salvar"
+        labelSubmit='Salvar'
         transparent
         isOpen={isRenameOpen}
         onClose={() => setRenameOpen(false)}
-        title="Renomear Chat"
+        title='Renomear Chat'
       >
         <div className={FormStyles.formGroup}>
           <input
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
-            placeholder="Novo nome"
+            placeholder='Novo nome'
           />
           {showError && !newName.trim() && (
             <span className={FormStyles.errorText}>
@@ -351,7 +378,7 @@ export default function ChatWindow({
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
-        data-scroll="messages"
+        data-scroll='messages'
       >
         <div ref={topSentinelRef} style={{ height: '1px' }} />
         {groupedMessages}
@@ -364,9 +391,8 @@ export default function ChatWindow({
             <>
               {replyingTo && (
                 <div
-                  className={`${styles.replyPreview} ${
-                    isExiting ? styles.isExiting : ''
-                  }`}
+                  className={`${styles.replyPreview} ${isExiting ? styles.isExiting : ''
+                    }`}
                 >
                   <div>
                     <span>
@@ -386,26 +412,29 @@ export default function ChatWindow({
               )}
 
               <div className={styles.inputArea}>
-                <div className={styles.toggleIaButton}>
-                  <div className={styles.headerToggleIa}>
-                    <Icon nome="agentespage" />{' '}
-                    {activeChat.ia_ativa ? 'Ativado' : 'Desativado'}
+                {!isSmallScreen && (
+                  <div className={styles.toggleIaButton}>
+                    <div className={styles.headerToggleIa}>
+                      <Icon nome='agentespage' />{' '}
+                      {activeChat.ia_ativa ? 'Ativado' : 'Desativado'}
+                    </div>
+                    <ToggleSwitch
+                      variant='secondary'
+                      isOn={activeChat.ia_ativa}
+                      onToggle={onToggleIA}
+                    />
                   </div>
-                  <ToggleSwitch
-                    variant="secondary"
-                    isOn={activeChat.ia_ativa}
-                    onToggle={onToggleIA}
-                  />
-                </div>
+                )}
 
                 <ChatInput
                   ref={inputRef}
-                  placeholder="Digite uma mensagem"
+                  placeholder='Digite uma mensagem'
                   onSend={(text, mimetype, base64) =>
                     onSendMessage(text, mimetype, base64)
                   }
                 />
               </div>
+
             </>
           ) : (
             <div className={styles.chatClosedBanner}>

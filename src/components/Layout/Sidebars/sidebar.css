@@ -7,22 +7,15 @@
   background-color: var(--color-background-sidebar);
   border-radius: 0px 15px 15px 0px;
 }
-
-.box-logo {
-  margin-bottom: 12px;
-}
-
 .box-logo svg {
   width: 90%;
 }
-
 .principal-menu,
 .suporte-menu {
   display: flex;
   gap: 8px;
   flex-direction: column;
 }
-
 .principal-menu h4,
 .suporte-menu h4 {
   color: rgba(255, 255, 255, 0.5);
@@ -30,8 +23,6 @@
   font-size: 24px;
   padding-bottom: 20px;
 }
-
-
 .MenuItem {
   display: flex;
   gap: 10px;
@@ -44,54 +35,35 @@
   font-size: 22px;
   font-family: var(--font-secundaria);
 }
-
-.MenuItem:focus, MenuItem.active-link:focus {
+.MenuItem:focus,
+MenuItem.active-link:focus {
   outline: 1px solid rgba(255, 255, 255, 0.04)
 }
-
 .MenuImage {
   display: flex;
   gap: 10px;
   padding: 4px 4px;
   align-items: center;
 }
-
 .MenuImage img {
   object-fit: cover;
 }
-
 .MenuItem:hover,
 .MenuItem.active-link {
   background-color: var(--color-background-menuItem);
   outline: 1px solid rgba(255, 255, 255, 0.15);
   color: #ffffff;
 }
-
 .user-menu {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
 }
-
 .column-info {
   gap: 8px;
   display: flex;
 }
-
-.column-links {
-  display: flex;
-  flex-direction: row;
-}
-
-.column-links>div:nth-child(1) {
-  display: none;
-}
-
-.column-links .MenuItem {
-  justify-content: center;
-}
-
 .user-info {
   align-items: start;
   justify-content: center;
@@ -99,36 +71,29 @@
   flex-direction: column;
   gap: 4px;
 }
-
 .user-avatar {
   width: 60px;
   height: 60px;
   border-radius: 100%;
 }
-
 .user-name {
   font-weight: 400;
   color: #ffffff;
   font-size: 30px;
   font-family: var(--font-main);
 }
-
 .user-email {
   font-size: 15px;
   font-family: var(--font-main);
-  color: #ffffffa8;
+  color: #ffffff88;
 }
-
-/* === Breakpoint 1: Telas Grandes (ex: Laptops Maiores) === */
-@media (max-width: 1299.98px) {
-  .sidebar {
-    width: 300px;
-    padding: 24px;
+@media (max-width: 1399.98px) {
+  .user-menu {
+    display: none;
   }
 
   .box-logo {
-    padding-right: 40px;
-    margin-bottom: 15px;
+    margin-bottom: 0;
   }
 
   .MenuItem {
@@ -142,259 +107,5 @@
   .suporte-menu h4 {
     font-size: 18px;
     padding-bottom: 12px;
-  }
-
-  .user-avatar {
-    width: 50px;
-    height: 50px;
-  }
-
-  .user-name {
-    font-size: 20px;
-  }
-
-  .user-email {
-    font-size: 12px;
-  }
-
-  .user-menu svg {
-    display: none;
-  }
-}
-
-/* === Breakpoint 2: Desktops Padrão === */
-@media (max-width: 1199.98px) {
-  .sidebar {
-    width: 280px;
-  }
-
-  .box-logo {
-    padding-right: 40px;
-    margin-bottom: 15px;
-  }
-
-  .MenuItem {
-    gap: 8px;
-    padding: 10px 10px;
-    border-radius: 14px;
-    font-size: 18px;
-  }
-
-  .principal-menu h4,
-  .suporte-menu h4 {
-    font-size: 18px;
-    padding-bottom: 12px;
-  }
-
-  .user-avatar {
-    width: 50px;
-    height: 50px;
-  }
-
-  .user-name {
-    font-size: 20px;
-  }
-
-  .user-email {
-    font-size: 12px;
-  }
-
-  .user-menu {
-    flex-direction: column;
-    align-items: start;
-  }
-
-  .column-links a:nth-child(2) {
-    display: none;
-  }
-
-  .user-menu svg {
-    width: 50%;
-  }
-}
-
-/* === Breakpoint 3: Tablets em Paisagem / Desktops Pequenos === */
-@media (max-width: 991.98px) {
-  .sidebar {
-    height: 100%;
-    position: fixed;
-    top: 0;
-    z-index: 5;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.70);
-    backdrop-filter: blur(10px);
-    transform: translateX(-200%);
-    /* Escondido por padrão */
-    opacity: 0;
-    width: 260px;
-    border-radius: 0 20px 20px 0;
-    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-  }
-
-  .sidebar.sidebar-is-open {
-    transform: translateX(0);
-    opacity: 1;
-    transition-delay: 0s, 0s, 0s;
-  }
-
-  .box-logo {
-    padding-right: 0px;
-    margin-bottom: 0px;
-  }
-
-  .MenuItem {
-    padding: 8px 8px;
-    border-radius: 10px;
-    font-size: 16px;
-  }
-
-  .principal-menu h4,
-  .suporte-menu h4 {
-    font-size: 16px;
-    padding-bottom: 8px;
-  }
-
-  .user-avatar {
-    width: 40px;
-    height: 40px;
-  }
-
-  .user-name {
-    font-size: 16px;
-  }
-
-  .user-email {
-    font-size: 12px;
-  }
-
-  .column-links>div:nth-child(1) {
-    display: block;
-  }
-
-  .user-menu {
-    gap: 12px;
-  }
-
-  .user-menu svg {
-    display: block;
-    width: 75%;
-  }
-
-  
-}
-
-/* === Breakpoint 4: Tablets em Retrato === */
-@media (max-width: 767.98px) {
-  .sidebar {
-    height: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.70);
-    backdrop-filter: blur(10px);
-    transform: translateX(-200%);
-    /* Escondido por padrão */
-    opacity: 0;
-    width: 260px;
-    border-radius: 0 20px 20px 0;
-    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-  }
-
-  .sidebar.sidebar-is-open {
-    transform: translateX(0);
-    opacity: 1;
-    transition-delay: 0s, 0s, 0s;
-  }
-
-  .box-logo {
-    padding-right: 50px;
-  }
-
-  .MenuItem {
-    padding: 8px 8px;
-    border-radius: 10px;
-    font-size: 14px;
-  }
-
-  .principal-menu h4,
-  .suporte-menu h4 {
-    font-size: 15px;
-    padding-bottom: 4px;
-  }
-
-  .user-avatar {
-    width: 40px;
-    height: 40px;
-  }
-
-  .user-name {
-    font-size: 14px;
-  }
-
-  .user-email {
-    font-size: 12px;
-  }
-
-  .column-links>div:nth-child(1) {
-    display: block;
-  }
-
-  .user-menu {
-    gap: 12px;
-  }
-
-  .user-menu svg {
-    display: block;
-    width: 75%;
-  }
-}
-
-/* === Breakpoint 5: Smartphones === */
-@media (max-width: 599.98px) {
-  .sidebar {
-    width: 220px;
-  }
-
-  .sidebar.sidebar-is-open {
-    transform: translateX(0);
-    opacity: 1;
-    transition-delay: 0s, 0s, 0s;
-  }
-
-  .box-logo {
-    padding-right: 50px;
-  }
-
-  .MenuItem {
-    padding: 8px 8px;
-    border-radius: 10px;
-    font-size: 14px;
-  }
-
-  .principal-menu h4,
-  .suporte-menu h4 {
-    font-size: 15px;
-    padding-bottom: 4px;
-  }
-
-  .user-avatar {
-    width: 40px;
-    height: 40px;
-  }
-
-  .user-name {
-    font-size: 14px;
-  }
-
-  .user-email {
-    font-size: 12px;
-  }
-
-  .user-menu {
-    gap: 12px;
-  }
-
-  .user-menu svg {
-    width: 60%;
   }
 }

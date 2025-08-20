@@ -14,32 +14,39 @@ const SidebarWrapper = () => {
     const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
-        const checkScreenSize = () => {
-            setIsMobile(window.innerWidth <= 991.98);
+        const mediaQuery = window.matchMedia('(max-width: 1175.98px)');
+
+        // Define inicial
+        setIsMobile(mediaQuery.matches);
+
+        // Listener que roda quando passa do breakpoint
+        const handler = (event: MediaQueryListEvent) => {
+            setIsMobile(event.matches);
         };
 
-        checkScreenSize();
-        window.addEventListener('resize', checkScreenSize);
-        return () => window.removeEventListener('resize', checkScreenSize);
+        mediaQuery.addEventListener('change', handler);
+
+        return () => mediaQuery.removeEventListener('change', handler);
     }, []);
+
 
     if (!user) return null;
 
     const modoSidebar = user.modo_side_bar;
 
     return (
-       
-            <div
-                key={modoSidebar + isMobile}
-                className={modoSidebar === 'Minimal' || (modoSidebar === 'Full' && isMobile)
-                    ? 'sidebarclosed'
-                    : 'sidebar'}
-            >
-                {modoSidebar === 'Minimal' || (modoSidebar === 'Full' && isMobile)
-                    ? <SidebarClosed />
-                    : <Sidebar />}
-            </div>
-    
+
+        <div
+            key={modoSidebar + isMobile}
+            className={modoSidebar === 'Minimal' || (modoSidebar === 'Full' && isMobile)
+                ? 'sidebarclosed'
+                : 'sidebar'}
+        >
+            {modoSidebar === 'Minimal' || (modoSidebar === 'Full' && isMobile)
+                ? <SidebarClosed />
+                : <Sidebar />}
+        </div>
+
     );
 };
 

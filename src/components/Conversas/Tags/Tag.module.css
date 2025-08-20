@@ -33,3 +33,10 @@
 .tag:focus-visible {
   border: 1px solid var(--color-secundaria);
 }
+
+
+@media (max-width: 1211.98px) {
+  .tag {
+    font-size: 12px;
+  }
+}

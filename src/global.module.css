@@ -1,8 +1,16 @@
+.conversasContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  gap: 40px;
+}
+
 .pageContainer {
   display: flex;
   flex-direction: column;
   gap: 32px;
-  padding: 32px 0 12px 0; 
+  padding: 32px 0 12px 0;
   height: 100%;
   box-sizing: border-box;
 }
@@ -59,7 +67,7 @@
   display: flex;
   flex-direction: row;
   gap: 12px;
-  margin-top: auto; 
+  margin-top: auto;
 }
 
 .filterControls .button {
@@ -89,12 +97,26 @@
   background-color: var(--color-filter-hover-attendants);
 }
 
+
+@media (max-width: 1211.98px) {
+  .conversasContainer {
+    gap: 20px;
+  }
+}
+
 @media (max-width: 1199.98px) {
   .page-header__titles h2 {
     font-size: 32px;
   }
+
   .page-header__titles h3 {
     font-size: 20px;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .conversasContainer {
+    flex-direction: column;
   }
 }
 
@@ -104,19 +126,21 @@
     align-items: start;
     gap: 24px;
   }
+
   .page-header__titles h2 {
     font-size: 26px;
   }
+
   .page-header__titles h3 {
     font-size: 18px;
   }
+
   .page-row {
     flex-direction: column;
   }
 }
 
-
-
+/* ========================== */
 
 .InputForm {
   display: flex;

@@ -144,9 +144,33 @@
 
 /* === Media Queries === */
 
-@media (max-width: 1111.98px) {
+@media (max-width: 1421.98px) {
   .chatSidebar {
     width: 35%;
+  }
+
+  .buttonAlterActiveChats {
+    font-size: 13px;
+  }
+
+  .iaFilterButton {
+    font-size: 13px;
+    line-height: 18px;
+  }
+}
+
+@media (max-width: 1211.98px) {
+  .chatSidebar {
+    width: 35%;
+  }
+
+  .buttonAlterActiveChats {
+    font-size: 12px;
+  }
+
+  .iaFilterButton {
+    font-size: 14px;
+    line-height: 18px;
   }
 }
 
@@ -154,7 +178,15 @@
   .chatSidebar {
     width: 100%;
     height: auto;
-    max-height: 280px;
+    max-height: 350px;
+  }
+
+  .statusToggleContainer {
+    flex-direction: row;
+  }
+
+  .tagsContainer {
+    padding-bottom: 34px;
   }
 
   .chatList {

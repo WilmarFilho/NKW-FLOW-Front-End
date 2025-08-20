@@ -17,6 +17,20 @@
 
   to {
     height: 100px;
+    /* padrão desktop */
+  }
+}
+
+@media (max-width: 991.98px) {
+  @keyframes fadeInContent {
+    from {
+      height: 0px;
+    }
+
+    to {
+      height: 65px;
+      /* altura reduzida para telas menores */
+    }
   }
 }
 
@@ -401,5 +415,11 @@
   .fallbackContainer {
     width: 100%;
     height: 65vh;
+  }
+
+  .toggleIaButton {
+    flex-direction: row;
+    width: 200px;
+    padding: 10px 24px;
   }
 }
