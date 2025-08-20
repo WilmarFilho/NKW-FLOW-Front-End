@@ -27,7 +27,7 @@
 
 .contentAreaMinimal {
   width: 80%;
-  padding: 12px 50px;
+  padding: 12px 40px;
 }
 
 .Toastify__toast-icon svg {
@@ -38,50 +38,37 @@
   background-color: var(--color-secundaria) !important;
 }
 
-/* === Breakpoint 1: Telas Grandes (ex: Laptops Maiores) === */
-@media (max-width: 1299.98px) {
-  .contentArea {
-    padding: 20px 32px;
-  }
-
-  .contentAreaMinimal {
-    padding: 12px 50px;
-  }
-}
-
-/* === Breakpoint 1: Telas Grandes (ex: Laptops Maiores) === */
 @media (max-width: 1175.98px) {
-  .contentArea {
-    width: 90%;
-  }
 
+  .contentArea,
   .contentAreaMinimal {
     width: 90%;
   }
 }
 
-/* === Breakpoint 3: Tablets em Paisagem / Desktops Pequenos === */
 @media (max-width: 991.98px) {
-  .contentArea {
-    width: 88%;
-  }
 
+  .contentArea,
   .contentAreaMinimal {
     width: 88%;
+    padding: 8px 20px;
   }
 }
 
-/* === Breakpoint 4: Tablets em Retrato === */
 @media (max-width: 767.98px) {
-  .contentArea {
-    padding: 12px 20px;
-    width: 80%;
+
+  .contentArea,
+  .contentAreaMinimal {
+    width: 88%;
+    padding: 8px 16px;
   }
 }
 
 /* === Breakpoint 5: Smartphones === */
 @media (max-width: 599.98px) {
-  .contentArea {
+  .contentArea,
+  .contentAreaMinimal {
+    width: 84%;
     padding: 8px 16px;
   }
 }
