@@ -56,6 +56,17 @@
   transition: .5s;
 }
 
+/* Texto padrão (desktop) */
+.buttonAlterActiveChats::after {
+  content: attr(data-label);
+}
+
+/* Esconde o texto do botão (o children do React) */
+.buttonAlterActiveChats {
+  font-size: 15px;
+  /* oculta o texto original */
+}
+
 .buttonAlterActiveChats:hover {
   background-color: var(--color-primary);
   transition: .5s;
@@ -201,5 +212,57 @@
   .buttonAlterActiveChats {
     justify-content: center;
     padding: 0px;
+  }
+}
+
+@media (max-width: 599.98px) {
+  .iaFilterButton {
+    font-size: 14px;
+    padding: 12px 36px;
+  }
+
+  .buttonAlterActiveChats::after {
+    content: attr(data-label-short);
+    font-size: 12px;
+  }
+
+  .chatSidebar {
+    max-height: none;
+    height: 100%;
+  }
+
+  .tagsContainer {
+    padding-bottom: 20px;
+  }
+
+  .chatList {
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+}
+
+@media (max-width: 464.98px) {
+  .iaFilterButton {
+    font-size: 12px;
+    padding: 6px 18px;
+  }
+
+  .chatSidebar {
+    padding: 10px;
+    gap: 8px;
+  }
+
+  .buttonAddChat svg {
+    height: 20px;
+  }
+
+  .tagsContainer {
+    padding-bottom: 26px;
+  }
+
+  .buttonAlterActiveChats {
+    height: 40px;
   }
 }

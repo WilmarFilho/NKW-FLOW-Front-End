@@ -58,3 +58,10 @@
     max-width: none;
   }
 }
+
+@media (max-width: 464.98px) {
+  .searchInput {
+    border-radius: 10px;
+    padding: 10px 10px 10px 48px;
+  }
+}

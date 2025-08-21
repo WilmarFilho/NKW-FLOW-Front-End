@@ -50,7 +50,7 @@ const Sidebar = () => {
         <div className='column-info'>
           <NavLink to='/configuracoes'>
             <div className='MenuImage'>
-              <img src={user?.foto_perfil} alt={user?.nome} className='user-avatar' />
+              <img src={user?.foto_perfil} alt={user?.nome} />
             </div>
           </NavLink>
           <div className='user-info'>

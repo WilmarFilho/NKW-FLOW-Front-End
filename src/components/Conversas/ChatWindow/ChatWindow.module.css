@@ -188,7 +188,7 @@
 .contactText span {
   font-size: 13px;
   font-family: var(--font-secundaria);
-  color: var(--color-subtext-2);
+  color: var(--color-text);
   text-decoration: underline;
   transition: .5s;
 }
@@ -197,7 +197,6 @@
   background: none;
   border: none;
   cursor: pointer;
-  padding: 8px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -206,9 +205,16 @@
   transition: background-color 0.2s;
 }
 
-.optionsButton svg {
-  width: 28px;
-  height: 28px;
+.backButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  transform: rotate(290deg);
+}
+
+.optionsButton svg,
+.backButton svg {
+  width: 40px;
   fill: var(--color-text);
 }
 
@@ -321,7 +327,7 @@
   background-color: var(--color-background-white);
   border-radius: 12px;
   border: none;
-  width: 200px;
+  width: 150px;
   height: 100%;
   overflow: hidden;
   flex-shrink: 0;
@@ -333,7 +339,7 @@
   align-items: center;
   color: var(--color-text);
   opacity: .8;
-  padding: 12px 40px;
+  padding: 12px 15px;
   outline: none;
 }
 
@@ -429,8 +435,16 @@
     width: 120px;
     padding: 6px 12px;
   }
+
+  .fallbackContainer {
+    padding: 0 40px;
+    text-wrap: balance;
+    line-height: 30px;
+  }
 }
 
 @media (max-width: 599.98px) {
-
+  .contactText span {
+    display: none;
+  }
 }

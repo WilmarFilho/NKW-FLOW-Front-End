@@ -22,6 +22,7 @@ interface MessageBubbleProps {
   createdAt: string;
   excluded: boolean;
   onDelete?: (id: string) => void;
+  isMobileLayout?: boolean;
 }
 
 const renderMessageContent = ({ mimetype, base64, text }: MessageBubbleProps) => {
@@ -235,19 +236,20 @@ export default function MessageBubble(props: MessageBubbleProps) {
           className={`${styles.messageMenu} ${sender === 'me' ? styles.menuRight : styles.menuLeft}`}
         >
           <button onClick={() => onReply?.()}>
-            <Icon nome="arrow" /> Responder Mensagem
+            <Icon nome="arrow" /> {props.isMobileLayout ? 'Responder' : 'Responder Mensagem'}
           </button>
 
           {props.text && (
             <button onClick={() => navigator.clipboard.writeText(props.text || '')}>
-              <Icon nome="copy" /> Copiar mensagem
+              <Icon nome="copy" /> {props.isMobileLayout ? 'Copiar' : 'Copiar mensagem'}
             </button>
           )}
 
           <button onClick={() => props.onDelete?.(id)}>
-            <Icon nome="trash" /> Apagar mensagem
+            <Icon nome="trash" /> {props.isMobileLayout ? 'Apagar' : 'Apagar mensagem'}
           </button>
         </DropdownMenu>
+
 
       )}
     </motion.div>

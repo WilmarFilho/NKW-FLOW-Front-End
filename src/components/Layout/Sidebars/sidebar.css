@@ -48,11 +48,15 @@ MenuItem.active-link:focus {
 .MenuImage {
   display: flex;
   gap: 10px;
-  padding: 4px 4px;
+  width: 50px;
+  height: 50px;
   align-items: center;
 }
 
 .MenuImage img {
+  border-radius: 200px;
+  height: 100%;
+  width: 100%;
   object-fit: cover;
 }
 
@@ -81,12 +85,6 @@ MenuItem.active-link:focus {
   display: flex;
   flex-direction: column;
   gap: 4px;
-}
-
-.user-avatar {
-  width: 60px;
-  height: 60px;
-  border-radius: 100%;
 }
 
 .user-name {

@@ -34,6 +34,9 @@ interface ChatWindowProps {
   fetchMoreMessages: () => void;
   hasMore: boolean;
   isLoading: boolean;
+  isSmallScreen: boolean;
+  isMobileLayout: boolean;
+  onBack?: () => void;
 }
 
 export default function ChatWindow({
@@ -53,6 +56,9 @@ export default function ChatWindow({
   isExiting,
   onDeleteMessage,
   handleCloseReply,
+  isSmallScreen,
+  isMobileLayout,
+  onBack,
 }: ChatWindowProps) {
   const [isDetailsOpen, setDetailsOpen] = useState(false);
   const [isRenameOpen, setRenameOpen] = useState(false);
@@ -70,15 +76,12 @@ export default function ChatWindow({
   const listRef = useRef<HTMLDivElement | null>(null);
   const prevScrollHeightRef = useRef<number | null>(null);
 
-  // Rastrear se é carregamento inicial
   const isInitialLoadRef = useRef(true);
 
-  // Reset flag ao trocar de chat
   useEffect(() => {
     isInitialLoadRef.current = true;
   }, [activeChat]);
 
-  // Intersection Observer para scroll infinito
   useEffect(() => {
     const list = listRef.current;
     if (!list) return;
@@ -90,29 +93,21 @@ export default function ChatWindow({
           fetchMoreMessages();
         }
       },
-      {
-        root: list,
-        rootMargin: '1000px 0px 0px 0px',
-        threshold: 0.0,
-      }
+      { root: list, rootMargin: '1000px 0px 0px 0px', threshold: 0.0 }
     );
 
     const sentinel = topSentinelRef.current;
-    if (sentinel) {
-      observer.observe(sentinel);
-    }
+    if (sentinel) observer.observe(sentinel);
 
     return () => {
       if (sentinel) observer.unobserve(sentinel);
     };
   }, [fetchMoreMessages, hasMore, isLoading]);
 
-  // Lógica de Scroll
   useLayoutEffect(() => {
     const list = listRef.current;
     if (!list) return;
 
-    // Paginando para cima
     if (prevScrollHeightRef.current !== null) {
       const newScrollHeight = list.scrollHeight;
       list.scrollTop = newScrollHeight - prevScrollHeightRef.current;
@@ -120,38 +115,23 @@ export default function ChatWindow({
       return;
     }
 
-    // Carregamento inicial
     if (isInitialLoadRef.current && messages.length > 0) {
       messagesEndRef.current?.scrollIntoView();
       isInitialLoadRef.current = false;
       return;
     }
 
-    // Nova mensagem em chat aberto
     if (!isInitialLoadRef.current) {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [messages]); // só depende das mensagens
+  }, [messages]);
 
-  // Foco no campo de resposta
   useEffect(() => {
     if (replyingTo && inputRef.current) {
       inputRef.current.focus();
       inputRef.current.select?.();
     }
   }, [replyingTo]);
-
-  const [isSmallScreen, setIsSmallScreen] = useState(false);
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(max-width: 991.98px)');
-    setIsSmallScreen(mediaQuery.matches);
-
-    const handler = (e: MediaQueryListEvent) => setIsSmallScreen(e.matches);
-    mediaQuery.addEventListener('change', handler);
-
-    return () => mediaQuery.removeEventListener('change', handler);
-  }, []);
 
   useEffect(() => onSetReplyingTo(undefined), [activeChat]);
 
@@ -181,7 +161,7 @@ export default function ChatWindow({
     );
   }
 
-  // --- Agrupamento de mensagens ---
+  // Agrupamento de mensagens
   const groupedMessages: React.ReactNode[] = [];
   let lastDate: string | null = null;
 
@@ -193,10 +173,7 @@ export default function ChatWindow({
     return new Date(utcTimestamp);
   };
 
-  // Deduplica mensagens
-  const uniqueMessages = Array.from(
-    new Map(messages.map((m) => [m.id, m])).values()
-  );
+  const uniqueMessages = Array.from(new Map(messages.map((m) => [m.id, m])).values());
 
   uniqueMessages.forEach((msg) => {
     const localMsgDate = parseToLocalDate(msg.criado_em);
@@ -239,13 +216,13 @@ export default function ChatWindow({
             ? {
               mensagem: msg.quote_message.mensagem,
               mimetype: msg.quote_message.mimetype,
-              remetente: msg.quote_message
-                .remetente as 'Usuário' | 'Contato' | 'IA',
+              remetente: msg.quote_message.remetente as 'Usuário' | 'Contato' | 'IA',
             }
             : undefined
         }
         onReply={() => onSetReplyingTo(msg)}
         onDelete={onDeleteMessage}
+        isMobileLayout={isMobileLayout}
       />
     );
   });
@@ -257,7 +234,44 @@ export default function ChatWindow({
       animate={isSmallScreen ? { opacity: 1 } : { opacity: 1, x: 0 }}
       transition={{ delay: 0.4, duration: 0.6 }}
     >
+      {/* Header MOBILE (<= 599.98px) */}
+      {isMobileLayout && (
+        <header className={styles.chatHeader}>
 
+          <div
+            className={styles.contactInfo}
+            onClick={() => setDetailsOpen(true)}
+            style={{ cursor: 'pointer' }}
+          >
+            <img
+              src={activeChat.foto_perfil || defaultAvatar}
+              alt={`Avatar de ${activeChat.contato_nome}`}
+            />
+            <div className={styles.contactText}>
+              <h1 title={activeChat.contato_nome}>{activeChat.contato_nome}</h1>
+              <span>
+                Agente - {activeChat.connection.agente.tipo_de_agente}
+              </span>
+            </div>
+          </div>
+
+          {onBack ? (
+            <button
+              className={styles.backButton}
+              onClick={onBack}
+              aria-label="Voltar para a lista de chats"
+            >
+              <Icon nome='arrow' />
+            </button>
+          ) : (
+            ''
+          )}
+
+
+        </header>
+      )}
+
+      {/* Header DESKTOP/TABLET (> 991.98px) */}
       {!isSmallScreen && (
         <header className={styles.chatHeader}>
           <div
@@ -271,19 +285,17 @@ export default function ChatWindow({
             />
             <div className={styles.contactText}>
               <h1>{activeChat.contato_nome}</h1>
-              <NavLink to='/agentes'>
-                <span>
-                  Agente - {activeChat.connection.agente.tipo_de_agente}
-                </span>
+              <NavLink to="/agentes">
+                <span>Agente - {activeChat.connection.agente.tipo_de_agente}</span>
               </NavLink>
             </div>
           </div>
 
           <DropdownMenu
-            id='chat-header'
+            id="chat-header"
             trigger={
               <button className={styles.optionsButton}>
-                <Icon nome='dots' />
+                <Icon nome="dots" />
               </button>
             }
           >
@@ -295,37 +307,27 @@ export default function ChatWindow({
                     setRenameOpen(true);
                   }}
                 >
-                  <Icon nome='pencil' /> Renomear Chat
+                  <Icon nome="pencil" /> Renomear Chat
                 </button>
                 <button onClick={onDeleteChat}>
-                  <Icon nome='trash' /> Apagar Chat
+                  <Icon nome="trash" /> Apagar Chat
                 </button>
                 <button onClick={onToggleChatStatus}>
-                  <Icon nome='close' />{' '}
-                  {activeChat.status === 'Open'
-                    ? 'Fechar Chat'
-                    : 'Reabrir Chat'}
+                  <Icon nome="close" />{' '}
+                  {activeChat.status === 'Open' ? 'Fechar Chat' : 'Reabrir Chat'}
                 </button>
               </>
             )}
             <button onClick={() => setDetailsOpen(true)}>
-              <Icon nome='info' /> Detalhes do Chat
+              <Icon nome="info" /> Detalhes do Chat
             </button>
           </DropdownMenu>
         </header>
       )}
 
-      <Modal
-        transparent
-        isOpen={isDetailsOpen}
-        onClose={() => setDetailsOpen(false)}
-        title='Detalhes do Chat'
-      >
+      <Modal transparent isOpen={isDetailsOpen} onClose={() => setDetailsOpen(false)} title="Detalhes do Chat">
         <div className={styles.chatDetails}>
-          <img
-            src={activeChat.foto_perfil || defaultAvatar}
-            alt={`Avatar de ${activeChat.contato_nome}`}
-          />
+          <img src={activeChat.foto_perfil || defaultAvatar} alt={`Avatar de ${activeChat.contato_nome}`} />
           <h2>{activeChat.contato_nome}</h2>
           <h3>{activeChat.contato_numero}</h3>
         </div>
@@ -333,22 +335,20 @@ export default function ChatWindow({
 
       <Modal
         onSave={handleRenameClick}
-        labelSubmit='Salvar'
+        labelSubmit="Salvar"
         transparent
         isOpen={isRenameOpen}
         onClose={() => setRenameOpen(false)}
-        title='Renomear Chat'
+        title="Renomear Chat"
       >
         <div className={FormStyles.formGroup}>
           <input
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
-            placeholder='Novo nome'
+            placeholder="Novo nome"
           />
           {showError && !newName.trim() && (
-            <span className={FormStyles.errorText}>
-              O nome não pode ficar vazio.
-            </span>
+            <span className={FormStyles.errorText}>O nome não pode ficar vazio.</span>
           )}
         </div>
       </Modal>
@@ -365,7 +365,7 @@ export default function ChatWindow({
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
-        data-scroll='messages'
+        data-scroll="messages"
       >
         <div ref={topSentinelRef} style={{ height: '1px' }} />
         {groupedMessages}
@@ -377,16 +377,9 @@ export default function ChatWindow({
           activeChat.status === 'Open' ? (
             <>
               {replyingTo && (
-                <div
-                  className={`${styles.replyPreview} ${isExiting ? styles.isExiting : ''
-                    }`}
-                >
+                <div className={`${styles.replyPreview} ${isExiting ? styles.isExiting : ''}`}>
                   <div>
-                    <span>
-                      {replyingTo.remetente === 'Usuário'
-                        ? 'Você'
-                        : 'Contato'}
-                    </span>
+                    <span>{replyingTo.remetente === 'Usuário' ? 'Você' : 'Contato'}</span>
                     <p>
                       {replyingTo.mensagem ||
                         (replyingTo.mimetype?.startsWith('image/')
@@ -399,48 +392,22 @@ export default function ChatWindow({
               )}
 
               <div className={styles.inputArea}>
-                {!isSmallScreen && (
+
+                {!isSmallScreen && !isMobileLayout && (
                   <div className={styles.toggleIaButton}>
                     <div className={styles.headerToggleIa}>
-                      <Icon nome='agentespage' />{' '}
-                      {activeChat.ia_ativa ? 'Ativado' : 'Desativado'}
+                      <Icon nome="agentespage" /> {activeChat.ia_ativa ? 'Ativado' : 'Desativado'}
                     </div>
-                    <ToggleSwitch
-                      variant='secondary'
-                      isOn={activeChat.ia_ativa}
-                      onToggle={onToggleIA}
-                    />
+                    <ToggleSwitch variant="secondary" isOn={activeChat.ia_ativa} onToggle={onToggleIA} />
                   </div>
                 )}
 
-                {/* Só renderiza no header se tela < 992px */}
-                {isSmallScreen && (
-                  <div className={styles.toggleIaButton}>
-                    <div className={styles.headerToggleIa}>
-                      <Icon nome='agentespage' />{' '}
-                    </div>
-                    <ToggleSwitch
-                      variant='secondary'
-                      isOn={activeChat.ia_ativa}
-                      onToggle={onToggleIA}
-                    />
-                  </div>
-                )}
-
-                <ChatInput
-                  ref={inputRef}
-                  placeholder='Digite uma mensagem'
-                  onSend={(text, mimetype, base64) =>
-                    onSendMessage(text, mimetype, base64)
-                  }
-                />
-                {/* Dropdown vai para o footer se for tela pequena */}
-                {isSmallScreen && (
+                {(isSmallScreen && !isMobileLayout) && (
                   <DropdownMenu
-                    id='chat-footer'
+                    id="chat-footer"
                     trigger={
                       <button className={styles.optionsButton}>
-                        <Icon nome='dots' />
+                        <Icon nome="dots" />
                       </button>
                     }
                   >
@@ -452,44 +419,88 @@ export default function ChatWindow({
                             setRenameOpen(true);
                           }}
                         >
-                          <Icon nome='pencil' /> Renomear Chat
+                          <Icon nome="pencil" /> {isMobileLayout ? 'Renomear' : 'Renomear Chat'}
                         </button>
                         <button onClick={onDeleteChat}>
-                          <Icon nome='trash' /> Apagar Chat
+                          <Icon nome="trash" /> {isMobileLayout ? 'Apagar' : 'Apagar Chat'}
                         </button>
                         <button onClick={onToggleChatStatus}>
-                          <Icon nome='close' />{' '}
-                          {activeChat.status === 'Open'
-                            ? 'Fechar Chat'
-                            : 'Reabrir Chat'}
+                          <Icon nome="close" />{' '}
+                          {isMobileLayout
+                            ? activeChat.status === 'Open'
+                              ? 'Fechar'
+                              : 'Reabrir'
+                            : activeChat.status === 'Open'
+                              ? 'Fechar Chat'
+                              : 'Reabrir Chat'}
                         </button>
                       </>
                     )}
                     <button onClick={() => setDetailsOpen(true)}>
-                      <Icon nome='info' /> Detalhes do Chat
+                      <Icon nome="info" /> {isMobileLayout ? 'Detalhes' : 'Detalhes do Chat'}
                     </button>
                   </DropdownMenu>
                 )}
-                
-              </div>
 
+
+                <ChatInput
+                  ref={inputRef}
+                  placeholder="Digite uma mensagem"
+                  onSend={(text, mimetype, base64) => onSendMessage(text, mimetype, base64)}
+                />
+
+                {(isMobileLayout) && (
+                  <DropdownMenu
+                    id="chat-footer"
+                    trigger={
+                      <button className={styles.optionsButton}>
+                        <Icon nome="dots" />
+                      </button>
+                    }
+                  >
+                    {isOwner && (
+                      <>
+                        <button
+                          onClick={() => {
+                            setNewName(activeChat.contato_nome || '');
+                            setRenameOpen(true);
+                          }}
+                        >
+                          <Icon nome="pencil" /> {isMobileLayout ? 'Renomear' : 'Renomear Chat'}
+                        </button>
+                        <button onClick={onDeleteChat}>
+                          <Icon nome="trash" /> {isMobileLayout ? 'Apagar' : 'Apagar Chat'}
+                        </button>
+                        <button onClick={onToggleChatStatus}>
+                          <Icon nome="close" />{' '}
+                          {isMobileLayout
+                            ? activeChat.status === 'Open'
+                              ? 'Fechar'
+                              : 'Reabrir'
+                            : activeChat.status === 'Open'
+                              ? 'Fechar Chat'
+                              : 'Reabrir Chat'}
+                        </button>
+                      </>
+                    )}
+                    <button onClick={() => setDetailsOpen(true)}>
+                      <Icon nome="info" /> {isMobileLayout ? 'Detalhes' : 'Detalhes do Chat'}
+                    </button>
+                  </DropdownMenu>
+                )}
+
+              </div>
             </>
           ) : (
             <div className={styles.chatClosedBanner}>
-              <button
-                className={styles.buttonReOpen}
-                onClick={onToggleChatStatus}
-              >
+              <button className={styles.buttonReOpen} onClick={onToggleChatStatus}>
                 Reabrir Chat
               </button>
             </div>
           )
         ) : (
           <div className={styles.chatClosedBanner}>
-            <button
-              className={styles.buttonReOpen}
-              onClick={onToggleChatStatus}
-            >
+            <button className={styles.buttonReOpen} onClick={onToggleChatStatus}>
               Chat em andamento por: {activeChat.user_nome}
             </button>
           </div>
@@ -498,3 +509,6 @@ export default function ChatWindow({
     </motion.section>
   );
 }
+
+
+

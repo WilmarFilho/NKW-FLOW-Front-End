@@ -17,7 +17,6 @@ import { userState } from '../../../state/atom';
 // Icons
 import Icon from '../../../components/Gerais/Icons/Icons';
 
-
 interface ChatSidebarProps {
   chats: Chat[];
   connections: { id: string; nome?: string }[];
@@ -32,7 +31,6 @@ const containerVariants = {
   show: { opacity: 1, transition: { staggerChildren: 0.1 } },
 };
 
-// Função utilitária para filtrar chats
 function filterChats(
   chats: Chat[],
   query: string,
@@ -96,7 +94,6 @@ function ChatSidebar({
   const currentUserId = user?.id ? user.id : null;
 
   const filteredChats = useMemo(() => {
-    // Se status é Close ou ownerFilter é 'mine', força IA desativada
     const effectiveIaFilter =
       statusFilter === 'Close' || ownerFilter === 'mine'
         ? 'desativada'
@@ -132,7 +129,6 @@ function ChatSidebar({
       initial="hidden"
       animate="show"
     >
-      {/* Barra de busca + botão novo chat */}
       <div className={styles.wrapperSearchBar}>
         <SearchBar onSearch={setSearchQuery} />
         <button onClick={() => setIsAddChatOpen(true)} className={styles.buttonAddChat}>
@@ -140,7 +136,6 @@ function ChatSidebar({
         </button>
       </div>
 
-      {/* Filtros IA */}
       <div className={styles.iaFilterContainer}>
         {statusFilter === 'Open' && ownerFilter === 'all' ? (
           ['ativa', 'desativada'].map((status) => (
@@ -156,7 +151,7 @@ function ChatSidebar({
         ) : (
           <button
             type="button"
-            className={`${styles.iaFilterButton} ${styles.active}`} // já ativo
+            className={`${styles.iaFilterButton} ${styles.active}`}
             onClick={() => setIaStatusFilter('desativada')}
           >
             Agente Desativado
@@ -164,9 +159,6 @@ function ChatSidebar({
         )}
       </div>
 
-
-
-      {/* Tags */}
       <div className={styles.tagsContainer}>
         <Tag
           label="Todas"
@@ -183,7 +175,6 @@ function ChatSidebar({
         ))}
       </div>
 
-      {/* Lista de chats */}
       <div className={styles.chatList}>
         {filteredChats.map((chat) => (
           <ChatListItem
@@ -201,26 +192,22 @@ function ChatSidebar({
         ))}
       </div>
 
-      {/* Alternar filtros no footer */}
       <div className={styles.statusToggleContainer}>
         <button
           className={styles.buttonAlterActiveChats}
           onClick={toggleStatusFilter}
-        >
-          {statusFilter === 'Open' ? 'Exibindo:  Chats Abertos' : 'Exibindo:  Chats Fechados'}
-        </button>
-
+          data-label={statusFilter === 'Open' ? 'Exibindo: Chats Abertos' : 'Exibindo: Chats Fechados'}
+          data-label-short={statusFilter === 'Open' ? 'Abertos' : 'Fechados'}
+        />
         <button
           className={styles.buttonAlterActiveChats}
           onClick={toggleOwnerFilter}
-        >
-          {ownerFilter === 'all' ? 'Exibindo:  Todos Chats' : 'Exibindo:  Meus Chats'}
-        </button>
+          data-label={ownerFilter === 'all' ? 'Exibindo: Todos Chats' : 'Exibindo: Meus Chats'}
+          data-label-short={ownerFilter === 'all' ? 'Todos' : 'Meus'}
+        />
       </div>
     </motion.aside>
   );
 }
 
 export default React.memo(ChatSidebar);
-
-
