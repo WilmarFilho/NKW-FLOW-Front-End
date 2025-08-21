@@ -9,9 +9,17 @@ import GaugeMetricChart from '../components/Resumo/GaugeMetricChart/GaugeMetricC
 import GlobalStyles from '../global.module.css';
 import Icon from '../components/Gerais/Icons/Icons';
 import { useResumoPage } from '../hooks/pages/useResumoPage';
+import { useMediaQuery } from 'react-responsive';
 
 export default function ResumoPage() {
   const navigate = useNavigate();
+
+  const isMobile = useMediaQuery({ maxWidth: 429.98 });
+
+  function getMobileData<T>(data: T[] | undefined): T[] {
+    if (!data) return [];
+    return isMobile ? data.slice(-3) : data;
+  }
 
   const {
     viewChatsNovos,
@@ -27,11 +35,6 @@ export default function ResumoPage() {
     heightAtedentes,
     widthConexoes
   } = useResumoPage();
-
-  console.log(dataNovos)
-  console.log(dataFechados)
-  console.log(dataConexoes)
-  console.log(dataAtendentes)
 
   return (
     <div className={GlobalStyles.pageContainer}>
@@ -64,10 +67,14 @@ export default function ResumoPage() {
               setOpenId={setOpenDropdown}
             />
           }
+          isMobile={isMobile} // 👈 passa para o MetricCard
         >
-          <BarMetricChart data={dataNovos?.labels || []} dataKey="chats" />
+          <BarMetricChart
+            data={getMobileData(dataNovos?.labels)}
+            dataKey="chats"
+           
+          />
         </MetricCard>
-
 
         <MetricCard
           title="Chats Fechados"
@@ -84,25 +91,31 @@ export default function ResumoPage() {
               setOpenId={setOpenDropdown}
             />
           }
+          isMobile={isMobile}
         >
-          <BarMetricChart data={dataFechados?.labels || []} dataKey="chats" />
+          <BarMetricChart
+            data={getMobileData(dataFechados?.labels)}
+            dataKey="chats"
+           
+          />
         </MetricCard>
-
       </motion.div>
 
-      <motion.div className={GlobalStyles.pageRow}>
+      <motion.div className={GlobalStyles.pageRowVariant}>
         <MetricCard
           title="Chats por Atendentes"
           icon={<Icon nome='userlist' />}
           small
+          isMobile={isMobile}
         >
           <div style={{ height: 200, overflowY: 'auto', paddingRight: 8, width: '100%', scrollbarWidth: 'none' }}>
             <BarMetricChart
-              data={dataAtendentes}
+              data={getMobileData(dataAtendentes)}
               dataKey="chats"
               vertical
               barSize={36}
               height={heightAtedentes}
+             
             />
           </div>
         </MetricCard>
@@ -111,9 +124,15 @@ export default function ResumoPage() {
           title="Chats por Conexões"
           icon={<Icon nome='connect' />}
           small
+          isMobile={isMobile}
         >
-          <div style={{ width: '420px', overflowX: 'auto', height: 200, scrollbarWidth: 'none' }}>
-            <LineMetricChart data={dataConexoes} dataKey="value" width={widthConexoes} />
+          <div className={GlobalStyles.chartContainer}>
+            <LineMetricChart
+              data={getMobileData(dataConexoes)}
+              dataKey="value"
+              width={widthConexoes}
+             
+            />
           </div>
         </MetricCard>
 
@@ -122,6 +141,7 @@ export default function ResumoPage() {
           icon={<Icon nome='money' />}
           value="+0"
           small
+          isMobile={isMobile}
         >
           <GaugeMetricChart
             filled={0}
@@ -134,8 +154,3 @@ export default function ResumoPage() {
     </div>
   );
 }
-
-
-
-
-

@@ -1,8 +1,5 @@
-// Libs
 import { ReactNode } from 'react';
-// Css
 import Styles from './MetricCard.module.css';
-// Icon 
 import Icon from '../../../components/Gerais/Icons/Icons';
 
 interface MetricCardProps {
@@ -14,6 +11,7 @@ interface MetricCardProps {
   dropdown?: ReactNode;
   children?: ReactNode;
   small?: boolean;
+  isMobile: boolean; // 👈 obrigatória
 }
 
 export default function MetricCard({
@@ -24,7 +22,8 @@ export default function MetricCard({
   variationText,
   dropdown,
   children,
-  small
+  small,
+  isMobile
 }: MetricCardProps) {
   const cardClass = small ? Styles.metricCardSmall : Styles.metricCard;
 
@@ -41,9 +40,13 @@ export default function MetricCard({
             </div>
           )}
         </div>
-        {dropdown}
+
+        {!isMobile && dropdown}
       </div>
+
       {children}
+
+      {isMobile && dropdown}
     </div>
   );
 }

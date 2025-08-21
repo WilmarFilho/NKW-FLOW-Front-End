@@ -66,3 +66,9 @@
     padding: 0 24px;
   }
 }
+
+@media (max-width: 599.98px) {
+  .button {
+    height: 60px;
+  }
+}

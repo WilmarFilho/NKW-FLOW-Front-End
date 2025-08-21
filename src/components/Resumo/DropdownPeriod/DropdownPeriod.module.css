@@ -46,3 +46,23 @@
 .dropdownSelectListItem:hover {
   opacity: 1;
 }
+
+@media (max-width: 767.98px) {
+  .dropdownSelectButton {
+    padding: 12px 8px;
+    width: 90px;
+    height: 38px;
+  }
+}
+
+
+@media (max-width: 427.98px) {
+  .dropdownSelectButton, .dropdownSelect {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  .dropdownSelectButton svg {
+    width: 12px;
+  }
+}
