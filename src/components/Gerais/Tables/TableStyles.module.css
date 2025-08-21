@@ -162,3 +162,9 @@
     padding: 8px 34px;
   }
 }
+
+@media (max-width: 499.98px) {
+  .statusWithActions::before {
+    display: none;
+  }
+}

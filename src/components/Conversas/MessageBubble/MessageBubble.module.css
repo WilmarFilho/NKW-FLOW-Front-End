@@ -59,8 +59,9 @@
 }
 
 .messageAudio {
-  width: 270px;
+  width:  100%;
   max-width: 100%;
+  min-width: 270px;
 }
 
 .documentContainer {

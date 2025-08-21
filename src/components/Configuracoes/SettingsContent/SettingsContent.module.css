@@ -203,6 +203,7 @@
 }
 
 .settingLabel {
+  text-wrap: balance;
   font-family: var(--font-main);
   font-size: 22px;
   font-weight: 500;
@@ -290,5 +291,74 @@
     width: 180px;
     height: 180px;
     right: -16px;
+  }
+}
+
+@media (max-width: 599.98px) {
+
+  .settingsContentAccount,
+  .settingsContent {
+    padding: 18px;
+  }
+
+  .settingRow {
+    align-items: start;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .settingInfo {
+    width: 100%;
+  }
+
+  .mainHeaderAccountWrapper {
+    padding: 6px;
+    flex-direction: column;
+    gap: 12px;
+    padding-bottom: 18px;
+    padding-right: 60px;
+  }
+
+  .profileImage {
+    width: 150px;
+    height: 150px;
+    right: 0px;
+  }
+
+  .userInfoMain h1 {
+    font-size: 16px;
+  }
+
+  .userInfoMain h2 {
+    font-size: 20px;
+    line-height: 24px;
+  }
+
+
+  .userInfo h2 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .headerAccountWrapper {
+    flex-direction: column;
+    border: none;
+    padding: 12px;
+    gap: 40px;
+  }
+
+  .infoGrid {
+    height: auto;
+    gap: 12px;
+  }
+
+  .configsWrapperBox {
+    overflow-y: scroll;
+    padding: 0;
+    scrollbar-width: none;
+  }
+  .settingsContentAccount {
+    gap: 16px;
   }
 }

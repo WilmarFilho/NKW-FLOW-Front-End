@@ -109,7 +109,7 @@
   width: 380px;
   height: 200px;
   overflow-x: auto;
-  scrollbar-width: none; 
+  scrollbar-width: none;
 }
 
 @media (max-width: 1399.98px) {
@@ -142,11 +142,13 @@
   .conversasContainer {
     flex-direction: column;
   }
+
   .pageRowVariant {
     padding-bottom: 32px;
     gap: 32px;
     flex-direction: column;
   }
+
   .pageRow {
     flex-direction: column;
     gap: 32px;
@@ -157,18 +159,45 @@
   .chartContainer {
     width: 275px;
   }
+
+  .pageContent {
+    padding: 20px;
+    gap: 20px;
+  }
+
+  .filterControls {
+    flex-direction: column;
+  }
+
+  .pageHeaderTitles {
+    gap: 8px;
+  }
+
+  .pageHeaderTitles h3 {
+    font-size: 14px;
+    line-height: 17px;
+  }
+
+  .pageHeaderTitles h2 {
+    font-size: 24px;
+  }
+
   .pageHeader {
     flex-direction: column;
     align-items: center;
-    gap: 24px;
-    text-align: center;
-  }
-}
 
-@media (max-width: 499.98px) {
-  .pageContent {
-    padding: 24px;
-    gap: 20px;
+    text-align: center;
+    gap: 8px;
+  }
+
+  .pageContainer {
+    gap: 16px;
+    padding: 8px 0 0 0;
+  }
+
+  .filterControls .button {
+    font-size: 12px;
+    padding: 16px 0;
   }
 }
 

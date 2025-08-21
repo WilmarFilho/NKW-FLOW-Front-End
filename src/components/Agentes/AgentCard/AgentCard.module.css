@@ -113,3 +113,10 @@
     display: block;
   }
 }
+
+
+@media (max-width: 499.98px) {
+  .card {
+    min-height: 300px;
+  }
+}

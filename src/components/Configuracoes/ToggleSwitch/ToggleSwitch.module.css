@@ -87,3 +87,19 @@
     left: 36px;
   }
 }
+
+@media (max-width: 599.98px) {
+  .toggleSwitch {
+    width: 200px;
+    height: 40px;
+  }
+
+  .switchKnob {
+    width: 40px;
+    height: 36px;
+  }
+
+  .toggleSwitch.on .switchKnob {
+    left: 158px;
+  }
+}
