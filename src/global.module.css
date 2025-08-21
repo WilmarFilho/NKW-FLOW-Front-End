@@ -17,6 +17,7 @@
 
 .pageHeader {
   display: flex;
+  text-wrap: balance;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
@@ -161,6 +162,13 @@
     align-items: center;
     gap: 24px;
     text-align: center;
+  }
+}
+
+@media (max-width: 499.98px) {
+  .pageContent {
+    padding: 24px;
+    gap: 20px;
   }
 }
 

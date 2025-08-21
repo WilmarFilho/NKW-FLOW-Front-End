@@ -42,3 +42,9 @@
     outline-offset: -10px;
     color: var(--color-text-white);
 }
+
+@media (max-width: 991.98px) {
+    .progressBar {
+        display: none;
+    }
+}

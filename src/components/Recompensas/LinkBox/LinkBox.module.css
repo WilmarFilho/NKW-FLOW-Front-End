@@ -1,14 +1,19 @@
 .containerLink {
-    width: 100%;
-    color: var(--color-text);
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+  width: 100%;
+  color: var(--color-text);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .containerLink h4 {
-    font-size: 30px;
-    font-family: var(--font-main);
+  font-size: 30px;
+  font-family: var(--font-main);
+}
+
+.containerLink p {
+  line-height: 20px;
+  text-wrap: balance;
 }
 
 .boxLink {
@@ -16,6 +21,7 @@
   justify-content: space-between;
   align-items: center;
   gap: 12px;
+  font-size: 14px;
   background: var(--color-background-white);
   border-radius: 8px;
   padding: 18px 12px;
@@ -39,5 +45,29 @@
 }
 
 .boxLink svg {
-    width: 40px;
+  width: 40px;
+}
+
+@media (max-width: 1175.98px) {
+  .boxLink span {
+    text-align: center;
+    text-wrap: balance;
+    line-height: 18px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 599.98px) {
+  .boxLink span {
+    line-height: 16px;
+    font-size: 10px;
+  }
+
+  .boxLink {
+    padding: 12px;
+  }
+
+  .containerLink p {
+    font-size: 12px;
+  }
 }
