@@ -6,46 +6,51 @@ import NewChatForm from '../components/Conversas/NewChatForm/NewChatForm';
 import { useConversasPage } from '../hooks/pages/useConversasPage';
 import { DropdownMenuProvider } from '../components/Gerais/Dropdown/DropdownMenuContext';
 import GlobalStyles from '../global.module.css';
+import SearchBar from '../components/Conversas/SearchBar/Searchbar';
 
 export default function ConversasPage() {
+
+  // Hook da Página
   const state = useConversasPage();
 
-  const [isSmallScreen, setIsSmallScreen] = useState(false);
+  // Estado para tamanho de tele
   const [isMobileLayout, setIsMobileLayout] = useState(false);
 
+  // Filtro de input
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Modais de seleção para filtro
+  const [isConnectionsModalOpen, setIsConnectionsModalOpen] = useState(false);
+  const [isAttendantsModalOpen, setIsAttendantsModalOpen] = useState(false);
+
+  // Detecta tamanho de tela
   useEffect(() => {
-    const querySmall = window.matchMedia('(max-width: 991.98px)');
-    const queryMobile = window.matchMedia('(max-width: 599.98px)');
+    const queryMobile = window.matchMedia('(max-width: 991.98px)');
 
     const setFlags = () => {
-      setIsSmallScreen(querySmall.matches);
       setIsMobileLayout(queryMobile.matches);
     };
 
     setFlags();
 
-    const handleSmall = (e: MediaQueryListEvent) => setIsSmallScreen(e.matches);
     const handleMobile = (e: MediaQueryListEvent) => setIsMobileLayout(e.matches);
 
-    if ('addEventListener' in querySmall) {
-      querySmall.addEventListener('change', handleSmall);
+    if ('addEventListener' in queryMobile) {
       queryMobile.addEventListener('change', handleMobile);
     } else {
-      (querySmall as MediaQueryList).addListener(handleSmall);
       (queryMobile as MediaQueryList).addListener(handleMobile);
     }
 
     return () => {
-      if ('removeEventListener' in querySmall) {
-        querySmall.removeEventListener('change', handleSmall);
+      if ('removeEventListener' in queryMobile) {
         queryMobile.removeEventListener('change', handleMobile);
       } else {
-        (querySmall as MediaQueryList).removeListener(handleSmall);
         (queryMobile as MediaQueryList).removeListener(handleMobile);
       }
     };
   }, []);
 
+  // Volta para ChatBar
   const handleBackToSidebar = () => state.setActiveChat(null);
 
   return (
@@ -71,31 +76,46 @@ export default function ConversasPage() {
               fetchMoreMessages={state.fetchMoreMessages}
               hasMore={state.hasMore}
               isLoading={state.isLoading}
-              isSmallScreen={isSmallScreen}
               isMobileLayout={isMobileLayout}
               onBack={handleBackToSidebar}
-              onReleaseChatOwner={state.handleReleaseChatOwner }
+              onReleaseChatOwner={state.handleReleaseChatOwner}
             />
           </DropdownMenuProvider>
         ) : (
           <ChatSidebar
             chats={state.chats}
+            attendants={state.attendants}
             activeChat={state.activeChat}
             setActiveChat={state.setActiveChat}
+            isMobileLayout={isMobileLayout}
             setIsAddChatOpen={state.openNewChatModal}
             fectchImageProfile={state.fectchImageProfile}
             connections={state.connections}
+            selectedConnectionId={state.filterConnectionId}
+            setSelectedConnectionId={state.setFilterConnectionId}
+            selectedAttendantId={state.selectedAttendantId}
+            setSelectedAttendantId={state.setSelectedAttendantId}
+            openConnectionsModal={() => setIsConnectionsModalOpen(true)}
+            openAttendantsModal={() => setIsAttendantsModalOpen(true)}
           />
         )
       ) : (
         <>
           <ChatSidebar
             chats={state.chats}
+            attendants={state.attendants}
+            isMobileLayout={isMobileLayout}
             activeChat={state.activeChat}
             setActiveChat={state.setActiveChat}
             setIsAddChatOpen={state.openNewChatModal}
             fectchImageProfile={state.fectchImageProfile}
             connections={state.connections}
+            selectedConnectionId={state.filterConnectionId}
+            setSelectedConnectionId={state.setFilterConnectionId}
+            selectedAttendantId={state.selectedAttendantId}
+            setSelectedAttendantId={state.setSelectedAttendantId}
+            openConnectionsModal={() => setIsConnectionsModalOpen(true)}
+            openAttendantsModal={() => setIsAttendantsModalOpen(true)}
           />
           <DropdownMenuProvider>
             <ChatWindow
@@ -116,26 +136,26 @@ export default function ConversasPage() {
               fetchMoreMessages={state.fetchMoreMessages}
               hasMore={state.hasMore}
               isLoading={state.isLoading}
-              isSmallScreen={isSmallScreen}
               isMobileLayout={isMobileLayout}
-              onReleaseChatOwner={state.handleReleaseChatOwner }
+              onReleaseChatOwner={state.handleReleaseChatOwner}
             />
           </DropdownMenuProvider>
         </>
       )}
 
+      {/* Modal Nova Conversa */}
       {state.isAddChatOpen && (
         <Modal
           isOpen={state.isAddChatOpen}
-          labelSubmit='Enviar'
+          labelSubmit="Enviar"
           onSave={state.handleSendMessage}
           onClose={() => state.setIsAddChatOpen(false)}
-          title='Começar nova conversa.'
+          title="Começar nova conversa."
         >
           <NewChatForm
             connections={state.connections}
-            selectedConnectionId={state.selectedConnectionId}
-            setSelectedConnectionId={state.setSelectedConnectionId}
+            selectedConnectionId={state.formConnectionId}
+            setSelectedConnectionId={state.setFormConnectionId}
             newChatNumber={state.newChatNumber}
             setNewChatNumber={state.setNewChatNumber}
             newChatMessage={state.newChatMessage}
@@ -145,6 +165,62 @@ export default function ConversasPage() {
           />
         </Modal>
       )}
+
+      {/* Modal Seleção de Conexão */}
+      <Modal
+        isOpen={isConnectionsModalOpen}
+        title="Escolha uma conexão"
+        onClose={() => setIsConnectionsModalOpen(false)}
+      >
+        <div className={GlobalStyles.wrapperModalFilter}>
+          <SearchBar onSearch={setSearchQuery} placeholder="Buscar conexão..." />
+          <div className={GlobalStyles.wrapperFilterItens}>
+            {state.connections
+              .filter(conn => !searchQuery || conn.nome?.toLowerCase().includes(searchQuery.toLowerCase()))
+              .map(conn => (
+                <div
+                  className={GlobalStyles.filterItens}
+                  key={conn.id}
+                  onClick={() => {
+                    state.setFilterConnectionId(conn.id);
+                    state.setSelectedAttendantId(null);
+                    setIsConnectionsModalOpen(false);
+                  }}
+                >
+                  {conn.nome}
+                </div>
+              ))}
+          </div>
+        </div>
+      </Modal>
+
+      {/* Modal Seleção de Atendente */}
+      <Modal
+        isOpen={isAttendantsModalOpen}
+        title="Escolha um atendente"
+        onClose={() => setIsAttendantsModalOpen(false)}
+      >
+        <div className={GlobalStyles.wrapperModalFilter}>
+          <SearchBar onSearch={setSearchQuery} placeholder="Buscar atendente..." />
+          <div className={GlobalStyles.wrapperFilterItens}>
+            {state.attendants
+              .filter(att => !searchQuery || att.user.nome.toLowerCase().includes(searchQuery.toLowerCase()))
+              .map(att => (
+                <div
+                  className={GlobalStyles.filterItens}
+                  key={att.id}
+                  onClick={() => {
+                    state.setSelectedAttendantId(att.id);
+                    state.setFilterConnectionId(null);
+                    setIsAttendantsModalOpen(false);
+                  }}
+                >
+                  {att.user.nome}
+                </div>
+              ))}
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

@@ -5,9 +5,10 @@ import styles from './Searchbar.module.css';
 
 interface SearchBarProps {
   onSearch: (query: string) => void;
+  placeholder?: string
 }
 
-export default function SearchBar({ onSearch }: SearchBarProps) {
+export default function SearchBar({ onSearch, placeholder = 'Pesquisar por nome ou telefone...' }: SearchBarProps) {
   return (
     <div className={styles.searchContainer} role="search">
       <div className={styles.iconWrapper}>
@@ -17,7 +18,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
       <input
         type="text"
         className={styles.searchInput}
-        placeholder="Pesquisar por nome ou telefone..."
+        placeholder={placeholder}
         onChange={(e) => onSearch(e.target.value)}
       />
     </div>

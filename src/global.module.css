@@ -217,3 +217,34 @@
   background-color: var(--color-background-white);
   color: var(--color-text-table);
 }
+
+.wrapperModalFilter {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.wrapperFilterItens {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 12px;
+  width: 100%;
+}
+
+.filterItens {
+  border-radius: 12px;
+  background-color: var(--color-background-white);
+  height: 100px;
+  color: var(--color-text);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: .2s;
+  text-align: center;
+  cursor: pointer;
+}
+
+.filterItens:hover {
+  background-color: var(--color-secundaria);
+  transition: .2s;
+}

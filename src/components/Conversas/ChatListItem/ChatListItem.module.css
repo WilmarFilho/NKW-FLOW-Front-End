@@ -104,21 +104,11 @@
   align-items: center;
 }
 
-@media (max-width: 1211.98px) {
- 
-}
+@media (max-width: 1211.98px) {}
 
 /* === Breakpoint 3: Tablets em Paisagem / Desktops Pequenos === */
 @media (max-width: 991.98px) {
   .chatListItem {
-    flex-shrink: 0;
-    width: 250px;
-  }
-}
-
-@media (max-width: 599.98px) {
- .chatListItem {
-    flex-shrink: 0;
     width: 100%;
   }
 }

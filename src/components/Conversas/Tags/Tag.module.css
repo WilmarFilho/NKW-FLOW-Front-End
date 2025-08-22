@@ -25,6 +25,7 @@
   opacity: 1;
   flex: 1;
   min-width: 140px;
+  transition: .2s;
 }
 
 .tag:not(.active):hover {

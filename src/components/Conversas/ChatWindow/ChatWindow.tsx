@@ -34,7 +34,6 @@ interface ChatWindowProps {
   fetchMoreMessages: () => void;
   hasMore: boolean;
   isLoading: boolean;
-  isSmallScreen: boolean;
   isMobileLayout: boolean;
   onBack?: () => void;
   onReleaseChatOwner: () => void;
@@ -57,21 +56,29 @@ export default function ChatWindow({
   isExiting,
   onDeleteMessage,
   handleCloseReply,
-  isSmallScreen,
   isMobileLayout,
   onReleaseChatOwner,
   onBack,
 }: ChatWindowProps) {
+
+  // MODAIS
   const [isDetailsOpen, setDetailsOpen] = useState(false);
   const [isRenameOpen, setRenameOpen] = useState(false);
+
+  // ESTADOS
   const [newName, setNewName] = useState('');
-  const [showError, setShowError] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
+
   const user = useRecoilValue(userState);
   const isOwner = !activeChat?.user_id || activeChat?.user_id === user?.id;
 
+  // ERROS
+  const [showError, setShowError] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // DRAG AND DROP
   const { isDragging, handleDragOver, handleDragLeave, handleDrop } = useDragAndDropFile({ onDropFile });
 
+  // PAGINAÇÂO
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const topSentinelRef = useRef<HTMLDivElement | null>(null);
   const listRef = useRef<HTMLDivElement | null>(null);
@@ -127,6 +134,8 @@ export default function ChatWindow({
     }
   }, [messages]);
 
+  // FUNÇÂO DE RESPOSTA DE MENSAGEM
+
   useEffect(() => {
     if (replyingTo && inputRef.current) {
       inputRef.current.focus();
@@ -163,6 +172,7 @@ export default function ChatWindow({
   }
 
   // Agrupamento de mensagens
+
   const groupedMessages: React.ReactNode[] = [];
   let lastDate: string | null = null;
 
@@ -231,11 +241,11 @@ export default function ChatWindow({
   return (
     <motion.section
       className={styles.chatWindow}
-      initial={isSmallScreen ? { opacity: 0 } : { opacity: 0, x: 30 }}
-      animate={isSmallScreen ? { opacity: 1 } : { opacity: 1, x: 0 }}
+      initial={isMobileLayout ? { opacity: 0 } : { opacity: 0, x: 30 }}
+      animate={isMobileLayout ? { opacity: 1 } : { opacity: 1, x: 0 }}
       transition={{ delay: 0.4, duration: 0.6 }}
     >
-      {/* Header MOBILE (<= 599.98px) */}
+      {/* Header MOBILE (<= 991.98px) */}
       {isMobileLayout && (
         <header className={styles.chatHeader}>
 
@@ -273,7 +283,7 @@ export default function ChatWindow({
       )}
 
       {/* Header DESKTOP/TABLET (> 991.98px) */}
-      {!isSmallScreen && (
+      {!isMobileLayout && (
         <header className={styles.chatHeader}>
           <div
             className={styles.contactInfo}
@@ -411,7 +421,7 @@ export default function ChatWindow({
 
               <div className={styles.inputArea}>
 
-                {!isSmallScreen && !isMobileLayout && (
+                {!isMobileLayout && (
                   <div className={styles.toggleIaButton}>
                     <div className={styles.headerToggleIa}>
                       <Icon nome="agentespage" /> {activeChat.ia_ativa ? 'Ativado' : 'Desativado'}
@@ -419,58 +429,6 @@ export default function ChatWindow({
                     <ToggleSwitch variant="secondary" isOn={activeChat.ia_ativa} onToggle={onToggleIA} />
                   </div>
                 )}
-
-                {(isSmallScreen && !isMobileLayout) && (
-                  <DropdownMenu
-                    isSmall={activeChat.user_id ? '' : 'isSmall'}
-                    id="chat-footer"
-                    trigger={
-                      <button className={styles.optionsButton}>
-                        <Icon nome="dots" />
-                      </button>
-                    }
-                  >
-                    {isOwner && (
-                      <>
-                        <button
-                          onClick={() => {
-                            setNewName(activeChat.contato_nome || '');
-                            setRenameOpen(true);
-                          }}
-                        >
-                          <Icon nome="pencil" /> {isMobileLayout ? 'Renomear' : 'Renomear Chat'}
-                        </button>
-
-
-                        {activeChat.user_id === user?.id && (
-                          <>
-                            <button onClick={onReleaseChatOwner}>
-                              <Icon nome="unlock" /> {isMobileLayout ? 'Liberar' : 'Liberar Chat'}
-                            </button>
-                            <button onClick={onToggleChatStatus}>
-                              <Icon nome="close" />{' '}
-                              {isMobileLayout
-                                ? activeChat.status === 'Open'
-                                  ? 'Fechar'
-                                  : 'Reabrir'
-                                : activeChat.status === 'Open'
-                                  ? 'Fechar Chat'
-                                  : 'Reabrir Chat'}
-                            </button>
-                            <button onClick={onDeleteChat}>
-                              <Icon nome="trash" /> {isMobileLayout ? 'Apagar' : 'Apagar Chat'}
-                            </button>
-                          </>
-                        )}
-
-                      </>
-                    )}
-                    <button onClick={() => setDetailsOpen(true)}>
-                      <Icon nome="info" /> {isMobileLayout ? 'Detalhes' : 'Detalhes do Chat'}
-                    </button>
-                  </DropdownMenu>
-                )}
-
 
                 <ChatInput
                   ref={inputRef}

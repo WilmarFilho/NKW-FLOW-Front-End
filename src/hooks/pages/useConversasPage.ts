@@ -4,7 +4,7 @@ import { useChats } from '../chats/useChats';
 import { useMessages } from '../../hooks/chats/useMessages';
 import useMessagesActions from '../chats/useMessagesActions';
 import useChatActions from '../chats/useChatActions';
-import { chatsState, connectionsState, userState } from '../../state/atom';
+import { attendantsState, chatsState, connectionsState, userState } from '../../state/atom';
 import type { Chat } from '../../types/chats';
 import { Message } from '../../types/message';
 
@@ -13,6 +13,7 @@ export function useConversasPage() {
   const chats = useRecoilValue(chatsState);
   const user = useRecoilValue(userState);
   const setChats = useSetRecoilState(chatsState);
+  const attendants = useRecoilValue(attendantsState)
 
   const [replyingTo, setReplyingTo] = useState<Message | undefined>(undefined);
   const [isExiting, setIsExiting] = useState(false);
@@ -47,7 +48,7 @@ export function useConversasPage() {
   const handleReleaseChatOwner = useCallback(async () => {
 
     if (!activeChat) return;
-   
+
     if (!activeChat.user_id) return;
 
     const updated = await releaseChatOwner(activeChat.id);
@@ -63,7 +64,9 @@ export function useConversasPage() {
   const [isAddChatOpen, setIsAddChatOpen] = useState(false);
   const [newChatNumber, setNewChatNumber] = useState('');
   const [newChatMessage, setNewChatMessage] = useState('');
-  const [selectedConnectionId, setSelectedConnectionId] = useState('');
+  const [filterConnectionId, setFilterConnectionId] = useState<string | null>(null);
+  const [formConnectionId, setFormConnectionId] = useState<string | null>(null);
+  const [selectedAttendantId, setSelectedAttendantId] = useState<string | null>(null);
   const [showErrors, setShowErrors] = useState(false);
   const [errors, setErrors] = useState<{ selectedConnectionId?: string; newChatNumber?: string; newChatMessage?: string }>({});
 
@@ -76,38 +79,40 @@ export function useConversasPage() {
 
   const validateForm = useCallback(() => {
     const newErrors: typeof errors = {};
-    if (!selectedConnectionId) newErrors.selectedConnectionId = 'Selecione uma conexão.';
+    if (!setFormConnectionId) newErrors.selectedConnectionId = 'Selecione uma conexão.';
     if (!/^\d{10,15}$/.test(newChatNumber)) newErrors.newChatNumber = 'Número inválido.';
     if (!newChatMessage.trim()) newErrors.newChatMessage = 'A mensagem não pode ficar vazia.';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  }, [selectedConnectionId, newChatNumber, newChatMessage]);
+  }, [setFormConnectionId, newChatNumber, newChatMessage]);
 
   const handleSendMessage = useCallback(
     async (text?: string, mimetype?: string, base64?: string) => {
       const messageText = text ?? newChatMessage;
 
-      // CASO: criando um chat novo do zero
       if (!activeChat) {
-        setShowErrors(true);
-
-        if (!validateForm()) return;
+        if (!formConnectionId) {
+          setErrors({ selectedConnectionId: 'Selecione uma conexão.' });
+          return;
+        }
 
         const result = await sendMessage({
           mensagem: newChatMessage,
           number: newChatNumber,
-          connection_id: selectedConnectionId,
+          connection_id: formConnectionId ?? undefined
         });
 
         if (result) {
           setIsAddChatOpen(false);
           setNewChatNumber('');
           setNewChatMessage('');
-          setSelectedConnectionId('');
+          setFormConnectionId(null); 
         }
 
-        return;
+        return
+
       }
+
 
       // 1. Bloqueio se IA ativa
       if (activeChat.ia_ativa) {
@@ -170,7 +175,6 @@ export function useConversasPage() {
       activeChat,
       newChatMessage,
       newChatNumber,
-      selectedConnectionId,
       sendMessage,
       setChats,
       user?.id,
@@ -287,8 +291,8 @@ export function useConversasPage() {
     setNewChatNumber,
     newChatMessage,
     setNewChatMessage,
-    selectedConnectionId,
-    setSelectedConnectionId,
+    formConnectionId,
+    setFormConnectionId,
     handleSendMessage,
     messages,
     handleToggleIA,
@@ -305,14 +309,14 @@ export function useConversasPage() {
     fetchMoreMessages,
     hasMore,
     isLoading,
-    handleReleaseChatOwner
+    handleReleaseChatOwner,
+    attendants,
+    selectedAttendantId,
+    setSelectedAttendantId,
+    filterConnectionId,
+    setFilterConnectionId,
   };
 }
-
-
-
-
-
 
 
 

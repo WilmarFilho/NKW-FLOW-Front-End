@@ -32,62 +32,14 @@
 
 .buttonAddChat:hover {
   background-color: var(--color-secundaria);
-  transition: .5s;
+  transition: .3s;
 }
 
-.buttonAlterActiveChats {
-  width: 100%;
-  border-radius: 12px;
-  cursor: pointer;
-  background-color: var(--color-background-white);
-  border: none;
-  color: var(--color-button-searchbar);
-  outline: none;
-  display: flex;
-  gap: 12px;
-  height: 50px;
-  font-size: 15px;
-  font-family: var(--font-main);
-  justify-content: start;
-  padding: 0px 32px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  align-items: center;
-  transition: .5s;
-}
-
-/* Texto padrão (desktop) */
-.buttonAlterActiveChats::after {
-  content: attr(data-label);
-}
-
-/* Esconde o texto do botão (o children do React) */
-.buttonAlterActiveChats {
-  font-size: 15px;
-  /* oculta o texto original */
-}
-
-.buttonAlterActiveChats:hover {
-  background-color: var(--color-primary);
-  transition: .5s;
-  color: var(--color-text-white);
-}
-
-.buttonAddChat svg,
-.buttonAlterActiveChats svg {
-  fill: var(--color-text-white);
-}
-
-.iaFilterContainer {
-  display: flex;
-  flex-direction: row;
-  gap: 8px;
-}
-
-.iaFilterButton {
+.ChatFilterButton {
   background-color: var(--color-background-white);
   text-transform: uppercase;
-  padding: 12px 20px;
+  gap: 16px;
+  padding: 12px 32px;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -108,20 +60,37 @@
   color: var(--color-button-searchbar);
 }
 
-.iaFilterButton:hover {
+.ChatFilterButton:hover {
   background-color: var(--color-background-tags-hover);
   transition: .2s;
   color: var(--color-text-white);
 }
 
-.iaFilterButton:focus {
+.ChatFilterButton:focus {
   border: none;
   outline: none;
 }
 
-.iaFilterButton.active {
+.ChatFilterButton.active {
   background-color: var(--color-primary);
   color: var(--color-text-white);
+}
+
+.ChatFilterButton::after {
+  content: attr(data-label);
+}
+
+.buttonAddChat svg,
+.ChatFilterButton svg {
+  fill: var(--color-text-white);
+  width: 22px;
+  height: 20px;
+}
+
+.iaFilterContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
 }
 
 .tagsContainer {
@@ -153,116 +122,88 @@
   gap: 12px;
 }
 
-/* === Media Queries === */
+.attendantsSection {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  height: 70px;
+}
+
+.attendantItem {
+  min-width: 190px;
+  border-radius: 12px;
+  cursor: pointer;
+  background-color: var(--color-background-white);
+  color: var(--color-button-searchbar);
+  display: flex;
+  height: 100%;
+  font-size: 14px;
+  font-family: var(--font-main);
+  justify-content: center;
+  padding: 0px 12px;
+  text-transform: uppercase;
+  align-items: center;
+  transition: .2s;
+}
+
+.attendantItem.active {
+  background-color: var(--color-secundaria);
+  color: var(--color-text-white);
+  font-weight: 350;
+  opacity: 1;
+  flex: 1;
+  min-width: 140px;
+}
 
 @media (max-width: 1421.98px) {
   .chatSidebar {
     width: 35%;
   }
-
-  .buttonAlterActiveChats {
-    font-size: 13px;
-  }
-
-  .iaFilterButton {
+  .ChatFilterButton {
     font-size: 13px;
     line-height: 18px;
+    padding: 12px 24px;
   }
 }
 
 @media (max-width: 1211.98px) {
-  .chatSidebar {
-    width: 35%;
-  }
-
-  .buttonAlterActiveChats {
+  .ChatFilterButton {
     font-size: 12px;
-  }
-
-  .iaFilterButton {
-    font-size: 14px;
-    line-height: 18px;
+    line-height: 16px;
+    padding: 12px 22px;
   }
 }
 
 @media (max-width: 991.98px) {
   .chatSidebar {
     width: 100%;
-    height: auto;
-    max-height: 350px;
   }
-
-  .statusToggleContainer {
-    flex-direction: row;
-  }
-
   .tagsContainer {
-    padding-bottom: 34px;
+    padding-bottom: 16px;
   }
-
-  .chatList {
-    margin: 0;
-    gap: 12px;
-    display: flex;
-    flex-direction: row;
-    overflow-x: auto;
-    overflow-y: hidden;
-  }
-
-  .buttonAlterActiveChats {
-    justify-content: center;
-    padding: 0px;
+  .ChatFilterButton {
+    padding: 16px;
   }
 }
 
 @media (max-width: 599.98px) {
-  .iaFilterButton {
-    font-size: 14px;
-    padding: 12px 36px;
-  }
-
-  .buttonAlterActiveChats::after {
+  .ChatFilterButton::after {
     content: attr(data-label-short);
-    font-size: 12px;
-  }
-
-  .chatSidebar {
-    max-height: none;
-    height: 100%;
-  }
-
-  .tagsContainer {
-    padding-bottom: 20px;
-  }
-
-  .chatList {
-    display: flex;
-    flex-direction: column;
-    overflow-x: hidden;
-    overflow-y: scroll;
   }
 }
 
 @media (max-width: 464.98px) {
-  .iaFilterButton {
-    font-size: 12px;
-    padding: 6px 18px;
-  }
-
   .chatSidebar {
     padding: 10px;
     gap: 8px;
   }
-
-  .buttonAddChat svg {
-    height: 20px;
-  }
-
   .tagsContainer {
-    padding-bottom: 26px;
+    padding-bottom: 8px;
   }
-
-  .buttonAlterActiveChats {
-    height: 40px;
+  .ChatFilterButton {
+    letter-spacing: 0px;
   }
 }

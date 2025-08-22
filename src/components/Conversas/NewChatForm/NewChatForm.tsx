@@ -2,7 +2,7 @@ import FormStyles from '../../Gerais/Form/form.module.css';
 
 interface NewChatFormProps {
   connections: { id: string; nome?: string }[];
-  selectedConnectionId: string;
+  selectedConnectionId: string | null;
   setSelectedConnectionId: (id: string) => void;
   newChatNumber: string;
   setNewChatNumber: (num: string) => void;
@@ -32,7 +32,7 @@ export default function NewChatForm({
       <div className={FormStyles.formGroup}>
         <label>Conexão para disparar mensagem</label>
         <select
-          value={selectedConnectionId}
+          value={selectedConnectionId ?? ''} 
           onChange={(e) => setSelectedConnectionId(e.target.value)}
         >
           <option value="">Selecione a conexão</option>
@@ -82,3 +82,4 @@ export default function NewChatForm({
     </div>
   );
 }
+
