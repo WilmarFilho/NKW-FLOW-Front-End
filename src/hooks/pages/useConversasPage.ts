@@ -39,10 +39,25 @@ export function useConversasPage() {
   const { fectchImageProfile } = useChats();
   const { sendMessage, deleteMessage } = useMessagesActions();
 
-  const { reOpenChat, deleteChat, renameChat, toggleIA, claimChatOwner } = useChatActions();
+  const { reOpenChat, deleteChat, renameChat, toggleIA, claimChatOwner, releaseChatOwner } = useChatActions();
 
   const [activeChat, setActiveChat] = useState<Chat | null>(null);
   const { messages, fetchMoreMessages, hasMore, isLoading } = useMessages(activeChat?.id || null);
+
+  const handleReleaseChatOwner = useCallback(async () => {
+
+    if (!activeChat) return;
+   
+    if (!activeChat.user_id) return;
+
+    const updated = await releaseChatOwner(activeChat.id);
+
+    if (updated) {
+
+      setActiveChat(prev => (prev ? { ...prev, user_id: null } : prev));
+
+    }
+  }, [activeChat, releaseChatOwner, setActiveChat]);
 
 
   const [isAddChatOpen, setIsAddChatOpen] = useState(false);
@@ -135,7 +150,11 @@ export function useConversasPage() {
       if (result) {
 
         if (!activeChat.user_id && user?.id) {
+
           await claimChatOwner(activeChat.id, user.id);
+
+          setActiveChat(prev => (prev ? { ...prev, user_id: user.id } : prev));
+
         }
 
         if (replyingTo) {
@@ -286,8 +305,12 @@ export function useConversasPage() {
     fetchMoreMessages,
     hasMore,
     isLoading,
+    handleReleaseChatOwner
   };
 }
+
+
+
 
 
 

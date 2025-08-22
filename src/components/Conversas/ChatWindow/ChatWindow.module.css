@@ -414,6 +414,24 @@
   align-self: center;
 }
 
+.ownerBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  color: var(--color-text);
+  width: 210px;
+  background-color: var(--color-background-white);
+  border-radius: 10px;
+  font-size: 12px;
+  padding: 4px 10px;
+}
+
+.ownerBadge svg {
+  color: var(--color-text);
+  width: 28px;
+}
+
 /* --- Media Queries --- */
 @media (max-width: 991.98px) {
 

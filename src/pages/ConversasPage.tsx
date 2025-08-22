@@ -74,6 +74,7 @@ export default function ConversasPage() {
               isSmallScreen={isSmallScreen}
               isMobileLayout={isMobileLayout}
               onBack={handleBackToSidebar}
+              onReleaseChatOwner={state.handleReleaseChatOwner }
             />
           </DropdownMenuProvider>
         ) : (
@@ -117,6 +118,7 @@ export default function ConversasPage() {
               isLoading={state.isLoading}
               isSmallScreen={isSmallScreen}
               isMobileLayout={isMobileLayout}
+              onReleaseChatOwner={state.handleReleaseChatOwner }
             />
           </DropdownMenuProvider>
         </>

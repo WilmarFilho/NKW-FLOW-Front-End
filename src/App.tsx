@@ -25,7 +25,7 @@ function App() {
 
           <Route
             path="/login"
-            element={
+            element={ 
               <PublicRoute>
                 <Suspense fallback={<LoadingScreen />}>
                   <LoginPage />

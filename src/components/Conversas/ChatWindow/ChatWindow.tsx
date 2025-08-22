@@ -37,6 +37,7 @@ interface ChatWindowProps {
   isSmallScreen: boolean;
   isMobileLayout: boolean;
   onBack?: () => void;
+  onReleaseChatOwner: () => void;
 }
 
 export default function ChatWindow({
@@ -58,6 +59,7 @@ export default function ChatWindow({
   handleCloseReply,
   isSmallScreen,
   isMobileLayout,
+  onReleaseChatOwner,
   onBack,
 }: ChatWindowProps) {
   const [isDetailsOpen, setDetailsOpen] = useState(false);
@@ -68,8 +70,7 @@ export default function ChatWindow({
   const user = useRecoilValue(userState);
   const isOwner = !activeChat?.user_id || activeChat?.user_id === user?.id;
 
-  const { isDragging, handleDragOver, handleDragLeave, handleDrop } =
-    useDragAndDropFile({ onDropFile });
+  const { isDragging, handleDragOver, handleDragLeave, handleDrop } = useDragAndDropFile({ onDropFile });
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const topSentinelRef = useRef<HTMLDivElement | null>(null);
@@ -291,6 +292,13 @@ export default function ChatWindow({
             </div>
           </div>
 
+          {activeChat.user_id === user?.id && (
+            <div className={styles.ownerBadge}>
+              <Icon nome="userlist" /> SEU CHAT
+            </div>
+          )}
+
+
           <DropdownMenu
             id="chat-header"
             trigger={
@@ -309,13 +317,23 @@ export default function ChatWindow({
                 >
                   <Icon nome="pencil" /> Renomear Chat
                 </button>
-                <button onClick={onDeleteChat}>
-                  <Icon nome="trash" /> Apagar Chat
-                </button>
-                <button onClick={onToggleChatStatus}>
-                  <Icon nome="close" />{' '}
-                  {activeChat.status === 'Open' ? 'Fechar Chat' : 'Reabrir Chat'}
-                </button>
+
+
+                {activeChat.user_id === user?.id && (
+                  <>
+                    <button onClick={onReleaseChatOwner}>
+                      <Icon nome="unlock" /> Liberar Chat
+                    </button>
+                    <button onClick={onToggleChatStatus}>
+                      <Icon nome="close" />{' '}
+                      {activeChat.status === 'Open' ? 'Fechar Chat' : 'Reabrir Chat'}
+                    </button>
+                    <button onClick={onDeleteChat}>
+                      <Icon nome="trash" /> Apagar Chat
+                    </button>
+                  </>
+                )}
+
               </>
             )}
             <button onClick={() => setDetailsOpen(true)}>
@@ -404,6 +422,7 @@ export default function ChatWindow({
 
                 {(isSmallScreen && !isMobileLayout) && (
                   <DropdownMenu
+                    isSmall={activeChat.user_id ? '' : 'isSmall'}
                     id="chat-footer"
                     trigger={
                       <button className={styles.optionsButton}>
@@ -421,19 +440,29 @@ export default function ChatWindow({
                         >
                           <Icon nome="pencil" /> {isMobileLayout ? 'Renomear' : 'Renomear Chat'}
                         </button>
-                        <button onClick={onDeleteChat}>
-                          <Icon nome="trash" /> {isMobileLayout ? 'Apagar' : 'Apagar Chat'}
-                        </button>
-                        <button onClick={onToggleChatStatus}>
-                          <Icon nome="close" />{' '}
-                          {isMobileLayout
-                            ? activeChat.status === 'Open'
-                              ? 'Fechar'
-                              : 'Reabrir'
-                            : activeChat.status === 'Open'
-                              ? 'Fechar Chat'
-                              : 'Reabrir Chat'}
-                        </button>
+
+
+                        {activeChat.user_id === user?.id && (
+                          <>
+                            <button onClick={onReleaseChatOwner}>
+                              <Icon nome="unlock" /> {isMobileLayout ? 'Liberar' : 'Liberar Chat'}
+                            </button>
+                            <button onClick={onToggleChatStatus}>
+                              <Icon nome="close" />{' '}
+                              {isMobileLayout
+                                ? activeChat.status === 'Open'
+                                  ? 'Fechar'
+                                  : 'Reabrir'
+                                : activeChat.status === 'Open'
+                                  ? 'Fechar Chat'
+                                  : 'Reabrir Chat'}
+                            </button>
+                            <button onClick={onDeleteChat}>
+                              <Icon nome="trash" /> {isMobileLayout ? 'Apagar' : 'Apagar Chat'}
+                            </button>
+                          </>
+                        )}
+
                       </>
                     )}
                     <button onClick={() => setDetailsOpen(true)}>
@@ -451,6 +480,7 @@ export default function ChatWindow({
 
                 {(isMobileLayout) && (
                   <DropdownMenu
+                    isSmall={activeChat.user_id ? '' : 'isSmall'}
                     id="chat-footer"
                     trigger={
                       <button className={styles.optionsButton}>
@@ -468,19 +498,29 @@ export default function ChatWindow({
                         >
                           <Icon nome="pencil" /> {isMobileLayout ? 'Renomear' : 'Renomear Chat'}
                         </button>
-                        <button onClick={onDeleteChat}>
-                          <Icon nome="trash" /> {isMobileLayout ? 'Apagar' : 'Apagar Chat'}
-                        </button>
-                        <button onClick={onToggleChatStatus}>
-                          <Icon nome="close" />{' '}
-                          {isMobileLayout
-                            ? activeChat.status === 'Open'
-                              ? 'Fechar'
-                              : 'Reabrir'
-                            : activeChat.status === 'Open'
-                              ? 'Fechar Chat'
-                              : 'Reabrir Chat'}
-                        </button>
+
+
+                        {activeChat.user_id === user?.id && (
+                          <>
+                            <button onClick={onReleaseChatOwner}>
+                              <Icon nome="unlock" /> {isMobileLayout ? 'Liberar' : 'Liberar Chat'}
+                            </button>
+                            <button onClick={onToggleChatStatus}>
+                              <Icon nome="close" />{' '}
+                              {isMobileLayout
+                                ? activeChat.status === 'Open'
+                                  ? 'Fechar'
+                                  : 'Reabrir'
+                                : activeChat.status === 'Open'
+                                  ? 'Fechar Chat'
+                                  : 'Reabrir Chat'}
+                            </button>
+                            <button onClick={onDeleteChat}>
+                              <Icon nome="trash" /> {isMobileLayout ? 'Apagar' : 'Apagar Chat'}
+                            </button>
+                          </>
+                        )}
+
                       </>
                     )}
                     <button onClick={() => setDetailsOpen(true)}>

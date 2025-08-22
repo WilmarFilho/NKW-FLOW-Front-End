@@ -84,7 +84,17 @@ export default function useChatActions() {
     return result;
   };
 
-  return { deleteChat, renameChat, reOpenChat, toggleIA, claimChatOwner };
+  async function releaseChatOwner(chatId: string) {
+    const result = await put(`/chats/${chatId}`, { user_id: null });
+    if (result) {
+      setChats((prev) =>
+        prev.map((chat) => (chat.id === chatId ? { ...chat, user_id: null } : chat))
+      );
+    }
+    return result;
+  }
+
+  return { deleteChat, renameChat, reOpenChat, toggleIA, claimChatOwner, releaseChatOwner };
 }
 
 

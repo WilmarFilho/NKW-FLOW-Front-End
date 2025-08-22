@@ -23,7 +23,8 @@
   color: var(--color-text-white);
   font-weight: 350;
   opacity: 1;
-   flex: 1;
+  flex: 1;
+  min-width: 140px;
 }
 
 .tag:not(.active):hover {
@@ -41,3 +42,6 @@
     font-size: 12px;
   }
 }
+
+
+/*Principal - Wilmar*/

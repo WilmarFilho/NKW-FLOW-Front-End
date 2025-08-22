@@ -15,6 +15,7 @@ interface DropdownMenuProps {
   trigger: React.ReactNode;
   children: React.ReactNode;
   className?: string;
+  isSmall?: string;
   position?: 'top' | 'bottom';
   direction?: 'left' | 'right';
   variant?: 'message' | 'header';
@@ -26,6 +27,7 @@ export function DropdownMenu({
   id,
   trigger,
   children,
+  isSmall,
   className,
   position = 'bottom',
   direction = 'right',
@@ -94,7 +96,8 @@ export function DropdownMenu({
             className={`${styles.menu}
               ${position === 'top' ? styles.menuTop : styles.menuBottom}
               ${direction === 'left' ? styles.menuLeft : styles.menuRight}
-              ${className || ''}`}
+              ${className || ''}
+              ${isSmall ? styles.isSmall : ''}`}
           >
             {wrappedChildren}
           </motion.div>

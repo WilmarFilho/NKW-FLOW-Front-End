@@ -59,7 +59,7 @@
 }
 
 .messageAudio {
-  width:  100%;
+  width: 100%;
   max-width: 100%;
   min-width: 270px;
 }
@@ -114,4 +114,19 @@
 
 .isExcluded {
   background-color: var(--color-background-dark);
+}
+
+@media (max-width: 599.98px) {
+  .messageAudio {
+    min-width: 190px;
+  }
+}
+
+@media (max-width: 399.98px) {
+  .messageAudio {
+    min-width: 140px;
+  }
+  .messageBubble {
+    max-width: 70%;
+  }
 }
