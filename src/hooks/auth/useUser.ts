@@ -13,6 +13,7 @@ import { useAgents } from '../agents/useAgents';
 import { useConnections } from '../connections/useConnections';
 import { useChats } from '../chats/useChats';
 import { Chat } from '../../types/chats';
+import { useMetrics } from '../metrics/useMetrics';
 
 export const useUser = () => {
 
@@ -24,6 +25,7 @@ export const useUser = () => {
   const { fetchAgents } = useAgents();
   const { fetchConnections } = useConnections();
   const { fetchChats } = useChats();
+  const { fetchMetrics } = useMetrics();
 
   // Carrega Metodos do hook da api
   const { get } = useApi();
@@ -37,24 +39,26 @@ export const useUser = () => {
     document.title = unreadCount > 0 ? `(${unreadCount}) WhatsApp - NKW FLOW` : 'WhatsApp - NKW FLOW';
   };
 
-
   const fetchUser = useCallback(async (opts?: { force?: boolean }) => {
 
     if (!token || !userId) return null;
 
     if (!opts?.force && user) return user;
 
-    const fetchedUser = await get<User>(`/users/${userId}`);
+    const fetchedUser = await get<User>('/users', {
+      params: { user_id: userId }
+    });
 
     if (fetchedUser) {
       setUser(fetchedUser);
 
-      fetchAttendants(fetchedUser);
-      fetchAgents();
-      fetchConnections(fetchedUser);
-
       const chats = await fetchChats(fetchedUser);
-      if (chats) updateDocumentTitle(chats); 
+      if (chats) updateDocumentTitle(chats);
+
+      fetchAttendants(fetchedUser);
+      fetchAgents(fetchedUser);
+      fetchConnections(fetchedUser);
+      fetchMetrics(fetchedUser);
 
     }
   }, [token, userId, setUser, get, fetchAttendants, fetchAgents, fetchConnections, fetchChats]);

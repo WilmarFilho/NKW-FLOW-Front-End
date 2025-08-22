@@ -25,7 +25,6 @@
   padding: 8px 16px;
   border-radius: 20px;
   font-size: 13px;
-  width: 100%;
   font-weight: bold;
   text-align: center;
 }
@@ -114,6 +113,7 @@
 
   .statusChipMobile {
     display: block;
+    width: 100%;
   }
 
   .inlineActions {
@@ -166,5 +166,25 @@
 @media (max-width: 499.98px) {
   .statusWithActions::before {
     display: none;
+  }
+
+  .columnsTable::before {
+    display: none;
+  }
+
+  .statusChip {
+    width: 100%;
+  }
+
+  .inlineActions {
+    width: 100%;
+  }
+
+  .columnsTable {
+    white-space: nowrap;
+    overflow: hidden;
+    display: block;
+    text-overflow: ellipsis;
+    width: 100%;
   }
 }

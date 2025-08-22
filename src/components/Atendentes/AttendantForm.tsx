@@ -13,6 +13,7 @@ interface AttendantFormProps {
   onChange: (data: AttendantFormData) => void;
   isSubmitting: boolean;
   triggerValidation?: boolean;
+  connections: { id: string; nome: string }[];
 }
 
 export default function AttendantForm({
@@ -20,15 +21,18 @@ export default function AttendantForm({
   editMode = false,
   onChange,
   isSubmitting,
-  triggerValidation = false
+  triggerValidation = false,
+  connections
 }: AttendantFormProps) {
-  const [formData, setFormData] = useState<AttendantFormData>({
+
+   const [formData, setFormData] = useState<AttendantFormData>({
     nome: initialData?.nome || '',
     email: initialData?.email || '',
     numero: initialData?.numero || '',
     senha_hash: '',
     status: initialData?.status ?? true,
     user_id: initialData?.user_id ?? '',
+    connection_id: initialData?.connection_id || '', 
   });
 
   const [errors, setErrors] = useState<ReturnType<typeof validateAttendantForm>>({});
@@ -41,13 +45,13 @@ export default function AttendantForm({
       senha_hash: '',
       status: initialData?.status ?? true,
       user_id: initialData?.user_id ?? '',
+      connection_id: initialData?.connection_id || '',
     });
     setErrors({});
   }, [initialData]);
 
   useEffect(() => {
     onChange(formData);
-
     if (triggerValidation) {
       setErrors(validateAttendantForm(formData, editMode));
     } else {
@@ -59,6 +63,8 @@ export default function AttendantForm({
     const { id, value } = e.target;
     if (id === 'status') {
       setFormData(prev => ({ ...prev, status: value === 'ativo' }));
+    } else if (id === 'connection') {
+      setFormData(prev => ({ ...prev, connection_id: value }));
     } else {
       setFormData(prev => ({ ...prev, [id]: value }));
     }
@@ -97,34 +103,59 @@ export default function AttendantForm({
         </div>
       </div>
 
-      <div className={formStyles.formGroup}>
-        <label htmlFor="email">Email:</label>
-        <input
-          id="email"
-          type="email"
-          placeholder='Email para atendente ser notificado.'
-          value={formData.email}
-          onChange={handleInputChange}
-          disabled={isSubmitting}
-        />
-        {triggerValidation && errors.email && (
-          <span className={formStyles.errorText}>{errors.email}</span>
-        )}
+      <div className={formStyles.formRow}>
+
+        <div className={formStyles.formGroup}>
+          <label htmlFor="email">Email:</label>
+          <input
+            id="email"
+            type="email"
+            placeholder='Email para atendente ser notificado.'
+            value={formData.email}
+            onChange={handleInputChange}
+            disabled={isSubmitting}
+          />
+          {triggerValidation && errors.email && (
+            <span className={formStyles.errorText}>{errors.email}</span>
+          )}
+        </div>
+
+        <div className={formStyles.formGroup}>
+          <label htmlFor="senha_hash">Senha:</label>
+          <input
+            id="senha_hash"
+            type="password"
+            placeholder={editMode ? 'Deixe em branco para não alterar' : 'Mínimo 6 caracteres'}
+            value={formData.senha_hash}
+            onChange={handleInputChange}
+            disabled={isSubmitting}
+            required={!editMode}
+          />
+          {triggerValidation && errors.senha_hash && (
+            <span className={formStyles.errorText}>{errors.senha_hash}</span>
+          )}
+        </div>
+
       </div>
 
+
       <div className={formStyles.formGroup}>
-        <label htmlFor="senha_hash">Senha:</label>
-        <input
-          id="senha_hash"
-          type="password"
-          placeholder={editMode ? 'Deixe em branco para não alterar' : 'Mínimo 6 caracteres'}
-          value={formData.senha_hash}
+        <label htmlFor="connection">Conexão Associada:</label>
+        <select
+          id="connection"
+          value={formData.connection_id}
           onChange={handleInputChange}
           disabled={isSubmitting}
-          required={!editMode}
-        />
-        {triggerValidation && errors.senha_hash && (
-          <span className={formStyles.errorText}>{errors.senha_hash}</span>
+        >
+          <option value="">Selecione uma conexão</option>
+          {connections.map(conn => (
+            <option key={conn.id} value={conn.id}>
+              {conn.nome}
+            </option>
+          ))}
+        </select>
+        {triggerValidation && errors.connection_id && (
+          <span className={formStyles.errorText}>{errors.connection_id}</span>
         )}
       </div>
 
@@ -145,3 +176,4 @@ export default function AttendantForm({
     </form>
   );
 }
+

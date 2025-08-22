@@ -459,10 +459,20 @@
     text-wrap: balance;
     line-height: 30px;
   }
+
+  .buttonReOpen {
+    font-size: 14px;
+  }
 }
 
 @media (max-width: 599.98px) {
   .contactText span {
     display: none;
+  }
+   .buttonReOpen {
+    font-size: 12px;
+    padding: 0 24px;
+    text-wrap: balance;
+    line-height: 18px;
   }
 }

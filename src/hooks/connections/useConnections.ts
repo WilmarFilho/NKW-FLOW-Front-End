@@ -1,6 +1,6 @@
 // Libs
 import { useCallback } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 // Recoil
 import { connectionsState, userState } from '../../state/atom';
 // Hooks
@@ -15,7 +15,7 @@ export const useConnections = () => {
   const [user] = useRecoilState(userState)
 
   // Carrega Conexões
-  const [connections, setConnections] = useRecoilState(connectionsState);
+  const setConnections = useSetRecoilState(connectionsState);
 
   // Carrega Metodos do hook da api
   const { get } = useApi();
@@ -25,10 +25,14 @@ export const useConnections = () => {
     const currentUser = userParam ?? user;
     if (!currentUser) return;
 
-    const data = await get<Connection[]>(`/connections/${currentUser.id}`);
-    
-    if (data) {
-      setConnections(data);
+    if (currentUser.tipo_de_usuario !== 'admin') return;
+
+    const fetchedData = await get<Connection[]>('/connections', {
+      params: { user_id: currentUser.id }
+    });
+
+    if (fetchedData) {
+      setConnections(fetchedData);
     }
 
   }, [get, setConnections]);

@@ -1,6 +1,6 @@
 // Libs
 import { useCallback } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 // Recoilt
 import { chatsState, userState } from '../../state/atom';
 // Hooks
@@ -15,7 +15,7 @@ export const useChats = () => {
   const [user] = useRecoilState(userState)
 
   // Carrega Chats
-  const [chats, setChats] = useRecoilState(chatsState);
+  const setChats = useSetRecoilState(chatsState);
 
   // Carrega Metodos do hook da api
   const { get, put } = useApi();
@@ -25,12 +25,14 @@ export const useChats = () => {
     const currentUser = userParam ?? user;
     if (!currentUser) return;
 
-    const data = await get<Chat[]>(`/chats/connections/chats/${currentUser.id}`);
+    const fetchedData = await get<Chat[]>('/chats', {
+          params: { user_id: currentUser.id }
+        });
 
-    if (data) {
+    if (fetchedData) {
       
-      setChats(data);
-      return data; 
+      setChats(fetchedData);
+      return fetchedData; 
     }
     
   }, [get, setChats]);

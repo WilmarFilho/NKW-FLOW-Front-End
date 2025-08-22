@@ -12,6 +12,10 @@ export interface User {
   senha_hash: string
   tipo_de_usuario: TipoUsuario;
   id: string;
+  user_admin_id?: string;
+  role?: string;
+  connection_id?: string;
+  connection_nome?: string;
   status: boolean;
   modo_tela: ModoTela;
   modo_side_bar: ModoSidebar;

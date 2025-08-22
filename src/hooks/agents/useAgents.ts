@@ -1,32 +1,31 @@
-// Libs
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { useCallback } from 'react';
-// Recoil
 import { agentsState, userState } from '../../state/atom';
-// Hooks
 import { useApi } from '../utils/useApi';
-// Types
 import type { Agent } from '../../types/agent';
+import { User } from '../../types/user';
 
 export const useAgents = () => {
-
-  // Carrega Usuário
-  const [user] = useRecoilState(userState)
-
-  // Carrega Agentes
-  const [agents, setAgents] = useRecoilState(agentsState);
-
-  // Carrega Metodos do hook da api
+  const [user] = useRecoilState(userState);
+  const setAgents = useSetRecoilState(agentsState);
   const { get } = useApi();
 
-  const fetchAgents = useCallback(async () => {
-    const fetchedData = await get<Agent[]>('/agents');
+  const fetchAgents = useCallback(async (userParam?: User) => {
+
+    const currentUser = userParam ?? user;
+    if (!currentUser) return;
+
+    if (currentUser.tipo_de_usuario !== 'admin') return
+
+    const fetchedData = await get<Agent[]>('/agents', {
+      params: { user_id: currentUser.id }
+    });
+
 
     if (fetchedData) {
       setAgents(fetchedData);
     }
-    
-  }, [get, setAgents]);
+  }, [get, user, setAgents]);
 
   return { fetchAgents };
 };

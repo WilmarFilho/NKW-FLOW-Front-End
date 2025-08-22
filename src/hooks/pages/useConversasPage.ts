@@ -120,7 +120,7 @@ export function useConversasPage() {
         return;
       }
 
-      const cooldownMin = 2;
+      const cooldownMin = 1;
 
       if (activeChat.ia_desligada_em) {
         let iso = activeChat.ia_desligada_em;

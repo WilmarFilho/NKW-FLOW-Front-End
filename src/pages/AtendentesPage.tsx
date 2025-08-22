@@ -18,6 +18,7 @@ export default function AtendentesPage() {
   const {
     attendants,
     isModalOpen,
+    connections,
     editData,
     isSubmitting,
     showErrors,
@@ -53,7 +54,7 @@ export default function AtendentesPage() {
     },
     { key: 'user', label: 'Nome', render: (item: Attendant) => item.user.nome, onClick: handleEdit },
     { key: 'user', label: 'Email', render: (item: Attendant) => item.user.email, onClick: handleEdit },
-    { key: 'user', label: 'Número', render: (item: Attendant) => item.user.numero, onClick: handleEdit },
+    { key: 'user', label: 'Conexão', render: (item: Attendant) => item.connection.nome, onClick: handleEdit },
   ];
 
   return (
@@ -122,6 +123,7 @@ export default function AtendentesPage() {
         onSave={handleSave}
       >
         <AttendantForm
+          connections={connections}
           initialData={editData || undefined}
           editMode={!!editData}
           onChange={handleFormChange}

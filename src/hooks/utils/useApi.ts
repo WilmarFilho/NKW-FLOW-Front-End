@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 
 export const useApi = () => {
   const executeRequest = useCallback(async <T>(
-    method: 'get' | 'post' | 'put' | 'delete',
+    method: 'get' | 'post' | 'put' | 'delete' | 'patch',
     path: string,
     requestData?: unknown,
     config?: AxiosRequestConfig
@@ -25,6 +25,9 @@ export const useApi = () => {
           break;
         case 'put':
           response = await axios.put<T>(url, requestData, config);
+          break;
+        case 'patch':
+          response = await axios.patch<T>(url, requestData, config);
           break;
         case 'delete':
           response = await axios.delete<T>(url, config);
@@ -66,6 +69,10 @@ export const useApi = () => {
     return executeRequest<T>('put', path, data, config);
   }, [executeRequest]);
 
+  const patch = useCallback(<T>(path: string, data?: unknown, config?: AxiosRequestConfig) => {
+    return executeRequest<T>('patch', path, data, config);
+  }, [executeRequest]);
+
   const del = useCallback(<T>(path: string, config?: AxiosRequestConfig) => {
     return executeRequest<T>('delete', path, undefined, config);
   }, [executeRequest]);
@@ -75,5 +82,6 @@ export const useApi = () => {
     post,
     put,
     del,
-  }), [get, post, put, del]);
+    patch,
+  }), [get, post, put, del, patch]);
 };

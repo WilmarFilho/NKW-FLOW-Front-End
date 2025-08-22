@@ -207,6 +207,20 @@ function ChatSidebar({
       {/* Conexões */}
       {!isMobileLayout && !selectedAttendantId && (
         (() => {
+          // Se for atendente → só mostra a conexão fixa dele
+          if (user?.tipo_de_usuario === 'atendente' && user?.connection_id) {
+           
+            const connectionNome = user?.connection_nome
+
+            return (
+              <div
+                className={`${styles.ChatFilterButton} ${styles.active}`}
+                data-label={connectionNome}
+              />
+            );
+          }
+
+          // Se for admin → pode abrir modal de conexões
           const connectionLabel = selectedConnectionId
             ? connections.find(c => c.id === selectedConnectionId)?.nome || 'Conexão selecionada'
             : 'Escolha uma conexão';
@@ -223,11 +237,7 @@ function ChatSidebar({
                 }
               }}
             >
-              {selectedConnectionId && (
-                <>
-                  <Icon nome="close" />
-                </>
-              )}
+              {selectedConnectionId && <Icon nome="close" />}
             </button>
           );
         })()
@@ -294,14 +304,15 @@ function ChatSidebar({
       {/* Atendentes (desktop, admin) */}
       {!isMobileLayout && !selectedConnectionId && user?.tipo_de_usuario === 'admin' && attendants.length > 0 && (
         (() => {
+      
           const attendantLabel = selectedAttendantId
-            ? attendants.find(a => a.id === selectedAttendantId)?.user.nome || 'Atendente selecionado'
+            ? attendants.find(a => a.user_id === selectedAttendantId)?.user.nome || 'Atendente selecionado'
             : 'Escolha um atendente';
 
           return (
             <button
               className={`${styles.ChatFilterButton} ${selectedAttendantId ? styles.active : ''}`}
-              data-label={attendantLabel} 
+              data-label={attendantLabel}
               onClick={() => {
                 if (selectedAttendantId) {
                   handleAttendantSelect(null);

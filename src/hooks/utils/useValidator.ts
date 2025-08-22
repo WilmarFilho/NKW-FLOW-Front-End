@@ -18,6 +18,10 @@ export function validateAttendantForm(data: AttendantFormData, editMode = false)
     errors.senha_hash = 'A senha deve ter pelo menos 6 caracteres.';
   }
 
+  if (!data.connection_id) {
+    errors.connection_id = 'Selecione uma conexão.';
+  }
+
   return errors;
 }
 

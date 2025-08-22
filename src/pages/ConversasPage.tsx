@@ -210,7 +210,7 @@ export default function ConversasPage() {
                   className={GlobalStyles.filterItens}
                   key={att.id}
                   onClick={() => {
-                    state.setSelectedAttendantId(att.id);
+                    state.setSelectedAttendantId(att.user_id);
                     state.setFilterConnectionId(null);
                     setIsAttendantsModalOpen(false);
                   }}

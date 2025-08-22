@@ -6,11 +6,22 @@ import type { HelpChat } from '../types/helpChat';
 import { Chat } from '../types/chats';
 import { Message } from '../types/message';
 import { User } from '../types/user';
+import { MetricsState } from '../types/metric';
 
 // Estado das conexões WhatsApp
 export const connectionsState = atom<Connection[]>({
   key: 'connectionsState',
   default: [],
+});
+
+export const metricsState = atom<MetricsState>({
+  key: 'metricsState',
+  default: {
+    novos: null,
+    fechados: null,
+    atendentes: [],
+    conexoes: [],
+  },
 });
 
 // Estado dos chats WhatsApp

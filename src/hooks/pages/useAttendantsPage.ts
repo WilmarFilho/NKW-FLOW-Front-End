@@ -8,23 +8,18 @@ import { useAttendantsActions } from '../attendants/useAttendantsActions';
 import type { Attendant, AttendantFormData } from '../../types/attendant';
 import type { FilterStatus, SortOrder, SortField } from '../../types/table';
 // Atom
-import { attendantsState } from '../../state/atom';
+import { attendantsState, connectionsState } from '../../state/atom';
 
 export function useAtendentesPage() {
-
-  // Carrega atendentes e seus metodos
-  const attendants = useRecoilValue(attendantsState)
+  const attendants = useRecoilValue(attendantsState);
+  const connections = useRecoilValue(connectionsState);
   const { addAttendant, removeAttendant, editAttendant, updateAttendantStatus } = useAttendantsActions();
 
-  // Controle de Filtro e Ordenação
   const [activeFilter, setActiveFilter] = useState<FilterStatus>('todos');
   const [sortField, setSortField] = useState<SortField<AttendantFormData>>(null);
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
-
-  // Controle de Erros
   const [showErrors, setShowErrors] = useState(false);
 
-  // Controle de Modal de edição / adição
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editData, setEditData] = useState<AttendantFormData | null>(null);
   const [editAttendantId, setEditAttendantId] = useState<string | null>(null);
@@ -33,59 +28,47 @@ export function useAtendentesPage() {
 
   const handleDelete = async (id: string | number) => {
     if (!window.confirm('Tem certeza?')) return;
-    await removeAttendant(id.toString());
+    await removeAttendant(id.toString()); //Cannot invoke an object which is possibly 'undefined'.t
   };
 
   const handleStatusToggle = async (attendant: Attendant) => {
-      await updateAttendantStatus(attendant);
+    await updateAttendantStatus(attendant); //Cannot invoke an object which is possibly 'undefined'.t
   };
 
   const handleEdit = (attendant: Attendant) => {
- 
     setEditAttendantId(attendant.id);
 
-    setEditData({
+    const data: AttendantFormData = {
       id: attendant.id,
       user_id: attendant.user_id,
       nome: attendant.user.nome,
       email: attendant.user.email,
       status: attendant.user.status,
       numero: attendant.user.numero,
-    });
+      connection_id: attendant.connection_id || '', 
+    };
 
-    setFormData({
-      id: attendant.id,
-      user_id: attendant.user_id,
-      nome: attendant.user.nome,
-      email: attendant.user.email,
-      status: attendant.user.status,
-      numero: attendant.user.numero,
-    });
-
+    setEditData(data);
+    setFormData(data);
     setIsModalOpen(true);
-
   };
 
   const handleFormChange = (data: AttendantFormData) => setFormData(data);
 
   const handleModalSaveClick = async () => {
-
     setShowErrors(true);
-
     if (!formData) return;
 
     const foundErrors = validateAttendantForm(formData, !!editData);
-
     if (Object.keys(foundErrors).length > 0) return;
 
     if (editAttendantId) {
-      await editAttendant(editAttendantId, formData.user_id!, formData);
+      await editAttendant(editAttendantId, formData.user_id!, formData); //Cannot invoke an object which is possibly 'undefined'.t
     } else {
-      await addAttendant(formData);
+      await addAttendant(formData); //Cannot invoke an object which is possibly 'undefined'.t
     }
 
     closeModal();
-    
   };
 
   const openModal = () => {
@@ -131,6 +114,7 @@ export function useAtendentesPage() {
 
   return {
     attendants: sortedAttendants,
+    connections, 
     sortField,
     sortOrder,
     activeFilter,
