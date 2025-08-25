@@ -1,6 +1,7 @@
 :root {
   --font-main: 'K2D', 'sans-serif';
   --font-secundaria: 'Jost', 'sans-serif';
+  --radius-default: 12px;
 }
 
 /* Tema Light */

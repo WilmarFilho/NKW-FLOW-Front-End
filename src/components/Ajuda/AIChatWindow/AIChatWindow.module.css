@@ -13,30 +13,26 @@
 .ai-chat-window::-webkit-scrollbar {
   display: none; 
 }
-
 .aiChatMessage {
   width: 60%;
   max-width: 600px; 
   padding: 12px 18px;
-  border-radius: 12px;
+  border-radius: var(--radius-default);
   font-size: 0.95rem;
   color: #c5c5d2;
   white-space: pre-wrap; 
   line-height: 1.6;
 }
-
 .aiChatMessage.bot {
   background-color: #52f2b724;
   align-self: flex-start;
   border-top-left-radius: 0;
 }
-
 .aiChatMessage.user {
   background-color: #52f2b769;
   align-self: flex-end;
   border-top-right-radius: 0;
 }
-
 @media (max-width: 767.98px) {
   .ai-chat-message {
     width: 85%;

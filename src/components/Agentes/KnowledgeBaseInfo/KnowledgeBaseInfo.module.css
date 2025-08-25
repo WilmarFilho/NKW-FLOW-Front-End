@@ -11,44 +11,37 @@
   text-align: center;
   text-wrap: balance;
 }
-
 .wrapperBody {
   width: 100%;
   display: flex;
   gap: 12px;
 }
-
 .columnTitlesConhecimento h4 {
   font-family: var(--font-main);
   font-size: 24px
 }
-
 .columnTitlesConhecimento p {
   font-size: 15px;
   line-height: 20px;
   opacity: .5;
 }
-
 .contentActions {
   display: flex;
   gap: 12px;
 }
-
 .contentActions button {
   border: none;
   outline: none;
   padding: 10px 20px;
   background-color: var(--color-background-messages);
   cursor: pointer;
-  border-radius: 10px;
+  border-radius: var(--radius-default);
 }
-
 .contentActions button svg {
   width: 30px;
   fill: var(--color-text-white);
   color: var(--color-text-white);
 }
-
 .progressFill {
   height: 100%;
   display: flex;
@@ -56,37 +49,29 @@
   align-items: center;
   transition: width 0.4s ease;
 }
-
 .progressFill.boa {
   background: var(--color-secundaria);
 }
-
 .progressFill.média {
   background: #facc15;
 }
-
 .progressFill.ruim {
   background: var(--color-background-red);
 }
-
 .progressPercent {
   color: var(--color-text-white);
   opacity: .6;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
-
 .progressBarAgent {
   background: var(--color-background-dark);
-  border-radius: 8px;
+  border-radius: var(--radius-default);
   height: 42px;
   margin-top: 8px;
   width: 100%;
   overflow: hidden;
 }
-
-
-
 @media (max-width: 1399.98px) {
   .columnTitlesConhecimento {
     padding: 0 40px;
@@ -100,7 +85,6 @@
     align-items: center;
   }
 }
-
 @media (max-width: 1199.98px) {
 
   .columnTitlesConhecimento h4 {
@@ -115,7 +99,6 @@
     padding: 0 32px;
   }
 }
-
 @media (max-width: 798.98px) {
   .columnTitlesConhecimento h4 {
     font-size: 18px;
@@ -130,7 +113,6 @@
     padding: 0 14px;
   }
 }
-
 @media (max-width: 499.98px) {
   .wrapperBody {
     flex-direction: column;
