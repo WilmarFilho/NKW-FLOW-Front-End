@@ -101,15 +101,16 @@ export default function AtendentesPage() {
         <div className={GlobalStyles.filterControls}>
           <button
             className={`${GlobalStyles.button} ${activeFilter === 'ativo' ? GlobalStyles.buttonActive : ''}`}
-            onClick={() => setActiveFilter('ativo')}
+            onClick={() => setActiveFilter(prev => prev === 'ativo' ? 'todos' : 'ativo')}
           >
-            Ver atendentes ativos
+            <span>Ver atendentes ativos</span>
           </button>
+
           <button
             className={`${GlobalStyles.button} ${activeFilter === 'inativo' ? GlobalStyles.buttonActive : ''}`}
-            onClick={() => setActiveFilter('inativo')}
+            onClick={() => setActiveFilter(prev => prev === 'inativo' ? 'todos' : 'inativo')}
           >
-            Ver atendentes inativos
+            <span>Ver atendentes inativos</span>
           </button>
         </div>
       </div>

@@ -119,17 +119,19 @@ export default function ConexoesPage() {
         <div className={GlobalStyles.filterControls}>
           <button
             className={`${GlobalStyles.button} ${activeFilter === 'ativo' ? GlobalStyles.buttonActive : ''}`}
-            onClick={() => setActiveFilter('ativo')}
+            onClick={() => setActiveFilter(prev => prev === 'ativo' ? 'todos' : 'ativo')}
           >
             <span>Ver conexões ativas</span>
           </button>
+
           <button
             className={`${GlobalStyles.button} ${activeFilter === 'inativo' ? GlobalStyles.buttonActive : ''}`}
-            onClick={() => setActiveFilter('inativo')}
+            onClick={() => setActiveFilter(prev => prev === 'inativo' ? 'todos' : 'inativo')}
           >
             <span>Ver conexões inativas</span>
           </button>
         </div>
+
       </div>
 
       <Modal

@@ -65,6 +65,7 @@
   padding: 60px 60px;
   overflow-y: hidden;
   scrollbar-width: none;
+  min-height: 270px;
 }
 .modalFooter {
   display: flex;
