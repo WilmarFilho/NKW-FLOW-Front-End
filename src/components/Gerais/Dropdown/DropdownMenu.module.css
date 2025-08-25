@@ -140,10 +140,7 @@
     font-size: 14px;
   }
 
-  .menuRight {
-    left: auto !important;
-    right: -220px;
-  }
+
 
   .messageWrapper {
     right: 98%;

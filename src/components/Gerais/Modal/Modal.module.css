@@ -230,3 +230,59 @@
   letter-spacing: 1px;
   opacity: .5;
 }
+
+/* --- Media Queries --- */
+@media (max-width: 1091.98px) {
+
+  .modalHeader h2 {
+    font-size: 20px;
+  }
+  .modalHeader {
+    padding: 24px;
+  }
+  .modalFooter {
+    padding: 24px;
+    gap: 8px;
+  }
+  .cancelButton {
+    font-size: 14px;
+    width: 30%;
+  }
+  .submitButton {
+    font-size: 16px;
+  }
+
+}
+
+@media (max-width: 591.98px) {
+
+  .modalHeader h2 {
+    font-size: 18px;
+  }
+  .modalHeader {
+    padding: 22px;
+  }
+  .modalFooter {
+    padding: 22px;
+    gap: 6px;
+  }
+  .cancelButton {
+    font-size: 12px;
+    width: 30%;
+  }
+  .submitButton {
+    font-size: 14px;
+  }
+
+}
+
+@media (max-width: 591.98px) {
+
+  .modalBody {
+    padding: 40px 30px;
+  }
+   .modalHeader h2 {
+    font-size: 16px;
+  }
+
+}

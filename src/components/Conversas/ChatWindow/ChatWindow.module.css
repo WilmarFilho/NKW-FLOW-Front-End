@@ -258,7 +258,6 @@
   justify-content: center;
   align-items: center;
   gap: 22px;
-  height: 600px;
 }
 
 .chatDetails img {
@@ -433,6 +432,24 @@
 }
 
 /* --- Media Queries --- */
+@media (max-width: 1291.98px) {
+
+  .chatDetails h2 {
+    font-size: 26px;
+  }
+
+  .chatDetails h3 {
+    font-size: 20px;
+  }
+
+  .chatDetails img {
+    width: 120px;
+    height: 120px;
+  }
+
+}
+
+
 @media (max-width: 991.98px) {
 
   .chatWindow,
@@ -469,10 +486,50 @@
   .contactText span {
     display: none;
   }
-   .buttonReOpen {
+
+  .buttonReOpen {
     font-size: 12px;
     padding: 0 24px;
     text-wrap: balance;
     line-height: 18px;
+  }
+
+  .chatDetails h2 {
+    font-size: 22px;
+  }
+
+  .chatDetails h3 {
+    font-size: 16px;
+  }
+
+  .chatDetails img {
+    width: 110px;
+    height: 110px;
+  }
+}
+
+@media (max-width: 499.98px) {
+  .chatDetails h2 {
+    font-size: 18px;
+    text-align: center;
+  }
+
+  .chatDetails h3 {
+    font-size: 14px;
+  }
+
+  .chatDetails img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .contactText h1 {
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .contactText {
+    width: 70%;
   }
 }

@@ -60,3 +60,16 @@ option {
     margin-top: 4px;
     display: block;
 }
+
+
+@media (max-width: 499.98px) {
+  .formGroup input, .formGroup select {
+    font-size: 14px;
+  }
+  .formGroup label {
+    line-height: 22px;
+  }
+  .formRow {
+    gap: 8px;
+  }
+}
