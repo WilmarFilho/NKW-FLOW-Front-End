@@ -12,12 +12,10 @@
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   padding: 1rem;
 }
-
 .wrapperSearchBar {
   display: flex;
   gap: 8px;
 }
-
 .buttonAddChat {
   border-radius: 12px;
   cursor: pointer;
@@ -29,12 +27,10 @@
   justify-content: center;
   align-items: center;
 }
-
 .buttonAddChat:hover {
   background-color: var(--color-secundaria);
   transition: .3s;
 }
-
 .ChatFilterButton {
   background-color: var(--color-background-white);
   text-transform: uppercase;
@@ -59,40 +55,33 @@
   /* Define um tamanho de fonte base */
   color: var(--color-button-searchbar);
 }
-
 .ChatFilterButton:hover {
   background-color: var(--color-background-tags-hover);
   transition: .2s;
   color: var(--color-text-white);
 }
-
 .ChatFilterButton:focus {
   border: none;
   outline: none;
 }
-
 .ChatFilterButton.active {
   background-color: var(--color-primary);
   color: var(--color-text-white);
 }
-
 .ChatFilterButton::after {
   content: attr(data-label);
 }
-
 .buttonAddChat svg,
 .ChatFilterButton svg {
   fill: var(--color-text-white);
   width: 22px;
   height: 20px;
 }
-
 .iaFilterContainer {
   display: flex;
   flex-direction: row;
   gap: 12px;
 }
-
 .tagsContainer {
   display: flex;
   gap: 8px;
@@ -102,7 +91,6 @@
   padding-bottom: 8px;
   scrollbar-width: none;
 }
-
 .chatList {
   overflow-y: scroll;
   height: 100%;
@@ -111,17 +99,14 @@
   flex-direction: column;
   gap: 8px;
 }
-
 .chatList::-webkit-scrollbar {
   display: none;
 }
-
 .statusToggleContainer {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
-
 .attendantsSection {
   display: flex;
   gap: 12px;
@@ -131,7 +116,6 @@
   scrollbar-width: none;
   height: 70px;
 }
-
 .attendantItem {
   min-width: 190px;
   border-radius: 12px;
@@ -148,7 +132,6 @@
   align-items: center;
   transition: .2s;
 }
-
 .attendantItem.active {
   background-color: var(--color-secundaria);
   color: var(--color-text-white);
@@ -157,7 +140,6 @@
   flex: 1;
   min-width: 140px;
 }
-
 @media (max-width: 1421.98px) {
   .chatSidebar {
     width: 35%;
@@ -168,7 +150,6 @@
     padding: 12px 24px;
   }
 }
-
 @media (max-width: 1211.98px) {
   .ChatFilterButton {
     font-size: 12px;
@@ -176,7 +157,6 @@
     padding: 12px 22px;
   }
 }
-
 @media (max-width: 991.98px) {
   .chatSidebar {
     width: 100%;
@@ -188,13 +168,11 @@
     padding: 16px;
   }
 }
-
 @media (max-width: 599.98px) {
   .ChatFilterButton::after {
     content: attr(data-label-short);
   }
 }
-
 @media (max-width: 464.98px) {
   .chatSidebar {
     padding: 10px;

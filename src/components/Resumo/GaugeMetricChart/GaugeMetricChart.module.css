@@ -4,15 +4,12 @@
   position: relative;
   margin-top: -20px;
 }
-
 .gaugeFill {
   fill: var(--color-secundaria);
 }
-
 .gaugeBackground {
   fill: var(--color-primary);
 }
-
 .gaugeFooter {
   position: absolute;
   bottom: 20px;
@@ -24,14 +21,12 @@
   flex-direction: column;
   gap: 4px;
 }
-
 .gaugeValue {
   font-size: 28px;
   font-weight: bold;
   font-family: var(--font-main);
   color: var(--color-secundaria);
 }
-
 .gaugeLabel {
   font-size: 14px;
   color: #666;

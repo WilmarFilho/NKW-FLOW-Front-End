@@ -19,7 +19,7 @@ function App() {
 
   return (
     <BrowserRouter future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
-      <AuthInitializer> {/* <--- Envolva suas rotas aqui */}
+      <AuthInitializer>
 
         <Routes>
 
@@ -122,6 +122,3 @@ function App() {
 }
 
 export default App;
-
-
-

@@ -17,7 +17,6 @@
   font-weight: 300;
   outline: transparent;
 }
-
 .tag.active {
   background-color: var(--color-secundaria);
   color: var(--color-text-white);
@@ -27,22 +26,15 @@
   min-width: 140px;
   transition: .2s;
 }
-
 .tag:not(.active):hover {
   background-color: var(--color-background-tags-hover);
   color: var(--color-text-white);
 }
-
 .tag:focus-visible {
   border: 1px solid var(--color-secundaria);
 }
-
-
 @media (max-width: 1211.98px) {
   .tag {
     font-size: 12px;
   }
 }
-
-
-/*Principal - Wilmar*/

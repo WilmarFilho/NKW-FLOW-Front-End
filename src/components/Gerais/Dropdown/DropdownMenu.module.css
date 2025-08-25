@@ -7,37 +7,25 @@
     opacity: 1;
   }
 }
-
 .dropdownWrapper {
   display: inline-flex;
   align-items: center;
 }
-
-/* ===== VARIANTES ===== */
-
-/* Header: participa do fluxo, serve de referência para o menu */
 .headerWrapper {
   position: relative;
 }
-
-/* Message: flutua no canto do balão sem ocupar espaço */
 .messageWrapper {
   position: absolute;
   top: 0;
   right: 0;
   z-index: 10;
   animation: fadeIn .2s forwards;
-  /* evita que uma área “invisível” bloqueie cliques */
   pointer-events: none;
 }
-
-/* reabilita eventos nos filhos que precisam */
 .messageWrapper .actionButton,
 .messageWrapper .menu {
   pointer-events: auto;
 }
-
-/* ===== TRIGGER ===== */
 .actionButton button {
   background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(4px);
@@ -56,10 +44,6 @@
   transition: all .2s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, .05);
 }
-
-/* ===== MENU ===== */
-
-/* Base do menu: não define top/bottom/left/right aqui! */
 .menu {
   position: absolute;
   background: var(--color-chat-dropdown);
@@ -74,30 +58,22 @@
   gap: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
-
-/* posição vertical (somente um eixo por vez) */
 .menuTop {
   top: auto !important;
   bottom: calc(100% + 14px);
 }
-
 .menuBottom {
   bottom: auto !important;
   top: calc(100% + 14px);
 }
-
-/* posição horizontal (somente um lado por vez) */
 .menuRight {
   left: auto !important;
   right: 14px;
 }
-
 .menuLeft {
   right: auto !important;
   left: 14px;
 }
-
-/* itens */
 .menu button {
   padding: 20px;
   width: 100%;
@@ -113,18 +89,14 @@
   background: var(--color-background-chats-options);
   text-align: left;
 }
-
 .menu button svg {
   width: 24px;
   fill: var(--color-text);
 }
-
 .menu button:hover {
   background: var(--color-background-white);
   transition: .3s;
 }
-
-/* --- Media Queries --- */
 @media (max-width: 991.98px) {
   .menuBottom {
     bottom: auto !important;
@@ -146,7 +118,6 @@
     right: 98%;
   }
 }
-
 @media (max-width: 599.98px) {
 
   .menuTop {

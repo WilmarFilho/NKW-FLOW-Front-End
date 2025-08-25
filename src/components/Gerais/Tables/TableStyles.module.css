@@ -8,18 +8,15 @@
   color: var(--color-text);
   transition: background-color 0.2s, transform 0.2s;
 }
-
 .tableRow:hover {
   background-color: var(--color-background-row-hover);
 }
-
 .columnsTable {
   text-align: start;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
 }
-
 .statusChip {
   display: block;
   padding: 8px 16px;
@@ -28,23 +25,19 @@
   font-weight: bold;
   text-align: center;
 }
-
 .statusChip.active {
   background-color: var(--color-secundaria);
   color: var(--color-text-white);
 }
-
 .statusChip.inactive {
   background-color: var(--color-background-red);
   color: var(--color-text-white);
 }
-
 .actionCell {
   display: flex;
   gap: 10px;
   justify-content: flex-start;
 }
-
 .actionButtonEdit,
 .actionButtonDelete {
   background-color: var(--color-background-row-hover);
@@ -58,7 +51,6 @@
   transition: background-color 0.2s;
   cursor: pointer;
 }
-
 .actionButtonDelete svg,
 .actionButtonEdit svg {
   width: 28px;
@@ -66,45 +58,36 @@
   fill: #a0a0a0;
   transition: fill 0.2s;
 }
-
 .actionButtonEdit:hover {
   background-color: var(--color-background-tags-hover);
 }
-
 .actionButtonDelete:hover {
   background-color: var(--color-background-red);
 }
-
 .actionButtonEdit:hover svg,
 .actionButtonDelete:hover svg {
   fill: #fff;
 }
-
 .actionButtonEdit:focus-visible,
 .actionButtonDelete:focus-visible {
   outline: 2px solid var(--color-primary);
 }
-
 .statusWithActions {
   display: flex;
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
 }
-
 .statusChipDesktop {
   display: block;
 }
-
 .statusChipMobile {
   display: none;
 }
-
 .inlineActions {
   display: none;
   gap: 8px;
 }
-
 @media (max-width: 991.98px) {
 
   .statusChipDesktop {
@@ -162,7 +145,6 @@
     padding: 8px 34px;
   }
 }
-
 @media (max-width: 499.98px) {
   .statusWithActions::before {
     display: none;

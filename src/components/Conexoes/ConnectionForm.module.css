@@ -10,5 +10,5 @@
     height: 250px;
     margin: 20px auto;
     display: block;
-    border-radius: 8px;
+    border-radius: var(--radius-default);
 }

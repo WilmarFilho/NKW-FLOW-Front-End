@@ -1,6 +1,6 @@
 .settingsContent {
   background: var(--color-background-dark);
-  border-radius: 16px;
+  border-radius: var(--radius-default);
   padding: 32px 40px;
   height: 100%;
   display: flex;
@@ -10,10 +10,9 @@
   overflow-y: auto;
   scrollbar-width: none;
 }
-
 .settingsContentAccount {
   background: var(--color-background-dark);
-  border-radius: 16px;
+  border-radius: var(--radius-default);
   padding: 32px 40px;
   height: 100%;
   display: flex;
@@ -22,12 +21,9 @@
   color: var(--color-text);
   overflow: hidden;
 }
-
 .settingsContent::-webkit-scrollbar {
   display: none;
 }
-
-/* --- Seção de Perfil (Aba 0) --- */
 .mainHeaderAccountWrapper {
   position: relative;
   display: flex;
@@ -37,7 +33,6 @@
   width: 100%;
   padding: 20px 20px 50px 20px;
 }
-
 .profileImageWrapper {
   position: absolute;
   top: -68px;
@@ -51,8 +46,6 @@
   align-items: end;
   padding-bottom: 30px;
 }
-
-/* Overlay escuro */
 .profileImageWrapper::after {
   content: '';
   position: absolute;
@@ -63,8 +56,6 @@
   z-index: 1;
   pointer-events: none;
 }
-
-/* Texto sobreposto */
 .overlayText {
   position: absolute;
   z-index: 2;
@@ -74,16 +65,12 @@
   transition: opacity 0.3s ease;
   pointer-events: none;
 }
-
-/* Ativa overlay e texto no hover */
 .profileImageWrapper:hover::after {
   background-color: rgba(0, 0, 0, 0.6);
 }
-
 .profileImageWrapper:hover .overlayText {
   opacity: 1;
 }
-
 .profileImage {
   object-fit: cover;
   position: absolute;
@@ -93,7 +80,6 @@
   border-radius: 50%;
   cursor: pointer;
 }
-
 .userInfo,
 .userInfoMain {
   display: flex;
@@ -103,35 +89,30 @@
   height: 100%;
   justify-content: space-between;
 }
-
 .userInfo h1 {
   font-size: 16px;
   font-weight: 400;
   color: var(--color-text);
   opacity: .7;
 }
-
 .userInfo h2 {
   font-size: 22px;
   font-weight: 500;
   color: var(--color-text);
   opacity: 1;
 }
-
 .userInfoMain h1 {
   font-size: 28px;
   font-weight: 400;
   opacity: .5;
   color: var(--color-subtext-2);
 }
-
 .userInfoMain h2 {
   font-size: 40px;
   font-weight: 500;
   font-family: var(--font-main);
   text-transform: uppercase;
 }
-
 .configsWrapperBox {
   height: 100%;
   width: 100%;
@@ -141,7 +122,6 @@
   gap: 20px;
   padding: 24px 0;
 }
-
 .infoGrid {
   display: flex;
   flex-direction: column;
@@ -149,7 +129,6 @@
   gap: 24px;
   justify-content: space-between;
 }
-
 .headerAccountWrapper {
   display: flex;
   align-items: center;
@@ -160,7 +139,6 @@
   padding: 50px 24px;
   border-radius: 12px;
 }
-
 .editButton {
   width: 100%;
   font-family: var(--font-secundaria);
@@ -176,14 +154,11 @@
   cursor: pointer;
   border-radius: 10px;
 }
-
 .editButton:hover {
   transition: .4s;
   background-color: var(--color-filter-hover-attendants);
   color: var(--color-text-white);
 }
-
-/* --- Seção de Configurações (Aba 1) --- */
 .settingRow {
   display: flex;
   justify-content: space-between;
@@ -191,24 +166,21 @@
   width: 100%;
   background-color: var(--color-subtext-1);
   padding: 24px;
-  border-radius: 12px;
+  border-radius: var(--radius-default);
   border-bottom: 1px solid var(--color-background-white);
 }
-
 .settingInfo {
   display: flex;
   flex-direction: column;
   gap: 12px;
   width: 70%;
 }
-
 .settingLabel {
   text-wrap: balance;
   font-family: var(--font-main);
   font-size: 22px;
   font-weight: 500;
 }
-
 .settingDescription {
   font-family: var(--font-secundaria);
   font-size: 16px;
@@ -216,8 +188,6 @@
   line-height: 1.5;
   text-wrap: balance;
 }
-
-
 @media (max-width: 1175.98px) {
   .headerAccountWrapper {
     padding: 38px 24px;
@@ -245,7 +215,6 @@
     right: 0;
   }
 }
-
 @media (max-width: 991.98px) {
 
   .settingsContentAccount,
@@ -265,7 +234,6 @@
     font-size: 14px;
   }
 }
-
 @media (max-width: 767.98px) {
   .userInfoMain h1 {
     font-size: 20px;
@@ -293,7 +261,6 @@
     right: -16px;
   }
 }
-
 @media (max-width: 599.98px) {
 
   .settingsContentAccount,

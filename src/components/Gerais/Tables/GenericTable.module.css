@@ -6,7 +6,6 @@
   overflow-y: scroll;
   scrollbar-width: none;
 }
-
 .tableHeader {
   display: grid;
   align-items: center;
@@ -17,11 +16,9 @@
   font-size: 1.5em;
   color: #a0a0a0;
 }
-
 .tableHeader div {
   text-align: start;
 }
-
 .tableBody {
   display: flex;
   flex-direction: column;
@@ -30,14 +27,12 @@
   scrollbar-width: none;
   overflow-y: auto;
 }
-
 .sortableHeader {
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 4px;
 }
-
 .sortIcon svg {
   width: 24px;
   height: 24px;
@@ -46,7 +41,6 @@
   align-items: center;
   fill: var(--color-text);
 }
-
 .sortIconInactive svg {
   width: 24px;
   height: 24px;
@@ -56,19 +50,16 @@
   fill: var(--color-text);
   opacity: .4;
 }
-
 .sortIcon {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-
 @media (max-width: 1399.98px) {
   .tableHeader {
     font-size: 1.3em;
   }
 }
-
 @media (max-width: 991.98px) {
   .tableContainer {
     background-color: transparent;

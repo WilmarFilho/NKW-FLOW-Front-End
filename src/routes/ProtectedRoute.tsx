@@ -1,11 +1,9 @@
-// routes/ProtectedRoute.tsx
-
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../hooks/auth/useAuth';
 import { JSX } from 'react';
 import { useRecoilValue } from 'recoil';
 import { userState } from '../state/atom';
-import LoadingScreen from '../components/Layout/LoadingScreen'; // ajuste o path se for diferente
+import LoadingScreen from '../components/Layout/LoadingScreen'; 
 
 interface RoleProps {
   children: JSX.Element;

@@ -14,36 +14,30 @@
   line-height: 1.5;
   overflow: visible;
 }
-
 .messageText {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
-
 .messageText strong {
   font-weight: bold;
 }
-
 .isMe {
   background-color: var(--color-secundaria);
   color: var(--color-text-white);
   align-self: flex-end;
   border-bottom-right-radius: 4px;
 }
-
 .isOther {
   background-color: var(--color-background-messages);
   color: var(--color-text-white);
   align-self: flex-start;
   border-bottom-left-radius: 4px;
 }
-
 .stickerBubble {
   background-color: transparent;
   padding: 0;
 }
-
 .messageImage {
   max-width: 100%;
   max-height: 400px;
@@ -51,41 +45,34 @@
   border-radius: 12px;
   display: block;
 }
-
 .stickerImage {
   width: 140px;
   height: 140px;
   object-fit: contain;
 }
-
 .messageAudio {
   width: 100%;
   max-width: 100%;
   min-width: 270px;
 }
-
 .documentContainer {
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 5px 0;
 }
-
 .documentIcon {
   font-size: 1.8rem;
 }
-
 .documentLink {
   color: inherit;
   font-weight: 500;
   text-decoration: underline;
   cursor: pointer;
 }
-
 .documentLink:hover {
   opacity: 0.8;
 }
-
 .quotedMessage {
   border-left: 3px solid var(--color-text-white);
   padding: 12px 16px;
@@ -95,33 +82,27 @@
   background: rgba(0, 0, 0, 0.05);
   border-radius: 6px;
 }
-
 .quotedSender {
   display: block;
   color: var(--color-text-white);
   margin-bottom: 2px;
 }
-
 .quotedText {
   font-style: italic;
   color: var(--color-text-white);
 }
-
 .time {
   text-align: end;
   font-size: 12px;
 }
-
 .isExcluded {
   background-color: var(--color-background-dark);
 }
-
 @media (max-width: 599.98px) {
   .messageAudio {
     min-width: 190px;
   }
 }
-
 @media (max-width: 399.98px) {
   .messageAudio {
     min-width: 140px;

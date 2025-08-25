@@ -2,7 +2,6 @@
   position: relative;
   width: 100%;
 }
-
 .iconWrapper {
   position: absolute;
   top: 50%;
@@ -14,11 +13,9 @@
   opacity: 0.5;
   transition: opacity 0.2s ease-in-out;
 }
-
 .iconWrapper svg {
   stroke: var(--color-button-searchbar);
 }
-
 .searchInput {
   width: 100%;
   padding: 16px 16px 16px 48px;
@@ -31,33 +28,25 @@
   outline: none;
   transition: border-color 0.2s ease-in-out;
 }
-
 .searchInput::placeholder {
   color: var(--color-button-searchbar);
 }
-
 .searchInput:focus {
   border-color: var(--color-button-searchbar);
 }
-
 .searchContainer:focus-within .iconWrapper {
   opacity: 1;
 }
-
-/* --- Media Queries --- */
-
 @media (max-width: 1211.98px) {
   .searchInput {
     font-size: 12px;
   }
 }
-
 @media (max-width: 991.98px) {
   .searchContainer {
     max-width: none;
   }
 }
-
 @media (max-width: 464.98px) {
   .searchInput {
     border-radius: 10px;
