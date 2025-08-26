@@ -255,11 +255,16 @@ export default function MessageBubble(props: MessageBubbleProps) {
             </button>
           )}
 
-          <button onClick={() => props.onDelete?.(id)}>
-            <Icon nome="trash" /> {props.isMobileLayout ? 'Apagar' : 'Apagar mensagem'}
-          </button>
+          {/* Só aparece se for mensagem do usuário e dentro de 5 min */}
+          {sender === 'me' &&
+            (Date.now() - createdAtLocal.getTime() <= 5 * 60 * 1000) && (
+              <button onClick={() => props.onDelete?.(id)}>
+                <Icon nome="trash" /> {props.isMobileLayout ? 'Apagar' : 'Apagar mensagem'}
+              </button>
+            )}
         </DropdownMenu>
       )}
+
     </motion.div>
   );
 }

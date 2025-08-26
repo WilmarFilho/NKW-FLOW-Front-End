@@ -12,7 +12,7 @@ import {
   getCustomSelectStyles,
   AnimatedMenu,
   SelectOption,
-} from '../Gerais/Form/CustomSelect'; // Ajuste o caminho conforme necessário
+} from '../Gerais/Form/CustomSelect';
 
 // Css
 import formStyles from '../Gerais/Form/form.module.css';
@@ -54,14 +54,26 @@ export default function AttendantForm({
     label: conn.nome,
   }));
 
-  const selectedConnection = connectionOptions.find(
-    (opt) => opt.value === formData.connection_id
-  ) || null;
+  const selectedConnection =
+    connectionOptions.find((opt) => opt.value === formData.connection_id) || null;
+
+  // Options para Status
+  const statusOptions: SelectOption[] = [
+    { value: 'ativo', label: 'Ativo' },
+    { value: 'inativo', label: 'Inativo' },
+  ];
+
+  const selectedStatus =
+    statusOptions.find((opt) => opt.value === (formData.status ? 'ativo' : 'inativo')) || null;
 
   useEffect(() => {
     setFormData({
-      nome: initialData?.nome || '', email: initialData?.email || '', numero: initialData?.numero || '',
-      senha_hash: '', status: initialData?.status ?? true, user_id: initialData?.user_id ?? '',
+      nome: initialData?.nome || '',
+      email: initialData?.email || '',
+      numero: initialData?.numero || '',
+      senha_hash: '',
+      status: initialData?.status ?? true,
+      user_id: initialData?.user_id ?? '',
       connection_id: initialData?.connection_id || '',
     });
     setErrors({});
@@ -80,14 +92,14 @@ export default function AttendantForm({
     const { id, value } = e.target;
     setFormData((prev) => ({ ...prev, [id]: value }));
   };
-  
-  const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setFormData(prev => ({ ...prev, status: e.target.value === 'ativo' }));
-  };
 
   const handleConnectionChange = (selectedOption: OnChangeValue<SelectOption, false>) => {
     const value = selectedOption ? selectedOption.value : '';
     setFormData((prev) => ({ ...prev, connection_id: value }));
+  };
+
+  const handleStatusChange = (selectedOption: OnChangeValue<SelectOption, false>) => {
+    setFormData((prev) => ({ ...prev, status: selectedOption?.value === 'ativo' }));
   };
 
   return (
@@ -95,28 +107,65 @@ export default function AttendantForm({
       <div className={formStyles.formRow}>
         <div className={formStyles.formGroup}>
           <label htmlFor="nome">Nome:</label>
-          <input id="nome" placeholder='Digite o nome completo do atendente.' value={formData.nome} onChange={handleInputChange} disabled={isSubmitting}/>
-          {triggerValidation && errors.nome && (<span className={formStyles.errorText}>{errors.nome}</span>)}
+          <input
+            id="nome"
+            placeholder="Digite o nome completo do atendente."
+            value={formData.nome}
+            onChange={handleInputChange}
+            disabled={isSubmitting}
+          />
+          {triggerValidation && errors.nome && (
+            <span className={formStyles.errorText}>{errors.nome}</span>
+          )}
         </div>
         <div className={formStyles.formGroup}>
           <label htmlFor="numero">Número:</label>
-          <input id="numero" type="tel" placeholder='Número para atendente ser notificado.' value={formData.numero} onChange={handleInputChange} disabled={isSubmitting}/>
-          {triggerValidation && errors.numero && (<span className={formStyles.errorText}>{errors.numero}</span>)}
+          <input
+            id="numero"
+            type="tel"
+            placeholder="Número para atendente ser notificado."
+            value={formData.numero}
+            onChange={handleInputChange}
+            disabled={isSubmitting}
+          />
+          {triggerValidation && errors.numero && (
+            <span className={formStyles.errorText}>{errors.numero}</span>
+          )}
         </div>
       </div>
+
       <div className={formStyles.formRow}>
         <div className={formStyles.formGroup}>
           <label htmlFor="email">Email:</label>
-          <input id="email" type="email" placeholder='Email para atendente ser notificado.' value={formData.email} onChange={handleInputChange} disabled={isSubmitting}/>
-          {triggerValidation && errors.email && (<span className={formStyles.errorText}>{errors.email}</span>)}
+          <input
+            id="email"
+            type="email"
+            placeholder="Email para atendente ser notificado."
+            value={formData.email}
+            onChange={handleInputChange}
+            disabled={isSubmitting}
+          />
+          {triggerValidation && errors.email && (
+            <span className={formStyles.errorText}>{errors.email}</span>
+          )}
         </div>
         <div className={formStyles.formGroup}>
           <label htmlFor="senha_hash">Senha:</label>
-          <input id="senha_hash" type="password" placeholder={editMode ? 'Deixe em branco para não alterar' : 'Mínimo 6 caracteres'} value={formData.senha_hash} onChange={handleInputChange} disabled={isSubmitting} required={!editMode}/>
-          {triggerValidation && errors.senha_hash && (<span className={formStyles.errorText}>{errors.senha_hash}</span>)}
+          <input
+            id="senha_hash"
+            type="password"
+            placeholder={editMode ? 'Deixe em branco para não alterar' : 'Mínimo 6 caracteres'}
+            value={formData.senha_hash}
+            onChange={handleInputChange}
+            disabled={isSubmitting}
+            required={!editMode}
+          />
+          {triggerValidation && errors.senha_hash && (
+            <span className={formStyles.errorText}>{errors.senha_hash}</span>
+          )}
         </div>
       </div>
-      
+
       <div className={formStyles.formGroup}>
         <label htmlFor="connection">Conexão Associada:</label>
         <Select<SelectOption>
@@ -138,10 +187,17 @@ export default function AttendantForm({
       {editMode && (
         <div className={formStyles.formGroup}>
           <label htmlFor="status">Status</label>
-          <select id="status" value={formData.status ? 'ativo' : 'inativo'} onChange={handleStatusChange} disabled={isSubmitting}>
-            <option value="ativo">Ativo</option>
-            <option value="inativo">Inativo</option>
-          </select>
+          <Select<SelectOption>
+            inputId="status"
+            options={statusOptions}
+            value={selectedStatus}
+            onChange={handleStatusChange}
+            placeholder="Selecione"
+            isClearable={false}
+            isDisabled={isSubmitting}
+            components={{ Menu: AnimatedMenu }}
+            styles={customStyles}
+          />
         </div>
       )}
     </form>

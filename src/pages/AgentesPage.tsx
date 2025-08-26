@@ -32,7 +32,12 @@ export default function AgentesPage() {
             Ao adicionar uma nova conexão você seleciona um desses para responder por você. Para contratar mais agentes entre em contato.
           </h3>
         </div>
-        <Button label='Entre em Contato' />
+
+        <Button
+          onClick={() => window.open('https://www.instagram.com/nkw_tech/', '_blank')}
+          label='Entre em Contato'
+        />
+
       </motion.div>
 
       {/* Lista de Agentes */}
@@ -56,7 +61,7 @@ export default function AgentesPage() {
       >
 
         <KnowledgeBaseInfo status={state.status} />
-      
+
       </motion.div>
 
       {/* Modal de Detalhes */}

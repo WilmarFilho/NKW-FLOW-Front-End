@@ -16,6 +16,17 @@ import { DropdownMenu } from '../../../components/Gerais/Dropdown/DropdownMenu';
 import { useRecoilValue } from 'recoil';
 import { userState } from '../../../state/atom';
 
+import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
+  AlertDialogCloseButton,
+  Button,
+} from '@chakra-ui/react'
+
 interface ChatWindowProps {
   activeChat: Chat | null;
   messages: Message[];
@@ -37,10 +48,16 @@ interface ChatWindowProps {
   isMobileLayout: boolean;
   onBack?: () => void;
   onReleaseChatOwner: () => void;
+  isDeleteDialogOpen: boolean;
+  setIsDeleteDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  cancelRef: React.RefObject<HTMLButtonElement>;
 }
 
 export default function ChatWindow({
+  isDeleteDialogOpen,
   fetchMoreMessages,
+  cancelRef,
+  setIsDeleteDialogOpen,
   hasMore,
   isLoading,
   activeChat,
@@ -339,7 +356,7 @@ export default function ChatWindow({
                       <Icon nome="close" />{' '}
                       {activeChat.status === 'Open' ? 'Fechar Chat' : 'Reabrir Chat'}
                     </button>
-                    <button onClick={onDeleteChat}>
+                    <button onClick={() => setIsDeleteDialogOpen(true)}>
                       <Icon nome="trash" /> Apagar Chat
                     </button>
                   </>
@@ -353,6 +370,8 @@ export default function ChatWindow({
           </DropdownMenu>
         </header>
       )}
+
+
 
       <Modal transparent isOpen={isDetailsOpen} onClose={() => setDetailsOpen(false)} title="Detalhes do Chat">
         <div className={styles.chatDetails}>
@@ -505,7 +524,37 @@ export default function ChatWindow({
           </div>
         )}
       </div>
+
+      <AlertDialog
+        isOpen={isDeleteDialogOpen}
+        leastDestructiveRef={cancelRef}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        isCentered
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+              Excluir Conversa
+            </AlertDialogHeader>
+
+            <AlertDialogBody>
+              Você tem certeza? Esta ação não pode ser desfeita.
+            </AlertDialogBody>
+
+            <AlertDialogFooter>
+              <Button ref={cancelRef} onClick={() => setIsDeleteDialogOpen(false)}>
+                Cancelar
+              </Button>
+              <Button colorScheme='red' onClick={onDeleteChat} ml={3}>
+                Excluir
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
+
     </motion.section>
+
   );
 }
 

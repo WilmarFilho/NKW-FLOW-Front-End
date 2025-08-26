@@ -79,7 +79,11 @@ export default function ConversasPage() {
               isMobileLayout={isMobileLayout}
               onBack={handleBackToSidebar}
               onReleaseChatOwner={state.handleReleaseChatOwner}
+              isDeleteDialogOpen={state.isDeleteDialogOpen}
+              setIsDeleteDialogOpen={state.setIsDeleteDialogOpen} 
+              cancelRef={state.cancelRef}
             />
+
           </DropdownMenuProvider>
         ) : (
           <ChatSidebar
@@ -137,7 +141,11 @@ export default function ConversasPage() {
               hasMore={state.hasMore}
               isLoading={state.isLoading}
               isMobileLayout={isMobileLayout}
+              onBack={handleBackToSidebar}
               onReleaseChatOwner={state.handleReleaseChatOwner}
+              isDeleteDialogOpen={state.isDeleteDialogOpen}
+              setIsDeleteDialogOpen={state.setIsDeleteDialogOpen}
+              cancelRef={state.cancelRef}
             />
           </DropdownMenuProvider>
         </>

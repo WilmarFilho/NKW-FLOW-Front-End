@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { useChats } from '../chats/useChats';
 import { useMessages } from '../../hooks/chats/useMessages';
@@ -106,7 +106,7 @@ export function useConversasPage() {
           setIsAddChatOpen(false);
           setNewChatNumber('');
           setNewChatMessage('');
-          setFormConnectionId(null); 
+          setFormConnectionId(null);
         }
 
         return
@@ -216,14 +216,15 @@ export function useConversasPage() {
     }
   }, [activeChat, toggleIA, setChats]);
 
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const cancelRef = useRef<HTMLButtonElement>(null!);
 
   const handleDeleteChat = useCallback(async () => {
     if (!activeChat) return;
-    if (window.confirm('Tem certeza?')) {
-      await deleteChat(activeChat.id);
-      setActiveChat(null);
-    }
-  }, [activeChat, deleteChat]);
+    await deleteChat(activeChat.id);
+    setActiveChat(null);
+    setIsDeleteDialogOpen(false);
+  }, [activeChat, deleteChat, setActiveChat]);
 
   const handleToggleChatStatus = useCallback(async () => {
     if (!activeChat) return;
@@ -278,6 +279,9 @@ export function useConversasPage() {
 
   return {
     chats,
+    isDeleteDialogOpen,
+    setIsDeleteDialogOpen,
+    cancelRef,
     fectchImageProfile,
     showErrors,
     errors,
@@ -317,6 +321,3 @@ export function useConversasPage() {
     setFilterConnectionId,
   };
 }
-
-
-

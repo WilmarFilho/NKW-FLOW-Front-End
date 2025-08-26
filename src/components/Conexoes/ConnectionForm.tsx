@@ -1,6 +1,6 @@
 // Hooks
 import { useRecoilValue } from 'recoil';
-import Select, { OnChangeValue } from 'react-select'; // 1. Importar o Select
+import Select, { OnChangeValue } from 'react-select'; // Importar o Select
 
 // Type
 import { Connection } from '../../types/connection';
@@ -10,7 +10,7 @@ import styles from './ConnectionForm.module.css';
 // State
 import { agentsState } from '../../state/atom';
 
-// 2. Importar tudo do nosso módulo reutilizável
+// Nosso módulo reutilizável
 import {
   useMediaQuery,
   getCustomSelectStyles,
@@ -39,28 +39,46 @@ export default function ConnectionForm({
 }: ConnectionFormProps) {
   const agents = useRecoilValue(agentsState);
 
-  // 3. Adicionar a lógica do select customizado
+  // Custom select config
   const isMobile = useMediaQuery('(max-width: 600px)');
   const customStyles = getCustomSelectStyles(isMobile);
 
-  // 4. Formatar os dados para o formato do Select
+  // --- AGENTES ---
   const agentOptions: SelectOption[] =
     agents?.map((agent) => ({
       value: agent.id,
       label: agent.tipo_de_agente,
     })) || [];
 
-  // 5. Encontrar o valor selecionado
   const selectedAgent =
     agentOptions.find((opt) => opt.value === formData?.agente_id) || null;
 
-  // 6. Criar um handler específico para o select customizado
   const handleAgentChange = (
     selectedOption: OnChangeValue<SelectOption, false>
   ) => {
     onChange({
       ...formData,
       agente_id: selectedOption ? selectedOption.value : '',
+    });
+  };
+
+  // --- STATUS (apenas no modo edição) ---
+  const statusOptions: SelectOption[] = [
+    { value: 'ativo', label: 'Ativo' },
+    { value: 'inativo', label: 'Inativo' },
+  ];
+
+  const selectedStatus =
+    statusOptions.find(
+      (opt) => opt.value === (formData?.status ? 'ativo' : 'inativo')
+    ) || null;
+
+  const handleStatusChange = (
+    selectedOption: OnChangeValue<SelectOption, false>
+  ) => {
+    onChange({
+      ...formData,
+      status: selectedOption?.value === 'ativo',
     });
   };
 
@@ -86,7 +104,7 @@ export default function ConnectionForm({
             )}
           </div>
 
-          {/* 7. Substituir o select nativo pelo componente Select */}
+          {/* Select customizado para Agente */}
           <div className={formStyles.formGroup}>
             <label>Agente IA</label>
             <Select<SelectOption>
@@ -108,19 +126,16 @@ export default function ConnectionForm({
         {editMode && (
           <div className={formStyles.formGroup}>
             <label>Status</label>
-            <select
-              id="status"
-              value={formData?.status ? 'ativo' : 'inativo'}
-              onChange={(e) =>
-                onChange({
-                  ...formData,
-                  status: e.target.value === 'ativo',
-                })
-              }
-            >
-              <option value="ativo">Ativo</option>
-              <option value="inativo">Inativo</option>
-            </select>
+            <Select<SelectOption>
+              inputId="status"
+              options={statusOptions}
+              value={selectedStatus}
+              onChange={handleStatusChange}
+              placeholder="Selecione"
+              isClearable={false}
+              components={{ Menu: AnimatedMenu }}
+              styles={customStyles}
+            />
           </div>
         )}
       </div>
