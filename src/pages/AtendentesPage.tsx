@@ -14,6 +14,17 @@ import { useAtendentesPage } from '../hooks/pages/useAttendantsPage';
 // Type
 import type { Attendant } from '../types/attendant';
 
+import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
+  Button as ChakraButton,
+} from '@chakra-ui/react';
+import { useRef, useState } from 'react';
+
 export default function AtendentesPage() {
   const {
     attendants,
@@ -36,6 +47,31 @@ export default function AtendentesPage() {
     activeFilter,
     setActiveFilter,
   } = useAtendentesPage();
+
+  // --- INÍCIO: estado para confirmação de exclusão via Chakra AlertDialog ---
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [attendantToDelete, setAttendantToDelete] = useState<Attendant | null>(null);
+  const cancelDeleteRef = useRef<HTMLButtonElement>(null);
+
+  const openDeleteDialog = (att: Attendant) => {
+    setAttendantToDelete(att);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!attendantToDelete) return;
+    try {
+      await handleDelete(attendantToDelete.id);
+    } finally {
+      setIsDeleteDialogOpen(false);
+      setAttendantToDelete(null);
+    }
+  };
+
+  const closeDeleteDialog = () => {
+    setIsDeleteDialogOpen(false);
+    setAttendantToDelete(null);
+  };
 
   const columnTemplate = '1fr 2fr 2fr 2fr 1fr';
 
@@ -78,7 +114,7 @@ export default function AtendentesPage() {
               columns={columns}
               columnTemplate={columnTemplate}
               onEdit={handleEdit}
-              onDelete={handleDelete}
+              onDelete={() => openDeleteDialog(attendant)}
             />
           )}
           gridTemplateColumns={columnTemplate}
@@ -114,6 +150,40 @@ export default function AtendentesPage() {
           </button>
         </div>
       </div>
+
+      <AlertDialog
+        isOpen={isDeleteDialogOpen}
+        leastDestructiveRef={cancelDeleteRef}
+        onClose={closeDeleteDialog}
+        isCentered
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Excluir Atendente
+            </AlertDialogHeader>
+
+            <AlertDialogBody>
+              {attendantToDelete ? (
+                <>
+                  Tem certeza que deseja excluir <strong>{attendantToDelete.user.nome}</strong>? Esta ação não pode ser desfeita.
+                </>
+              ) : (
+                'Tem certeza que deseja excluir este atendente?'
+              )}
+            </AlertDialogBody>
+
+            <AlertDialogFooter>
+              <ChakraButton ref={cancelDeleteRef} onClick={closeDeleteDialog}>
+                Cancelar
+              </ChakraButton>
+              <ChakraButton colorScheme="red" onClick={confirmDelete} ml={3}>
+                Excluir
+              </ChakraButton>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
 
       <Modal
         isOpen={isModalOpen}

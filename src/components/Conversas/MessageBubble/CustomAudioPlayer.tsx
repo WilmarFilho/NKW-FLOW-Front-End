@@ -17,7 +17,7 @@ const waveOptions = {
   barWidth: 3,
   barRadius: 3,
   barGap: 2,
-  width: 120, // Largura inicial, WaveSurfer ajustará para o container.
+  minWidth: 320,
   height: 40,
   normalize: true,
 };

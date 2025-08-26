@@ -9,6 +9,7 @@
   overflow: hidden;
   position: relative;
 }
+
 @keyframes fadeInContent {
   from {
     height: 0px;
@@ -19,6 +20,7 @@
     /* padrão desktop */
   }
 }
+
 @media (max-width: 991.98px) {
   @keyframes fadeInContent {
     from {
@@ -31,6 +33,7 @@
     }
   }
 }
+
 @keyframes animateRow {
 
   /* Estado inicial: transparente e 15px abaixo */
@@ -43,6 +46,7 @@
     grid-template-rows: 1fr auto;
   }
 }
+
 @keyframes animateReplay {
 
   /* Estado inicial: transparente e 15px abaixo */
@@ -56,6 +60,7 @@
 
   }
 }
+
 @keyframes animateInverseReplay {
 
   /* Estado inicial: transparente e 15px abaixo */
@@ -69,12 +74,14 @@
 
   }
 }
+
 .inputAreaWrapper {
   display: grid;
   animation: animateRow .1s;
   padding: 12px 20px;
   border-top: 1px solid var(--color-borders);
 }
+
 .replyPreview {
   overflow: hidden;
   animation: animateReplay .1s forwards;
@@ -83,15 +90,18 @@
   border-radius: 12px;
   position: relative;
 }
+
 .replyPreview div {
   gap: 12px;
   display: flex;
   flex-direction: column;
   padding: 20px 26px;
 }
+
 .replyPreview.isExiting {
   animation: animateInverseReplay .1s forwards;
 }
+
 .inputArea {
   display: flex;
   margin-top: 12px;
@@ -99,6 +109,7 @@
   height: 0;
   animation: fadeInContent .3s forwards;
 }
+
 .replyPreview button {
   top: 12px;
   right: 12px;
@@ -111,6 +122,7 @@
   cursor: pointer;
   outline: none;
 }
+
 .chatHeader {
   display: flex;
   justify-content: space-between;
@@ -120,10 +132,12 @@
   border-bottom: 1px solid var(--color-borders);
   flex-shrink: 0;
 }
+
 .inputGroup {
   display: flex;
   gap: 12px;
 }
+
 .inputEditChat {
   height: 100px;
   padding: 8px 22px;
@@ -135,6 +149,7 @@
   outline: none;
   border: none;
 }
+
 .contactInfo {
   display: flex;
   gap: 12px;
@@ -142,26 +157,31 @@
   overflow: hidden;
   width: 100%;
 }
+
 .contactInfo img {
   width: 42px;
   height: 42px;
   border-radius: 50%;
   object-fit: cover;
 }
+
 .contactText {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
+
 .contactText h1 {
   font-size: 16px;
   font-family: var(--font-main);
   color: var(--color-text);
 }
+
 .contactText a {
   text-decoration: none;
   color: var(--color-text);
 }
+
 .contactText span {
   font-size: 13px;
   font-family: var(--font-secundaria);
@@ -169,6 +189,7 @@
   text-decoration: underline;
   transition: .5s;
 }
+
 .optionsButton {
   background: none;
   border: none;
@@ -180,24 +201,29 @@
   outline: none;
   transition: background-color 0.2s;
 }
+
 .backButton {
   background: none;
   border: none;
   cursor: pointer;
   transform: rotate(290deg);
 }
+
 .optionsButton svg,
 .backButton svg {
   width: 50px;
   fill: var(--color-text);
 }
+
 .optionsButton:hover {
   background-color: var(--color-subtext-1);
 }
+
 .optionsButton:focus-visible {
   outline: 2px solid var(--color-secundaria);
   outline-offset: 1px;
 }
+
 .dragOverlay {
   position: absolute;
   top: 0;
@@ -212,6 +238,7 @@
   pointer-events: none;
   border-radius: 12px;
 }
+
 .overlayContent {
   color: white;
   font-size: 1.25rem;
@@ -221,6 +248,7 @@
   padding: 16px 24px;
   border-radius: 12px;
 }
+
 .chatDetails {
   display: flex;
   flex-direction: column;
@@ -228,21 +256,25 @@
   align-items: center;
   gap: 22px;
 }
+
 .chatDetails img {
   width: 180px;
   height: 180px;
   border-radius: 200px;
 }
+
 .chatDetails h2 {
   font-size: 34px;
   font-family: var(--font-main);
   color: var(--color-text);
 }
+
 .chatDetails h3 {
   font-size: 28px;
   color: var(--color-text);
   font-family: var(--font-main);
 }
+
 .bottomDetails {
   display: flex;
   text-align: center;
@@ -252,22 +284,27 @@
   color: var(--color-text);
   opacity: .7;
 }
+
 .statusIaActive {
   background-color: var(--color-secundaria);
   color: var(--color-text-white);
 }
+
 .statusIaInactive {
   background-color: rgba(255, 85, 85, 0.15);
   color: var(--color-text-white);
 }
+
 .bottomDetails a {
   font-size: 20px;
 }
+
 .bottomDetails strong {
   padding: 12px 20px;
   border-radius: 12px;
   font-size: 20px;
 }
+
 .messageList {
   flex: 1;
   display: flex;
@@ -276,9 +313,11 @@
   scrollbar-width: none;
   padding: 20px;
 }
+
 .messageList::-webkit-scrollbar {
   display: none;
 }
+
 .toggleIaButton {
   background-color: var(--color-background-white);
   border-radius: 12px;
@@ -298,6 +337,7 @@
   padding: 12px 15px;
   outline: none;
 }
+
 .headerToggleIa {
   display: flex;
   flex-direction: row;
@@ -305,14 +345,17 @@
   align-items: center;
   justify-content: center;
 }
+
 .headerToggleIa svg {
   stroke: var(--color-text);
   opacity: .8;
 }
+
 .toggleIaButton:focus-visible {
   outline: 2px solid var(--color-secundaria);
   outline-offset: 2px;
 }
+
 .fallbackContainer {
   flex: 1;
   display: flex;
@@ -322,6 +365,7 @@
   background: var(--color-background-dark);
   border-radius: 20px;
 }
+
 .fallbackContainer p {
   font-size: 22px;
   font-family: var(--font-main);
@@ -329,6 +373,7 @@
   text-align: center;
   padding: 1rem;
 }
+
 .buttonReOpen {
   height: 70px;
   width: 100%;
@@ -347,11 +392,13 @@
   background-color: var(--color-background-white);
   color: var(--color-button-searchbar);
 }
+
 .buttonReOpen:hover {
   background-color: var(--color-primary);
   transition: .5s;
   color: var(--color-text-white);
 }
+
 .dateDivider {
   background-color: var(--color-background-white);
   padding: 12px 32px;
@@ -360,6 +407,7 @@
   border-radius: 32px;
   align-self: center;
 }
+
 .ownerBadge {
   display: flex;
   align-items: center;
@@ -372,10 +420,35 @@
   font-size: 12px;
   padding: 4px 10px;
 }
+
 .ownerBadge svg {
   color: var(--color-text);
   width: 28px;
 }
+
+.customDialog {
+  background: var(--color-chat-dropdown) !important;
+  color: var(--color-text) !important;
+}
+
+.customDialog header {
+  border-bottom: var(--color-background-white) 1px solid !important;
+}
+
+.customDialog footer {
+  border-top: var(--color-background-white) 1px solid !important;
+}
+
+.customDialog div {
+  padding: 40px 24px !important;
+  opacity: .8;
+}
+
+.actionAlert {
+  background-color: var(--color-background-red) !important;
+  color: var(--color-text-white) !important;
+}
+
 @media (max-width: 1291.98px) {
 
   .chatDetails h2 {
@@ -392,6 +465,7 @@
   }
 
 }
+
 @media (max-width: 991.98px) {
 
   .chatWindow,
@@ -406,6 +480,7 @@
     padding: 10px 24px;
   }
 }
+
 @media (max-width: 767.98px) {
   .toggleIaButton {
     width: 120px;
@@ -422,6 +497,7 @@
     font-size: 14px;
   }
 }
+
 @media (max-width: 599.98px) {
   .contactText span {
     display: none;
@@ -447,6 +523,7 @@
     height: 110px;
   }
 }
+
 @media (max-width: 499.98px) {
   .chatDetails h2 {
     font-size: 18px;
@@ -468,6 +545,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
+
   .contactText {
     width: 70%;
   }

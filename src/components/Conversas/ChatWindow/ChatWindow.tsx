@@ -23,7 +23,6 @@ import {
   AlertDialogHeader,
   AlertDialogContent,
   AlertDialogOverlay,
-  AlertDialogCloseButton,
   Button,
 } from '@chakra-ui/react'
 
@@ -77,6 +76,26 @@ export default function ChatWindow({
   onReleaseChatOwner,
   onBack,
 }: ChatWindowProps) {
+
+  // --- inicio: adicionado para deletar mensagem ---
+  const [isDeleteMessageOpen, setIsDeleteMessageOpen] = useState(false);
+  const [messageToDelete, setMessageToDelete] = useState<string | null>(null);
+  const cancelDeleteMsgRef = useRef<HTMLButtonElement>(null);
+
+  const openDeleteMessageDialog = (id: string) => {
+    setMessageToDelete(id);
+    setIsDeleteMessageOpen(true);
+  };
+
+  const confirmDeleteMessage = async () => {
+    if (!messageToDelete) return;
+    try {
+      await onDeleteMessage?.(messageToDelete);
+    } finally {
+      setIsDeleteMessageOpen(false);
+      setMessageToDelete(null);
+    }
+  };
 
   // MODAIS
   const [isDetailsOpen, setDetailsOpen] = useState(false);
@@ -250,7 +269,7 @@ export default function ChatWindow({
             : undefined
         }
         onReply={() => onSetReplyingTo(msg)}
-        onDelete={onDeleteMessage}
+        onDelete={openDeleteMessageDialog}
         isMobileLayout={isMobileLayout}
       />
     );
@@ -370,8 +389,6 @@ export default function ChatWindow({
           </DropdownMenu>
         </header>
       )}
-
-
 
       <Modal transparent isOpen={isDetailsOpen} onClose={() => setDetailsOpen(false)} title="Detalhes do Chat">
         <div className={styles.chatDetails}>
@@ -493,7 +510,7 @@ export default function ChatWindow({
                                   ? 'Fechar Chat'
                                   : 'Reabrir Chat'}
                             </button>
-                            <button onClick={onDeleteChat}>
+                            <button onClick={() => setIsDeleteDialogOpen(true)}>
                               <Icon nome="trash" /> {isMobileLayout ? 'Apagar' : 'Apagar Chat'}
                             </button>
                           </>
@@ -532,20 +549,45 @@ export default function ChatWindow({
         isCentered
       >
         <AlertDialogOverlay>
-          <AlertDialogContent>
+          <AlertDialogContent className={styles.customDialog}>
             <AlertDialogHeader fontSize='lg' fontWeight='bold'>
               Excluir Conversa
             </AlertDialogHeader>
-
             <AlertDialogBody>
               Você tem certeza? Esta ação não pode ser desfeita.
             </AlertDialogBody>
-
             <AlertDialogFooter>
               <Button ref={cancelRef} onClick={() => setIsDeleteDialogOpen(false)}>
                 Cancelar
               </Button>
-              <Button colorScheme='red' onClick={onDeleteChat} ml={3}>
+              <Button className={styles.actionAlert} onClick={onDeleteChat} ml={3}>
+                Excluir
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
+
+      <AlertDialog
+        isOpen={isDeleteMessageOpen}
+        leastDestructiveRef={cancelDeleteMsgRef}
+        onClose={() => setIsDeleteMessageOpen(false)}
+        isCentered
+        finalFocusRef={listRef} 
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent className={styles.customDialog}>
+            <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+              Excluir Mensagem
+            </AlertDialogHeader>
+            <AlertDialogBody>
+              Tem certeza que deseja excluir esta mensagem? Esta ação não pode ser desfeita.
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <Button ref={cancelDeleteMsgRef} onClick={() => setIsDeleteMessageOpen(false)}>
+                Cancelar
+              </Button>
+              <Button className={styles.actionAlert} colorScheme="red" onClick={confirmDeleteMessage} ml={3}>
                 Excluir
               </Button>
             </AlertDialogFooter>

@@ -29,10 +29,6 @@ export function useConexoesPage() {
 
   const handleDelete = useCallback(async (id: string | number) => {
 
-    const confirm = window.confirm('Tem certeza que deseja excluir esta conexão?');
-
-    if (!confirm) return;
-
     await removeConnection(id.toString());
 
   }, [removeConnection]);

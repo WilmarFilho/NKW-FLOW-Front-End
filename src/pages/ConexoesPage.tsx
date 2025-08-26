@@ -14,6 +14,17 @@ import GlobalStyles from '../global.module.css';
 import TableStyles from '../components/Gerais/Tables/TableStyles.module.css';
 // Type
 import { Connection } from '../types/connection';
+import { useRef, useState } from 'react';
+
+import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
+  Button as ChakraButton,
+} from '@chakra-ui/react';
 
 export default function ConexoesPage() {
 
@@ -40,6 +51,31 @@ export default function ConexoesPage() {
     step,
     qrCode,
   } = useConexoesPage();
+
+  // --- INÍCIO: estado e handlers para confirmação de exclusão via Chakra ---
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [connectionToDelete, setConnectionToDelete] = useState<Connection | null>(null);
+  const cancelDeleteRef = useRef<HTMLButtonElement>(null);
+
+  const openDeleteDialog = (conn: Connection) => {
+    setConnectionToDelete(conn);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!connectionToDelete) return;
+    try {
+      await handleDelete(connectionToDelete.id);
+    } finally {
+      setIsDeleteDialogOpen(false);
+      setConnectionToDelete(null);
+    }
+  };
+
+  const closeDeleteDialog = () => {
+    setIsDeleteDialogOpen(false);
+    setConnectionToDelete(null);
+  };
 
   const columnTemplate = '1fr 2fr 2fr 2fr 1fr';
 
@@ -96,7 +132,7 @@ export default function ConexoesPage() {
               columns={columns}
               columnTemplate={columnTemplate}
               onEdit={handleEdit}
-              onDelete={handleDelete}
+              onDelete={() => openDeleteDialog(conn)}
             />
           )}
           gridTemplateColumns={columnTemplate}
@@ -133,6 +169,40 @@ export default function ConexoesPage() {
         </div>
 
       </div>
+
+      <AlertDialog
+        isOpen={isDeleteDialogOpen}
+        leastDestructiveRef={cancelDeleteRef}
+        onClose={closeDeleteDialog}
+        isCentered
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Excluir Conexão
+            </AlertDialogHeader>
+
+            <AlertDialogBody>
+              {connectionToDelete ? (
+                <>
+                  Tem certeza que deseja excluir <strong>{connectionToDelete.nome}</strong>? Esta ação não pode ser desfeita.
+                </>
+              ) : (
+                'Tem certeza que deseja excluir esta conexão?'
+              )}
+            </AlertDialogBody>
+
+            <AlertDialogFooter>
+              <ChakraButton ref={cancelDeleteRef} onClick={closeDeleteDialog}>
+                Cancelar
+              </ChakraButton>
+              <ChakraButton colorScheme="red" onClick={confirmDelete} ml={3}>
+                Excluir
+              </ChakraButton>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
 
       <Modal
         isOpen={modalState.isOpen}

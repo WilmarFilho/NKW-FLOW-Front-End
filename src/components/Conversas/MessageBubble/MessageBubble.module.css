@@ -1,5 +1,6 @@
 .messageBubble {
   max-width: 70%;
+  min-width: 30%;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -138,7 +139,7 @@
   cursor: pointer;
   background: none;
   border: none;
-  width: 48px;
+  width: 68px;
 }
 
 /* Container para a waveform e o cursor */
@@ -177,6 +178,7 @@
 }
 
 .waveWrapper {
+  width: 100%;
   display: flex;
   flex-direction: column;
   position: relative;

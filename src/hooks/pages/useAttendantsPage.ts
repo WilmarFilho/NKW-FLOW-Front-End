@@ -27,12 +27,11 @@ export function useAtendentesPage() {
   const [formData, setFormData] = useState<AttendantFormData | null>(null);
 
   const handleDelete = async (id: string | number) => {
-    if (!window.confirm('Tem certeza?')) return;
-    await removeAttendant(id.toString()); //Cannot invoke an object which is possibly 'undefined'.t
+    await removeAttendant(id.toString()); 
   };
 
   const handleStatusToggle = async (attendant: Attendant) => {
-    await updateAttendantStatus(attendant); //Cannot invoke an object which is possibly 'undefined'.t
+    await updateAttendantStatus(attendant); 
   };
 
   const handleEdit = (attendant: Attendant) => {
