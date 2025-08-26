@@ -1,31 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import Select, { components, MenuProps, OnChangeValue, StylesConfig } from 'react-select';
+import React from 'react';
+import Select, { OnChangeValue } from 'react-select';
 import FormStyles from '../../Gerais/Form/form.module.css';
 
-// --- Hook para Media Query ---
-// Este hook detecta se a largura da tela é menor que um valor específico.
-const useMediaQuery = (query: string): boolean => {
-  const [matches, setMatches] = useState(false);
-
-  useEffect(() => {
-    const media = window.matchMedia(query);
-    if (media.matches !== matches) {
-      setMatches(media.matches);
-    }
-    const listener = () => setMatches(media.matches);
-    window.addEventListener('resize', listener);
-    return () => window.removeEventListener('resize', listener);
-  }, [matches, query]);
-
-  return matches;
-};
-
-
-// --- Interfaces (Tipagem) ---
-interface SelectOption {
-  value: string;
-  label: string;
-}
+// Importando tudo do nosso módulo reutilizável
+import {
+  useMediaQuery,
+  getCustomSelectStyles,
+  AnimatedMenu,
+  SelectOption,
+} from '../../Gerais/Form/CustomSelect'; // Ajuste o caminho conforme necessário
 
 interface NewChatFormProps {
   connections: { id: string; nome?: string }[];
@@ -43,19 +26,6 @@ interface NewChatFormProps {
   };
 }
 
-
-// --- Componente de Animação ---
-// Este componente ainda precisa de uma classe CSS para os @keyframes.
-const Menu = (props: MenuProps<SelectOption>) => {
-  return (
-    <components.Menu {...props} className={FormStyles.animatedMenu}>
-      {props.children}
-    </components.Menu>
-  );
-};
-
-
-// --- Componente Principal ---
 export default function NewChatForm({
   connections,
   selectedConnectionId,
@@ -67,10 +37,10 @@ export default function NewChatForm({
   showErrors,
   errors,
 }: NewChatFormProps) {
-  // Usando o hook para detectar telas mobile (largura <= 600px)
+  // Lógica do select customizado importada e utilizada
   const isMobile = useMediaQuery('(max-width: 600px)');
+  const customStyles = getCustomSelectStyles(isMobile);
 
-  // Formata as opções para o React Select
   const selectOptions: SelectOption[] = connections.map((conn) => ({
     value: conn.id,
     label: conn.nome || conn.id,
@@ -84,63 +54,6 @@ export default function NewChatForm({
     setSelectedConnectionId(selectedOption ? selectedOption.value : '');
   };
 
-  // Objeto de estilos dinâmico que reage à media query 'isMobile'
-  const customSelectStyles: StylesConfig<SelectOption> = {
-    control: (provided, state) => ({
-      ...provided,
-      minHeight: isMobile ? '48px' : '50px',
-      height: isMobile ? '48px' : '50px',
-      borderRadius: '8px',
-      backgroundColor: '#ffffff1a',
-      border: state.isFocused ? '1px solid #ffffff23' : '1px solid transparent',
-      boxShadow: 'none',
-      '&:hover': {
-        borderColor: state.isFocused ? '#ffffff23' : '#cccccc',
-      },
-    }),
-    valueContainer: (provided) => ({
-      ...provided,
-      padding: '0 10px',
-    }),
-    singleValue: (provided) => ({
-      ...provided,
-      color: '#ffffff90',
-      fontSize: isMobile ? '16px' : '14px',
-    }),
-    placeholder: (provided) => ({
-      ...provided,
-      color: '#999999',
-      fontSize: isMobile ? '16px' : '14px',
-    }),
-    menu: (provided) => ({
-      ...provided,
-      borderRadius: '8px',
-      // Ajuste aqui para o seu tema, se necessário
-      backgroundColor: '#1a1e24', // Exemplo de cor de fundo escura para o menu
-      boxShadow: '0 4px 12px rgba(1, 0, 0, 0.1)',
-      marginTop: '12px',
-    }),
-    // ***** ALTERAÇÃO PRINCIPAL AQUI *****
-    option: (provided, state) => ({
-      ...provided,
-      // O fundo só muda no hover (isFocused), caso contrário é transparente.
-      backgroundColor: 'transparent',
-
-      // A cor do texto é sempre a mesma, sem mudança para a opção selecionada.
-      color: '#ffffff90',
-
-      fontSize: isMobile ? '16px' : '14px',
-      padding: isMobile ? '12px 15px' : '16px 15px',
-      cursor: 'pointer',
-
-      // Remove o efeito de clique para não ter cor de fundo
-      '&:active': {
-        backgroundColor: '#ffffff1a', // Opcional: manter o mesmo efeito do hover ao clicar
-      },
-    }),
-    indicatorSeparator: () => ({ display: 'none' }),
-  };
-
   return (
     <div className={FormStyles.formContainer}>
       <div className={FormStyles.formGroupSelect}>
@@ -151,8 +64,8 @@ export default function NewChatForm({
           onChange={handleSelectChange}
           placeholder="Selecione a conexão"
           isClearable
-          components={{ Menu }}
-          styles={customSelectStyles} // A mágica acontece aqui!
+          components={{ Menu: AnimatedMenu }}
+          styles={customStyles}
         />
         {showErrors && errors.selectedConnectionId && (
           <span className={FormStyles.errorText}>
@@ -161,7 +74,6 @@ export default function NewChatForm({
         )}
       </div>
 
-      {/* Usamos o operador '&&' para renderizar o bloco seguinte APENAS se 'selectedConnectionId' for truthy */}
       {selectedConnectionId && (
         <div className={`${FormStyles.formRow} ${FormStyles.fieldsAppear}`}>
           <div className={FormStyles.formGroup}>

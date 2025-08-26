@@ -81,6 +81,7 @@ option {
 }
 .animatedMenu {
   animation: slideDownFadeIn 0.2s ease-out;
+ 
 }
 @media (max-width: 499.98px) {
   .formGroup input, .formGroup select {

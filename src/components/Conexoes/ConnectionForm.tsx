@@ -1,11 +1,22 @@
 // Hooks
 import { useRecoilValue } from 'recoil';
+import Select, { OnChangeValue } from 'react-select'; // 1. Importar o Select
+
 // Type
 import { Connection } from '../../types/connection';
 // Css
-import formStyles from '../Gerais/Form/form.module.css'
-import styles from './ConnectionForm.module.css'
+import formStyles from '../Gerais/Form/form.module.css';
+import styles from './ConnectionForm.module.css';
+// State
 import { agentsState } from '../../state/atom';
+
+// 2. Importar tudo do nosso módulo reutilizável
+import {
+  useMediaQuery,
+  getCustomSelectStyles,
+  AnimatedMenu,
+  SelectOption,
+} from '../Gerais/Form/CustomSelect'; // Ajuste o caminho conforme necessário
 
 interface ConnectionFormProps {
   formData: Partial<Connection> | null;
@@ -24,10 +35,34 @@ export default function ConnectionForm({
   qrCode,
   editMode,
   errors = {},
-  showErrors = false
+  showErrors = false,
 }: ConnectionFormProps) {
+  const agents = useRecoilValue(agentsState);
 
-  const agents = useRecoilValue(agentsState)
+  // 3. Adicionar a lógica do select customizado
+  const isMobile = useMediaQuery('(max-width: 600px)');
+  const customStyles = getCustomSelectStyles(isMobile);
+
+  // 4. Formatar os dados para o formato do Select
+  const agentOptions: SelectOption[] =
+    agents?.map((agent) => ({
+      value: agent.id,
+      label: agent.tipo_de_agente,
+    })) || [];
+
+  // 5. Encontrar o valor selecionado
+  const selectedAgent =
+    agentOptions.find((opt) => opt.value === formData?.agente_id) || null;
+
+  // 6. Criar um handler específico para o select customizado
+  const handleAgentChange = (
+    selectedOption: OnChangeValue<SelectOption, false>
+  ) => {
+    onChange({
+      ...formData,
+      agente_id: selectedOption ? selectedOption.value : '',
+    });
+  };
 
   if (step === 1) {
     return (
@@ -51,25 +86,19 @@ export default function ConnectionForm({
             )}
           </div>
 
+          {/* 7. Substituir o select nativo pelo componente Select */}
           <div className={formStyles.formGroup}>
             <label>Agente IA</label>
-            <select
-              id="agent"
-              value={formData?.agente_id || ''}
-              onChange={(e) =>
-                onChange({
-                  ...formData,
-                  agente_id: e.target.value,
-                })
-              }
-            >
-              <option value="">Selecione</option>
-              {agents?.map((a) => (
-                <option key={a.id} value={a.id}>
-                  {a.tipo_de_agente}
-                </option>
-              ))}
-            </select>
+            <Select<SelectOption>
+              inputId="agent"
+              options={agentOptions}
+              value={selectedAgent}
+              onChange={handleAgentChange}
+              placeholder="Selecione"
+              isClearable
+              components={{ Menu: AnimatedMenu }}
+              styles={customStyles}
+            />
             {showErrors && errors.agente_id && (
               <span className={formStyles.errorText}>{errors.agente_id}</span>
             )}

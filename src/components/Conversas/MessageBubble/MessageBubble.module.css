@@ -1,5 +1,5 @@
 .messageBubble {
-  max-width: 60%;
+  max-width: 70%;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -110,4 +110,82 @@
   .messageBubble {
     max-width: 70%;
   }
+}
+
+
+/* MessageBubble.module.css */
+
+.audioContainer {
+  display: flex;
+  align-items: center;
+  margin-left: -16px;
+}
+
+.audioAvatar {
+  width: 60px;
+  height: 60px;
+  margin-left: 16px;
+  border-radius: 100%;
+  object-fit: cover;
+}
+
+.audioButton svg {
+  color: var(--color-text);
+  width: 100%;
+}
+
+.audioButton {
+  cursor: pointer;
+  background: none;
+  border: none;
+  width: 48px;
+}
+
+/* Container para a waveform e o cursor */
+.waveformContainer {
+  position: relative;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+}
+
+/* Onde o WaveSurfer desenha a onda */
+.audioWaveform {
+  width: 100%;
+}
+
+.audioWaveHeight {
+  height: 40px; /* altura controlável */
+}
+
+/* Estilo para o cursor redondo */
+.customCursor {
+  position: absolute;
+  top: 30%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  background-color: #4299E1; 
+  border-radius: 50%;
+  z-index: 5;
+  cursor: pointer;
+}
+
+.messageTime {
+  color: #8696a0;
+  font-size: 0.75rem
+}
+
+.waveWrapper {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.timeRow {
+  height: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  width: 100%;
 }

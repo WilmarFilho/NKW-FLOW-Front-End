@@ -215,6 +215,7 @@ export default function ChatWindow({
       <MessageBubble
         key={msg.id}
         id={msg.id}
+        avatarUrl={msg.remetente === 'Usuário' ? user?.foto_perfil : activeChat.foto_perfil}
         senderName={activeChat.contato_nome}
         text={msg.mensagem}
         mimetype={msg.mimetype}
@@ -407,12 +408,12 @@ export default function ChatWindow({
               {replyingTo && (
                 <div className={`${styles.replyPreview} ${isExiting ? styles.isExiting : ''}`}>
                   <div>
-                    <span>{replyingTo.remetente === 'Usuário' ? 'Você' : 'Contato'}</span>
+                    <span>{replyingTo.remetente === 'Usuário' ? 'Você' : activeChat.contato_nome}</span>
                     <p>
                       {replyingTo.mensagem ||
                         (replyingTo.mimetype?.startsWith('image/')
-                          ? '📷 Imagem'
-                          : 'Mensagem')}
+                          ? '📷 Foto'
+                          : 'Mensagem de áudio')}
                     </p>
                     <button onClick={handleCloseReply}>✖</button>
                   </div>

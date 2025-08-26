@@ -1,14 +1,10 @@
-
-
-
-
-// MessageBubble.tsx
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import styles from './MessageBubble.module.css';
 import Icon from '../../../components/Gerais/Icons/Icons';
 import { DropdownMenu } from '../../../components/Gerais/Dropdown/DropdownMenu';
 import { useDropdownMenu } from '../../../components/Gerais/Dropdown/DropdownMenuContext';
+import { CustomAudioPlayer } from './CustomAudioPlayer';
 
 interface MessageBubbleProps {
   id: string;
@@ -23,6 +19,7 @@ interface MessageBubbleProps {
   excluded: boolean;
   onDelete?: (id: string) => void;
   isMobileLayout?: boolean;
+  avatarUrl?: string;
 }
 
 const renderMessageContent = ({ mimetype, base64, text }: MessageBubbleProps) => {
@@ -50,15 +47,6 @@ const renderMessageContent = ({ mimetype, base64, text }: MessageBubbleProps) =>
         className={styles.stickerImage}
         loading="lazy"
       />
-    );
-  }
-
-  if (type.startsWith('audio') && base64) {
-    return (
-      <audio controls className={styles.messageAudio}>
-        <source src={base64} type="audio/ogg" />
-        Seu navegador não suporta áudio.
-      </audio>
     );
   }
 
@@ -96,8 +84,7 @@ const renderMessageContent = ({ mimetype, base64, text }: MessageBubbleProps) =>
 };
 
 export default function MessageBubble(props: MessageBubbleProps) {
-
-  const { id, sender, mimetype, onReply, quote, senderName, createdAt, excluded } = props;
+  const { id, sender, mimetype, onReply, quote, senderName, createdAt, excluded, avatarUrl, base64 } = props;
 
   const parseToLocalDate = (utcTimestamp: string): Date => {
     if (utcTimestamp && !utcTimestamp.endsWith('Z')) {
@@ -125,7 +112,10 @@ export default function MessageBubble(props: MessageBubbleProps) {
     const maybeEl = bubbleRef.current.closest('[data-scroll="messages"]');
     const scroller: HTMLElement | Window = maybeEl instanceof HTMLElement ? maybeEl : window;
 
-    const scrollerRect = scroller instanceof Window ? { top: 0, bottom: window.innerHeight } as DOMRect : scroller.getBoundingClientRect();
+    const scrollerRect =
+      scroller instanceof Window
+        ? ({ top: 0, bottom: window.innerHeight } as DOMRect)
+        : scroller.getBoundingClientRect();
 
     if (menuRef.current && !menuHeightRef.current) menuHeightRef.current = menuRef.current.offsetHeight;
 
@@ -183,6 +173,26 @@ export default function MessageBubble(props: MessageBubbleProps) {
     excluded ? styles.isExcluded : '',
   ].join(' ');
 
+  let messageContent;
+
+  if (mimetype?.startsWith('audio') && base64) {
+    // 🎧 renderiza áudio com hora dentro
+    messageContent = (
+      <CustomAudioPlayer
+        src={base64}
+        avatarUrl={avatarUrl}
+        time={createdAtLocal.toLocaleTimeString('pt-BR', {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false,
+        })}
+      />
+    );
+  } else {
+    // 📝 renderiza texto, imagem, documento...
+    messageContent = renderMessageContent(props);
+  }
+
   return (
     <motion.div
       ref={bubbleRef}
@@ -202,7 +212,7 @@ export default function MessageBubble(props: MessageBubbleProps) {
         </div>
       )}
 
-      {renderMessageContent(props)}
+      {messageContent}
 
       {excluded && (
         <div className={styles.deletedOverlay}>
@@ -210,16 +220,16 @@ export default function MessageBubble(props: MessageBubbleProps) {
         </div>
       )}
 
-      {/* Hora da mensagem */}
-      <span className={styles.time}>
-        {createdAtLocal.toLocaleTimeString('pt-BR', {
-          hour: '2-digit',
-          minute: '2-digit',
-          hour12: false,
-        })}
-      </span>
-
-
+      {/* Hora da mensagem só fora se não for áudio */}
+      {!mimetype?.startsWith('audio') && (
+        <span className={styles.time}>
+          {createdAtLocal.toLocaleTimeString('pt-BR', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false,
+          })}
+        </span>
+      )}
 
       {!excluded && (isHovered || showMenu) && (
         <DropdownMenu
@@ -249,11 +259,7 @@ export default function MessageBubble(props: MessageBubbleProps) {
             <Icon nome="trash" /> {props.isMobileLayout ? 'Apagar' : 'Apagar mensagem'}
           </button>
         </DropdownMenu>
-
-
       )}
     </motion.div>
   );
 }
-
-

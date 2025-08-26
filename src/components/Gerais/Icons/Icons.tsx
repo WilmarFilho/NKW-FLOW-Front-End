@@ -32,8 +32,11 @@ import DownnloadTextIcon from './assets/dowloadtext.svg';
 import SearchIcon from './assets/search.svg';
 import PlayIcon from  './assets/play.svg';
 import AddChatIcon from './assets/addchat.svg';
-import ArrowSimpleIcon from './assets/arrowsimple.svg'
-import UnlockIcon from './assets/unlock.svg'
+import ArrowSimpleIcon from './assets/arrowsimple.svg';
+import UnlockIcon from './assets/unlock.svg';
+import PlayAudioIcon from './assets/playaudio.svg';
+import PauseIcon from  './assets/pause.svg'
+import MicAudioIcon from './assets/micaudio.svg'
 // Assets Sidebar 
 import ConversasIcon from './assets/chat.svg';
 import AtendenteIcon from './assets/atendentes.svg';
@@ -45,6 +48,9 @@ import DashIcon from './assets/dash.svg'
 import GiftIcon from './assets/gift.svg'
 
 const iconMap = {
+  micaudio: MicAudioIcon,
+  pause: PauseIcon,
+  playaudio: PlayAudioIcon,
   unlock: UnlockIcon,
   addchat: AddChatIcon,
   play: PlayIcon,
