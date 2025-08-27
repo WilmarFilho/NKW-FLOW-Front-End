@@ -392,9 +392,53 @@ export default function ChatWindow({
 
       <Modal transparent isOpen={isDetailsOpen} onClose={() => setDetailsOpen(false)} title="Detalhes do Chat">
         <div className={styles.chatDetails}>
-          <img src={activeChat.foto_perfil || defaultAvatar} alt={`Avatar de ${activeChat.contato_nome}`} />
-          <h2>{activeChat.contato_nome}</h2>
-          <h3>{activeChat.contato_numero}</h3>
+
+          <div className={styles.detailsRow}>
+
+            <img src={activeChat.foto_perfil || defaultAvatar} alt={`Avatar de ${activeChat.contato_nome}`} />
+
+            <div className={styles.detailsColumn}>
+              <p>Nome</p>
+              <span>{activeChat.contato_nome ?? '------'}</span>
+            </div>
+
+            <div className={styles.detailsColumn}>
+              <p>Número</p>
+              <span>{activeChat.contato_numero ?? '------'}</span>
+            </div>
+          </div>
+
+          <div className={styles.detailsRow}>
+            <div className={styles.detailsColumn}>
+              <p>Criado em</p>
+              <span>
+                {(() => {
+                  const date = new Date(activeChat.ultima_atualizacao);
+                  const dia = date.toLocaleDateString('pt-BR', { day: '2-digit' });
+                  const mes = date.toLocaleDateString('pt-BR', { month: 'long' });
+                  return `${dia} de ${mes}`;
+                })()}
+              </span>
+            </div>
+
+            <div className={styles.detailsColumn}>
+              <p>Status</p>
+              <span>{activeChat.status === 'Open' ? 'Aberto' : 'Fechado'}</span>
+            </div>
+          </div>
+
+          <div className={styles.detailsRow}>
+            <div className={styles.detailsColumn}>
+              <p>IA</p>
+              <span>{activeChat.ia_ativa ? 'Ativada' : 'Desativada'}</span>
+            </div>
+
+            <div className={styles.detailsColumn}>
+              <p>Chat atrelado ao usuário</p>
+              <span>{activeChat.user_nome ?? '------'}</span>
+            </div>
+          </div>
+
         </div>
       </Modal>
 
@@ -573,7 +617,7 @@ export default function ChatWindow({
         leastDestructiveRef={cancelDeleteMsgRef}
         onClose={() => setIsDeleteMessageOpen(false)}
         isCentered
-        finalFocusRef={listRef} 
+        finalFocusRef={listRef}
       >
         <AlertDialogOverlay>
           <AlertDialogContent className={styles.customDialog}>

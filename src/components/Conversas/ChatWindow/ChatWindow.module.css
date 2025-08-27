@@ -257,9 +257,41 @@
   gap: 22px;
 }
 
+.detailsRow {
+  display: flex;
+  gap: 32px;
+  width: 100%;
+  justify-content: space-between;
+  padding-bottom: 16px;
+  border-radius: var(--radius-default);
+  border-bottom: 1px solid var(--color-borders);
+}
+
+.detailsColumn {
+  width: 50%;
+}
+
+.detailsColumn p {
+  color: var(--color-text);
+  font-size: 20px;
+  opacity: .5;
+}
+
+.detailsColumn span {
+  color: var(--color-text);
+  font-size: 22px;
+  text-transform: uppercase;
+  font-family: var(--font-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 90%;
+  display: block;
+}
+
 .chatDetails img {
-  width: 180px;
-  height: 180px;
+  width: 160px;
+  height: 160px;
   border-radius: 200px;
 }
 
