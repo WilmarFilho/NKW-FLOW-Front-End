@@ -1,7 +1,12 @@
 // Libs
+import { userState } from '../../state/atom';
 import { useState, useMemo, useCallback } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 export function useRecompensasPage() {
+
+  const user = useRecoilValue(userState)
+
   const rewards = useMemo(
     () => [
       { tier: 1, name: 'Novato', goal: 2, casbackPercentual: 5 },
@@ -18,7 +23,7 @@ export function useRecompensasPage() {
     []
   );
 
-  const totalIndicacoes = 0;
+  const totalIndicacoes = user?.referrals_count || 0;
 
   const progresso = useMemo(
     () =>

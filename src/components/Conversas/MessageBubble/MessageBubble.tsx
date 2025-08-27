@@ -43,11 +43,38 @@ export default function MessageBubble(props: MessageBubbleProps) {
   const [expandedMedia, setExpandedMedia] = useState<string | null>(null);
   const [expandedType, setExpandedType] = useState<'image' | 'video' | null>(null);
 
+  // estado para tamanho do arquivo exibido no documento
+  const [fileSizeText, setFileSizeText] = useState<string | null>(null);
+
   const bubbleRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
 
   const { openMenuId } = useDropdownMenu();
   const menuHeightRef = useRef<number>(0);
+
+  // 📌 Função auxiliar para descobrir o mimeType a partir do base64 (fallback)
+  const inferMime = (dataUrl: string, fallback: string): string => {
+    const match = dataUrl.match(/^data:([^;]+);/);
+    return match ? match[1] : fallback;
+  };
+
+  // 📌 Função auxiliar para calcular o tamanho aproximado do arquivo
+  const calculateFileSize = (base64Data: string): string => {
+    try {
+      const sizeInBytes = (base64Data.length * 3) / 4;
+      if (sizeInBytes < 1024) return `${sizeInBytes.toFixed(0)} B`;
+      if (sizeInBytes < 1024 * 1024) return `${(sizeInBytes / 1024).toFixed(1)} KB`;
+      return `${(sizeInBytes / (1024 * 1024)).toFixed(1)} MB`;
+    } catch {
+      return '—';
+    }
+  };
+
+  useEffect(() => {
+    if (base64) {
+      setFileSizeText(calculateFileSize(base64));
+    }
+  }, [base64]);
 
   const computePosition = () => {
     if (!bubbleRef.current) return;
@@ -116,11 +143,10 @@ export default function MessageBubble(props: MessageBubbleProps) {
     excluded ? styles.isExcluded : '',
   ].join(' ');
 
-  // 👉 Render do conteúdo da mensagem (agora tem acesso aos setters do lightbox)
+  // 👉 Render do conteúdo da mensagem
   const renderMessageContent = () => {
     const type = mimetype || 'text';
 
-    // Imagem (png) com click para expandir
     if (type === 'image/png' && base64) {
       return (
         <>
@@ -139,7 +165,6 @@ export default function MessageBubble(props: MessageBubbleProps) {
       );
     }
 
-    // Sticker webp (sem expansão)
     if (type === 'image/webp' && base64) {
       return (
         <img
@@ -151,7 +176,6 @@ export default function MessageBubble(props: MessageBubbleProps) {
       );
     }
 
-    // Vídeo mp4 (preview clicável; controles apenas no overlay)
     if (type === 'video/mp4' && base64) {
       return (
         <video
@@ -168,24 +192,33 @@ export default function MessageBubble(props: MessageBubbleProps) {
       );
     }
 
-    // Documento genérico (download)
     if (type !== 'text' && base64) {
+      const fileMime = inferMime(base64, type);
+      const filename = text || `arquivo.${fileMime.split('/').pop() || 'bin'}`;
+      const sizeLabel = fileSizeText ?? '—';
+
       return (
         <div className={styles.documentContainer}>
-          <span className={styles.documentIcon}>📄</span>
-          <a href={base64} download={text || 'arquivo'} className={styles.documentLink}>
-            {text || 'Baixar Documento'}
-          </a>
+          <div className={styles.documentLeft}>
+            <Icon nome='document' />
+          </div>
+          <div className={styles.documentBody}>
+            <div className={styles.documentName}>{filename}</div>
+            <div className={styles.documentMeta}>{fileMime} • {sizeLabel}</div>
+          </div>
+          <div className={styles.documentRight}>
+            <a href={base64} download={filename} aria-label={`Baixar ${filename}`}>
+              <Icon nome='arrowdownload' />
+            </a>
+          </div>
         </div>
       );
     }
 
-    // 🚫 Não suportado: quando não é texto e não há base64
     if (type !== 'texto' && !base64) {
       return <div className={styles.documentContainer}>🚫 Tipo de mensagem não suportado.</div>;
     }
 
-    // Texto
     if (!text) return null;
     return (
       <p className={styles.messageText}>
@@ -229,8 +262,8 @@ export default function MessageBubble(props: MessageBubbleProps) {
             <p className={styles.quotedText}>
               {quote.mensagem
                 || (quote.mimetype?.startsWith('image/') ? '📷 Imagem'
-                : quote.mimetype?.startsWith('video/') ? '🎬 Vídeo'
-                : 'Mensagem')}
+                  : quote.mimetype?.startsWith('video/') ? '🎬 Vídeo'
+                    : 'Mensagem')}
             </p>
           </div>
         )}
@@ -256,7 +289,6 @@ export default function MessageBubble(props: MessageBubbleProps) {
           </div>
         )}
 
-        {/* Hora da mensagem só fora se não for áudio */}
         {!mimetype?.startsWith('audio') && (
           <span className={styles.time}>
             {createdAtLocal.toLocaleTimeString('pt-BR', {
@@ -291,7 +323,6 @@ export default function MessageBubble(props: MessageBubbleProps) {
               </button>
             )}
 
-            {/* Só aparece se for mensagem do usuário e dentro de 5 min */}
             {sender === 'me' &&
               (Date.now() - createdAtLocal.getTime() <= 5 * 60 * 1000) && (
                 <button onClick={() => props.onDelete?.(id)}>
@@ -302,12 +333,12 @@ export default function MessageBubble(props: MessageBubbleProps) {
         )}
       </motion.div>
 
-      {/* Overlay para imagem/vídeo expandido */}
       {expandedMedia && (
         <div className={styles.mediaOverlay} onClick={() => setExpandedMedia(null)}>
-          <button className={styles.closeButton} onClick={() => setExpandedMedia(null)}><Icon nome='close' /></button>
+          <button className={styles.closeButton} onClick={() => setExpandedMedia(null)}>
+            <Icon nome='close' />
+          </button>
           <div className={styles.mediaContainer} onClick={(e) => e.stopPropagation()}>
-            
             {expandedType === 'image' ? (
               <img src={expandedMedia} alt="Visualização" className={styles.mediaFull} />
             ) : (

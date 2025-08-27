@@ -37,6 +37,8 @@ import UnlockIcon from './assets/unlock.svg';
 import PlayAudioIcon from './assets/playaudio.svg';
 import PauseIcon from  './assets/pause.svg'
 import MicAudioIcon from './assets/micaudio.svg'
+import ArrowDownload from './assets/arrowdownload.svg'
+import DocumentIcon from './assets/document.svg'
 // Assets Sidebar 
 import ConversasIcon from './assets/chat.svg';
 import AtendenteIcon from './assets/atendentes.svg';
@@ -48,6 +50,8 @@ import DashIcon from './assets/dash.svg'
 import GiftIcon from './assets/gift.svg'
 
 const iconMap = {
+  document: DocumentIcon,
+  arrowdownload: ArrowDownload,
   micaudio: MicAudioIcon,
   pause: PauseIcon,
   playaudio: PlayAudioIcon,

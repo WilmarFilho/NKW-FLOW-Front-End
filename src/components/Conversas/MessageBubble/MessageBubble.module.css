@@ -14,30 +14,36 @@
   line-height: 1.5;
   overflow: visible;
 }
+
 .messageText {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
+
 .messageText strong {
   font-weight: bold;
 }
+
 .isMe {
   background-color: var(--color-secundaria);
   color: var(--color-text-white);
   align-self: flex-end;
   border-bottom-right-radius: 4px;
 }
+
 .isOther {
   background-color: var(--color-background-messages);
   color: var(--color-text-white);
   align-self: flex-start;
   border-bottom-left-radius: 4px;
 }
+
 .stickerBubble {
   background-color: transparent;
   padding: 0;
 }
+
 .messageImage {
   max-width: 100%;
   max-height: 400px;
@@ -45,33 +51,40 @@
   border-radius: 12px;
   display: block;
 }
+
 .stickerImage {
   width: 140px;
   height: 140px;
 }
+
 .messageAudio {
   width: 100%;
   max-width: 100%;
   min-width: 270px;
 }
+
 .documentContainer {
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 5px 0;
 }
+
 .documentIcon {
   font-size: 1.8rem;
 }
+
 .documentLink {
   color: inherit;
   font-weight: 500;
   text-decoration: underline;
   cursor: pointer;
 }
+
 .documentLink:hover {
   opacity: 0.8;
 }
+
 .quotedMessage {
   border-left: 3px solid var(--color-text-white);
   padding: 12px 16px;
@@ -81,31 +94,38 @@
   background: rgba(0, 0, 0, 0.05);
   border-radius: 6px;
 }
+
 .quotedSender {
   display: block;
   color: var(--color-text-white);
   margin-bottom: 2px;
 }
+
 .quotedText {
   font-style: italic;
   color: var(--color-text-white);
 }
+
 .time {
   text-align: end;
   font-size: 12px;
 }
+
 .isExcluded {
   background-color: var(--color-background-dark);
 }
+
 @media (max-width: 599.98px) {
   .messageAudio {
     min-width: 190px;
   }
 }
+
 @media (max-width: 399.98px) {
   .messageAudio {
     min-width: 140px;
   }
+
   .messageBubble {
     max-width: 70%;
   }
@@ -154,7 +174,8 @@
 }
 
 .audioWaveHeight {
-  height: 40px; /* altura controlável */
+  height: 40px;
+  /* altura controlável */
 }
 
 /* Estilo para o cursor redondo */
@@ -164,7 +185,7 @@
   transform: translateY(-50%);
   width: 14px;
   height: 14px;
-  background-color: #4299E1; 
+  background-color: #4299E1;
   border-radius: 50%;
   z-index: 5;
   cursor: pointer;
@@ -217,17 +238,22 @@
   position: relative;
   max-width: 90%;
   max-height: 90%;
+  overflow: auto;
+  /* permite scroll se imagem for maior que viewport */
   display: flex;
-  align-items: center;
+  align-items: start;
   justify-content: center;
 }
 
 .mediaFull {
   max-width: 100%;
   max-height: 100%;
+  width: auto;
+  height: auto;
+  display: block;
   border-radius: 8px;
-  box-shadow: 0 10px 30px rgba(0,0,0,.5);
-  object-fit: contain; /* mantém proporção, sem crop */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .5);
+  object-fit: contain;
 }
 
 .closeButton {
@@ -246,3 +272,54 @@
   cursor: pointer;
 }
 
+
+
+.documentContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 10px 12px;
+  border-radius: 12px;
+}
+
+.documentLeft {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  color: var(--color-text);
+}
+
+.documentBody {
+  flex: 1 1 auto;
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.documentName {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.documentMeta {
+  font-size: 12px;
+  color: var(--color-text-muted, #9a9a9a);
+}
+
+.documentRight {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 32px;
+  padding-bottom: 6px;
+}

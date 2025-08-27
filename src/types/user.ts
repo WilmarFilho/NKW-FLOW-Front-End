@@ -26,7 +26,7 @@ export interface User {
   notificacao_novo_chat: boolean;
   criado_em: string;
   ref_code: string;
-  referrals_count: number;
+  referrals_count: number | null;
   discount_percent: number;
   ai_trigger_word: string | null;
 }
