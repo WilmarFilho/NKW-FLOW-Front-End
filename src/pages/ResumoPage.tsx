@@ -36,6 +36,9 @@ export default function ResumoPage() {
     widthConexoes
   } = useResumoPage();
 
+
+  
+
   return (
     <div className={GlobalStyles.pageContainer}>
       <motion.div

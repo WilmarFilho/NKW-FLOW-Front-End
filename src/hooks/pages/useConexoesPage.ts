@@ -1,6 +1,6 @@
 // Libs
 import { useState, useMemo, useCallback } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 // Atom
 import { addConnectionModalState, connectionsState } from '../../state/atom';
 // Hooks
@@ -14,7 +14,8 @@ export function useConexoesPage() {
 
   // Carrega Conezões e seus Metodos
   const connections = useRecoilValue(connectionsState)
-  const { removeConnection, updateConnectionStatus, handleStartSession, handleEditConnection, isLoading, step, qrCode } = useConnectionsActions();
+  const setConnections = useSetRecoilState(connectionsState);
+  const { removeConnection, updateConnectionStatus, handleStartSession, handleEditConnection, isLoading, step, qrCode, setStep } = useConnectionsActions();
 
   // Controle de Filtro e Ordenação
   const [activeFilter, setActiveFilter] = useState<FilterStatus>('todos');
@@ -56,9 +57,29 @@ export function useConexoesPage() {
   }, [openModal]);
 
   const closeModal = useCallback(() => {
-    setModalState({ isOpen: false, editMode: false });
-    setFormData(null);
-  }, []);
+    // Se estiver no passo 2 e houver formData, remover localmente qualquer conexão pendente
+    // que foi criada localmente (status === null) com os mesmos campos básicos.
+    try {
+      if (step === 2 && formData) {
+        setConnections(prev => {
+          // procura por pendente que bate com os dados do form (nome e número)
+          const pending = prev.find(c =>
+            c.status === null &&
+            c.nome === formData.nome &&
+            (formData.numero ? c.numero === formData.numero : true)
+          );
+          if (!pending) return prev;
+          return prev.filter(c => c.id !== pending.id);
+        });
+      }
+    } catch (err) {
+      console.error('Erro ao remover conexão pendente localmente', err);
+    } finally {
+      setModalState({ isOpen: false, editMode: false });
+      setFormData(null);
+      setStep(1);
+    }
+  }, [step, formData, setConnections, setModalState, setFormData, setStep]);
 
   const handleModalSaveClick = useCallback(async () => {
 

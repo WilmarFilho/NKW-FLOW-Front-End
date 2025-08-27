@@ -1,7 +1,7 @@
 // Libs
 import { useCallback, useState } from 'react';
 // Recoil
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { connectionsState, userState } from '../../state/atom';
 // Hooks
 import { useApi } from '../utils/useApi';
@@ -13,7 +13,7 @@ export const useConnectionsActions = () => {
 
   // Carrega metodos de conexões
   const { fetchConnections } = useConnections();
-  const [connections, setConnections] = useRecoilState(connectionsState);
+  const setConnections = useSetRecoilState(connectionsState);
 
   // Carrega o usuário
   const [user] = useRecoilState(userState);
@@ -30,19 +30,27 @@ export const useConnectionsActions = () => {
 
     if (!user) return;
 
-    setIsLoading(true)
+    setIsLoading(true);
+    try {
+      const qrcode = await post<string>('/connections', {
+        user_id: user.id,
+        nome: connection.nome,
+        status: false,
+        agente_id: connection.agente_id,
+      });
 
-    const qrcode = await post<string>('/connections', {
-      user_id: user.id,
-      nome: connection.nome,
-      status: false,
-      agente_id: connection.agente_id,
-    });
-
-    setQrCode(qrcode);
-    setIsLoading(false)
-    setStep(2);
-
+      if (qrcode) {
+        setQrCode(qrcode);
+        setStep(2);
+      } else {
+        setQrCode(null);
+      }
+    } catch (err) {
+      console.error('Erro ao iniciar sessão de conexão', err);
+      setQrCode(null);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleEditConnection = async (connection: Partial<Connection>) => {
@@ -90,6 +98,7 @@ export const useConnectionsActions = () => {
   }, [put, setConnections]);
 
   return {
+    setStep,
     step,
     qrCode,
     handleStartSession,

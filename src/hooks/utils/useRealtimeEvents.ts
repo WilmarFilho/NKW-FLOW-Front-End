@@ -26,11 +26,23 @@ export const useRealtimeEvents = (userId: string | undefined) => {
       try {
         const payload = JSON.parse(event.data);
 
+        console.log('[SSE] Evento recebido:', payload);
+
         const { event: tipo, connection, message, state, deletedMessage } = payload;
 
         if (tipo === 'connection.update') {
           if (state === 'close') {
             setConnections((prev) => prev.filter((c) => c.id !== connection.id));
+          }
+          if (state === 'connecting') {
+            setConnections((prev) => {
+              const exists = prev.find((c) => c.id === connection.id);
+              return exists
+                ? prev.map((c) =>
+                  c.id === connection.id ? { ...c, state: 'connecting' } : c
+                )
+                : [...prev, { ...connection, state: 'connecting' }];
+            });
           }
           if (state === 'open') {
             setModalState({ isOpen: false });
@@ -153,3 +165,6 @@ export const useRealtimeEvents = (userId: string | undefined) => {
     };
   }, [userId]);
 };
+
+
+

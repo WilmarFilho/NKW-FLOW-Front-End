@@ -52,6 +52,8 @@ export default function ConexoesPage() {
     qrCode,
   } = useConexoesPage();
 
+  console.log('Connections:', connections);
+
   // --- INÍCIO: estado e handlers para confirmação de exclusão via Chakra ---
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [connectionToDelete, setConnectionToDelete] = useState<Connection | null>(null);
@@ -83,13 +85,27 @@ export default function ConexoesPage() {
     {
       key: 'status',
       label: 'Status',
-      render: (conn: Connection) => (
-        <span
-          className={`${TableStyles.statusChip} ${conn.status ? TableStyles.active : TableStyles.inactive}`}
-        >
-          {conn.status ? 'Ativo' : 'Inativo'}
-        </span>
-      ),
+      render: (conn: Connection) => {
+        const statusLabel =
+          conn.status === true ? 'Ativo' :
+          conn.status === false ? 'Inativo' :
+          'Conectando';
+
+        const statusClass =
+          conn.status === true ? TableStyles.active :
+          conn.status === false ? TableStyles.inactive :
+          TableStyles.inactive;
+
+        return (
+          <span
+            className={`${TableStyles.statusChip} ${statusClass}`}
+            // opcional: só disparar toggle se não for estado "aguardando"
+            onClick={() => conn.status !== null && handleStatusToggle(conn)}
+          >
+            {statusLabel}
+          </span>
+        );
+      },
       onClick: handleStatusToggle, // só status
     },
     {
