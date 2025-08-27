@@ -13,6 +13,7 @@ import styles from './SettingsContent.module.css';
 // Components
 import ToggleSwitch from '../ToggleSwitch/ToggleSwitch';
 import OptionSelector from '../OptionSelector/OptionSelector';
+import Modal from '../../Gerais/Modal/Modal';
 
 // Types
 import { User } from '../../../types/user';
@@ -43,6 +44,14 @@ export default function SettingsContent({ tabIndex }: Props) {
   const [screenMode, setScreenMode] = useState<'Black' | 'White'>('Black');
   const [sidebarMode, setSidebarMode] = useState<'Full' | 'Minimal'>('Full');
 
+  // IA trigger keyword
+  const [iaKeyword, setIaKeyword] = useState<string | null>('');
+
+  // Modal para editar informações da conta
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editForm, setEditForm] = useState<Partial<User> | null>(null);
+  const [isEditSubmitting, setIsEditSubmitting] = useState(false);
+
   useEffect(() => {
     if (user) {
       setShowNameInMessages(user.mostra_nome_mensagens);
@@ -51,17 +60,20 @@ export default function SettingsContent({ tabIndex }: Props) {
       setNotifyOnNewChat(user.notificacao_novo_chat);
       setScreenMode(user.modo_tela);
       setSidebarMode(user.modo_side_bar);
+      setIaKeyword(user.ai_trigger_word);
     }
   }, [user]);
 
   const handleSettingsUpdate = async (updatedFields: Partial<User>) => {
-    if (!user) return;
+    if (!user) return false;
 
     const success = await updateUser(updatedFields);
     if (success) {
       toast.success('Alteração salva com sucesso!');
+      return true;
     } else {
       toast.error('Erro ao salvar as alterações. Tente novamente.');
+      return false;
     }
   };
 
@@ -76,6 +88,41 @@ export default function SettingsContent({ tabIndex }: Props) {
     } else {
       toast.error('Falha no upload da imagem.');
     }
+  };
+
+  // open edit modal and populate form
+  const openEditModal = () => {
+    if (!user) return;
+    setEditForm({
+      nome: user.nome,
+      email: user.email,
+      cidade: user.cidade ?? '',
+      endereco: user.endereco ?? '',
+      numero: user.numero ?? '',
+    });
+    setIsEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setIsEditModalOpen(false);
+    setEditForm(null);
+  };
+
+  const handleEditSave = async () => {
+    if (!editForm) return;
+    setIsEditSubmitting(true);
+    try {
+      const success = await handleSettingsUpdate(editForm);
+      if (success) closeEditModal();
+    } finally {
+      setIsEditSubmitting(false);
+    }
+  };
+
+  // when IA keyword changes, persist immediately (on blur)
+  const persistIaKeyword = async (value: string | null) => {
+    setIaKeyword(value);
+    await handleSettingsUpdate({ ...({ ai_trigger_word: value } as Partial<User>) });
   };
 
   // Funções de renderização para evitar repetição de JSX
@@ -107,6 +154,29 @@ export default function SettingsContent({ tabIndex }: Props) {
         <p className={styles.settingDescription}>{description}</p>
       </div>
       <OptionSelector options={options} selected={value} onChange={onChange} />
+    </div>
+  );
+
+  const renderInputSetting = (
+    label: string,
+    description: string,
+    value: string | null,
+    onChange: (v: string) => void,
+    onBlur?: () => void,
+  ) => (
+    <div className={styles.settingRow}>
+      <div className={styles.settingInfo}>
+        <span className={styles.settingLabel}>{label}</span>
+        <p className={styles.settingDescription}>{description}</p>
+      </div>
+      <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+        <input
+          className={styles.textInput}
+          value={value ? value : ''}
+          onChange={(e) => onChange(e.target.value)}
+          onBlur={onBlur}
+        />
+      </div>
     </div>
   );
 
@@ -183,7 +253,7 @@ export default function SettingsContent({ tabIndex }: Props) {
                   </div>
 
                 </div>
-                <button className={styles.editButton}>Editar Informações</button>
+                <button className={styles.editButton} onClick={openEditModal}>Editar Informações</button>
               </div>
             </motion.div>
           </>
@@ -260,6 +330,13 @@ export default function SettingsContent({ tabIndex }: Props) {
                   handleSettingsUpdate({ mostra_nome_mensagens: newValue });
                 }
               )}
+              {renderInputSetting(
+                'Palavra-chave da IA',
+                'Defina uma palavra que, quando enviada pelo usuário, ativa a IA automaticamente.',
+                iaKeyword,
+                (v) => setIaKeyword(v),
+                () => persistIaKeyword(iaKeyword)
+              )}
             </motion.div>
           </>
         );
@@ -272,6 +349,54 @@ export default function SettingsContent({ tabIndex }: Props) {
   return (
     <>
       {renderActiveTabContent()}
+
+      {/* Modal de edição de informações da conta */}
+      <Modal
+        isOpen={isEditModalOpen}
+        onClose={closeEditModal}
+        title="Editar Informações"
+        labelSubmit="Salvar"
+        isSubmitting={isEditSubmitting}
+        onSave={handleEditSave}
+      >
+
+        <div className={styles.formContainer}>
+
+          <div className={styles.formRow}>
+            <div className={styles.formGroup}>
+              <label htmlFor='cidade'>Cidade</label>
+              <input
+                id='cidade'
+                value={editForm?.cidade ?? ''}
+                onChange={(e) => setEditForm(prev => ({ ...(prev ?? {}), cidade: e.target.value }))}
+              />
+
+            </div>
+
+            <div className={styles.formGroup}>
+              <label htmlFor='endereco'>Endereço</label>
+              <input
+                id='endereco'
+                value={editForm?.endereco ?? ''}
+                onChange={(e) => setEditForm(prev => ({ ...(prev ?? {}), endereco: e.target.value }))}
+              />
+            </div>
+          </div>
+
+          <div className={styles.formRow}>
+            <div className={styles.formGroup}>
+              <label htmlFor='numero'>Número</label>
+              <input
+                id='numero'
+                value={editForm?.numero ?? ''}
+                onChange={(e) => setEditForm(prev => ({ ...(prev ?? {}), numero: e.target.value }))}
+              />
+            </div>
+          </div>
+
+        </div>
+
+      </Modal>
     </>
   );
 }

@@ -1,20 +1,23 @@
 // Libs
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 // Recoil
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import {
   connectionsState,
   chatsState,
   messagesState,
   addConnectionModalState,
+  activeChatState,
 } from '../../state/atom';
 // Config
 import { apiConfig } from '../../config/api';
+import { Chat } from '../../types/chats';
 
 export const useRealtimeEvents = (userId: string | undefined) => {
   const setConnections = useSetRecoilState(connectionsState);
   const setChats = useSetRecoilState(chatsState);
   const setMessagesByChat = useSetRecoilState(messagesState);
+  const setActiveChat = useSetRecoilState<Chat | null>(activeChatState);
   const setModalState = useSetRecoilState(addConnectionModalState);
 
   useEffect(() => {
@@ -72,9 +75,11 @@ export const useRealtimeEvents = (userId: string | undefined) => {
           fetch(`${apiConfig.node}/chats/${chatId}`)
             .then((res) => res.json())
             .then((chat) => {
+              let updatedChats: Chat[] = [];
+
+              // 🔄 Atualiza lista de chats
               setChats((prevChats) => {
                 const exists = prevChats.find((c) => c.id === chatId);
-                let updatedChats;
 
                 if (exists) {
                   updatedChats = prevChats.map((c) =>
@@ -84,37 +89,38 @@ export const useRealtimeEvents = (userId: string | undefined) => {
                   updatedChats = [...prevChats, chat];
                 }
 
-                if (message.remetente === 'Contato') {
-                  const unreadCount = updatedChats.filter(c => c.unread_count > 0).length;
-                  document.title = unreadCount > 0
-                    ? `(${unreadCount}) WhatsApp - NKW FLOW`
-                    : 'WhatsApp - NKW FLOW';
-                }
-
-                if (message.remetente === 'Contato' && chat.ia_ativa === false) {
-                  const audio = new Audio('/sounds/ding.mp3');
-                  audio.play().catch(err => console.warn('Erro ao tocar notificação', err));
-                }
-
-                const sorted = [...updatedChats].sort((a, b) => {
-                  const dateA = a.mensagem_data
-                    ? new Date(a.mensagem_data).getTime()
-                    : 0;
-                  const dateB = b.mensagem_data
-                    ? new Date(b.mensagem_data).getTime()
-                    : 0;
+                return [...updatedChats].sort((a, b) => {
+                  const dateA = a.mensagem_data ? new Date(a.mensagem_data).getTime() : 0;
+                  const dateB = b.mensagem_data ? new Date(b.mensagem_data).getTime() : 0;
                   return dateB - dateA;
                 });
-
-                return sorted;
               });
+
+              // ✅ Atualiza o ativo
+              setActiveChat((prevActive) =>
+                prevActive && prevActive.id === chatId ? chat : prevActive
+              );
+
+              // 🔔 Usa `updatedChats` aqui, já com valor garantido
+              if (message.remetente === 'Contato') {
+                const unreadCount = updatedChats.filter((c) => c.unread_count > 0).length;
+                document.title =
+                  unreadCount > 0
+                    ? `(${unreadCount}) WhatsApp - NKW FLOW`
+                    : 'WhatsApp - NKW FLOW';
+              }
+
+              if (message.remetente === 'Contato' && chat.ia_ativa === false) {
+                const audio = new Audio('/sounds/ding.mp3');
+                audio.play().catch((err) =>
+                  console.warn('Erro ao tocar notificação', err)
+                );
+              }
             })
             .catch((err) => {
-              console.error(
-                'Erro ao buscar chat para a mensagem recebida:',
-                err
-              );
+              console.error('Erro ao buscar chat para a mensagem recebida:', err);
             });
+
         }
 
         if (tipo === 'chats.upsert' && payload.chat) {

@@ -1,6 +1,5 @@
 .messageBubble {
-  max-width: 70%;
-  min-width: 30%;
+  max-width: 65%;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -49,7 +48,6 @@
 .stickerImage {
   width: 140px;
   height: 140px;
-  object-fit: contain;
 }
 .messageAudio {
   width: 100%;
@@ -182,6 +180,7 @@
   display: flex;
   flex-direction: column;
   position: relative;
+  min-width: 130px;
 }
 
 .timeRow {
@@ -191,3 +190,59 @@
   align-items: end;
   width: 100%;
 }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+
+.mediaOverlay {
+  position: fixed;
+  inset: 0;
+  background: #08090F;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.2s linear;
+}
+
+.mediaContainer {
+  position: relative;
+  max-width: 90%;
+  max-height: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mediaFull {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.5);
+  object-fit: contain; /* mantém proporção, sem crop */
+}
+
+.closeButton {
+  position: absolute;
+  top: 12px;
+  right: 18px;
+  border: none;
+}
+
+.closeButton svg {
+  fill: var(--color-text);
+  cursor: pointer;
+}
+
+.messageImage {
+  cursor: pointer;
+}
+

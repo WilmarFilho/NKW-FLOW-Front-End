@@ -28,4 +28,5 @@ export interface User {
   ref_code: string;
   referrals_count: number;
   discount_percent: number;
+  ai_trigger_word: string | null;
 }

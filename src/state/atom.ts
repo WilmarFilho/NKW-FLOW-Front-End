@@ -14,6 +14,12 @@ export const connectionsState = atom<Connection[]>({
   default: [],
 });
 
+// Chat ativo (selecionado no painel de conversas)
+export const activeChatState = atom<Chat | null>({
+  key: 'activeChatState',
+  default: null,
+});
+
 export const metricsState = atom<MetricsState>({
   key: 'metricsState',
   default: {
