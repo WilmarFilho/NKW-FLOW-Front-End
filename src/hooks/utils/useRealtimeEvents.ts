@@ -96,6 +96,8 @@ export const useRealtimeEvents = (userId: string | undefined) => {
                 });
               });
 
+              console.log(chat)
+
               // ✅ Atualiza o ativo
               setActiveChat((prevActive) =>
                 prevActive && prevActive.id === chatId ? chat : prevActive

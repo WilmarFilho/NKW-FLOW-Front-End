@@ -30,6 +30,8 @@ export const useChats = () => {
         });
 
     if (fetchedData) {
+
+      console.log(fetchedData)
       
       setChats(fetchedData);
       return fetchedData; 

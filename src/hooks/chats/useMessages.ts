@@ -38,18 +38,30 @@ export const useMessages = (chatId: string | null) => {
           [chatId]: data.messages.reverse(),
         }));
         setNextCursor(data.nextCursor || null);
-
         // --- Marca como lido ---
         setChats((currentChats) => {
           const chat = currentChats.find((c) => c.id === chatId);
           if (chat && chat.unread_count > 0) {
-            post(`/chats_reads/${chatId}`);
-            return currentChats.map((c) =>
-              c.id === chatId ? { ...c, unread_count: 0 } : c
-            );
+        
+            const totalUnreadChats = currentChats.filter((c) => c.unread_count > 0).length;
+
+           
+            const unreadCount = totalUnreadChats - 1;
+
+            document.title =
+              unreadCount > 0
+                ? `(${unreadCount}) WhatsApp - NKW FLOW`
+                : 'WhatsApp - NKW FLOW';
           }
-          return currentChats;
+
+          post(`/chats_reads/${chatId}`);
+
+          // zera o contador do chat atual
+          return currentChats.map((c) =>
+            c.id === chatId ? { ...c, unread_count: 0 } : c
+          );
         });
+
       }
       setIsLoading(false);
     };

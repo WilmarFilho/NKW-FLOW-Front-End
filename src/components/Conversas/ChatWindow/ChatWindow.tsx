@@ -123,6 +123,10 @@ export default function ChatWindow({
   const isInitialLoadRef = useRef(true);
 
   useEffect(() => {
+    console.log(activeChat?.ultima_atualizacao)
+  }, [isDetailsOpen]);
+
+   useEffect(() => {
     isInitialLoadRef.current = true;
   }, [activeChat]);
 
