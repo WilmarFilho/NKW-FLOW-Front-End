@@ -7,13 +7,16 @@
     opacity: 1;
   }
 }
+
 .dropdownWrapper {
   display: inline-flex;
   align-items: center;
 }
+
 .headerWrapper {
   position: relative;
 }
+
 .messageWrapper {
   position: absolute;
   top: 0;
@@ -22,6 +25,7 @@
   animation: fadeIn .2s forwards;
   pointer-events: none;
 }
+
 .messageWrapper .actionButton,
 .messageWrapper .menu {
   pointer-events: auto;
@@ -50,6 +54,7 @@
   transition: all .2s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, .05);
 }
+
 .menu {
   position: absolute;
   background: var(--color-chat-dropdown);
@@ -64,22 +69,27 @@
   gap: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
+
 .menuTop {
   top: auto !important;
   bottom: calc(100% + 14px);
 }
+
 .menuBottom {
   bottom: auto !important;
   top: calc(100% + 14px);
 }
+
 .menuRight {
   left: auto !important;
   right: 14px;
 }
+
 .menuLeft {
   right: auto !important;
   left: 14px;
 }
+
 .menu button {
   padding: 20px;
   width: 100%;
@@ -95,57 +105,33 @@
   background: var(--color-background-chats-options);
   text-align: left;
 }
+
 .menu button svg {
   width: 24px;
   fill: var(--color-text);
 }
+
 .menu button:hover {
   background: var(--color-background-white);
   transition: .3s;
 }
-@media (max-width: 991.98px) {
-  .menuBottom {
-    bottom: auto !important;
-    top: calc(100% + -400px);
-  }
 
-  .isSmall {
-    top: calc(100% + -210px);
-  }
-
-  .menu button {
-    padding: 12px;
-    font-size: 14px;
-  }
-
-
-
-  .messageWrapper {
-    right: 98%;
-  }
-}
-@media (max-width: 599.98px) {
-
-  .menuTop {
-    top: auto !important;
-    bottom: calc(100% + 14px);
-  }
-
-  .menu {
-    width: 160px;
-  }
-
-  .menuRight {
-    left: auto !important;
-    right: 0px;
-  }
-
+@media (max-width: 1204.98px) {
   .menuLeft {
-    right: auto !important;
-    left: -8px;
-  }
-
-  .messageWrapper {
-    right: 0%;
+    left: -46px;
   }
 }
+
+@media (max-width: 664.98px) {
+  .menu {
+    width: 180px;
+  }
+}
+
+
+@media (max-width: 400.98px) {
+   .menuLeft {
+    left: -100px;
+  }
+}
+

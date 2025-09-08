@@ -319,6 +319,48 @@ export default function ChatWindow({
             ''
           )}
 
+            <DropdownMenu
+            id="chat-header"
+            trigger={
+              <button className={styles.optionsButton}>
+                <Icon nome="dots" />
+              </button>
+            }
+          >
+            {isOwner && (
+              <>
+                <button
+                  onClick={() => {
+                    setNewName(activeChat.contato_nome || '');
+                    setRenameOpen(true);
+                  }}
+                >
+                  <Icon nome="pencil" /> Renomear Chat
+                </button>
+
+
+                {activeChat.user_id === user?.id && (
+                  <>
+                    <button onClick={onReleaseChatOwner}>
+                      <Icon nome="unlock" /> Liberar Chat
+                    </button>
+                    <button onClick={onToggleChatStatus}>
+                      <Icon nome="close" />{' '}
+                      {activeChat.status === 'Open' ? 'Fechar Chat' : 'Reabrir Chat'}
+                    </button>
+                    <button onClick={() => setIsDeleteDialogOpen(true)}>
+                      <Icon nome="trash" /> Apagar Chat
+                    </button>
+                  </>
+                )}
+
+              </>
+            )}
+            <button onClick={() => setDetailsOpen(true)}>
+              <Icon nome="info" /> Detalhes do Chat
+            </button>
+          </DropdownMenu>
+
 
         </header>
       )}
@@ -401,7 +443,7 @@ export default function ChatWindow({
 
             <img src={activeChat.foto_perfil || defaultAvatar} alt={`Avatar de ${activeChat.contato_nome}`} />
 
-            <div className={styles.detailsColumn}>
+            <div className={`${styles.detailsColumn} ${styles.detailsColumnMobile}`}>
               <p>Nome</p>
               <span>{activeChat.contato_nome ?? '------'}</span>
             </div>
@@ -438,7 +480,7 @@ export default function ChatWindow({
             </div>
 
             <div className={styles.detailsColumn}>
-              <p>Chat atrelado ao usuário</p>
+              <p>Atendente Responsável</p>
               <span>{activeChat.user_nome ?? '------'}</span>
             </div>
           </div>
@@ -520,57 +562,6 @@ export default function ChatWindow({
                   placeholder="Digite uma mensagem"
                   onSend={(text, mimetype, base64) => onSendMessage(text, mimetype, base64)}
                 />
-
-                {(isMobileLayout) && (
-                  <DropdownMenu
-                    isSmall={activeChat.user_id ? '' : 'isSmall'}
-                    id="chat-footer"
-                    trigger={
-                      <button className={styles.optionsButton}>
-                        <Icon nome="dots" />
-                      </button>
-                    }
-                  >
-                    {isOwner && (
-                      <>
-                        <button
-                          onClick={() => {
-                            setNewName(activeChat.contato_nome || '');
-                            setRenameOpen(true);
-                          }}
-                        >
-                          <Icon nome="pencil" /> {isMobileLayout ? 'Renomear' : 'Renomear Chat'}
-                        </button>
-
-
-                        {activeChat.user_id === user?.id && (
-                          <>
-                            <button onClick={onReleaseChatOwner}>
-                              <Icon nome="unlock" /> {isMobileLayout ? 'Liberar' : 'Liberar Chat'}
-                            </button>
-                            <button onClick={onToggleChatStatus}>
-                              <Icon nome="close" />{' '}
-                              {isMobileLayout
-                                ? activeChat.status === 'Open'
-                                  ? 'Fechar'
-                                  : 'Reabrir'
-                                : activeChat.status === 'Open'
-                                  ? 'Fechar Chat'
-                                  : 'Reabrir Chat'}
-                            </button>
-                            <button onClick={() => setIsDeleteDialogOpen(true)}>
-                              <Icon nome="trash" /> {isMobileLayout ? 'Apagar' : 'Apagar Chat'}
-                            </button>
-                          </>
-                        )}
-
-                      </>
-                    )}
-                    <button onClick={() => setDetailsOpen(true)}>
-                      <Icon nome="info" /> {isMobileLayout ? 'Detalhes' : 'Detalhes do Chat'}
-                    </button>
-                  </DropdownMenu>
-                )}
 
               </div>
             </>

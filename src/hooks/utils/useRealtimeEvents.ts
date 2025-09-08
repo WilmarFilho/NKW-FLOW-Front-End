@@ -128,6 +128,8 @@ export const useRealtimeEvents = (userId: string | undefined) => {
         if (tipo === 'chats.upsert' && payload.chat) {
           const chatId = payload.chat.id;
 
+          console.log('Caiu no if de chat upsert: ', chatId)
+
           setChats((prevChats) => {
             const updatedChats = prevChats.map((c) =>
               c.id === chatId ? { ...c, unread_count: 0 } : c
