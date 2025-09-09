@@ -42,20 +42,20 @@ export const useMessages = (chatId: string | null) => {
         setChats((currentChats) => {
           const chat = currentChats.find((c) => c.id === chatId);
           if (chat && chat.unread_count > 0) {
-        
+
             const totalUnreadChats = currentChats.filter((c) => c.unread_count > 0).length;
 
-           
+
             const unreadCount = totalUnreadChats - 1;
 
             document.title =
               unreadCount > 0
                 ? `(${unreadCount}) WhatsApp - NKW FLOW`
                 : 'WhatsApp - NKW FLOW';
+
+            post(`/chats_reads/${chatId}`);
           }
-
-          post(`/chats_reads/${chatId}`);
-
+          
           // zera o contador do chat atual
           return currentChats.map((c) =>
             c.id === chatId ? { ...c, unread_count: 0 } : c

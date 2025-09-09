@@ -42,7 +42,7 @@ export const getCustomSelectStyles = (isMobile: boolean): StylesConfig<SelectOpt
     minHeight: isMobile ? '48px' : '50px',
     height: isMobile ? '48px' : '50px',
     borderRadius: '8px',
-    backgroundColor: '#ffffff1a',
+    backgroundColor: 'var(--color-background-white)',
     border: state.isFocused ? '1px solid #ffffff23' : '1px solid transparent',
     boxShadow: 'none',
     transition: 'border-color 0.2s ease', // Adicionado para suavidade
@@ -56,7 +56,7 @@ export const getCustomSelectStyles = (isMobile: boolean): StylesConfig<SelectOpt
   }),
   singleValue: (provided) => ({
     ...provided,
-    color: '#ffffff90',
+    color: 'var(--color-text)',
     fontSize: isMobile ? '16px' : '14px',
   }),
   placeholder: (provided) => ({

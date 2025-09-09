@@ -39,29 +39,34 @@ export const useUser = () => {
     document.title = unreadCount > 0 ? `(${unreadCount}) WhatsApp - NKW FLOW` : 'WhatsApp - NKW FLOW';
   };
 
-  const fetchUser = useCallback(async (opts?: { force?: boolean }) => {
-
+  const fetchUser = useCallback(async (opts?: { force?: boolean, onProgress?: (msg: string) => void }) => {
     if (!token || !userId) return null;
-
     if (!opts?.force && user) return user;
 
-    const fetchedUser = await get<User>('/users', {
-      params: { user_id: userId }
-    });
+    const fetchedUser = await get<User>('/users', { params: { user_id: userId } });
 
     if (fetchedUser) {
       setUser(fetchedUser);
 
+      opts?.onProgress?.('Carregando conversas...');
       const chats = await fetchChats(fetchedUser);
       if (chats) updateDocumentTitle(chats);
 
-      fetchAttendants(fetchedUser);
-      fetchAgents(fetchedUser);
-      fetchConnections(fetchedUser);
-      fetchMetrics(fetchedUser);
+      opts?.onProgress?.('Carregando atendentes...');
+      await fetchAttendants(fetchedUser);
 
+      opts?.onProgress?.('Carregando agentes...');
+      await fetchAgents(fetchedUser);
+
+      opts?.onProgress?.('Carregando conexões...');
+      await fetchConnections(fetchedUser);
+
+      opts?.onProgress?.('Carregando métricas...');
+      await fetchMetrics(fetchedUser);
     }
-  }, [token, userId, setUser, get, fetchAttendants, fetchAgents, fetchConnections, fetchChats]);
+
+    return fetchedUser;
+  }, [token, userId, user, setUser, get]); 
 
 
   return { fetchUser };

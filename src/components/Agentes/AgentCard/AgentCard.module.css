@@ -45,7 +45,7 @@
 .buttonCard:hover {
   transition: .4s;
   background-color: var(--color-background-dark);
-  color: var(--color-text-white);
+  color: var(--color-text);
 }
 .title {
   display: flex;

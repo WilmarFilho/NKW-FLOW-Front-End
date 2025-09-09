@@ -35,7 +35,7 @@
 }
 .toggleSwitch.off,
 .toggleSwitchSecondary.off {
-  background-color: var(--color-background-dark);
+  background-color: var(--color-background-toggle);
 }
 .switchKnob {
   width: 34px;

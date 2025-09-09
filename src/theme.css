@@ -49,6 +49,7 @@ body.modo-light {
   /* Backgrounds */
 
   --color-background-dark: #fcfcfc;
+  --color-background-toggle: #ececec;
   --color-background-white: #49539b2a;
 
   /* Página de Resumo */
@@ -110,6 +111,7 @@ body.modo-dark {
   /* Backgrounds */
 
   --color-background-dark: #07070777;
+  --color-background-toggle: #07070777;
   --color-background-white: #ffffff1a;
 
   /* Página de Resumo */

@@ -52,8 +52,6 @@ export default function ConexoesPage() {
     qrCode,
   } = useConexoesPage();
 
-  console.log('Connections:', connections);
-
   // --- INÍCIO: estado e handlers para confirmação de exclusão via Chakra ---
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [connectionToDelete, setConnectionToDelete] = useState<Connection | null>(null);

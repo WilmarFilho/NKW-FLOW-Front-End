@@ -291,14 +291,14 @@ function ChatSidebar({
           data-label={statusFilter === 'Open' ? 'Exibindo: Chats Abertos' : 'Exibindo: Chats Fechados'}
           data-label-short={statusFilter === 'Open' ? 'Abertos' : 'Fechados'}
         />
-        {user?.tipo_de_usuario !== 'admin' && (
+        
           <button
             className={styles.ChatFilterButton}
             onClick={toggleOwnerFilter}
             data-label={ownerFilter === 'all' ? 'Exibindo: Todos Chats' : 'Exibindo: Meus Chats'}
             data-label-short={ownerFilter === 'all' ? 'Todos' : 'Meus'}
           />
-        )}
+      
       </div>
 
       {/* Atendentes (desktop, admin) */}

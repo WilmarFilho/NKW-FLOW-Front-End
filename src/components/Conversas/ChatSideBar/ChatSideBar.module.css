@@ -30,6 +30,10 @@
 .buttonAddChat:hover {
   background-color: var(--color-secundaria);
   transition: .3s;
+  fill: red;
+}
+.buttonAddChat:hover  svg {
+  fill: var(--color-text-white);
 }
 .ChatFilterButton {
   background-color: var(--color-background-white);
@@ -73,7 +77,7 @@
 }
 .buttonAddChat svg,
 .ChatFilterButton svg {
-  fill: var(--color-text-white);
+  fill: var(--color-button-searchbar);
   width: 22px;
   height: 20px;
 }

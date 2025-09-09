@@ -2,18 +2,18 @@ import { useEffect, useState } from 'react';
 import styles from './LoadingScreen.module.css'
 
 interface LoadingScreenProps {
-  onFinish?: () => void; 
+  message?: string;
+  onFinish?: () => void;
 }
 
-export default function LoadingScreen({ onFinish } : LoadingScreenProps) {
+export default function LoadingScreen({ message = 'Carregando...', onFinish }: LoadingScreenProps) {
   const [fadeOut, setFadeOut] = useState(false);
 
-   useEffect(() => {
+  useEffect(() => {
     const timer = setTimeout(() => {
       setFadeOut(true);
-      
       if (onFinish) {
-        setTimeout(onFinish, 500); 
+        setTimeout(onFinish, 500);
       }
     }, 10000); // tempo mínimo do loading
 
@@ -23,6 +23,7 @@ export default function LoadingScreen({ onFinish } : LoadingScreenProps) {
   return (
     <div className={`${styles.loadingOverlay} ${fadeOut ? styles.fadeOut : ''}`}>
       <div className={styles.spinner}></div>
+      <p className={styles.message}>{message}</p>
     </div>
   );
 }
