@@ -24,7 +24,7 @@ export const useUser = () => {
   const { fetchAttendants } = useAttendants();
   const { fetchAgents } = useAgents();
   const { fetchConnections } = useConnections();
-  const { fetchChats } = useChats();
+  const { fetchChats } = useChats(); //Property 'fetchChats' does not exist on type 'void'.t
   const { fetchMetrics } = useMetrics();
 
   // Carrega Metodos do hook da api
@@ -33,11 +33,6 @@ export const useUser = () => {
   // Auth
   const [token] = useRecoilState(authTokenState);
   const userId = token?.userId;
-
-  const updateDocumentTitle = (chats: Chat[]) => {
-    const unreadCount = chats.filter(c => c.unread_count > 0).length;
-    document.title = unreadCount > 0 ? `(${unreadCount}) WhatsApp - NKW FLOW` : 'WhatsApp - NKW FLOW';
-  };
 
   const fetchUser = useCallback(async (opts?: { force?: boolean, onProgress?: (msg: string) => void }) => {
     if (!token || !userId) return null;
@@ -49,9 +44,7 @@ export const useUser = () => {
       setUser(fetchedUser);
 
       opts?.onProgress?.('Carregando conversas...');
-      const chats = await fetchChats(fetchedUser);
-      if (chats) updateDocumentTitle(chats);
-
+ 
       opts?.onProgress?.('Carregando atendentes...');
       await fetchAttendants(fetchedUser);
 
@@ -71,3 +64,8 @@ export const useUser = () => {
 
   return { fetchUser };
 }
+
+
+
+
+

@@ -103,6 +103,12 @@
   animation: animateInverseReplay .1s forwards;
 }
 
+.sentinel {
+  height: 100px;
+  position: absolute;
+  top: 0;
+}
+
 .inputArea {
   display: flex;
   margin-top: 12px;
@@ -343,9 +349,22 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  justify-content: end;
   overflow-y: auto;
   scrollbar-width: none;
+  position: relative;
+}
+
+.teste {
+  position: absolute; /* ou relative, dependendo do layout */
+  bottom: 0; /* define o final do container */
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto; /* scroll se conteúdo exceder */
   padding: 20px;
+  scrollbar-width: none;
 }
 
 .messageList::-webkit-scrollbar {

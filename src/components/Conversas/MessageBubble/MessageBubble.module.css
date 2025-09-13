@@ -1,3 +1,4 @@
+
 .messageBubble {
   max-width: 55%;
   display: flex;
@@ -238,6 +239,7 @@
   position: relative;
   max-width: 90%;
   max-height: 90%;
+  scrollbar-width: none;
   overflow: auto;
   /* permite scroll se imagem for maior que viewport */
   display: flex;

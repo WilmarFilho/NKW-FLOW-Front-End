@@ -1,38 +1,92 @@
 // Libs
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 // Recoil
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   connectionsState,
   chatsState,
   messagesState,
   addConnectionModalState,
   activeChatState,
+  chatFiltersState,
 } from '../../state/atom';
 // Config
 import { apiConfig } from '../../config/api';
-import { Chat } from '../../types/chats';
+import { Chat, ChatFilters } from '../../types/chats';
+
+// ✨ Função auxiliar para verificar se um chat corresponde aos filtros
+const chatMatchesFilters = (chat: Chat, filters: ChatFilters, userId: string | undefined): boolean => {
+  if (!userId) return false;
+
+  if (filters.search && filters.search.trim() !== '') {
+    // Convertemos o termo de busca para minúsculas para busca case-insensitive.
+    const searchTerm = filters.search.trim().toLowerCase();
+
+    // Pegamos o nome e o número do chat de forma segura (caso sejam null/undefined)
+    // e também os convertemos para minúsculas.
+    const chatName = chat.contato_nome?.toLowerCase() || '';
+    const chatNumber = chat.contato_numero?.toLowerCase() || '';
+
+    // Verificamos se o nome OU o número contêm o termo de busca.
+    const nameMatches = chatName.includes(searchTerm);
+    const numberMatches = chatNumber.includes(searchTerm);
+
+    // Se NENHUM dos dois corresponder, o chat não passa no filtro.
+    if (!nameMatches && !numberMatches) {
+      return false;
+    }
+  }
+
+  // Filtro de Status (Open/Close)
+  if (filters.status && chat.status !== filters.status) return false;
+
+  // Filtro de IA
+  if (filters.iaStatus === 'ativa' && !chat.ia_ativa) return false;
+  if (filters.iaStatus === 'desativada' && chat.ia_ativa) return false;
+
+  // Filtro de Dono (Meus Chats)
+  if (filters.owner === 'mine' && chat.user_id !== userId) return false;
+
+  // Filtro de Conexão
+  if (filters.connection_id && chat.connection_id !== filters.connection_id) return false;
+
+  // Filtro de Atendente
+  if (filters.attendant_id && chat.user_id !== filters.attendant_id) return false;
+
+  // Se passou em todos os testes, o chat é válido para os filtros atuais
+  return true;
+};
 
 export const useRealtimeEvents = (userId: string | undefined) => {
-  const setConnections = useSetRecoilState(connectionsState);
+  const setConnections = useSetRecoilState(connectionsState);;
+  const setModalState = useSetRecoilState(addConnectionModalState);
   const setChats = useSetRecoilState(chatsState);
+  const filters = useRecoilValue(chatFiltersState);
   const setMessagesByChat = useSetRecoilState(messagesState);
   const setActiveChat = useSetRecoilState<Chat | null>(activeChatState);
-  const setModalState = useSetRecoilState(addConnectionModalState);
 
   useEffect(() => {
     if (!userId) return;
 
     const eventSource = new EventSource(`${apiConfig.node}/events/${userId}`);
 
+    const parseDateBR = (d?: string | null) => {
+      if (!d) return 0;
+      let iso = d.replace(' ', 'T').replace(/(\.\d{3})\d+/, '$1');
+      if (!iso.endsWith('Z') && !iso.includes('+')) iso += 'Z'; // garante UTC
+      return new Date(iso).getTime();
+    };
+
+
+
     eventSource.onmessage = (event) => {
       try {
         const payload = JSON.parse(event.data);
-
         console.log('[SSE] Evento recebido:', payload);
 
         const { event: tipo, connection, message, state, deletedMessage } = payload;
 
+        // ======= CONNECTION EVENTS =======
         if (tipo === 'connection.update') {
           if (state === 'close') {
             setConnections((prev) => prev.filter((c) => c.id !== connection.id));
@@ -58,10 +112,11 @@ export const useRealtimeEvents = (userId: string | undefined) => {
           }
         }
 
+        // ======= MESSAGES EVENTS =======
         if ((tipo === 'messages.upsert' || tipo === 'send.message') && message) {
           const chatId = message.chat_id;
 
-          // 1. Atualiza apenas mensagens do chat específico
+          // 1️⃣ Atualiza mensagens do chat
           setMessagesByChat((prev) => {
             const current = prev[chatId] || [];
             const exists = current.find((m) => m.id === message.id);
@@ -71,81 +126,85 @@ export const useRealtimeEvents = (userId: string | undefined) => {
             };
           });
 
-          // 2. Sempre busca o chat completo no backend
+          // 2️⃣ Atualiza chat completo no frontend
           fetch(`${apiConfig.node}/chats/${chatId}`)
             .then((res) => res.json())
-            .then((chat) => {
-              let updatedChats: Chat[] = [];
+            .then((fullChatData: Chat) => {
+              // Verifica se o chat atualizado passa nos filtros atuais
+              const shouldBeVisible = chatMatchesFilters(fullChatData, filters, userId);
 
-              // 🔄 Atualiza lista de chats
               setChats((prevChats) => {
-                const exists = prevChats.find((c) => c.id === chatId);
+                const chatExistsInList = prevChats.some((c) => c.id === chatId);
+                let newChats: Chat[];
 
-                if (exists) {
-                  updatedChats = prevChats.map((c) =>
-                    c.id === chatId ? { ...c, ...chat } : c
-                  );
+                if (shouldBeVisible) {
+                  // Se deve ser visível: adicione ou atualize
+                  const updatedChat = {
+                    ...fullChatData,
+                    mensagem_data: message.created_at || fullChatData.mensagem_data,
+                  };
+
+                  if (chatExistsInList) {
+                    newChats = prevChats.map((c) => c.id === chatId ? updatedChat : c);
+                  } else {
+                    newChats = [...prevChats, updatedChat];
+                  }
                 } else {
-                  updatedChats = [...prevChats, chat];
+                  // Se NÃO deve ser visível: remova da lista se existir
+                  newChats = prevChats.filter((c) => c.id !== chatId);
                 }
 
-                return [...updatedChats].sort((a, b) => {
-                  const dateA = a.mensagem_data ? new Date(a.mensagem_data).getTime() : 0;
-                  const dateB = b.mensagem_data ? new Date(b.mensagem_data).getTime() : 0;
-                  return dateB - dateA;
-                });
+                if (message.remetente === 'Contato') {
+                  const unreadCount = newChats.filter((c) => c.unread_count > 0).length;
+                  document.title =
+                    unreadCount > 0
+                      ? `(${unreadCount}) WhatsApp - NKW FLOW`
+                      : 'WhatsApp - NKW FLOW';
+                }
+
+                // Sempre reordene a lista final
+                return newChats.sort(
+                  (a, b) => parseDateBR(b.mensagem_data) - parseDateBR(a.mensagem_data)
+                );
               });
 
-              console.log(chat)
-
-              // ✅ Atualiza o ativo
+              // atualiza chat ativo se for o mesmo
               setActiveChat((prevActive) =>
-                prevActive && prevActive.id === chatId ? chat : prevActive
+                prevActive && prevActive.id === chatId ? fullChatData : prevActive
               );
 
-              // 🔔 Usa `updatedChats` aqui, já com valor garantido
-              if (message.remetente === 'Contato') {
-                const unreadCount = updatedChats.filter((c) => c.unread_count > 0).length;
-                document.title =
-                  unreadCount > 0
-                    ? `(${unreadCount}) WhatsApp - NKW FLOW`
-                    : 'WhatsApp - NKW FLOW';
-              }
-
-              if (message.remetente === 'Contato' && chat.ia_ativa === false) {
+              // ✨ CORREÇÃO 2: Usar a variável correta `fullChatData`.
+              if (message.remetente === 'Contato' && fullChatData.ia_ativa === false) {
                 const audio = new Audio('/sounds/ding.mp3');
                 audio.play().catch((err) =>
                   console.warn('Erro ao tocar notificação', err)
                 );
               }
+
             })
             .catch((err) => {
               console.error('Erro ao buscar chat para a mensagem recebida:', err);
             });
-
         }
 
+        // ======= CHAT UPDATES =======
         if (tipo === 'chats.upsert' && payload.chat) {
           const chatId = payload.chat.id;
-
-          console.log('Caiu no if de chat upsert: ', chatId)
-
           setChats((prevChats) => {
             const updatedChats = prevChats.map((c) =>
               c.id === chatId ? { ...c, unread_count: 0 } : c
             );
 
-            // Atualiza o título da aba
             const unreadCount = updatedChats.filter((c) => c.unread_count > 0).length;
-            document.title = unreadCount > 0 ? `(${unreadCount}) WhatsApp - NKW FLOW` : 'WhatsApp - NKW FLOW';
+            document.title =
+              unreadCount > 0 ? `(${unreadCount}) WhatsApp - NKW FLOW` : 'WhatsApp - NKW FLOW';
 
             return updatedChats;
           });
         }
 
+        // ======= MESSAGES DELETE =======
         if (tipo === 'messages.delete' && deletedMessage) {
-          console.log('🗑️ Recebido evento para excluir mensagem:', deletedMessage);
-
           const chatId = deletedMessage.chat_id;
           if (!chatId) return;
 
@@ -159,7 +218,6 @@ export const useRealtimeEvents = (userId: string | undefined) => {
             };
           });
         }
-
       } catch (err) {
         console.error('[SSE] Erro ao processar evento:', err);
       }
@@ -173,7 +231,7 @@ export const useRealtimeEvents = (userId: string | undefined) => {
     return () => {
       eventSource.close();
     };
-  }, [userId]);
+  }, [userId, filters, setChats, setActiveChat, setConnections, setMessagesByChat, setModalState]);
 };
 
 

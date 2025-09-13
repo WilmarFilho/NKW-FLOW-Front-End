@@ -247,11 +247,8 @@ export default function MessageBubble(props: MessageBubbleProps) {
 
   return (
     <>
-      <motion.div
+      <div
         ref={bubbleRef}
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0, duration: 0.1, ease: 'linear' }}
         className={bubbleClasses}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => !showMenu && setIsHovered(false)}
@@ -331,7 +328,7 @@ export default function MessageBubble(props: MessageBubbleProps) {
               )}
           </DropdownMenu>
         )}
-      </motion.div>
+      </div>
 
       {expandedMedia && (
         <div className={styles.mediaOverlay} onClick={() => setExpandedMedia(null)}>

@@ -31,6 +31,8 @@ export default function ConversasPage() {
       setIsMobileLayout(queryMobile.matches);
     };
 
+
+
     setFlags();
 
     const handleMobile = (e: MediaQueryListEvent) => setIsMobileLayout(e.matches);
@@ -80,20 +82,21 @@ export default function ConversasPage() {
               onBack={handleBackToSidebar}
               onReleaseChatOwner={state.handleReleaseChatOwner}
               isDeleteDialogOpen={state.isDeleteDialogOpen}
-              setIsDeleteDialogOpen={state.setIsDeleteDialogOpen} 
+              setIsDeleteDialogOpen={state.setIsDeleteDialogOpen}
               cancelRef={state.cancelRef}
             />
 
           </DropdownMenuProvider>
         ) : (
           <ChatSidebar
+            fetchChats={state.fetchChats}
             chats={state.chats}
             attendants={state.attendants}
             activeChat={state.activeChat}
             setActiveChat={state.setActiveChat}
             isMobileLayout={isMobileLayout}
             setIsAddChatOpen={state.openNewChatModal}
-            fectchImageProfile={state.fectchImageProfile}
+            fectchImageProfile={state.fetchImageProfile}
             connections={state.connections}
             selectedConnectionId={state.filterConnectionId}
             setSelectedConnectionId={state.setFilterConnectionId}
@@ -101,18 +104,24 @@ export default function ConversasPage() {
             setSelectedAttendantId={state.setSelectedAttendantId}
             openConnectionsModal={() => setIsConnectionsModalOpen(true)}
             openAttendantsModal={() => setIsAttendantsModalOpen(true)}
+            // 🔹 Novos props
+            fetchMoreChats={state.fetchMoreChats}
+            hasMore={state.hasMoreChats}
+            loading={state.isLoadingChats}
           />
+
         )
       ) : (
         <>
           <ChatSidebar
+            fetchChats={state.fetchChats}
             chats={state.chats}
             attendants={state.attendants}
-            isMobileLayout={isMobileLayout}
             activeChat={state.activeChat}
             setActiveChat={state.setActiveChat}
+            isMobileLayout={isMobileLayout}
             setIsAddChatOpen={state.openNewChatModal}
-            fectchImageProfile={state.fectchImageProfile}
+            fectchImageProfile={state.fetchImageProfile}
             connections={state.connections}
             selectedConnectionId={state.filterConnectionId}
             setSelectedConnectionId={state.setFilterConnectionId}
@@ -120,7 +129,12 @@ export default function ConversasPage() {
             setSelectedAttendantId={state.setSelectedAttendantId}
             openConnectionsModal={() => setIsConnectionsModalOpen(true)}
             openAttendantsModal={() => setIsAttendantsModalOpen(true)}
+            // 🔹 Novos props
+            fetchMoreChats={state.fetchMoreChats} //Property 'fetchMoreChats' does not exist on type '{ chats: Chat[]; isDeleteDialogOpen: boolean; setIsDeleteDialogOpen: Dispatch<SetStateAction<boolean>>; cancelRef: RefObject<HTMLButtonElement>; ... 36 more ...; setFilterConnectionId: Dispatch<...>; }
+            hasMore={state.hasMoreChats}
+            loading={state.isLoadingChats} //Property 'loading' does not exist on type '{ chats: Chat[]; isDeleteDialogOpen: boolean; setIsDeleteDialogOpen: Dispatch<SetStateAction<boolean>>; cancelRef: RefObject<HTMLButtonElement>; ... 36 more ...; setFilterConnectionId: Dispatch<...>; }'. Did you mean 'isLoading'?
           />
+
           <DropdownMenuProvider>
             <ChatWindow
               activeChat={state.activeChat}
@@ -232,3 +246,9 @@ export default function ConversasPage() {
     </div>
   );
 }
+
+
+
+
+
+

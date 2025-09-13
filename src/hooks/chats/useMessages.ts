@@ -18,9 +18,14 @@ export const useMessages = (chatId: string | null) => {
   const [nextCursor, setNextCursor] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
+
+
   // Carregar primeiras mensagens
   useEffect(() => {
     if (!chatId) return;
+
+    console.log('Mensagens atualizadas:', messagesByChat[chatId]);
+
 
     // Reseta mensagens só do chat atual
     setMessagesByChat((prev) => ({ ...prev, [chatId]: [] }));
@@ -55,7 +60,7 @@ export const useMessages = (chatId: string | null) => {
 
             post(`/chats_reads/${chatId}`);
           }
-          
+
           // zera o contador do chat atual
           return currentChats.map((c) =>
             c.id === chatId ? { ...c, unread_count: 0 } : c
@@ -67,16 +72,20 @@ export const useMessages = (chatId: string | null) => {
     };
 
     fetchInitialMessages();
-  }, [chatId, get, post, setMessagesByChat, setChats]);
+  }, [chatId, get, post, setMessagesByChat, setChats, ]);
 
   // Carregar mais mensagens (scroll para cima)
   const fetchMoreMessages = useCallback(async () => {
     if (!chatId || !nextCursor || isLoading) return;
     setIsLoading(true);
 
+    console.log(nextCursor)
+
     const data = await get<{ messages: Message[]; nextCursor: string | null }>(
       `/messages/chat/${chatId}?limit=20&cursor=${nextCursor}`
     );
+
+    console.log(data)
 
     if (data && data.messages.length > 0) {
       setMessagesByChat((prev) => ({
@@ -90,6 +99,7 @@ export const useMessages = (chatId: string | null) => {
     } else if (data) {
       setNextCursor(null);
     }
+    console.log(messagesByChat[chatId]) // è normal aqui ainda estar com as 20 prikeiras mensagens?
     setIsLoading(false);
   }, [chatId, nextCursor, get, setMessagesByChat, isLoading]);
 

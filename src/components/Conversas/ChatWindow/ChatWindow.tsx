@@ -15,7 +15,6 @@ import FormStyles from '../../Gerais/Form/form.module.css';
 import { DropdownMenu } from '../../../components/Gerais/Dropdown/DropdownMenu';
 import { useRecoilValue } from 'recoil';
 import { userState } from '../../../state/atom';
-
 import {
   AlertDialog,
   AlertDialogBody,
@@ -24,7 +23,8 @@ import {
   AlertDialogContent,
   AlertDialogOverlay,
   Button,
-} from '@chakra-ui/react'
+} from '@chakra-ui/react';
+import { useInfiniteScroll } from '../../../hooks/utils/useInfiniteScroll';
 
 interface ChatWindowProps {
   activeChat: Chat | null;
@@ -76,11 +76,45 @@ export default function ChatWindow({
   onReleaseChatOwner,
   onBack,
 }: ChatWindowProps) {
-
-  // --- inicio: adicionado para deletar mensagem ---
   const [isDeleteMessageOpen, setIsDeleteMessageOpen] = useState(false);
   const [messageToDelete, setMessageToDelete] = useState<string | null>(null);
   const cancelDeleteMsgRef = useRef<HTMLButtonElement>(null);
+  const [isDetailsOpen, setDetailsOpen] = useState(false);
+  const [isRenameOpen, setRenameOpen] = useState(false);
+  const [newName, setNewName] = useState('');
+  const [showError, setShowError] = useState(false);
+
+  const user = useRecoilValue(userState);
+  const isOwner = !activeChat?.user_id || activeChat?.user_id === user?.id;
+
+  const inputRef = useRef<HTMLInputElement>(null);
+  const { isDragging, handleDragOver, handleDragLeave, handleDrop } = useDragAndDropFile({ onDropFile });
+  const chatId = activeChat?.id
+
+  const { listRef, topSentinelRef } = useInfiniteScroll({
+    fetchMoreMessages,
+    hasMore,
+    isLoading,
+    messages,
+    chatId
+  });
+
+  // Resposta de mensagem
+  useEffect(() => {
+    if (replyingTo && inputRef.current) {
+      inputRef.current.focus();
+      inputRef.current.select?.();
+    }
+  }, [replyingTo]);
+
+  useEffect(() => onSetReplyingTo(undefined), [activeChat]);
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && replyingTo) handleCloseReply();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [replyingTo, handleCloseReply]);
 
   const openDeleteMessageDialog = (id: string) => {
     setMessageToDelete(id);
@@ -96,98 +130,6 @@ export default function ChatWindow({
       setMessageToDelete(null);
     }
   };
-
-  // MODAIS
-  const [isDetailsOpen, setDetailsOpen] = useState(false);
-  const [isRenameOpen, setRenameOpen] = useState(false);
-
-  // ESTADOS
-  const [newName, setNewName] = useState('');
-
-  const user = useRecoilValue(userState);
-  const isOwner = !activeChat?.user_id || activeChat?.user_id === user?.id;
-
-  // ERROS
-  const [showError, setShowError] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  // DRAG AND DROP
-  const { isDragging, handleDragOver, handleDragLeave, handleDrop } = useDragAndDropFile({ onDropFile });
-
-  // PAGINAÇÂO
-  const messagesEndRef = useRef<HTMLDivElement | null>(null);
-  const topSentinelRef = useRef<HTMLDivElement | null>(null);
-  const listRef = useRef<HTMLDivElement | null>(null);
-  const prevScrollHeightRef = useRef<number | null>(null);
-
-  const isInitialLoadRef = useRef(true);
-
-   useEffect(() => {
-    isInitialLoadRef.current = true;
-  }, [activeChat]);
-
-  useEffect(() => {
-    const list = listRef.current;
-    if (!list) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && hasMore && !isLoading) {
-          prevScrollHeightRef.current = list.scrollHeight;
-          fetchMoreMessages();
-        }
-      },
-      { root: list, rootMargin: '1000px 0px 0px 0px', threshold: 0.0 }
-    );
-
-    const sentinel = topSentinelRef.current;
-    if (sentinel) observer.observe(sentinel);
-
-    return () => {
-      if (sentinel) observer.unobserve(sentinel);
-    };
-  }, [fetchMoreMessages, hasMore, isLoading]);
-
-  useLayoutEffect(() => {
-    const list = listRef.current;
-    if (!list) return;
-
-    if (prevScrollHeightRef.current !== null) {
-      const newScrollHeight = list.scrollHeight;
-      list.scrollTop = newScrollHeight - prevScrollHeightRef.current;
-      prevScrollHeightRef.current = null;
-      return;
-    }
-
-    if (isInitialLoadRef.current && messages.length > 0) {
-      messagesEndRef.current?.scrollIntoView();
-      isInitialLoadRef.current = false;
-      return;
-    }
-
-    if (!isInitialLoadRef.current) {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [messages]);
-
-  // FUNÇÂO DE RESPOSTA DE MENSAGEM
-
-  useEffect(() => {
-    if (replyingTo && inputRef.current) {
-      inputRef.current.focus();
-      inputRef.current.select?.();
-    }
-  }, [replyingTo]);
-
-  useEffect(() => onSetReplyingTo(undefined), [activeChat]);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && replyingTo) handleCloseReply();
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [replyingTo, handleCloseReply]);
 
   const handleRenameClick = () => {
     if (!newName.trim()) {
@@ -208,7 +150,6 @@ export default function ChatWindow({
   }
 
   // Agrupamento de mensagens
-
   const groupedMessages: React.ReactNode[] = [];
   let lastDate: string | null = null;
 
@@ -275,6 +216,10 @@ export default function ChatWindow({
     );
   });
 
+
+
+
+
   return (
     <motion.section
       className={styles.chatWindow}
@@ -307,7 +252,7 @@ export default function ChatWindow({
             <button
               className={styles.backButton}
               onClick={onBack}
-              aria-label="Voltar para a lista de chats"
+              aria-label='Voltar para a lista de chats'
             >
               <Icon nome='arrow' />
             </button>
@@ -315,11 +260,11 @@ export default function ChatWindow({
             ''
           )}
 
-            <DropdownMenu
-            id="chat-header"
+          <DropdownMenu
+            id='chat-header'
             trigger={
               <button className={styles.optionsButton}>
-                <Icon nome="dots" />
+                <Icon nome='dots' />
               </button>
             }
           >
@@ -331,21 +276,21 @@ export default function ChatWindow({
                     setRenameOpen(true);
                   }}
                 >
-                  <Icon nome="pencil" /> Renomear Chat
+                  <Icon nome='pencil' /> Renomear Chat
                 </button>
 
 
                 {activeChat.user_id === user?.id && (
                   <>
                     <button onClick={onReleaseChatOwner}>
-                      <Icon nome="unlock" /> Liberar Chat
+                      <Icon nome='unlock' /> Liberar Chat
                     </button>
                     <button onClick={onToggleChatStatus}>
-                      <Icon nome="close" />{' '}
+                      <Icon nome='close' />{' '}
                       {activeChat.status === 'Open' ? 'Fechar Chat' : 'Reabrir Chat'}
                     </button>
                     <button onClick={() => setIsDeleteDialogOpen(true)}>
-                      <Icon nome="trash" /> Apagar Chat
+                      <Icon nome='trash' /> Apagar Chat
                     </button>
                   </>
                 )}
@@ -353,7 +298,7 @@ export default function ChatWindow({
               </>
             )}
             <button onClick={() => setDetailsOpen(true)}>
-              <Icon nome="info" /> Detalhes do Chat
+              <Icon nome='info' /> Detalhes do Chat
             </button>
           </DropdownMenu>
 
@@ -375,7 +320,7 @@ export default function ChatWindow({
             />
             <div className={styles.contactText}>
               <h1>{activeChat.contato_nome}</h1>
-              <NavLink to="/agentes">
+              <NavLink to='/agentes'>
                 <span>Agente - {activeChat.connection.agente.tipo_de_agente}</span>
               </NavLink>
             </div>
@@ -383,16 +328,16 @@ export default function ChatWindow({
 
           {activeChat.user_id === user?.id && (
             <div className={styles.ownerBadge}>
-              <Icon nome="userlist" /> SEU CHAT
+              <Icon nome='userlist' /> SEU CHAT
             </div>
           )}
 
 
           <DropdownMenu
-            id="chat-header"
+            id='chat-header'
             trigger={
               <button className={styles.optionsButton}>
-                <Icon nome="dots" />
+                <Icon nome='dots' />
               </button>
             }
           >
@@ -404,21 +349,21 @@ export default function ChatWindow({
                     setRenameOpen(true);
                   }}
                 >
-                  <Icon nome="pencil" /> Renomear Chat
+                  <Icon nome='pencil' /> Renomear Chat
                 </button>
 
 
                 {activeChat.user_id === user?.id && (
                   <>
                     <button onClick={onReleaseChatOwner}>
-                      <Icon nome="unlock" /> Liberar Chat
+                      <Icon nome='unlock' /> Liberar Chat
                     </button>
                     <button onClick={onToggleChatStatus}>
-                      <Icon nome="close" />{' '}
+                      <Icon nome='close' />{' '}
                       {activeChat.status === 'Open' ? 'Fechar Chat' : 'Reabrir Chat'}
                     </button>
                     <button onClick={() => setIsDeleteDialogOpen(true)}>
-                      <Icon nome="trash" /> Apagar Chat
+                      <Icon nome='trash' /> Apagar Chat
                     </button>
                   </>
                 )}
@@ -426,13 +371,13 @@ export default function ChatWindow({
               </>
             )}
             <button onClick={() => setDetailsOpen(true)}>
-              <Icon nome="info" /> Detalhes do Chat
+              <Icon nome='info' /> Detalhes do Chat
             </button>
           </DropdownMenu>
         </header>
       )}
 
-      <Modal transparent isOpen={isDetailsOpen} onClose={() => setDetailsOpen(false)} title="Detalhes do Chat">
+      <Modal transparent isOpen={isDetailsOpen} onClose={() => setDetailsOpen(false)} title='Detalhes do Chat'>
         <div className={styles.chatDetails}>
 
           <div className={styles.detailsRow}>
@@ -486,17 +431,17 @@ export default function ChatWindow({
 
       <Modal
         onSave={handleRenameClick}
-        labelSubmit="Salvar"
+        labelSubmit='Salvar'
         transparent
         isOpen={isRenameOpen}
         onClose={() => setRenameOpen(false)}
-        title="Renomear Chat"
+        title='Renomear Chat'
       >
         <div className={FormStyles.formGroup}>
           <input
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
-            placeholder="Novo nome"
+            placeholder='Novo nome'
           />
           {showError && !newName.trim() && (
             <span className={FormStyles.errorText}>O nome não pode ficar vazio.</span>
@@ -510,17 +455,23 @@ export default function ChatWindow({
         </div>
       )}
 
+
       <div
-        ref={listRef}
+
         className={styles.messageList}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
-        data-scroll="messages"
+
       >
-        <div ref={topSentinelRef} style={{ height: '1px' }} />
-        {groupedMessages}
-        <div ref={messagesEndRef} />
+        <div className={styles.teste} ref={listRef}>
+          <div ref={topSentinelRef} className={styles.sentinel} style={{ visibility: 'hidden', height: 1 }}>.</div>
+
+          {groupedMessages}
+
+        </div>
+
+
       </div>
 
       <div className={styles.inputAreaWrapper}>
@@ -547,15 +498,15 @@ export default function ChatWindow({
                 {!isMobileLayout && (
                   <div className={styles.toggleIaButton}>
                     <div className={styles.headerToggleIa}>
-                      <Icon nome="agentespage" /> {activeChat.ia_ativa ? 'Ativado' : 'Desativado'}
+                      <Icon nome='agentespage' /> {activeChat.ia_ativa ? 'Ativado' : 'Desativado'}
                     </div>
-                    <ToggleSwitch variant="secondary" isOn={activeChat.ia_ativa} onToggle={onToggleIA} />
+                    <ToggleSwitch variant='secondary' isOn={activeChat.ia_ativa} onToggle={onToggleIA} />
                   </div>
                 )}
 
                 <ChatInput
                   ref={inputRef}
-                  placeholder="Digite uma mensagem"
+                  placeholder='Digite uma mensagem'
                   onSend={(text, mimetype, base64) => onSendMessage(text, mimetype, base64)}
                 />
 
@@ -608,7 +559,6 @@ export default function ChatWindow({
         leastDestructiveRef={cancelDeleteMsgRef}
         onClose={() => setIsDeleteMessageOpen(false)}
         isCentered
-        finalFocusRef={listRef}
       >
         <AlertDialogOverlay>
           <AlertDialogContent className={styles.customDialog}>
@@ -622,7 +572,7 @@ export default function ChatWindow({
               <Button ref={cancelDeleteMsgRef} onClick={() => setIsDeleteMessageOpen(false)}>
                 Cancelar
               </Button>
-              <Button className={styles.actionAlert} colorScheme="red" onClick={confirmDeleteMessage} ml={3}>
+              <Button className={styles.actionAlert} colorScheme='red' onClick={confirmDeleteMessage} ml={3}>
                 Excluir
               </Button>
             </AlertDialogFooter>
@@ -634,6 +584,22 @@ export default function ChatWindow({
 
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

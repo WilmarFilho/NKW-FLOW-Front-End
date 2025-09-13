@@ -22,3 +22,12 @@ export interface Chat {
   ia_desligada_em?: string | null;
   user_nome?: string | null;
 }
+
+export interface ChatFilters {
+  search?: string | null;
+  connection_id?: string | null;
+  attendant_id?: string | null;
+  iaStatus?: 'todos' | 'ativa' | 'desativada';
+  status?: 'Open' | 'Close';
+  owner?: string;
+}

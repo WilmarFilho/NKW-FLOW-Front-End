@@ -1,6 +1,6 @@
 // Libs
-import React, { useState, useMemo, useCallback } from 'react';
-import { useRecoilValue } from 'recoil';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { motion } from 'framer-motion';
 // Hooks
 import { useDebounce } from '../../../hooks/utils/useDebounce';
@@ -9,14 +9,14 @@ import SearchBar from '../SearchBar/Searchbar';
 import Tag from '../Tags/Tag';
 import ChatListItem from '../ChatListItem/ChatListItem';
 // Types
-import { Chat } from '../../../types/chats';
+import { Chat, ChatFilters } from '../../../types/chats';
+import { Attendant } from '../../../types/attendant';
 // CSS Modules
 import styles from './ChatSideBar.module.css';
 // Atom
-import { userState } from '../../../state/atom';
+import { chatFiltersState, userState } from '../../../state/atom';
 // Icons
 import Icon from '../../../components/Gerais/Icons/Icons';
-import { Attendant } from '../../../types/attendant';
 
 interface ChatSidebarProps {
   chats: Chat[];
@@ -33,62 +33,16 @@ interface ChatSidebarProps {
   setSelectedAttendantId: (id: string | null) => void;
   openConnectionsModal: () => void;
   openAttendantsModal: () => void;
+  fetchChats: (filters?: ChatFilters) => Promise<Chat[] | undefined>;
+  fetchMoreChats: (filters?: ChatFilters) => Promise<void>;
+  hasMore: boolean;
+  loading: boolean;
 }
 
 const containerVariants = {
   hidden: { opacity: 0 },
   show: { opacity: 1, transition: { staggerChildren: 0.1 } },
 };
-
-function filterChats(
-  chats: Chat[],
-  query: string,
-  selectedConnectionId: string | null,
-  iaStatusFilter: 'todos' | 'ativa' | 'desativada',
-  statusFilter: 'Open' | 'Close',
-  ownerFilter: 'all' | 'mine',
-  currentUserId: string | null,
-  selectedAttendantId: string | null
-) {
-  const lowerQuery = query.toLowerCase();
-
-  return chats.filter((chat) => {
-    const matchesSearch =
-      chat.contato_nome?.toLowerCase().includes(lowerQuery) ||
-      chat.contato_numero?.includes(lowerQuery);
-
-    const matchesConnection = selectedConnectionId
-      ? chat.connection.id === selectedConnectionId
-      : true;
-
-    const matchesIAStatus =
-      iaStatusFilter === 'todos'
-        ? true
-        : iaStatusFilter === 'ativa'
-          ? chat.ia_ativa
-          : !chat.ia_ativa;
-
-    const matchesStatus = chat.status === statusFilter;
-
-    const matchesOwner =
-      ownerFilter === 'all'
-        ? true
-        : chat.user_id === currentUserId;
-
-    const matchesAttendant = selectedAttendantId
-      ? chat.user_id === selectedAttendantId
-      : true;
-
-    return (
-      matchesSearch &&
-      matchesConnection &&
-      matchesIAStatus &&
-      matchesStatus &&
-      matchesOwner &&
-      matchesAttendant
-    );
-  });
-}
 
 function ChatSidebar({
   chats,
@@ -105,60 +59,68 @@ function ChatSidebar({
   setSelectedAttendantId,
   openConnectionsModal,
   openAttendantsModal,
+  fetchChats,
+  fetchMoreChats,
+  hasMore,
+  loading,
 }: ChatSidebarProps) {
-  const [iaStatusFilter, setIaStatusFilter] = useState<'todos' | 'ativa' | 'desativada'>('todos');
-  const [statusFilter, setStatusFilter] = useState<'Open' | 'Close'>('Open');
-  const [ownerFilter, setOwnerFilter] = useState<'all' | 'mine'>('all');
+  // ✨ Substituir múltiplos useStates pelo atom global de filtros
+  const [filters, setFilters] = useRecoilState(chatFiltersState);
+
+  // Manter estado local para o input de busca para usar o debounce
   const [searchQuery, setSearchQuery] = useState('');
   const debouncedSearch = useDebounce(searchQuery, 300);
 
   const user = useRecoilValue(userState);
-  const currentUserId = user?.id ? user.id : null;
+  const listRef = useRef<HTMLDivElement | null>(null);
 
-  const filteredChats = useMemo(() => {
-    const effectiveIaFilter =
-      statusFilter === 'Close' || ownerFilter === 'mine'
-        ? 'desativada'
-        : iaStatusFilter;
+  // ✨ Efeito para atualizar o filtro de busca no estado global
+  useEffect(() => {
+    setFilters(prev => ({ ...prev, search: debouncedSearch }));
+  }, [debouncedSearch, setFilters]);
 
-    return filterChats(
-      chats,
-      debouncedSearch,
-      selectedConnectionId,
-      effectiveIaFilter,
-      statusFilter,
-      ownerFilter,
-      currentUserId,
-      selectedAttendantId
-    );
-  }, [
-    chats,
-    debouncedSearch,
-    selectedConnectionId,
-    iaStatusFilter,
-    statusFilter,
-    ownerFilter,
-    currentUserId,
-    selectedAttendantId,
-  ]);
+  // Dispara fetchChats sempre que os filtros mudam
+  useEffect(() => {
+    fetchChats(filters);
+  }, [filters, fetchChats]);
 
+  // scroll infinito
+  useEffect(() => {
+    const el = listRef.current;
+    if (!el) return;
+
+    const handleScroll = () => {
+      if (loading || !hasMore) return;
+      const { scrollTop, scrollHeight, clientHeight } = el;
+      if (scrollHeight - scrollTop - clientHeight < 350) {
+        fetchMoreChats(filters);
+      }
+    };
+
+    el.addEventListener('scroll', handleScroll);
+    return () => el.removeEventListener('scroll', handleScroll);
+  }, [loading, hasMore, fetchMoreChats, filters]);
+
+  // ✨ Funções de manipulação de filtros agora atualizam o estado global
   const toggleStatusFilter = useCallback(() => {
-    setStatusFilter((prev) => (prev === 'Open' ? 'Close' : 'Open'));
-  }, []);
+    setFilters(prev => ({ ...prev, status: prev.status === 'Open' ? 'Close' : 'Open' }));
+  }, [setFilters]);
 
   const toggleOwnerFilter = useCallback(() => {
-    setOwnerFilter((prev) => (prev === 'all' ? 'mine' : 'all'));
-  }, []);
+    setFilters(prev => ({ ...prev, owner: prev.owner === 'all' ? 'mine' : 'all' }));
+  }, [setFilters]);
+
+  const setIaStatusFilter = useCallback((status: 'ativa' | 'desativada') => {
+    setFilters(prev => ({ ...prev, iaStatus: prev.iaStatus === status ? 'todos' : status }));
+  }, [setFilters]);
 
   const handleConnectionSelect = useCallback((connectionId: string | null) => {
-    setSelectedConnectionId(connectionId);
-    setSelectedAttendantId(null); // reset se trocar conexão
-  }, [setSelectedConnectionId, setSelectedAttendantId]);
+    setFilters(prev => ({ ...prev, connection_id: connectionId, attendant_id: undefined }));
+  }, [setFilters]);
 
   const handleAttendantSelect = useCallback((attendantId: string | null) => {
-    setSelectedAttendantId(attendantId);
-    setSelectedConnectionId(null); // reset se trocar atendente
-  }, [setSelectedAttendantId, setSelectedConnectionId]);
+    setFilters(prev => ({ ...prev, attendant_id: attendantId, connection_id: undefined }));
+  }, [setFilters]);
 
   return (
     <motion.aside
@@ -174,23 +136,18 @@ function ChatSidebar({
         </button>
       </div>
 
-      {/* Filtro IA */}
+      {/* ✨ Filtros agora usam o objeto `filters` do Recoil */}
       <div className={styles.iaFilterContainer}>
-        {statusFilter === 'Open' && ownerFilter === 'all' ? (
+        {filters.status === 'Open' && filters.owner === 'all' ? (
           ['ativa', 'desativada'].map((status) => (
             <button
               key={status}
               type="button"
               data-label={status === 'ativa' ? 'Agente Ativado' : 'Agente Desativado'}
               data-label-short={status === 'ativa' ? 'IA Ligada' : 'IA Desligada'}
-              className={`${styles.ChatFilterButton} ${iaStatusFilter === status ? styles.active : ''}`}
-              onClick={() =>
-                setIaStatusFilter((prev) =>
-                  prev === status ? 'todos' : (status as 'ativa' | 'desativada')
-                )
-              }
-            >
-            </button>
+              className={`${styles.ChatFilterButton} ${filters.iaStatus === status ? styles.active : ''}`}
+              onClick={() => setIaStatusFilter(status as 'ativa' | 'desativada')}
+            />
           ))
         ) : (
           <button
@@ -199,45 +156,28 @@ function ChatSidebar({
             data-label-short={'IA Desligada'}
             className={`${styles.ChatFilterButton} ${styles.active}`}
             onClick={() => setIaStatusFilter('desativada')}
-          >
-          </button>
+          />
         )}
       </div>
 
       {/* Conexões */}
-      {!isMobileLayout && !selectedAttendantId && (
+      {!isMobileLayout && !filters.attendant_id && (
         (() => {
-          // Se for atendente → só mostra a conexão fixa dele
-          if (user?.tipo_de_usuario === 'atendente' && user?.connection_id) {
-           
-            const connectionNome = user?.connection_nome
-
-            return (
-              <div
-                className={`${styles.ChatFilterButton} ${styles.active}`}
-                data-label={connectionNome}
-              />
-            );
-          }
-
-          // Se for admin → pode abrir modal de conexões
-          const connectionLabel = selectedConnectionId
-            ? connections.find(c => c.id === selectedConnectionId)?.nome || 'Conexão selecionada'
+          // ... (lógica de exibição da conexão)
+          const connectionLabel = filters.connection_id
+            ? connections.find(c => c.id === filters.connection_id)?.nome || 'Conexão selecionada'
             : 'Escolha uma conexão';
 
           return (
             <button
-              className={`${styles.ChatFilterButton} ${selectedConnectionId ? styles.active : ''}`}
+              className={`${styles.ChatFilterButton} ${filters.connection_id ? styles.active : ''}`}
               data-label={connectionLabel}
               onClick={() => {
-                if (selectedConnectionId) {
-                  handleConnectionSelect(null);
-                } else {
-                  openConnectionsModal();
-                }
+                if (filters.connection_id) handleConnectionSelect(null);
+                else openConnectionsModal();
               }}
             >
-              {selectedConnectionId && <Icon nome="close" />}
+              {filters.connection_id && <Icon nome="close" />}
             </button>
           );
         })()
@@ -265,9 +205,9 @@ function ChatSidebar({
         </div>
       )}
 
-      {/* Lista chats */}
-      <div className={styles.chatList}>
-        {filteredChats.map((chat) => (
+      {/* Lista de chats */}
+      <div ref={listRef} className={styles.chatList}>
+        {chats.map((chat) => (
           <ChatListItem
             key={chat.id}
             unreadCount={chat.unread_count}
@@ -281,30 +221,30 @@ function ChatSidebar({
             onClick={() => setActiveChat(chat)}
           />
         ))}
+
+        {hasMore && loading && <div className={styles.loadMore}><span>Carregando mais conversas...</span></div>}
       </div>
 
-      {/* Toggles */}
       <div className={styles.statusToggleContainer}>
         <button
           className={styles.ChatFilterButton}
           onClick={toggleStatusFilter}
-          data-label={statusFilter === 'Open' ? 'Exibindo: Chats Abertos' : 'Exibindo: Chats Fechados'}
-          data-label-short={statusFilter === 'Open' ? 'Abertos' : 'Fechados'}
+          data-label={filters.status === 'Open' ? 'Exibindo: Chats Abertos' : 'Exibindo: Chats Fechados'}
+          data-label-short={filters.status === 'Open' ? 'Abertos' : 'Fechados'}
         />
-        
+        {!filters.attendant_id && (
           <button
             className={styles.ChatFilterButton}
             onClick={toggleOwnerFilter}
-            data-label={ownerFilter === 'all' ? 'Exibindo: Todos Chats' : 'Exibindo: Meus Chats'}
-            data-label-short={ownerFilter === 'all' ? 'Todos' : 'Meus'}
+            data-label={filters.owner === 'all' ? 'Exibindo: Todos Chats' : 'Exibindo: Meus Chats'}
+            data-label-short={filters.owner === 'all' ? 'Todos' : 'Meus'}
           />
-      
+        )}
       </div>
 
-      {/* Atendentes (desktop, admin) */}
-      {!isMobileLayout && !selectedConnectionId && user?.tipo_de_usuario === 'admin' && attendants.length > 0 && (
+      {/* Atendentes desktop/admin */}
+      {!isMobileLayout && !selectedConnectionId && user?.tipo_de_usuario === 'admin' && attendants.length > 0 && filters.owner === 'all' && (
         (() => {
-      
           const attendantLabel = selectedAttendantId
             ? attendants.find(a => a.user_id === selectedAttendantId)?.user.nome || 'Atendente selecionado'
             : 'Escolha um atendente';
@@ -314,26 +254,18 @@ function ChatSidebar({
               className={`${styles.ChatFilterButton} ${selectedAttendantId ? styles.active : ''}`}
               data-label={attendantLabel}
               onClick={() => {
-                if (selectedAttendantId) {
-                  handleAttendantSelect(null);
-                } else {
-                  openAttendantsModal();
-                }
+                if (selectedAttendantId) handleAttendantSelect(null);
+                else openAttendantsModal();
               }}
             >
-              {selectedAttendantId && (
-                <>
-                  <Icon nome="close" />
-                </>
-              )
-              }
+              {selectedAttendantId && <Icon nome="close" />}
             </button>
           );
         })()
       )}
 
-      {/* Atendentes tags (mobile, admin) */}
-      {isMobileLayout && user?.tipo_de_usuario === 'admin' && attendants.length > 0 && (
+      {/* Atendentes tags mobile/admin */}
+      {isMobileLayout && user?.tipo_de_usuario === 'admin' && attendants.length > 0 && filters.owner === 'all' && (
         <div className={styles.tagsContainer}>
           <Tag
             label="Todos"

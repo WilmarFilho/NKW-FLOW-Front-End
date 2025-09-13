@@ -5,6 +5,7 @@ import { ViewType, DropdownId } from '../../components/Resumo/DropdownPeriod/Dro
 
 export function useResumoPage() {
   const metrics = useRecoilValue(metricsState);
+  console.log(metrics)
 
   const [viewChatsNovos, setViewChatsNovos] = useState<ViewType>('weekly');
   const [viewChatsFechados, setViewChatsFechados] = useState<ViewType>('weekly');

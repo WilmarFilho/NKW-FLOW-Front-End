@@ -3,7 +3,7 @@ import type { Connection } from '../types/connection';
 import type { Attendant } from '../types/attendant';
 import type { Agent } from '../types/agent';
 import type { HelpChat } from '../types/helpChat';
-import { Chat } from '../types/chats';
+import { Chat, ChatFilters } from '../types/chats';
 import { Message } from '../types/message';
 import { User } from '../types/user';
 import { MetricsState } from '../types/metric';
@@ -95,4 +95,21 @@ export const authTokenState = atom<{ token: string; userId: string } | null>({
       });
     },
   ],
+});
+
+export const nextCursorState = atom<string | null>({
+  key: 'nextCursorState',
+  default: null,
+});
+
+export const chatFiltersState = atom<ChatFilters>({
+  key: 'chatFiltersState',
+  default: {
+    search: '',
+    connection_id: undefined,
+    attendant_id: undefined,
+    iaStatus: 'todos',
+    status: 'Open',
+    owner: 'all',
+  },
 });

@@ -47,3 +47,4 @@ export const useMetrics = () => {
 
   return { metrics, fetchMetrics };
 };
+
