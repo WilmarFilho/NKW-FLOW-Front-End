@@ -20,7 +20,7 @@ interface ChatListItemProps {
   onClick: () => void;
   unreadCount: number;
   mensagemData?: string | null;
-  fectchImageProfile: (chatId: string) => Promise<Chat | null>;
+  fetchImageProfile: (chatId: string) => Promise<Chat | null>;
 }
 
 const itemVariants = {
@@ -35,7 +35,7 @@ function ChatListItem({
   isActive,
   onClick,
   chatId,
-  fectchImageProfile,
+  fetchImageProfile,
   mensagemData,
   unreadCount,
 }: ChatListItemProps) {
@@ -46,7 +46,7 @@ function ChatListItem({
     if (!hasError) {
       setHasError(true);
 
-      const data = await fectchImageProfile(chatId);
+      const data = await fetchImageProfile(chatId);
       if (data?.foto_perfil) {
         setAvatarUrl(data.foto_perfil);
       } else {

@@ -2,10 +2,10 @@
 import { useState, useCallback } from 'react';
 
 interface UseDragAndDropFileProps {
-  onDropFile: (file: File) => void;
+  handleDropFile: (file: File) => void;
 }
 
-export const useDragAndDropFile = ({ onDropFile }: UseDragAndDropFileProps) => {
+export const useDragAndDropFile = ({ handleDropFile }: UseDragAndDropFileProps) => {
   const [isDragging, setIsDragging] = useState(false);
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
@@ -24,9 +24,9 @@ export const useDragAndDropFile = ({ onDropFile }: UseDragAndDropFileProps) => {
     const file = e.dataTransfer.files[0];
     console.log(file)
     if (file) {
-      onDropFile(file);
+      handleDropFile(file);
     }
-  }, [onDropFile]);
+  }, [handleDropFile]);
 
   return {
     isDragging,

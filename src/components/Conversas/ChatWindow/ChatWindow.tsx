@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useLayoutEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { NavLink } from 'react-router-dom';
 import { Chat } from '../../../types/chats';
@@ -29,24 +29,24 @@ import { useInfiniteScroll } from '../../../hooks/utils/useInfiniteScroll';
 interface ChatWindowProps {
   activeChat: Chat | null;
   messages: Message[];
-  onSendMessage: (text?: string, mimetype?: string, base64?: string) => void;
-  onToggleIA: () => void;
-  onDeleteChat: () => void;
-  onToggleChatStatus: () => void;
-  onRenameChat: (newName: string) => void;
-  onDropFile: (file: File) => void;
-  onSetReplyingTo: (msg: Message | undefined) => void;
+  handleSendMessage: (text?: string, mimetype?: string, base64?: string) => void;
+  handleToggleIA: () => void;
+  handleDeleteChat: () => void;
+  handleToggleChatStatus: () => void;
+  handleRenameChat: (newName: string) => void;
+  handleDropFile: (file: File) => void;
+  handleSetReplyingTo: (msg: Message | undefined) => void;
   replyingTo: Message | undefined;
   isExiting: boolean;
   setIsExiting: React.Dispatch<React.SetStateAction<boolean>>;
   handleCloseReply: () => void;
-  onDeleteMessage: (id: string) => void;
+  handleDeleteMessage: (id: string) => void;
   fetchMoreMessages: () => void;
   hasMore: boolean;
   isLoading: boolean;
   isMobileLayout: boolean;
   onBack?: () => void;
-  onReleaseChatOwner: () => void;
+  handleReleaseChatOwner: () => void;
   isDeleteDialogOpen: boolean;
   setIsDeleteDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   cancelRef: React.RefObject<HTMLButtonElement>;
@@ -61,19 +61,19 @@ export default function ChatWindow({
   isLoading,
   activeChat,
   messages,
-  onSendMessage,
-  onToggleIA,
-  onDeleteChat,
-  onToggleChatStatus,
-  onRenameChat,
-  onDropFile,
-  onSetReplyingTo,
+  handleSendMessage,
+  handleToggleIA,
+  handleDeleteChat,
+  handleToggleChatStatus,
+  handleRenameChat,
+  handleDropFile,
+  handleSetReplyingTo,
   replyingTo,
   isExiting,
-  onDeleteMessage,
+  handleDeleteMessage,
   handleCloseReply,
   isMobileLayout,
-  onReleaseChatOwner,
+  handleReleaseChatOwner,
   onBack,
 }: ChatWindowProps) {
   const [isDeleteMessageOpen, setIsDeleteMessageOpen] = useState(false);
@@ -88,7 +88,7 @@ export default function ChatWindow({
   const isOwner = !activeChat?.user_id || activeChat?.user_id === user?.id;
 
   const inputRef = useRef<HTMLInputElement>(null);
-  const { isDragging, handleDragOver, handleDragLeave, handleDrop } = useDragAndDropFile({ onDropFile });
+  const { isDragging, handleDragOver, handleDragLeave, handleDrop } = useDragAndDropFile({ handleDropFile });
   const chatId = activeChat?.id
 
   const { listRef, topSentinelRef } = useInfiniteScroll({
@@ -107,7 +107,7 @@ export default function ChatWindow({
     }
   }, [replyingTo]);
 
-  useEffect(() => onSetReplyingTo(undefined), [activeChat]);
+  useEffect(() => handleSetReplyingTo(undefined), [activeChat]);
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && replyingTo) handleCloseReply();
@@ -124,7 +124,7 @@ export default function ChatWindow({
   const confirmDeleteMessage = async () => {
     if (!messageToDelete) return;
     try {
-      await onDeleteMessage?.(messageToDelete);
+      await handleDeleteMessage?.(messageToDelete);
     } finally {
       setIsDeleteMessageOpen(false);
       setMessageToDelete(null);
@@ -137,7 +137,7 @@ export default function ChatWindow({
       return;
     }
     setShowError(false);
-    onRenameChat(newName.trim());
+    handleRenameChat(newName.trim());
     setRenameOpen(false);
   };
 
@@ -209,7 +209,7 @@ export default function ChatWindow({
             }
             : undefined
         }
-        onReply={() => onSetReplyingTo(msg)}
+        onReply={() => handleSetReplyingTo(msg)}
         onDelete={openDeleteMessageDialog}
         isMobileLayout={isMobileLayout}
       />
@@ -282,10 +282,10 @@ export default function ChatWindow({
 
                 {activeChat.user_id === user?.id && (
                   <>
-                    <button onClick={onReleaseChatOwner}>
+                    <button onClick={handleReleaseChatOwner}>
                       <Icon nome='unlock' /> Liberar Chat
                     </button>
-                    <button onClick={onToggleChatStatus}>
+                    <button onClick={handleToggleChatStatus}>
                       <Icon nome='close' />{' '}
                       {activeChat.status === 'Open' ? 'Fechar Chat' : 'Reabrir Chat'}
                     </button>
@@ -355,10 +355,10 @@ export default function ChatWindow({
 
                 {activeChat.user_id === user?.id && (
                   <>
-                    <button onClick={onReleaseChatOwner}>
+                    <button onClick={handleReleaseChatOwner}>
                       <Icon nome='unlock' /> Liberar Chat
                     </button>
-                    <button onClick={onToggleChatStatus}>
+                    <button onClick={handleToggleChatStatus}>
                       <Icon nome='close' />{' '}
                       {activeChat.status === 'Open' ? 'Fechar Chat' : 'Reabrir Chat'}
                     </button>
@@ -500,28 +500,28 @@ export default function ChatWindow({
                     <div className={styles.headerToggleIa}>
                       <Icon nome='agentespage' /> {activeChat.ia_ativa ? 'Ativado' : 'Desativado'}
                     </div>
-                    <ToggleSwitch variant='secondary' isOn={activeChat.ia_ativa} onToggle={onToggleIA} />
+                    <ToggleSwitch variant='secondary' isOn={activeChat.ia_ativa} onToggle={handleToggleIA} />
                   </div>
                 )}
 
                 <ChatInput
                   ref={inputRef}
                   placeholder='Digite uma mensagem'
-                  onSend={(text, mimetype, base64) => onSendMessage(text, mimetype, base64)}
+                  onSend={(text, mimetype, base64) => handleSendMessage(text, mimetype, base64)}
                 />
 
               </div>
             </>
           ) : (
             <div className={styles.chatClosedBanner}>
-              <button className={styles.buttonReOpen} onClick={onToggleChatStatus}>
+              <button className={styles.buttonReOpen} onClick={handleToggleChatStatus}>
                 Reabrir Chat
               </button>
             </div>
           )
         ) : (
           <div className={styles.chatClosedBanner}>
-            <button className={styles.buttonReOpen} onClick={onToggleChatStatus}>
+            <button className={styles.buttonReOpen} onClick={handleToggleChatStatus}>
               Chat em andamento por: {activeChat.user_nome}
             </button>
           </div>
@@ -546,7 +546,7 @@ export default function ChatWindow({
               <Button ref={cancelRef} onClick={() => setIsDeleteDialogOpen(false)}>
                 Cancelar
               </Button>
-              <Button className={styles.actionAlert} onClick={onDeleteChat} ml={3}>
+              <Button className={styles.actionAlert} onClick={handleDeleteChat} ml={3}>
                 Excluir
               </Button>
             </AlertDialogFooter>
@@ -584,22 +584,3 @@ export default function ChatWindow({
 
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

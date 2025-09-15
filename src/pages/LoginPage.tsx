@@ -4,8 +4,6 @@ import LoginForm from '../components/Login/LoginForm';
 import bgImage from '../components/Layout/assets/bgDark.webp';
 
 export default function LoginPage() {
-
-  console.log('LoginPage render')
   return (
     <div
       style={{

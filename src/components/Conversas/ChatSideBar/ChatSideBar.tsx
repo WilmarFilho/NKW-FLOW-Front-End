@@ -26,17 +26,13 @@ interface ChatSidebarProps {
   activeChat: Chat | null;
   setActiveChat: (chat: Chat) => void;
   setIsAddChatOpen: (value: boolean) => void;
-  fectchImageProfile: (chatId: string) => Promise<Chat | null>;
-  selectedConnectionId: string | null;
-  setSelectedConnectionId: (id: string | null) => void;
-  selectedAttendantId: string | null;
-  setSelectedAttendantId: (id: string | null) => void;
+  fetchImageProfile: (chatId: string) => Promise<Chat | null>;
   openConnectionsModal: () => void;
   openAttendantsModal: () => void;
   fetchChats: (filters?: ChatFilters) => Promise<Chat[] | undefined>;
   fetchMoreChats: (filters?: ChatFilters) => Promise<void>;
-  hasMore: boolean;
-  loading: boolean;
+  hasMoreChats: boolean;
+  isLoadingChats: boolean;
 }
 
 const containerVariants = {
@@ -49,7 +45,7 @@ function ChatSidebar({
   activeChat,
   setActiveChat,
   setIsAddChatOpen,
-  fectchImageProfile,
+  fetchImageProfile,
   isMobileLayout,
   connections,
   attendants,
@@ -57,8 +53,8 @@ function ChatSidebar({
   openAttendantsModal,
   fetchChats,
   fetchMoreChats,
-  hasMore,
-  loading,
+  hasMoreChats,
+  isLoadingChats,
 }: ChatSidebarProps) {
   // ✨ Substituir múltiplos useStates pelo atom global de filtros
   const [filters, setFilters] = useRecoilState(chatFiltersState);
@@ -86,7 +82,7 @@ function ChatSidebar({
     if (!el) return;
 
     const handleScroll = () => {
-      if (loading || !hasMore) return;
+      if (isLoadingChats || !hasMoreChats) return;
       const { scrollTop, scrollHeight, clientHeight } = el;
       if (scrollHeight - scrollTop - clientHeight < 350) {
         fetchMoreChats(filters);
@@ -95,7 +91,7 @@ function ChatSidebar({
 
     el.addEventListener('scroll', handleScroll);
     return () => el.removeEventListener('scroll', handleScroll);
-  }, [loading, hasMore, fetchMoreChats, filters]);
+  }, [isLoadingChats, hasMoreChats, fetchMoreChats, filters]);
 
   // ✨ Funções de manipulação de filtros agora atualizam o estado global
   const toggleStatusFilter = useCallback(() => {
@@ -215,12 +211,12 @@ function ChatSidebar({
             name={chat.contato_nome}
             message={chat.ultima_mensagem}
             avatar={chat.foto_perfil}
-            fectchImageProfile={fectchImageProfile}
+            fetchImageProfile={fetchImageProfile}
             onClick={() => setActiveChat(chat)}
           />
         ))}
 
-        {hasMore && loading && <div className={styles.loadMore}><span>Carregando mais conversas...</span></div>}
+        {hasMoreChats && isLoadingChats && <div className={styles.loadMore}><span>Carregando mais conversas...</span></div>}
       </div>
 
       <div className={styles.statusToggleContainer}>

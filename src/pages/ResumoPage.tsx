@@ -33,32 +33,25 @@ export default function ResumoPage() {
     widthConexoes,
   } = useResumoPage();
 
-  const getMobileData = useCallback(<T,>(data?: T[]) => {
-    if (!data) return [] as T[];
-    return isMobile ? data.slice(-3) : data;
-  }, [isMobile]);
-
-  const formatValue = useCallback((v?: number) => (v ?? 0).toString(), []);
+  const getMobileData = useCallback(<T,>(data?: T[]) => (isMobile && data ? data.slice(-3) : data ?? []), [isMobile]);
+  const formatValue = useCallback((v?: number) => `${v ?? 0}`, []);
   const formatPercent = useCallback((p?: number) => (p != null ? `${p.toFixed(1)}%` : '0%'), []);
 
-  const novosValue = useMemo(() => `+ ${formatValue(dataNovos?.total)}`, [dataNovos, formatValue]);
-  const novosPercent = useMemo(() => formatPercent(dataNovos?.percent), [dataNovos, formatPercent]);
-  const novosVariationText = useMemo(() => {
-    const diff = dataNovos?.diff ?? 0;
-    const sign = diff >= 0 ? '+' : '';
-    return `${sign}${diff} comparado ao período anterior`;
-  }, [dataNovos]);
+  const formatMetric = useCallback(
+    (data?: { total?: number; percent?: number; diff?: number }) => ({
+      value: `+ ${formatValue(data?.total)}`,
+      percent: formatPercent(data?.percent),
+      variationText: `${data?.diff && data.diff >= 0 ? '+' : ''}${data?.diff ?? 0} comparado ao período anterior`,
+    }),
+    [formatValue, formatPercent]
+  );
 
-  const fechadosValue = useMemo(() => `+ ${formatValue(dataFechados?.total)}`, [dataFechados, formatValue]);
-  const fechadosPercent = useMemo(() => formatPercent(dataFechados?.percent), [dataFechados, formatPercent]);
-  const fechadosVariationText = useMemo(() => {
-    const diff = dataFechados?.diff ?? 0;
-    const sign = diff >= 0 ? '+' : '';
-    return `${sign}${diff} comparado ao período anterior`;
-  }, [dataFechados]);
+  const novos = useMemo(() => formatMetric(dataNovos ?? undefined), [dataNovos, formatMetric]);
+  const fechados = useMemo(() => formatMetric(dataFechados ?? undefined), [dataFechados, formatMetric]);
 
   return (
     <div className={GlobalStyles.pageContainer}>
+      {/* Header */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -72,13 +65,14 @@ export default function ResumoPage() {
         <Button onClick={() => navigate('/ajuda')} label="Quero Ajuda" />
       </motion.div>
 
+      {/* Chats Novos / Fechados */}
       <motion.div className={GlobalStyles.pageRow}>
         <MetricCard
           title="Chats Novos"
           icon={<Icon nome="chaton" />}
-          value={novosValue}
-          variation={novosPercent}
-          variationText={novosVariationText}
+          value={novos.value}
+          variation={novos.percent}
+          variationText={novos.variationText}
           dropdown={
             <DropdownPeriod
               value={viewChatsNovos}
@@ -96,9 +90,9 @@ export default function ResumoPage() {
         <MetricCard
           title="Chats Fechados"
           icon={<Icon nome="chatoff" />}
-          value={fechadosValue}
-          variation={fechadosPercent}
-          variationText={fechadosVariationText}
+          value={fechados.value}
+          variation={fechados.percent}
+          variationText={fechados.variationText}
           dropdown={
             <DropdownPeriod
               value={viewChatsFechados}
@@ -114,6 +108,7 @@ export default function ResumoPage() {
         </MetricCard>
       </motion.div>
 
+      {/* Chats por Atendentes / Conexões / Convidados */}
       <motion.div className={GlobalStyles.pageRowVariant}>
         <MetricCard title="Chats por Atendentes" icon={<Icon nome="userlist" />} small isMobile={isMobile}>
           <div style={{ height: 200, overflowY: 'auto', paddingRight: 8, width: '100%', scrollbarWidth: 'none' }}>
