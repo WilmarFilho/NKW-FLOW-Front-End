@@ -1,27 +1,67 @@
 import { atom } from 'recoil';
+
 import type { Connection } from '../types/connection';
 import type { Attendant } from '../types/attendant';
 import type { Agent } from '../types/agent';
 import type { HelpChat } from '../types/helpChat';
-import { Chat, ChatFilters } from '../types/chats';
-import { Message } from '../types/message';
-import { User } from '../types/user';
-import { MetricsState } from '../types/metric';
+import type { Chat, ChatFilters } from '../types/chats';
+import type { Message } from '../types/message';
+import type { User } from '../types/user';
+import type { MetricsState } from '../types/metric';
 
-// Estado das conexões WhatsApp
+const KEYS = {
+  CONNECTIONS: 'connectionsState',
+  ACTIVE_CHAT: 'activeChatState',
+  METRICS: 'metricsState',
+  CHATS: 'chatsState',
+  MESSAGES: 'messagesState',
+  ADD_CONN_MODAL: 'addConnectionModalState',
+  ATTENDANTS: 'attendantsState',
+  AGENTS: 'agentsState',
+  HELP_CHAT: 'helpChat',
+  USER: 'userState',
+  AUTH_TOKEN: 'authTokenState',
+  NEXT_CURSOR: 'nextCursorState',
+  CHAT_FILTERS: 'chatFiltersState',
+};
+
+const localStorageEffect =
+  <T,>(key: string) =>
+  ({ onSet }: { onSet: (callback: (newValue: T) => void) => void }) => {
+    onSet((newValue) => {
+      try {
+        if (newValue === null || newValue === undefined) {
+          localStorage.removeItem(key);
+        } else {
+          localStorage.setItem(key, JSON.stringify(newValue));
+        }
+      } catch {
+        // silent
+      }
+    });
+  };
+
+const readLocalStorage = <T,>(key: string): T | null => {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? (JSON.parse(raw) as T) : null;
+  } catch {
+    return null;
+  }
+};
+
 export const connectionsState = atom<Connection[]>({
-  key: 'connectionsState',
+  key: KEYS.CONNECTIONS,
   default: [],
 });
 
-// Chat ativo (selecionado no painel de conversas)
 export const activeChatState = atom<Chat | null>({
-  key: 'activeChatState',
+  key: KEYS.ACTIVE_CHAT,
   default: null,
 });
 
 export const metricsState = atom<MetricsState>({
-  key: 'metricsState',
+  key: KEYS.METRICS,
   default: {
     novos: null,
     fechados: null,
@@ -30,80 +70,54 @@ export const metricsState = atom<MetricsState>({
   },
 });
 
-// Estado dos chats WhatsApp
 export const chatsState = atom<Chat[]>({
-  key: 'chatsState',
+  key: KEYS.CHATS,
   default: [],
 });
 
 export const messagesState = atom<Record<string, Message[]>>({
-  key: 'messagesState',
+  key: KEYS.MESSAGES,
   default: {},
 });
 
-// Controle do modal de adicionar nova conversa
-export const addConnectionModalState = atom<{
-  isOpen: boolean;
-  editMode?: boolean;
-}>({
-  key: 'addConnectionModalState',
+export const addConnectionModalState = atom<{ isOpen: boolean; editMode?: boolean }>({
+  key: KEYS.ADD_CONN_MODAL,
   default: { isOpen: false, editMode: false },
 });
 
-// Estado dos atendentes humanos
 export const attendantsState = atom<Attendant[]>({
-  key: 'attendantsState',
+  key: KEYS.ATTENDANTS,
   default: [],
 });
 
-// Estado dos agents IA
 export const agentsState = atom<Agent[]>({
-  key: 'agentsState',
+  key: KEYS.AGENTS,
   default: [],
 });
 
-// Chat da Pagina de Ajuda
 export const helpChatState = atom<HelpChat[]>({
-  key: 'helpChatState',
+  key: KEYS.HELP_CHAT,
   default: [],
 });
-
-// Autenticação
 
 export const userState = atom<User | null>({
-  key: 'userState',
+  key: KEYS.USER,
   default: null,
 });
 
 export const authTokenState = atom<{ token: string; userId: string } | null>({
-  key: 'authTokenState',
-  default: (() => {
-    const token = localStorage.getItem('token');
-    const userId = localStorage.getItem('userId');
-    return token && userId ? { token, userId } : null;
-  })(),
-  effects: [
-    ({ onSet }) => {
-      onSet((value) => {
-        if (value) {
-          localStorage.setItem('token', value.token);
-          localStorage.setItem('userId', value.userId);
-        } else {
-          localStorage.removeItem('token');
-          localStorage.removeItem('userId');
-        }
-      });
-    },
-  ],
+  key: KEYS.AUTH_TOKEN,
+  default: (() => readLocalStorage<{ token: string; userId: string }>(KEYS.AUTH_TOKEN))(),
+  effects_UNSTABLE: [localStorageEffect<{ token: string; userId: string } | null>(KEYS.AUTH_TOKEN)],
 });
 
 export const nextCursorState = atom<string | null>({
-  key: 'nextCursorState',
+  key: KEYS.NEXT_CURSOR,
   default: null,
 });
 
 export const chatFiltersState = atom<ChatFilters>({
-  key: 'chatFiltersState',
+  key: KEYS.CHAT_FILTERS,
   default: {
     search: '',
     connection_id: undefined,
@@ -111,5 +125,5 @@ export const chatFiltersState = atom<ChatFilters>({
     iaStatus: 'todos',
     status: 'Open',
     owner: 'all',
-  },
+  } as ChatFilters,
 });

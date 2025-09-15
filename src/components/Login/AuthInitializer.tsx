@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useUser } from '../../hooks/auth/useUser';
 import LoadingScreen from '../Layout/LoadingScreen';
 import { useRecoilValue } from 'recoil';
@@ -9,28 +9,46 @@ interface AuthInitializerProps {
 }
 export const AuthInitializer = ({ children }: AuthInitializerProps) => {
   const { fetchUser } = useUser();
-  const [isInitializing, setIsInitializing] = useState(true);
-  const [progressMessage, setProgressMessage] = useState('Iniciando...');
   const token = useRecoilValue(authTokenState);
 
-  useEffect(() => {
-    if (!token || !isInitializing) return;
+  const [isInitializing, setIsInitializing] = useState(true);
+  const [progressMessage, setProgressMessage] = useState('Iniciando...');
 
-    const initializeAuth = async () => {
+  // evita reentradas/loops
+  const initRef = useRef(false);
+
+  useEffect(() => {
+    let mounted = true;
+    if (!token) {
+      initRef.current = false;
+      if (mounted) setIsInitializing(false);
+      return;
+    }
+
+    if (initRef.current) return;
+    initRef.current = true;
+    setIsInitializing(true);
+
+    (async () => {
       try {
         await fetchUser({
           force: true,
-          onProgress: (msg) => setProgressMessage(msg),
+          onProgress: (msg) => {
+            if (mounted) setProgressMessage(msg);
+          },
         });
       } catch (error) {
         console.error('Falha ao inicializar a sessão do usuário', error);
       } finally {
-        setIsInitializing(false);
+        if (mounted) setIsInitializing(false);
       }
+    })();
+
+    return () => {
+      mounted = false;
     };
 
-    initializeAuth();
-  }, [token, isInitializing]);
+  }, [token]);
 
   if (isInitializing) {
     return <LoadingScreen message={progressMessage} />;
@@ -38,3 +56,4 @@ export const AuthInitializer = ({ children }: AuthInitializerProps) => {
 
   return <>{children}</>;
 };
+export default AuthInitializer;

@@ -131,7 +131,6 @@ body.modo-dark {
 /*=============================================*/
 
 * {
-  font-family: var(--font-secundaria);
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -314,18 +313,59 @@ a {
 
 /* Opcional: Melhorias na acessibilidade do foco */
 :focus {
-  outline: 2px solid transparent;
-  /* Remove o outline padrão */
-  /* Considere adicionar um outline customizado e visível para acessibilidade */
-  /* Ex: outline: 2px solid blue; */
+  outline: none;
+}
+:focus-visible {
+  outline: 2px solid rgba(66, 153, 225, 0.9);
+  outline-offset: 2px;
+  border-radius: 6px;
 }
 
-/* Opcional: Garante que imagens e mídias sejam responsivas por padrão */
-img,
-picture,
-video,
-canvas,
-svg {
-  display: block;
-  max-width: 100%;
+/* Reduz animações para usuários que preferem menos movimento */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
+
+/* Variáveis semânticas adicionais (úteis para components e temas) */
+:root {
+  --surface: var(--color-modal, #fff);
+  --surface-contrast: rgba(0,0,0,0.08);
+  --text-muted: #9a9a9a;
+  --success: #52f2b7;
+  --danger: #ff5555;
+  --info: #1b214a;
+  --shadow-default: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+/* Prefer theme follow OS if body class not set */
+@media (prefers-color-scheme: dark) {
+  body:not(.modo-light):not(.modo-dark) {
+    /* aplica tema dark por padrão quando não houver classe explícita */
+    --color-primary: #1b214a90;
+    --color-text: #fafafa;
+  }
+}
+
+/* Scrollbar theming (opt-in, cross-browser consideration) */
+:root {
+  --scrollbar-bg: rgba(0,0,0,0.08);
+  --scrollbar-thumb: rgba(0,0,0,0.18);
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-track {
+  background: var(--scrollbar-bg);
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 10px;
+}
+
+/* Keep other resets but avoid overly aggressive removals that harm accessibility */

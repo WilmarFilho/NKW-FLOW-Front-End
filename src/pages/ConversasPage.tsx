@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useSetRecoilState } from 'recoil';
 import Modal from '../components/Gerais/Modal/Modal';
 import ChatSidebar from '../components/Conversas/ChatSideBar/ChatSideBar';
 import ChatWindow from '../components/Conversas/ChatWindow/ChatWindow';
@@ -7,21 +8,24 @@ import { useConversasPage } from '../hooks/pages/useConversasPage';
 import { DropdownMenuProvider } from '../components/Gerais/Dropdown/DropdownMenuContext';
 import GlobalStyles from '../global.module.css';
 import SearchBar from '../components/Conversas/SearchBar/Searchbar';
+import { chatFiltersState } from '../state/atom';
 
 export default function ConversasPage() {
-
   // Hook da Página
   const state = useConversasPage();
 
-  // Estado para tamanho de tele
+  // Estado para tamanho de tela
   const [isMobileLayout, setIsMobileLayout] = useState(false);
 
-  // Filtro de input
+  // Filtro de input (usado nos modais)
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Modais de seleção para filtro
+  // Modais de seleção para filtro (UI local)
   const [isConnectionsModalOpen, setIsConnectionsModalOpen] = useState(false);
   const [isAttendantsModalOpen, setIsAttendantsModalOpen] = useState(false);
+
+  // Recoil setter para filtros centralizados
+  const setFilters = useSetRecoilState(chatFiltersState);
 
   // Detecta tamanho de tela
   useEffect(() => {
@@ -30,8 +34,6 @@ export default function ConversasPage() {
     const setFlags = () => {
       setIsMobileLayout(queryMobile.matches);
     };
-
-
 
     setFlags();
 
@@ -85,7 +87,6 @@ export default function ConversasPage() {
               setIsDeleteDialogOpen={state.setIsDeleteDialogOpen}
               cancelRef={state.cancelRef}
             />
-
           </DropdownMenuProvider>
         ) : (
           <ChatSidebar
@@ -104,12 +105,11 @@ export default function ConversasPage() {
             setSelectedAttendantId={state.setSelectedAttendantId}
             openConnectionsModal={() => setIsConnectionsModalOpen(true)}
             openAttendantsModal={() => setIsAttendantsModalOpen(true)}
-            // 🔹 Novos props
+            // Novos props
             fetchMoreChats={state.fetchMoreChats}
             hasMore={state.hasMoreChats}
             loading={state.isLoadingChats}
           />
-
         )
       ) : (
         <>
@@ -123,16 +123,17 @@ export default function ConversasPage() {
             setIsAddChatOpen={state.openNewChatModal}
             fectchImageProfile={state.fetchImageProfile}
             connections={state.connections}
+            // manter compatibilidade enquanto refatora ChatSidebar
             selectedConnectionId={state.filterConnectionId}
             setSelectedConnectionId={state.setFilterConnectionId}
             selectedAttendantId={state.selectedAttendantId}
             setSelectedAttendantId={state.setSelectedAttendantId}
             openConnectionsModal={() => setIsConnectionsModalOpen(true)}
             openAttendantsModal={() => setIsAttendantsModalOpen(true)}
-            // 🔹 Novos props
-            fetchMoreChats={state.fetchMoreChats} //Property 'fetchMoreChats' does not exist on type '{ chats: Chat[]; isDeleteDialogOpen: boolean; setIsDeleteDialogOpen: Dispatch<SetStateAction<boolean>>; cancelRef: RefObject<HTMLButtonElement>; ... 36 more ...; setFilterConnectionId: Dispatch<...>; }
+            // Novos props
+            fetchMoreChats={state.fetchMoreChats}
             hasMore={state.hasMoreChats}
-            loading={state.isLoadingChats} //Property 'loading' does not exist on type '{ chats: Chat[]; isDeleteDialogOpen: boolean; setIsDeleteDialogOpen: Dispatch<SetStateAction<boolean>>; cancelRef: RefObject<HTMLButtonElement>; ... 36 more ...; setFilterConnectionId: Dispatch<...>; }'. Did you mean 'isLoading'?
+            loading={state.isLoadingChats}
           />
 
           <DropdownMenuProvider>
@@ -204,8 +205,12 @@ export default function ConversasPage() {
                   className={GlobalStyles.filterItens}
                   key={conn.id}
                   onClick={() => {
-                    state.setFilterConnectionId(conn.id);
-                    state.setSelectedAttendantId(null);
+                    // atualiza filtro centralizado no Recoil
+                    setFilters(prev => ({
+                      ...prev,
+                      connection_id: conn.id,
+                      attendant_id: undefined, // zera atendente quando escolhe conexão
+                    }));
                     setIsConnectionsModalOpen(false);
                   }}
                 >
@@ -232,8 +237,12 @@ export default function ConversasPage() {
                   className={GlobalStyles.filterItens}
                   key={att.id}
                   onClick={() => {
-                    state.setSelectedAttendantId(att.user_id);
-                    state.setFilterConnectionId(null);
+                    // atualiza filtro centralizado no Recoil
+                    setFilters(prev => ({
+                      ...prev,
+                      attendant_id: att.user_id,
+                      connection_id: undefined, // zera conexão quando escolhe atendente
+                    }));
                     setIsAttendantsModalOpen(false);
                   }}
                 >
@@ -246,9 +255,3 @@ export default function ConversasPage() {
     </div>
   );
 }
-
-
-
-
-
-

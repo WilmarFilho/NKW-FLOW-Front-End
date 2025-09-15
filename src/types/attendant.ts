@@ -6,7 +6,6 @@ export interface Attendant {
   user_admin_id: string;
   connection_id: string;
   user_id: string;
-  // Objetos Aninhados
   user_admin: User;
   connection: Connection;
   user: User;
@@ -20,5 +19,5 @@ export interface AttendantFormData {
   email: string;
   status: boolean;
   numero: string;
-  connection_id: string ; // <--- adicionado
+  connection_id: string;
 }

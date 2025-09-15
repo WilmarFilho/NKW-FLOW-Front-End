@@ -1,25 +1,22 @@
+import { useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useMediaQuery } from 'react-responsive';
+
 import Button from '../components/Gerais/Buttons/Button';
 import MetricCard from '../components/Resumo/MetricCard/MetricCard';
 import DropdownPeriod from '../components/Resumo/DropdownPeriod/DropdownPeriod';
 import BarMetricChart from '../components/Resumo/BarMetricChart/BarMetricChart';
 import LineMetricChart from '../components/Resumo/LineMetricChart/LineMetricChart';
 import GaugeMetricChart from '../components/Resumo/GaugeMetricChart/GaugeMetricChart';
-import GlobalStyles from '../global.module.css';
 import Icon from '../components/Gerais/Icons/Icons';
+
+import GlobalStyles from '../global.module.css';
 import { useResumoPage } from '../hooks/pages/useResumoPage';
-import { useMediaQuery } from 'react-responsive';
 
 export default function ResumoPage() {
   const navigate = useNavigate();
-
   const isMobile = useMediaQuery({ maxWidth: 429.98 });
-
-  function getMobileData<T>(data: T[] | undefined): T[] {
-    if (!data) return [];
-    return isMobile ? data.slice(-3) : data;
-  }
 
   const {
     viewChatsNovos,
@@ -33,11 +30,32 @@ export default function ResumoPage() {
     dataConexoes,
     dataAtendentes,
     heightAtedentes,
-    widthConexoes
+    widthConexoes,
   } = useResumoPage();
 
+  const getMobileData = useCallback(<T,>(data?: T[]) => {
+    if (!data) return [] as T[];
+    return isMobile ? data.slice(-3) : data;
+  }, [isMobile]);
 
-  
+  const formatValue = useCallback((v?: number) => (v ?? 0).toString(), []);
+  const formatPercent = useCallback((p?: number) => (p != null ? `${p.toFixed(1)}%` : '0%'), []);
+
+  const novosValue = useMemo(() => `+ ${formatValue(dataNovos?.total)}`, [dataNovos, formatValue]);
+  const novosPercent = useMemo(() => formatPercent(dataNovos?.percent), [dataNovos, formatPercent]);
+  const novosVariationText = useMemo(() => {
+    const diff = dataNovos?.diff ?? 0;
+    const sign = diff >= 0 ? '+' : '';
+    return `${sign}${diff} comparado ao período anterior`;
+  }, [dataNovos]);
+
+  const fechadosValue = useMemo(() => `+ ${formatValue(dataFechados?.total)}`, [dataFechados, formatValue]);
+  const fechadosPercent = useMemo(() => formatPercent(dataFechados?.percent), [dataFechados, formatPercent]);
+  const fechadosVariationText = useMemo(() => {
+    const diff = dataFechados?.diff ?? 0;
+    const sign = diff >= 0 ? '+' : '';
+    return `${sign}${diff} comparado ao período anterior`;
+  }, [dataFechados]);
 
   return (
     <div className={GlobalStyles.pageContainer}>
@@ -57,10 +75,10 @@ export default function ResumoPage() {
       <motion.div className={GlobalStyles.pageRow}>
         <MetricCard
           title="Chats Novos"
-          icon={<Icon nome='chaton' />}
-          value={`+ ${dataNovos?.total ?? 0}`}
-          variation={`${dataNovos?.percent.toFixed(1) ?? 0}%`}
-          variationText={`${(dataNovos?.diff ?? 0) >= 0 ? '+' : ''}${dataNovos?.diff ?? 0} comparado ao período anterior`}
+          icon={<Icon nome="chaton" />}
+          value={novosValue}
+          variation={novosPercent}
+          variationText={novosVariationText}
           dropdown={
             <DropdownPeriod
               value={viewChatsNovos}
@@ -70,21 +88,17 @@ export default function ResumoPage() {
               setOpenId={setOpenDropdown}
             />
           }
-          isMobile={isMobile} // 👈 passa para o MetricCard
+          isMobile={isMobile}
         >
-          <BarMetricChart
-            data={getMobileData(dataNovos?.labels)}
-            dataKey="chats"
-           
-          />
+          <BarMetricChart data={getMobileData(dataNovos?.labels)} dataKey="chats" />
         </MetricCard>
 
         <MetricCard
           title="Chats Fechados"
-          icon={<Icon nome='chatoff' />}
-          value={`+ ${dataFechados?.total ?? 0}`}
-          variation={`${dataFechados?.percent.toFixed(1) ?? 0}%`}
-          variationText={`${(dataFechados?.diff ?? 0) >= 0 ? '+' : ''}${dataFechados?.diff ?? 0} comparado ao período anterior`}
+          icon={<Icon nome="chatoff" />}
+          value={fechadosValue}
+          variation={fechadosPercent}
+          variationText={fechadosVariationText}
           dropdown={
             <DropdownPeriod
               value={viewChatsFechados}
@@ -96,21 +110,12 @@ export default function ResumoPage() {
           }
           isMobile={isMobile}
         >
-          <BarMetricChart
-            data={getMobileData(dataFechados?.labels)}
-            dataKey="chats"
-           
-          />
+          <BarMetricChart data={getMobileData(dataFechados?.labels)} dataKey="chats" />
         </MetricCard>
       </motion.div>
 
       <motion.div className={GlobalStyles.pageRowVariant}>
-        <MetricCard
-          title="Chats por Atendentes"
-          icon={<Icon nome='userlist' />}
-          small
-          isMobile={isMobile}
-        >
+        <MetricCard title="Chats por Atendentes" icon={<Icon nome="userlist" />} small isMobile={isMobile}>
           <div style={{ height: 200, overflowY: 'auto', paddingRight: 8, width: '100%', scrollbarWidth: 'none' }}>
             <BarMetricChart
               data={getMobileData(dataAtendentes)}
@@ -118,40 +123,18 @@ export default function ResumoPage() {
               vertical
               barSize={36}
               height={heightAtedentes}
-             
             />
           </div>
         </MetricCard>
 
-        <MetricCard
-          title="Chats por Conexões"
-          icon={<Icon nome='connect' />}
-          small
-          isMobile={isMobile}
-        >
+        <MetricCard title="Chats por Conexões" icon={<Icon nome="connect" />} small isMobile={isMobile}>
           <div className={GlobalStyles.chartContainer}>
-            <LineMetricChart
-              data={getMobileData(dataConexoes)}
-              dataKey="value"
-              width={widthConexoes}
-             
-            />
+            <LineMetricChart data={getMobileData(dataConexoes)} dataKey="value" width={widthConexoes} />
           </div>
         </MetricCard>
 
-        <MetricCard
-          title="Convidados na Semana"
-          icon={<Icon nome='money' />}
-          value="+0"
-          small
-          isMobile={isMobile}
-        >
-          <GaugeMetricChart
-            filled={0}
-            empty={100}
-            valueText="+ 0"
-            labelText="Para ganhar recompensas"
-          />
+        <MetricCard title="Convidados na Semana" icon={<Icon nome="money" />} value="+0" small isMobile={isMobile}>
+          <GaugeMetricChart filled={0} empty={100} valueText="+ 0" labelText="Para ganhar recompensas" />
         </MetricCard>
       </motion.div>
     </div>

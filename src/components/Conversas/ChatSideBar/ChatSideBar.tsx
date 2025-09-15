@@ -53,10 +53,6 @@ function ChatSidebar({
   isMobileLayout,
   connections,
   attendants,
-  selectedConnectionId,
-  setSelectedConnectionId,
-  selectedAttendantId,
-  setSelectedAttendantId,
   openConnectionsModal,
   openAttendantsModal,
   fetchChats,
@@ -119,6 +115,7 @@ function ChatSidebar({
   }, [setFilters]);
 
   const handleAttendantSelect = useCallback((attendantId: string | null) => {
+    console.log('Selecionou atendente:', attendantId);
     setFilters(prev => ({ ...prev, attendant_id: attendantId, connection_id: undefined }));
   }, [setFilters]);
 
@@ -188,22 +185,23 @@ function ChatSidebar({
         <div className={styles.tagsContainer}>
           <Tag
             label="Todas"
-            active={selectedConnectionId === null && selectedAttendantId === null}
+            active={!filters.connection_id && !filters.attendant_id}
             onClick={() => {
-              setSelectedConnectionId(null);
-              setSelectedAttendantId(null);
+              handleConnectionSelect(null);
+              handleAttendantSelect(null);
             }}
           />
           {connections.map((connection) => (
             <Tag
               key={connection.id}
               label={connection.nome}
-              active={selectedConnectionId === connection.id}
+              active={filters.connection_id === connection.id}
               onClick={() => handleConnectionSelect(connection.id)}
             />
           ))}
         </div>
       )}
+
 
       {/* Lista de chats */}
       <div ref={listRef} className={styles.chatList}>
@@ -243,48 +241,60 @@ function ChatSidebar({
       </div>
 
       {/* Atendentes desktop/admin */}
-      {!isMobileLayout && !selectedConnectionId && user?.tipo_de_usuario === 'admin' && attendants.length > 0 && filters.owner === 'all' && (
-        (() => {
-          const attendantLabel = selectedAttendantId
-            ? attendants.find(a => a.user_id === selectedAttendantId)?.user.nome || 'Atendente selecionado'
-            : 'Escolha um atendente';
+      {!isMobileLayout &&
+        !filters.connection_id &&
+        user?.tipo_de_usuario === 'admin' &&
+        attendants.length > 0 &&
+        filters.owner === 'all' && (
+          (() => {
+            const attendantLabel = filters.attendant_id
+              ? attendants.find(a => a.user_id === filters.attendant_id)?.user.nome || 'Atendente selecionado'
+              : 'Escolha um atendente';
 
-          return (
-            <button
-              className={`${styles.ChatFilterButton} ${selectedAttendantId ? styles.active : ''}`}
-              data-label={attendantLabel}
-              onClick={() => {
-                if (selectedAttendantId) handleAttendantSelect(null);
-                else openAttendantsModal();
-              }}
-            >
-              {selectedAttendantId && <Icon nome="close" />}
-            </button>
-          );
-        })()
-      )}
+            return (
+              <button
+                className={`${styles.ChatFilterButton} ${filters.attendant_id ? styles.active : ''}`}
+                data-label={attendantLabel}
+                onClick={() => {
+                  if (filters.attendant_id) {
+                    handleAttendantSelect(null);
+                  } else {
+                    openAttendantsModal();
+                  }
+                }}
+              >
+                {filters.attendant_id && <Icon nome="close" />}
+              </button>
+            );
+          })()
+        )}
+
 
       {/* Atendentes tags mobile/admin */}
-      {isMobileLayout && user?.tipo_de_usuario === 'admin' && attendants.length > 0 && filters.owner === 'all' && (
-        <div className={styles.tagsContainer}>
-          <Tag
-            label="Todos"
-            active={selectedAttendantId === null && selectedConnectionId === null}
-            onClick={() => {
-              setSelectedAttendantId(null);
-              setSelectedConnectionId(null);
-            }}
-          />
-          {attendants.map((att) => (
+      {isMobileLayout &&
+        user?.tipo_de_usuario === 'admin' &&
+        attendants.length > 0 &&
+        filters.owner === 'all' && (
+          <div className={styles.tagsContainer}>
             <Tag
-              key={att.id}
-              label={att.user.nome}
-              active={selectedAttendantId === att.id}
-              onClick={() => handleAttendantSelect(att.id)}
+              label="Todos"
+              active={!filters.attendant_id && !filters.connection_id}
+              onClick={() => {
+                handleAttendantSelect(null);
+                handleConnectionSelect(null);
+              }}
             />
-          ))}
-        </div>
-      )}
+            {attendants.map((att) => (
+              <Tag
+                key={att.id}
+                label={att.user.nome}
+                active={filters.attendant_id === att.user_id}
+                onClick={() => handleAttendantSelect(att.user_id)}
+              />
+            ))}
+          </div>
+        )}
+
     </motion.aside>
   );
 }
