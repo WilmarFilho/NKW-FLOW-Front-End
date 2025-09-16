@@ -1,4 +1,3 @@
-// useMetrics.ts
 import { useCallback } from 'react';
 import { useRecoilState } from 'recoil';
 import { metricsState, userState } from '../../state/atom';
@@ -19,7 +18,7 @@ export const useMetrics = () => {
     if (currentUser.tipo_de_usuario !== 'admin') return;
 
     try {
-      const params = { user_admin_id: currentUser.id, period: 'weekly' };
+      const params = { period: 'weekly' };
 
       const [novos, fechados, atendentes, conexoes] = await Promise.all([
         get<ChatsMetricResponse>('/metrics/chats/novos', { params }),
@@ -47,4 +46,3 @@ export const useMetrics = () => {
 
   return { metrics, fetchMetrics };
 };
-

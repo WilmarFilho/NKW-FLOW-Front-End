@@ -1,15 +1,17 @@
 import { useState, useEffect, useRef } from 'react';
 import { useUser } from '../../hooks/auth/useUser';
 import LoadingScreen from '../Layout/LoadingScreen';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { authTokenState } from '../../state/atom';
 
 interface AuthInitializerProps {
   children: React.ReactNode;
 }
 export const AuthInitializer = ({ children }: AuthInitializerProps) => {
+
   const { fetchUser } = useUser();
-  const token = useRecoilValue(authTokenState);
+  const [token, setToken] = useRecoilState(authTokenState);
+
 
   const [isInitializing, setIsInitializing] = useState(true);
   const [progressMessage, setProgressMessage] = useState('Iniciando...');
@@ -39,7 +41,8 @@ export const AuthInitializer = ({ children }: AuthInitializerProps) => {
         });
       } catch (error) {
         console.error('Falha ao inicializar a sessão do usuário', error);
-        
+        localStorage.removeItem('authTokenState');
+        setToken(null);
       } finally {
         if (mounted) setIsInitializing(false);
       }

@@ -39,6 +39,8 @@ import PauseIcon from  './assets/pause.svg'
 import MicAudioIcon from './assets/micaudio.svg'
 import ArrowDownload from './assets/arrowdownload.svg'
 import DocumentIcon from './assets/document.svg'
+import Eye from './assets/eye.svg'
+import EyeOff from './assets/eye-slash.svg'
 // Assets Sidebar 
 import ConversasIcon from './assets/chat.svg';
 import AtendenteIcon from './assets/atendentes.svg';
@@ -50,6 +52,8 @@ import DashIcon from './assets/dash.svg'
 import GiftIcon from './assets/gift.svg'
 
 const iconMap = {
+  eye: Eye,
+  eyeoff: EyeOff,
   document: DocumentIcon,
   arrowdownload: ArrowDownload,
   micaudio: MicAudioIcon,

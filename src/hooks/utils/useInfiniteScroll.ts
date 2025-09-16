@@ -1,4 +1,3 @@
-import { Chat } from '@/types/chats';
 import { Message } from '../../types/message';
 import { useEffect, useRef, useState } from 'react';
 
@@ -7,7 +6,7 @@ interface UseInfiniteScrollProps {
   hasMore: boolean;
   isLoading: boolean;
   messages: Message[];
-  chatId?: string | null; // novo
+  chatId?: string | null; 
 }
 
 export function useInfiniteScroll({

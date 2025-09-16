@@ -33,9 +33,7 @@ export const useConnectionsActions = () => {
     setIsLoading(true);
     try {
       const qrcode = await post<string>('/connections', {
-        user_id: user.id,
         nome: connection.nome,
-        status: false,
         agente_id: connection.agente_id,
       });
 

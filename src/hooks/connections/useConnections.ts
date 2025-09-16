@@ -21,21 +21,17 @@ export const useConnections = () => {
   const { get } = useApi();
 
   const fetchConnections = useCallback(async (userParam?: User) => {
-
     const currentUser = userParam ?? user;
     if (!currentUser) return;
-
     if (currentUser.tipo_de_usuario !== 'admin') return;
 
-    const fetchedData = await get<Connection[]>('/connections', {
-      params: { user_id: currentUser.id }
-    });
+    const fetchedData = await get<Connection[]>('/connections');
 
     if (fetchedData) {
       setConnections(fetchedData);
     }
+  }, [get, setConnections, user]);
 
-  }, [get, setConnections]);
 
   return { fetchConnections };
 };

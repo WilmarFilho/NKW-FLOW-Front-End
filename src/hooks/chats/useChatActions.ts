@@ -96,6 +96,3 @@ export default function useChatActions() {
 
   return { deleteChat, renameChat, reOpenChat, toggleIA, claimChatOwner, releaseChatOwner };
 }
-
-
-

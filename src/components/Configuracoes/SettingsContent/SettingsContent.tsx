@@ -2,6 +2,7 @@
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
+import Icon from '../../../components/Gerais/Icons/Icons';
 
 // Hooks
 import { userState } from '../../../state/atom';
@@ -28,6 +29,8 @@ export default function SettingsContent({ tabIndex }: Props) {
   const { updateUser, uploadProfileImage } = useUserAction();
 
   const [isDesktop, setIsDesktop] = useState(true);
+
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     const checkScreen = () => setIsDesktop(window.innerWidth >= 992);
@@ -92,7 +95,7 @@ export default function SettingsContent({ tabIndex }: Props) {
 
   // open edit modal and populate form
   const openEditModal = () => {
-    if (!user) return;
+    if (!user || user.tipo_de_usuario !== 'admin') return;
     setEditForm({
       nome: user.nome,
       email: user.email,
@@ -183,6 +186,9 @@ export default function SettingsContent({ tabIndex }: Props) {
   const renderActiveTabContent = () => {
     if (!user) return <p>Carregando configurações...</p>;
 
+    // Atendente não pode editar informações, apenas preferências
+    const isAdmin = user.tipo_de_usuario === 'admin';
+
     switch (tabIndex) {
       case 0: // Aba de Perfil
         return (
@@ -194,23 +200,25 @@ export default function SettingsContent({ tabIndex }: Props) {
               className={styles.settingsContentAccount}
             >
               <div className={styles.mainHeaderAccountWrapper}>
-                <div className={styles.profileImageWrapper}>
-                  <img
-                    src={user.foto_perfil || '/default-avatar.png'}
-                    alt='Foto de Perfil'
-                    className={styles.profileImage}
-                    onClick={() => document.getElementById('profileImageInput')?.click()}
-                    style={{ cursor: 'pointer' }}
-                  />
-                  <span className={styles.overlayText}>Editar</span>
-                  <input
-                    type='file'
-                    id='profileImageInput'
-                    accept='image/*'
-                    style={{ display: 'none' }}
-                    onChange={handleImageUpload}
-                  />
-                </div>
+                {isAdmin && (
+                  <div className={styles.profileImageWrapper}>
+                    <img
+                      src={user.foto_perfil || '/default-avatar.png'}
+                      alt='Foto de Perfil'
+                      className={styles.profileImage}
+                      onClick={() => document.getElementById('profileImageInput')?.click()}
+                      style={{ cursor: 'pointer' }}
+                    />
+                    <span className={styles.overlayText}>Editar</span>
+                    <input
+                      type='file'
+                      id='profileImageInput'
+                      accept='image/*'
+                      style={{ display: 'none' }}
+                      onChange={handleImageUpload}
+                    />
+                  </div>
+                )}
                 <div className={styles.userInfoMain}>
                   <h1>Nome de usuário</h1>
                   <h2>{user.nome}</h2>
@@ -253,13 +261,105 @@ export default function SettingsContent({ tabIndex }: Props) {
                   </div>
 
                 </div>
-                <button className={styles.editButton} onClick={openEditModal}>Editar Informações</button>
+                {isAdmin && (
+                  <button className={styles.editButton} onClick={openEditModal}>Editar Informações</button>
+                )}
               </div>
             </motion.div>
           </>
         );
 
       case 1: // Aba de Configurações
+        return (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4, duration: 0.4, ease: 'easeOut' }}
+            className={styles.settingsContent}
+          >
+            {isAdmin && (
+              <>
+                {renderSwitchSetting(
+                  'Notificação para atendente',
+                  'Envia um alerta ao atendente quando é necessário entrar em uma conversa.',
+                  notifyAttendant,
+                  () => {
+                    const newValue = !notifyAttendant;
+                    setNotifyAttendant(newValue);
+                    handleSettingsUpdate({ modo_notificacao_atendente: newValue });
+                  }
+                )}
+
+                {renderSwitchSetting(
+                  'Notificação ao entrar na conversa',
+                  'Informa você quando entrar em uma conversa ativa.',
+                  notifyOnEnterConversation,
+                  () => {
+                    const newValue = !notifyOnEnterConversation;
+                    setNotifyOnEnterConversation(newValue);
+                    handleSettingsUpdate({ notificacao_para_entrar_conversa: newValue });
+                  }
+                )}
+
+                {renderSwitchSetting(
+                  'Notificação de novo chat',
+                  'Você será notificado sempre que um novo chat for iniciado.',
+                  notifyOnNewChat,
+                  () => {
+                    const newValue = !notifyOnNewChat;
+                    setNotifyOnNewChat(newValue);
+                    handleSettingsUpdate({ notificacao_novo_chat: newValue });
+                  }
+                )}
+
+                {renderSwitchSetting(
+                  'Mostrar nome nas mensagens',
+                  'Exibe seu nome junto das mensagens enviadas no chat.',
+                  showNameInMessages,
+                  () => {
+                    const newValue = !showNameInMessages;
+                    setShowNameInMessages(newValue);
+                    handleSettingsUpdate({ mostra_nome_mensagens: newValue });
+                  }
+                )}
+
+                {renderInputSetting(
+                  'Palavra-chave da IA',
+                  'Defina uma palavra que, quando enviada pelo usuário, ativa a IA automaticamente.',
+                  iaKeyword,
+                  (v) => setIaKeyword(v),
+                  () => persistIaKeyword(iaKeyword)
+                )}
+              </>
+            )}
+
+            {/* Opções que todos podem ver */}
+            {renderSelectSetting(
+              'Modo de Tela',
+              'Altere entre modo escuro (Black) e claro (White).',
+              screenMode,
+              (val) => {
+                const newValue = val as 'Black' | 'White';
+                setScreenMode(newValue);
+                handleSettingsUpdate({ modo_tela: newValue });
+              },
+              ['Black', 'White']
+            )}
+
+            {renderSelectSetting(
+              'Modo de Sidebar',
+              'Completa com nomes e ícones ou minimalista apenas com ícones.',
+              sidebarMode,
+              (val) => {
+                const newValue = val as 'Full' | 'Minimal';
+                setSidebarMode(newValue);
+                handleSettingsUpdate({ modo_side_bar: newValue });
+              },
+              ['Full', 'Minimal']
+            )}
+          </motion.div>
+        );
+
         return (
           <>
             <motion.div
@@ -268,6 +368,7 @@ export default function SettingsContent({ tabIndex }: Props) {
               transition={{ delay: 0.4, duration: 0.4, ease: 'easeOut' }}
               className={styles.settingsContent}
             >
+
               {renderSwitchSetting(
                 'Notificação para atendente',
                 'Envia um alerta ao atendente quando é necessário entrar em uma conversa.',
@@ -364,6 +465,26 @@ export default function SettingsContent({ tabIndex }: Props) {
 
           <div className={styles.formRow}>
             <div className={styles.formGroup}>
+              <label htmlFor='nome'>Nome</label>
+              <input
+                id='nome'
+                value={editForm?.nome ?? ''}
+                onChange={(e) => setEditForm(prev => ({ ...(prev ?? {}), nome: e.target.value }))}
+              />
+            </div>
+
+            <div className={styles.formGroup}>
+              <label htmlFor='numero'>Número</label>
+              <input
+                id='numero'
+                value={editForm?.numero ?? ''}
+                onChange={(e) => setEditForm(prev => ({ ...(prev ?? {}), numero: e.target.value }))}
+              />
+            </div>
+          </div>
+
+          <div className={styles.formRow}>
+            <div className={styles.formGroup}>
               <label htmlFor='cidade'>Cidade</label>
               <input
                 id='cidade'
@@ -385,12 +506,32 @@ export default function SettingsContent({ tabIndex }: Props) {
 
           <div className={styles.formRow}>
             <div className={styles.formGroup}>
-              <label htmlFor='numero'>Número</label>
-              <input
-                id='numero'
-                value={editForm?.numero ?? ''}
-                onChange={(e) => setEditForm(prev => ({ ...(prev ?? {}), numero: e.target.value }))}
-              />
+              <label htmlFor='password'>Senha</label>
+              <div className={styles.passwordInputWrapper}>
+                <input
+                  id='password'
+                  type={showPassword ? 'text' : 'password'}
+                  value={editForm?.password ?? ''}
+                  onChange={(e) =>
+                    setEditForm(prev => ({ ...(prev ?? {}), password: e.target.value }))
+                  }
+                  className={styles.textInput}
+                  style={{ paddingRight: '2.5rem' }} // espaço pro ícone
+                />
+                <button
+                  type='button'
+                  onClick={() => setShowPassword(prev => !prev)}
+                  style={{
+                    position: 'absolute',
+                    right: '0.5rem',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer'
+                  }}
+                >
+                  {showPassword ? <Icon nome="eyeoff" /> : <Icon nome="eye" />}
+                </button>
+              </div>
             </div>
           </div>
 

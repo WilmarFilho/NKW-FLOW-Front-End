@@ -14,8 +14,8 @@ export function validateAttendantForm(data: AttendantFormData, editMode = false)
   if (!/^\d{10,15}$/.test(data.numero)) {
     errors.numero = 'Número deve ter entre 10 e 15 dígitos.';
   }
-  if (!editMode && (!data.senha_hash || data.senha_hash.length < 6)) {
-    errors.senha_hash = 'A senha deve ter pelo menos 6 caracteres.';
+  if (!editMode && (!data.password || data.password.length < 6)) {
+    errors.password = 'A senha deve ter pelo menos 6 caracteres.';
   }
 
   if (!data.connection_id) {

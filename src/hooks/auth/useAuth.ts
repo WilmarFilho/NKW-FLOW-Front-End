@@ -3,13 +3,6 @@ import { authTokenState, userState } from '../../state/atom';
 import { useApi } from '../utils/useApi';
 import { User } from '../../types/user';
 
-interface ApiError {
-  response?: {
-    status?: number;
-  };
-  message?: string;
-}
-
 export const useAuth = () => {
   const [token, setToken] = useRecoilState(authTokenState);
   const [user, setUser] = useRecoilState(userState);
@@ -17,6 +10,7 @@ export const useAuth = () => {
 
   const login = async (email: string, senha: string) => {
     try {
+
       const response = await api.post<{ message: string; token: string; user: User }>('/login', { email, senha });
 
       if (!response || !response.token) {
@@ -26,9 +20,7 @@ export const useAuth = () => {
       setToken({ token: response.token, userId: response.user.id });
       setUser(response.user);
 
-      return response;
     } catch (err: unknown) {
-      // Aqui é o ponto crítico: capturar o erro lançado pelo useApi
       const apiError = err as { message: string; status?: number };
 
       if (apiError.status === 401) {
@@ -48,4 +40,3 @@ export const useAuth = () => {
 
   return { token, isAuthenticated, login, logout, user };
 };
-

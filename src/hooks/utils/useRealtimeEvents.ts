@@ -1,7 +1,7 @@
 // Libs
 import { useEffect } from 'react';
 // Recoil
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   connectionsState,
   chatsState,
@@ -63,7 +63,7 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
   const setChats = useSetRecoilState(chatsState);
   const filters = useRecoilValue(chatFiltersState);
   const setMessagesByChat = useSetRecoilState(messagesState);
-  const setActiveChat = useSetRecoilState<Chat | null>(activeChatState);
+  const [activeChat, setActiveChat] = useRecoilState(activeChatState);
 
   useEffect(() => {
     if (!userId) return;
@@ -129,8 +129,22 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
             };
           });
 
+          if (activeChat?.id === chatId) {
+            console.log('Scroll to bottom for chat:', chatId);
+            requestAnimationFrame(() => {
+              const list = document.querySelector(`#chat-list-${chatId}`) as HTMLDivElement;
+              console.log('List element:', list);
+              if (list) list.scrollTo({ top: list.scrollHeight, behavior: 'smooth' });
+            });
+          }
+
           // 2️⃣ Atualiza chat completo no frontend
-          fetch(`${apiConfig.node}/chats/${chatId}`)
+          fetch(`${apiConfig.node}/chats/${chatId}`, {
+            headers: {
+              'Authorization': `Bearer ${token}`,  // token do login
+              'x-auth-id': userId                  // auth_id do Supabase
+            }
+          })
             .then((res) => res.json())
             .then((fullChatData: Chat) => {
               // Verifica se o chat atualizado passa nos filtros atuais
@@ -236,6 +250,9 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
     };
   }, [userId, filters, setChats, setActiveChat, setConnections, setMessagesByChat, setModalState]);
 };
+
+
+
 
 
 

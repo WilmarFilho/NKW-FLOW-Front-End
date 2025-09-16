@@ -1,18 +1,25 @@
-// useAttendantsActions.ts
 import { useCallback } from 'react';
 import { useRecoilState } from 'recoil';
 import { userState } from '../../state/atom';
 import { useAttendants } from './useAttendants';
 import { useApi } from '../utils/useApi';
 import type { Attendant, AttendantFormData } from '../../types/attendant';
-import { User } from '../../types/user';
+import type { User } from '../../types/user';
 
 interface NewAttendantData {
     nome: string;
     numero: string;
     email: string;
-    senha_hash: string;
-    connection_id?: string;
+    password: string;
+    connection_id?: string | null;
+}
+
+interface CreateUserResponse {
+    message: string;
+    authUser: {
+        user: User;
+    };
+    userData: User;
 }
 
 export const useAttendantsActions = () => {
@@ -20,60 +27,64 @@ export const useAttendantsActions = () => {
     const { fetchAttendants } = useAttendants();
     const { post, del, put, patch } = useApi();
 
+    // ✅ Criar atendente (só admins podem)
     const addAttendant = async (attendantData: Partial<NewAttendantData>) => {
-        if (!user || user.tipo_de_usuario !== 'admin') return;
+        if (user?.tipo_de_usuario !== 'admin') return;
 
-        const userResponse = await post<User[]>('/users', {
+        if (!attendantData.email || !attendantData.nome || !attendantData.numero || !attendantData.password) {
+            throw new Error('Campos obrigatórios não fornecidos');
+        }
+
+        // 1️⃣ Criar usuário atendente
+        const userResponse = await post<CreateUserResponse>('/createUser', {
             nome: attendantData.nome,
             numero: attendantData.numero,
             email: attendantData.email,
-            senha_hash: attendantData.senha_hash,
-            tipo_de_usuario: 'atendente',
-            status: true,
+            password: attendantData.password,
+            cidade: user.cidade,
+            endereco: user.endereco,
+            tipo_de_usuario: 'atendente'
         });
 
-        const createdUserId = userResponse?.[0]?.id;
-        if (!createdUserId) return;
+        if (!userResponse?.authUser) return;
 
+        // 2️⃣ Vincular atendente ao admin logado
         await post('/attendants', {
-            user_id: createdUserId,
-            user_admin_id: user.id,
-            connection_id: attendantData.connection_id || null
+            user_id: userResponse.authUser.user.id,
+            connection_id: attendantData.connection_id
         });
 
+        // 3️⃣ Atualizar lista de atendentes
         await fetchAttendants();
     };
 
+    // ❌ Remover atendente
     const removeAttendant = async (id: string) => {
-        if (!user || user.tipo_de_usuario !== 'admin') return;
+        if (user?.tipo_de_usuario !== 'admin') return;
         await del(`/attendants/${id}`);
         await fetchAttendants();
     };
 
+    // ✏️ Editar atendente
     const editAttendant = async (
         attendantId: string,
-        userId: string,
         updatedData: Partial<AttendantFormData>
     ) => {
-        if (!user || user.tipo_de_usuario !== 'admin') return;
+        if (user?.tipo_de_usuario !== 'admin') return;
 
-        await put(`/users/${userId}`, {
+        await patch(`/attendants/${attendantId}`, {
+            connection_id: updatedData.connection_id,
             nome: updatedData.nome,
-            email: updatedData.email,
             numero: updatedData.numero,
-            status: updatedData.status,
+            email: updatedData.email,
+            password: updatedData.password,
+            status: updatedData.status
         });
-
-        if (updatedData.connection_id !== undefined) {
-            await patch(`/attendants/${attendantId}`, {
-                connection_id: updatedData.connection_id,
-                user_admin_id: user.id
-            });
-        }
 
         await fetchAttendants();
     };
 
+    // 🔄 Ativar/desativar atendente
     const updateAttendantStatus = useCallback(async (attendant: Attendant) => {
         if (!user || user.tipo_de_usuario !== 'admin') return;
         await put(`/users/${attendant.user.id}`, { status: !attendant.user.status });

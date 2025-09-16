@@ -464,8 +464,8 @@ export default function ChatWindow({
         onDrop={handleDrop}
 
       >
-        <div className={styles.teste} ref={listRef}>
-          <div ref={topSentinelRef} className={styles.sentinel} style={{ visibility: 'hidden', height: 1 }}>.</div>
+        <div className={styles.teste} ref={listRef} id={`chat-list-${activeChat.id}`}>
+          <div ref={topSentinelRef} className={styles.sentinel} style={{ visibility: 'hidden', height: 1 }} >.</div>
 
           {groupedMessages}
 
@@ -584,3 +584,4 @@ export default function ChatWindow({
 
   );
 }
+

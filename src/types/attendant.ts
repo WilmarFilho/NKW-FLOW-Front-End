@@ -15,7 +15,7 @@ export interface AttendantFormData {
   id?: string;
   user_id: string;
   nome: string;
-  senha_hash?: string;
+  password?: string;
   email: string;
   status: boolean;
   numero: string;

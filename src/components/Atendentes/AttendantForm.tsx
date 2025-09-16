@@ -38,7 +38,7 @@ export default function AttendantForm({
     nome: initialData?.nome || '',
     email: initialData?.email || '',
     numero: initialData?.numero || '',
-    senha_hash: '',
+    password: '',
     status: initialData?.status ?? true,
     user_id: initialData?.user_id ?? '',
     connection_id: initialData?.connection_id || '',
@@ -71,7 +71,7 @@ export default function AttendantForm({
       nome: initialData?.nome || '',
       email: initialData?.email || '',
       numero: initialData?.numero || '',
-      senha_hash: '',
+      password: '',
       status: initialData?.status ?? true,
       user_id: initialData?.user_id ?? '',
       connection_id: initialData?.connection_id || '',
@@ -150,18 +150,18 @@ export default function AttendantForm({
           )}
         </div>
         <div className={formStyles.formGroup}>
-          <label htmlFor="senha_hash">Senha:</label>
+          <label htmlFor="password">Senha:</label>
           <input
-            id="senha_hash"
+            id="password"
             type="password"
             placeholder={editMode ? 'Deixe em branco para não alterar' : 'Mínimo 6 caracteres'}
-            value={formData.senha_hash}
+            value={formData.password}
             onChange={handleInputChange}
             disabled={isSubmitting}
             required={!editMode}
           />
-          {triggerValidation && errors.senha_hash && (
-            <span className={formStyles.errorText}>{errors.senha_hash}</span>
+          {triggerValidation && errors.password && (
+            <span className={formStyles.errorText}>{errors.password}</span>
           )}
         </div>
       </div>

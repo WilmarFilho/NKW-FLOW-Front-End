@@ -46,7 +46,7 @@ export const useChats = (): UseChatsReturn => {
       setSessionId(newSessionId);
 
       try {
-        const params = { user_id: currentUser.id, ...filters };
+        const params = { user_id: currentUser.id, auth_id: currentUser.auth_id, ...filters };
         const fetchedData = await get<{ chats: Chat[]; nextCursor: string | null }>('/chats', { params });
 
         if (fetchedData) {

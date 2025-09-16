@@ -9,9 +9,10 @@ export interface User {
   foto_perfil?: string;
   email: string;
   nome: string;
-  senha_hash: string
+  password: string
   tipo_de_usuario: TipoUsuario;
   id: string;
+  auth_id: string;
   user_admin_id?: string;
   role?: string;
   connection_id?: string;

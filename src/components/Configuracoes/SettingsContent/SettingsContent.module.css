@@ -219,6 +219,14 @@
     color: var(--color-text);
     font-size: 14px;
 }
+.passwordInputWrapper button svg {
+  fill: var(--color-text);
+}
+.passwordInputWrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
 .formGroup input,
 .formGroup select {
     width: 100%;

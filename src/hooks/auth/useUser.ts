@@ -35,13 +35,8 @@ export const useUser = () => {
       if (!token?.token || !token.userId) return null;
       if (!opts?.force && user) return user;
 
-      const fetchedUser = await get<User>('/users', {
-        params: {
-          user_id: token.userId,
-          token: token.token, // token agora vai via query
-        },
-      });
-
+      const fetchedUser = await get<User>('/users');
+      
       if (fetchedUser) {
         setUser(fetchedUser);
 
@@ -65,8 +60,3 @@ export const useUser = () => {
 
   return { fetchUser };
 }
-
-
-
-
-

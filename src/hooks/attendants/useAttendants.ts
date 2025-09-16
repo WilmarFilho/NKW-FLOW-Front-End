@@ -1,4 +1,3 @@
-// useAttendants.ts
 import { useCallback } from 'react';
 import { useRecoilState } from 'recoil';
 import { attendantsState, userState } from '../../state/atom';
@@ -12,16 +11,12 @@ export const useAttendants = () => {
   const { get } = useApi();
 
   const fetchAttendants = useCallback(async (userParam?: User) => {
+
     const currentUser = userParam ?? user;
     if (!currentUser) return;
-
-    // Apenas admins podem buscar a lista
-    
     if (currentUser.tipo_de_usuario !== 'admin') return;
 
-    const fetchedData = await get<Attendant[]>('/attendants', {
-      params: { user_admin_id: currentUser.id }
-    });
+    const fetchedData = await get<Attendant[]>('/attendants');
 
     if (fetchedData) setAttendants(fetchedData);
   }, [get, setAttendants, user]);
