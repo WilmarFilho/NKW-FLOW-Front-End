@@ -1,28 +1,42 @@
 import { useRecoilState } from 'recoil';
-// Recoil
 import { authTokenState, userState } from '../../state/atom';
+import { useApi } from '../utils/useApi';
+import { User } from '../../types/user';
+
+interface ApiError {
+  response?: {
+    status?: number;
+  };
+  message?: string;
+}
 
 export const useAuth = () => {
-
-  
   const [token, setToken] = useRecoilState(authTokenState);
-
   const [user, setUser] = useRecoilState(userState);
+  const api = useApi();
 
   const login = async (email: string, senha: string) => {
+    try {
+      const response = await api.post<{ message: string; token: string; user: User }>('/login', { email, senha });
 
-    const token = '123' + email + senha;
+      if (!response || !response.token) {
+        throw { message: 'Erro ao realizar login. Tente novamente.', status: 500 };
+      }
 
-    //const userId = '949c16e4-c76b-474b-9770-c6938b10de15'; 
-    const userId = '807cc327-34ec-43b7-abc1-7f4def7d15c6'; 
-    //const userId = '64bed13c-fa9c-47fa-9cc1-6c07ff98a0d3'; 
+      setToken({ token: response.token, userId: response.user.id });
+      setUser(response.user);
 
-    // 807cc327-34ec-43b7-abc1-7f4def7d15c6
-    // 949c16e4-c76b-474b-9770-c6938b10de15  ATENDENTE
-    // outro admin 64bed13c-fa9c-47fa-9cc1-6c07ff98a0d3
+      return response;
+    } catch (err: unknown) {
+      // Aqui é o ponto crítico: capturar o erro lançado pelo useApi
+      const apiError = err as { message: string; status?: number };
 
-    setToken({ token: token, userId: userId });
-
+      if (apiError.status === 401) {
+        throw { message: 'E-mail ou senha incorretos.', status: 401 };
+      } else {
+        throw { message: apiError.message || 'Erro ao fazer login. Tente novamente.', status: apiError.status || 500 };
+      }
+    }
   };
 
   const logout = () => {
@@ -34,3 +48,4 @@ export const useAuth = () => {
 
   return { token, isAuthenticated, login, logout, user };
 };
+

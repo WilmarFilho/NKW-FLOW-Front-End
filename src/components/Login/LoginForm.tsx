@@ -1,48 +1,80 @@
-// Libs
 import { useState } from 'react';
-// Hooks
 import { useAuth } from '../../hooks/auth/useAuth';
-// Css
 import styles from './LoginForm.module.css';
-// Icon
-import Icon from '../Gerais/Icons/Icons';
+import Icon from '../../components/Gerais/Icons/Icons';
+
+interface ApiError {
+  response?: {
+    status?: number;
+  };
+  message?: string;
+}
 
 export default function LoginForm() {
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-    const [email, setEmail] = useState('');
-    const [senha, setSenha] = useState('');
+  const { login } = useAuth();
 
-    const { login } = useAuth();
+  const handleLogin = async () => {
+    setErrorMessage(null);
 
-    const handleLogin = async () => {
-        try {
-            await login(email, senha);
-        } catch (err) {
-            alert('Falha ao fazer login: ' + err);
-        }
-        
-    };
+    // Valida campos
+    if (!email.trim() || !senha.trim()) {
+      setErrorMessage('Por favor, preencha todos os campos.');
+      return;
+    }
 
-    return (
-        <div className={styles.loginBox}>
+    setLoading(true);
 
-            <div className={styles.wrapperLogo}>
-                <Icon nome='logo' />
-            </div>
+    try {
+      await login(email, senha);
+    } catch (err: unknown) {
+      // Refinamento de tipo seguro
+      const apiError = err as ApiError;
 
-            <input
-                type='email'
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder='E-mail'
-            />
-            <input
-                type='password'
-                value={senha}
-                onChange={(e) => setSenha(e.target.value)}
-                placeholder='Senha'
-            />
-            <button onClick={handleLogin}>Entrar</button>
-        </div>
-    );
+      if (apiError.response?.status === 401) {
+        setErrorMessage('E-mail ou senha incorretos.');
+      } else if (apiError.message) {
+        setErrorMessage(apiError.message);
+      } else {
+        setErrorMessage('Erro ao fazer login. Tente novamente.');
+      }
+
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className={styles.loginBox}>
+      <div className={styles.wrapperLogo}>
+        <Icon nome="logo" />
+      </div>
+
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="E-mail"
+        disabled={loading}
+      />
+      <input
+        type="password"
+        value={senha}
+        onChange={(e) => setSenha(e.target.value)}
+        placeholder="Senha"
+        disabled={loading}
+      />
+
+      {errorMessage && <span className={styles.error}>{errorMessage}</span>}
+
+      <button onClick={handleLogin} disabled={loading}>
+        {loading ? 'Entrando...' : 'Entrar'}
+      </button>
+    </div>
+  );
 }

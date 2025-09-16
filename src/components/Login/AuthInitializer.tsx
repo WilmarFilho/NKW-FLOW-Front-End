@@ -39,6 +39,7 @@ export const AuthInitializer = ({ children }: AuthInitializerProps) => {
         });
       } catch (error) {
         console.error('Falha ao inicializar a sessão do usuário', error);
+        
       } finally {
         if (mounted) setIsInitializing(false);
       }
@@ -57,3 +58,4 @@ export const AuthInitializer = ({ children }: AuthInitializerProps) => {
   return <>{children}</>;
 };
 export default AuthInitializer;
+

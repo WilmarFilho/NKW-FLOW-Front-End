@@ -11,8 +11,6 @@ import type { User } from '../../types/user';
 import { useAttendants } from '../attendants/useAttendants';
 import { useAgents } from '../agents/useAgents';
 import { useConnections } from '../connections/useConnections';
-import { useChats } from '../chats/useChats';
-import { Chat } from '../../types/chats';
 import { useMetrics } from '../metrics/useMetrics';
 
 export const useUser = () => {
@@ -24,7 +22,6 @@ export const useUser = () => {
   const { fetchAttendants } = useAttendants();
   const { fetchAgents } = useAgents();
   const { fetchConnections } = useConnections();
-  const { fetchChats } = useChats(); //Property 'fetchChats' does not exist on type 'void'.t
   const { fetchMetrics } = useMetrics();
 
   // Carrega Metodos do hook da api
@@ -32,35 +29,39 @@ export const useUser = () => {
 
   // Auth
   const [token] = useRecoilState(authTokenState);
-  const userId = token?.userId;
 
-  const fetchUser = useCallback(async (opts?: { force?: boolean, onProgress?: (msg: string) => void }) => {
-    if (!token || !userId) return null;
-    if (!opts?.force && user) return user;
+  const fetchUser = useCallback(
+    async (opts?: { force?: boolean; onProgress?: (msg: string) => void }) => {
+      if (!token?.token || !token.userId) return null;
+      if (!opts?.force && user) return user;
 
-    const fetchedUser = await get<User>('/users', { params: { user_id: userId } });
+      const fetchedUser = await get<User>('/users', {
+        params: {
+          user_id: token.userId,
+          token: token.token, // token agora vai via query
+        },
+      });
 
-    if (fetchedUser) {
-      setUser(fetchedUser);
+      if (fetchedUser) {
+        setUser(fetchedUser);
 
-      opts?.onProgress?.('Carregando conversas...');
- 
-      opts?.onProgress?.('Carregando atendentes...');
-      await fetchAttendants(fetchedUser);
+        opts?.onProgress?.('Carregando conversas...');
+        await fetchAttendants(fetchedUser);
 
-      opts?.onProgress?.('Carregando agentes...');
-      await fetchAgents(fetchedUser);
+        opts?.onProgress?.('Carregando agentes...');
+        await fetchAgents(fetchedUser);
 
-      opts?.onProgress?.('Carregando conexões...');
-      await fetchConnections(fetchedUser);
+        opts?.onProgress?.('Carregando conexões...');
+        await fetchConnections(fetchedUser);
 
-      opts?.onProgress?.('Carregando métricas...');
-      await fetchMetrics(fetchedUser);
-    }
+        opts?.onProgress?.('Carregando métricas...');
+        await fetchMetrics(fetchedUser);
+      }
 
-    return fetchedUser;
-  }, [token, userId, user, setUser, get]); 
-
+      return fetchedUser;
+    },
+    [token, user, setUser, get]
+  );
 
   return { fetchUser };
 }

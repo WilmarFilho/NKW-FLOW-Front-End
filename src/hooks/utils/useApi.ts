@@ -3,19 +3,23 @@ import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import { apiConfig } from '../../config/api';
 import { toast } from 'react-toastify';
 
+export interface ApiError {
+  message: string;
+  status: number;
+}
+
 export const useApi = () => {
   const executeRequest = useCallback(async <T>(
     method: 'get' | 'post' | 'put' | 'delete' | 'patch',
     path: string,
     requestData?: unknown,
     config?: AxiosRequestConfig
-  ): Promise<T | null> => {
-
-    console.log(`[useApi] Chamando ${method.toUpperCase()} ${path}`);
+  ): Promise<T> => {
+    const url = `${apiConfig.node}${path}`;
 
     try {
-      const url = `${apiConfig.node}${path}`;
       let response: AxiosResponse<T>;
+
       switch (method) {
         case 'get':
           response = await axios.get<T>(url, config);
@@ -33,55 +37,40 @@ export const useApi = () => {
           response = await axios.delete<T>(url, config);
           break;
         default:
-          throw new Error('Método HTTP não suportado');
+          throw { message: 'Método HTTP não suportado', status: 500 } as ApiError;
       }
+
       return response.data;
-    } catch (err) {
-      const axiosError = err as AxiosError;
-      let errorMessage = '';
+    } catch (err: unknown) {
+      const axiosError = err as AxiosError<{ message?: string }>;
+
+      let message = '';
+      let status = 500;
 
       if (axiosError.response) {
-        const data = axiosError.response.data as { message?: string; error?: string };
-        errorMessage = data?.message || data?.error || `Erro: ${axiosError.response.status} - ${axiosError.response.statusText}`;
-      }
-      else if (axiosError.request) {
-        errorMessage = 'Nenhuma resposta recebida do servidor backend. Verifique sua conexão.';
+        message = axiosError.response.data?.message || axiosError.response.statusText || 'Erro desconhecido';
+        status = axiosError.response.status; // <-- aqui pegamos o status real (ex: 401)
+      } else if (axiosError.request) {
+        message = 'Nenhuma resposta recebida do servidor.';
+        status = 0;
       } else {
-        errorMessage = `Erro na requisição: ${axiosError.message}`;
+        message = axiosError.message;
+        status = 500;
       }
 
-      toast.error(errorMessage);
+      toast.error(message);
 
-      throw new Error
-
+      // lança o erro com status correto
+      throw { message, status } as ApiError;
     }
+
   }, []);
 
-  const get = useCallback(<T>(path: string, config?: AxiosRequestConfig) => {
-    return executeRequest<T>('get', path, undefined, config);
-  }, [executeRequest]);
+  const get = useCallback(<T>(path: string, config?: AxiosRequestConfig) => executeRequest<T>('get', path, undefined, config), [executeRequest]);
+  const post = useCallback(<T>(path: string, data?: unknown, config?: AxiosRequestConfig) => executeRequest<T>('post', path, data, config), [executeRequest]);
+  const put = useCallback(<T>(path: string, data?: unknown, config?: AxiosRequestConfig) => executeRequest<T>('put', path, data, config), [executeRequest]);
+  const patch = useCallback(<T>(path: string, data?: unknown, config?: AxiosRequestConfig) => executeRequest<T>('patch', path, data, config), [executeRequest]);
+  const del = useCallback(<T>(path: string, config?: AxiosRequestConfig) => executeRequest<T>('delete', path, undefined, config), [executeRequest]);
 
-  const post = useCallback(<T>(path: string, data?: unknown, config?: AxiosRequestConfig) => {
-    return executeRequest<T>('post', path, data, config);
-  }, [executeRequest]);
-
-  const put = useCallback(<T>(path: string, data?: unknown, config?: AxiosRequestConfig) => {
-    return executeRequest<T>('put', path, data, config);
-  }, [executeRequest]);
-
-  const patch = useCallback(<T>(path: string, data?: unknown, config?: AxiosRequestConfig) => {
-    return executeRequest<T>('patch', path, data, config);
-  }, [executeRequest]);
-
-  const del = useCallback(<T>(path: string, config?: AxiosRequestConfig) => {
-    return executeRequest<T>('delete', path, undefined, config);
-  }, [executeRequest]);
-
-  return useMemo(() => ({
-    get,
-    post,
-    put,
-    del,
-    patch,
-  }), [get, post, put, del, patch]);
+  return useMemo(() => ({ get, post, put, patch, del }), [get, post, put, patch, del]);
 };

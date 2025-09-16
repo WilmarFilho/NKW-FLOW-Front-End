@@ -1,12 +1,12 @@
 import { Outlet } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { ToastContainer } from 'react-toastify';
 // Components
 import SidebarWrapper from './Sidebars/SidebarWrapper';
 // Hooks
 import { useRealtimeEvents } from '../../hooks/utils/useRealtimeEvents';
 // State
-import { userState } from '../../state/atom';
+import { authTokenState, userState } from '../../state/atom';
 // Estilos
 import styles from './Layout.module.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -15,11 +15,18 @@ export default function Layout() {
 
   const user = useRecoilValue(userState);
 
+  // Auth
+  const [token] = useRecoilState(authTokenState);
+
   const modoTela = user?.modo_tela || 'dark';
 
   const modoSideBar = user?.modo_side_bar || 'Full';
 
-  useRealtimeEvents(user?.id);
+  if(token === null) {
+    return <></>;
+  }
+
+  useRealtimeEvents(token.userId, token.token);
 
   const body = document.body;
 
@@ -47,3 +54,4 @@ export default function Layout() {
     </div>
   );
 }
+

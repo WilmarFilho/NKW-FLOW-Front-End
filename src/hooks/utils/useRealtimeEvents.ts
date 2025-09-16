@@ -57,7 +57,7 @@ const chatMatchesFilters = (chat: Chat, filters: ChatFilters, userId: string | u
   return true;
 };
 
-export const useRealtimeEvents = (userId: string | undefined) => {
+export const useRealtimeEvents = (userId: string | undefined, token: string) => {
   const setConnections = useSetRecoilState(connectionsState);;
   const setModalState = useSetRecoilState(addConnectionModalState);
   const setChats = useSetRecoilState(chatsState);
@@ -68,7 +68,10 @@ export const useRealtimeEvents = (userId: string | undefined) => {
   useEffect(() => {
     if (!userId) return;
 
-    const eventSource = new EventSource(`${apiConfig.node}/events/${userId}`);
+    // 🔑 passa userId e token via query string
+    const eventSource = new EventSource(
+      `${apiConfig.node}/events/${userId}?token=${encodeURIComponent(token)}`
+    );
 
     const parseDateBR = (d?: string | null) => {
       if (!d) return 0;
