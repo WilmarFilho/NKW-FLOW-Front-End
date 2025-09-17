@@ -69,6 +69,14 @@ option {
     margin-top: 4px;
     display: block;
 }
+.passwordInputWrapper button svg {
+  fill: var(--color-text);
+}
+.passwordInputWrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
 @keyframes slideDownFadeIn {
   from {
     opacity: 0;

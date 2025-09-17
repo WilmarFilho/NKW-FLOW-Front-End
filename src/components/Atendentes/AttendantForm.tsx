@@ -1,6 +1,7 @@
 // Libs
 import { useState, useEffect } from 'react';
 import Select, { OnChangeValue } from 'react-select';
+import Icon from '../../components/Gerais/Icons/Icons';
 
 // Types
 import type { AttendantFormData } from '../../types/attendant';
@@ -44,6 +45,8 @@ export default function AttendantForm({
     connection_id: initialData?.connection_id || '',
   });
   const [errors, setErrors] = useState<ReturnType<typeof validateAttendantForm>>({});
+
+  const [showPassword, setShowPassword] = useState(false);
 
   // Lógica do Select Customizado
   const isMobile = useMediaQuery('(max-width: 600px)');
@@ -151,19 +154,36 @@ export default function AttendantForm({
         </div>
         <div className={formStyles.formGroup}>
           <label htmlFor="password">Senha:</label>
-          <input
-            id="password"
-            type="password"
-            placeholder={editMode ? 'Deixe em branco para não alterar' : 'Mínimo 6 caracteres'}
-            value={formData.password}
-            onChange={handleInputChange}
-            disabled={isSubmitting}
-            required={!editMode}
-          />
+          <div className={formStyles.passwordInputWrapper}>
+            <input
+              id='password'
+              type={showPassword ? 'text' : 'password'}
+              value={formData.password}
+              onChange={handleInputChange}
+               disabled={isSubmitting}
+              className={formStyles.textInput}
+              style={{ paddingRight: '2.5rem' }} 
+               required={!editMode}
+            />
+            <button
+              type='button'
+              onClick={() => setShowPassword(prev => !prev)}
+              style={{
+                position: 'absolute',
+                right: '0.5rem',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer'
+              }}
+            >
+              {showPassword ? <Icon nome="eyeoff" /> : <Icon nome="eye" />}
+            </button>
+          </div>
           {triggerValidation && errors.password && (
             <span className={formStyles.errorText}>{errors.password}</span>
           )}
         </div>
+
       </div>
 
       <div className={formStyles.formGroup}>

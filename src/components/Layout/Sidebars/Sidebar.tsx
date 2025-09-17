@@ -3,11 +3,12 @@ import Icon from '../../../components/Gerais/Icons/Icons';
 import { useRecoilValue } from 'recoil';
 import { userState } from '../../../state/atom';
 import { menuItems } from '../../../hooks/utils/useMenuItens';
+import DefaultImage from '../assets/default.webp'
 
 const Sidebar = () => {
   const user = useRecoilValue(userState);
-  if(!user) return
- 
+  if (!user) return
+
   const MenuItem = ({ to, children }: { to: string; children: React.ReactNode }) => (
     <NavLink to={to} className={({ isActive }) => `MenuItem ${isActive ? 'active-link' : ''}`}>
       {children}
@@ -21,6 +22,8 @@ const Sidebar = () => {
   const suporteItems = menuItems.filter(
     (item) => item.section === 'suporte' && item.roles.includes(user?.tipo_de_usuario)
   );
+
+  const fotoPerfil = user.foto_perfil || DefaultImage
 
   return (
     <>
@@ -48,11 +51,13 @@ const Sidebar = () => {
 
       <div className='user-menu'>
         <div className='column-info'>
-          <NavLink to='/configuracoes'>
-            <div className='MenuImage'>
-              <img src={user?.foto_perfil} alt={user?.nome} />
-            </div>
-          </NavLink>
+          {user.tipo_de_usuario === 'admin' &&
+            <NavLink style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} to='/configuracoes'>
+              <div className='MenuImage'>
+                <img src={fotoPerfil} alt={user?.nome} />
+              </div>
+            </NavLink>
+          }
           <div className='user-info'>
             <p className='user-name'>{user?.nome}</p>
             <p className='user-email'>{user?.email}</p>
