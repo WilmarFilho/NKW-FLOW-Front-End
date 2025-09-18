@@ -1,36 +1,34 @@
 // Libs
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 // Recoil
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { connectionsState, userState } from '../../state/atom';
+import { addConnectionModalState, connectionsState, userState } from '../../state/atom';
 // Hooks
 import { useApi } from '../utils/useApi';
 import { useConnections } from './useConnections';
 // Types
 import { Connection } from '../../types/connection';
+import { useAttendants } from '../attendants/useAttendants';
 
 export const useConnectionsActions = () => {
 
-  // Carrega metodos de conexões
+  // Carrega conexões e seus Métodos
+  const [connections, setConnections] = useRecoilState(connectionsState);
   const { fetchConnections } = useConnections();
-  const setConnections = useSetRecoilState(connectionsState);
+  const { fetchAttendants } = useAttendants();  
 
-  // Carrega o usuário
+  // Recoil
   const [user] = useRecoilState(userState);
-
-  // Variaveis de controle de cadastro
-  const [step, setStep] = useState<1 | 2>(1);
-  const [qrCode, setQrCode] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const setModalState = useSetRecoilState(addConnectionModalState);
 
   // Carrega Metodos do hook da api
   const { post, put, del } = useApi();
 
   const handleStartSession = async (connection: Partial<Connection>) => {
-
     if (!user) return;
 
-    setIsLoading(true);
+    setModalState((prev) => ({ ...prev, isLoading: true }));
+
     try {
       const qrcode = await post<string>('/connections', {
         nome: connection.nome,
@@ -38,16 +36,13 @@ export const useConnectionsActions = () => {
       });
 
       if (qrcode) {
-        setQrCode(qrcode);
-        setStep(2);
+        setModalState((prev) => ({ ...prev, qrCode: qrcode, step: 2 }));
       } else {
-        setQrCode(null);
+        setModalState((prev) => ({ ...prev, qrCode: null, step: 1, isOpen: false }));
       }
     } catch (err) {
       console.error('Erro ao iniciar sessão de conexão', err);
-      setQrCode(null);
-    } finally {
-      setIsLoading(false);
+      setModalState((prev) => ({ ...prev, qrCode: null, step: 1, isOpen: false }));
     }
   };
 
@@ -75,6 +70,7 @@ export const useConnectionsActions = () => {
 
     if (result) {
       fetchConnections();
+      fetchAttendants();
     }
 
   }, [del, setConnections]);
@@ -96,12 +92,10 @@ export const useConnectionsActions = () => {
   }, [put, setConnections]);
 
   return {
-    setStep,
-    step,
-    qrCode,
+    connections,
+    setConnections,
     handleStartSession,
     handleEditConnection,
-    isLoading,
     removeConnection,
     updateConnectionStatus,
   };

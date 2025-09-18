@@ -10,6 +10,7 @@
   overflow-y: auto;
   scrollbar-width: none;
 }
+
 .settingsContentAccount {
   background: var(--color-background-dark);
   border-radius: var(--radius-default);
@@ -21,9 +22,11 @@
   color: var(--color-text);
   overflow: hidden;
 }
+
 .settingsContent::-webkit-scrollbar {
   display: none;
 }
+
 .mainHeaderAccountWrapper {
   position: relative;
   display: flex;
@@ -33,6 +36,7 @@
   width: 100%;
   padding: 20px 20px 50px 20px;
 }
+
 .profileImageWrapper {
   position: absolute;
   top: -68px;
@@ -46,6 +50,7 @@
   align-items: end;
   padding-bottom: 30px;
 }
+
 .profileImageWrapper::after {
   content: '';
   position: absolute;
@@ -56,6 +61,7 @@
   z-index: 1;
   pointer-events: none;
 }
+
 .overlayText {
   position: absolute;
   z-index: 2;
@@ -65,12 +71,15 @@
   transition: opacity 0.3s ease;
   pointer-events: none;
 }
+
 .profileImageWrapper:hover::after {
   background-color: rgba(0, 0, 0, 0.6);
 }
+
 .profileImageWrapper:hover .overlayText {
   opacity: 1;
 }
+
 .profileImage {
   object-fit: cover;
   position: absolute;
@@ -80,6 +89,7 @@
   border-radius: 50%;
   cursor: pointer;
 }
+
 .userInfo,
 .userInfoMain {
   display: flex;
@@ -89,39 +99,44 @@
   height: 100%;
   justify-content: space-between;
 }
+
 .userInfo h1 {
   font-size: 16px;
   font-weight: 400;
   color: var(--color-text);
   opacity: .7;
 }
+
 .userInfo h2 {
   font-size: 22px;
   font-weight: 500;
   color: var(--color-text);
   opacity: 1;
 }
+
 .userInfoMain h1 {
   font-size: 28px;
   font-weight: 400;
   opacity: .5;
   color: var(--color-subtext-2);
 }
+
 .userInfoMain h2 {
   font-size: 40px;
   font-weight: 500;
   font-family: var(--font-main);
   text-transform: uppercase;
 }
+
 .configsWrapperBox {
   height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 20px;
-  padding: 24px 0;
+  gap: 18px;
 }
+
 .infoGrid {
   display: flex;
   flex-direction: column;
@@ -129,6 +144,7 @@
   gap: 24px;
   justify-content: space-between;
 }
+
 .headerAccountWrapper {
   display: flex;
   align-items: center;
@@ -139,6 +155,7 @@
   padding: 50px 24px;
   border-radius: 12px;
 }
+
 .editButton {
   width: 100%;
   font-family: var(--font-secundaria);
@@ -154,11 +171,13 @@
   cursor: pointer;
   border-radius: 10px;
 }
+
 .editButton:hover {
   transition: .4s;
   background-color: var(--color-filter-hover-attendants);
   color: var(--color-text-white);
 }
+
 .settingRow {
   display: flex;
   justify-content: space-between;
@@ -169,18 +188,21 @@
   border-radius: var(--radius-default);
   border-bottom: 1px solid var(--color-background-white);
 }
+
 .settingInfo {
   display: flex;
   flex-direction: column;
   gap: 12px;
   width: 70%;
 }
+
 .settingLabel {
   text-wrap: balance;
   font-family: var(--font-main);
   font-size: 22px;
   font-weight: 500;
 }
+
 .settingDescription {
   font-family: var(--font-secundaria);
   font-size: 16px;
@@ -188,6 +210,7 @@
   line-height: 1.5;
   text-wrap: balance;
 }
+
 .textInput {
   background: var(--color-background-dark);
   border: 1px solid var(--color-borders);
@@ -198,55 +221,63 @@
   width: 200px;
   outline: none;
 }
+
 .formRow {
-    display: flex;
-    flex-direction: row;
-    gap: 40px;
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
 }
+
 .formGroup {
-    text-align: left;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+  text-align: left;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
+
 .formGroup label {
-    display: block;
-    opacity: .5;
-    font-family: var(--font-secundaria);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--color-text);
-    font-size: 14px;
+  display: block;
+  opacity: .5;
+  font-family: var(--font-secundaria);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-text);
+  font-size: 14px;
 }
+
 .passwordInputWrapper button svg {
   fill: var(--color-text);
 }
+
 .passwordInputWrapper {
   display: flex;
   align-items: center;
   position: relative;
 }
+
 .formGroup input,
 .formGroup select {
-    width: 100%;
-    appearance: none;
-    height: 48px;
-    background-color: var(--color-background-white);
-    color: var(--color-text);
-    padding: 0 12px;
-    border-radius: 8px;
-    border: none;
-    outline: none;
-    font-size: 16px;
-    box-sizing: border-box;
-    transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+  appearance: none;
+  height: 48px;
+  background-color: var(--color-background-white);
+  color: var(--color-text);
+  padding: 0 12px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
+
 .formContainer {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
+
 @media (max-width: 1175.98px) {
   .headerAccountWrapper {
     padding: 38px 24px;
@@ -274,6 +305,7 @@
     right: 0;
   }
 }
+
 @media (max-width: 991.98px) {
 
   .settingsContentAccount,
@@ -289,10 +321,24 @@
     font-size: 18px;
   }
 
+  .headerAccountWrapper {
+    flex-direction: column;
+    border: none;
+    padding: 12px;
+    gap: 40px;
+  }
+
+  .configsWrapperBox {
+    overflow-y: scroll;
+    padding: 0;
+    scrollbar-width: none;
+  }
+
   .settingDescription {
     font-size: 14px;
   }
 }
+
 @media (max-width: 767.98px) {
   .userInfoMain h1 {
     font-size: 20px;
@@ -317,9 +363,11 @@
   .profileImage {
     width: 180px;
     height: 180px;
-    right: -16px;
+    right: 0;
+    top: 0;
   }
 }
+
 @media (max-width: 599.98px) {
 
   .settingsContentAccount,
@@ -348,7 +396,8 @@
   .profileImage {
     width: 150px;
     height: 150px;
-    right: 0px;
+    right: 25px;
+    top: 25px;
   }
 
   .userInfoMain h1 {
@@ -360,18 +409,10 @@
     line-height: 24px;
   }
 
-
   .userInfo h2 {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-
-  .headerAccountWrapper {
-    flex-direction: column;
-    border: none;
-    padding: 12px;
-    gap: 40px;
   }
 
   .infoGrid {
@@ -379,11 +420,6 @@
     gap: 12px;
   }
 
-  .configsWrapperBox {
-    overflow-y: scroll;
-    padding: 0;
-    scrollbar-width: none;
-  }
   .settingsContentAccount {
     gap: 16px;
   }

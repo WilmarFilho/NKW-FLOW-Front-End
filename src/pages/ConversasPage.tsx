@@ -15,6 +15,15 @@ export default function ConversasPage() {
   // Hook da Página
   const state = useConversasPage();
 
+  // Se o usuário estiver desativado, mostrar fallback
+  if (state.user?.status === false) {
+    return (
+      <div className={GlobalStyles.fallbackContainer}>
+        <p>Usuário desativado. Você não tem acesso às conversas.</p>
+      </div>
+    );
+  }
+
   // Estado para tamanho de tela
   const isMobileLayout = useIsMobileLayout()
 
@@ -94,7 +103,7 @@ export default function ConversasPage() {
         isOpen={isConnectionsModalOpen}
         title="Escolha uma conexão"
         items={state.connections}
-        labelSelector={(conn) => conn.nome || ''} 
+        labelSelector={(conn) => conn.nome || ''}
         onSelect={(conn) => {
           setFilters(prev => ({ ...prev, connection_id: conn?.id, attendant_id: undefined }));
           setIsConnectionsModalOpen(false);
@@ -106,7 +115,7 @@ export default function ConversasPage() {
         isOpen={isAttendantsModalOpen}
         title="Escolha um atendente"
         items={state.attendants}
-        labelSelector={(att) => att.user.nome} 
+        labelSelector={(att) => att.user.nome}
         onSelect={(att) => {
           setFilters(prev => ({ ...prev, attendant_id: att?.user_id, connection_id: undefined }));
           setIsAttendantsModalOpen(false);

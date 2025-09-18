@@ -52,17 +52,27 @@ export default function AttendantForm({
   const isMobile = useMediaQuery('(max-width: 600px)');
   const customStyles = getCustomSelectStyles(isMobile);
 
-  const connectionOptions: SelectOption[] = connections.map((conn) => ({
-    value: conn.id,
-    label: conn.nome,
-  }));
+  const connectionOptions: SelectOption[] =
+    connections.length > 0
+      ? connections.map((conn) => ({
+        value: conn.id,
+        label: conn.nome,
+        isDisabled: false,
+      }))
+      : [
+        {
+          value: 'no-connections',
+          label: 'Sem conexões no momento',
+          isDisabled: true,
+        },
+      ];
 
   const selectedConnection =
     connectionOptions.find((opt) => opt.value === formData.connection_id) || null;
 
   // Options para Status
   const statusOptions: SelectOption[] = [
-    { value: 'ativo', label: 'Ativo' },
+    { value: 'ativo', label: 'Ativo', },
     { value: 'inativo', label: 'Inativo' },
   ];
 
@@ -160,10 +170,10 @@ export default function AttendantForm({
               type={showPassword ? 'text' : 'password'}
               value={formData.password}
               onChange={handleInputChange}
-               disabled={isSubmitting}
+              disabled={isSubmitting}
               className={formStyles.textInput}
-              style={{ paddingRight: '2.5rem' }} 
-               required={!editMode}
+              style={{ paddingRight: '2.5rem' }}
+              required={!editMode}
             />
             <button
               type='button'
@@ -198,7 +208,9 @@ export default function AttendantForm({
           isDisabled={isSubmitting}
           components={{ Menu: AnimatedMenu }}
           styles={customStyles}
+          isOptionDisabled={(option) => option.isDisabled === true} //Property 'isDisabled' does not exist on type 'SelectOption'.
         />
+
         {triggerValidation && errors.connection_id && (
           <span className={formStyles.errorText}>{errors.connection_id}</span>
         )}

@@ -100,7 +100,7 @@
     color: var(--color-text-white);
     width: 100%;
 }
-@media (max-width: 1400px) {
+@media (max-width: 1550px) {
     .containerRewards {
         overflow-x: auto;
         scrollbar-width: none;

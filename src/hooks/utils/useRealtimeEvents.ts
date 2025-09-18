@@ -1,5 +1,6 @@
 // Libs
 import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 // Recoil
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
@@ -13,6 +14,7 @@ import {
 // Config
 import { apiConfig } from '../../config/api';
 import { Chat, ChatFilters } from '../../types/chats';
+
 
 // ✨ Função auxiliar para verificar se um chat corresponde aos filtros
 const chatMatchesFilters = (chat: Chat, filters: ChatFilters, userId: string | undefined): boolean => {
@@ -58,17 +60,17 @@ const chatMatchesFilters = (chat: Chat, filters: ChatFilters, userId: string | u
 };
 
 export const useRealtimeEvents = (userId: string | undefined, token: string) => {
+
   const setConnections = useSetRecoilState(connectionsState);;
   const setModalState = useSetRecoilState(addConnectionModalState);
   const setChats = useSetRecoilState(chatsState);
-  const filters = useRecoilValue(chatFiltersState);
   const setMessagesByChat = useSetRecoilState(messagesState);
+  const filters = useRecoilValue(chatFiltersState);
   const [activeChat, setActiveChat] = useRecoilState(activeChatState);
 
   useEffect(() => {
     if (!userId) return;
 
-    // 🔑 passa userId e token via query string
     const eventSource = new EventSource(
       `${apiConfig.node}/events/${userId}?token=${encodeURIComponent(token)}`
     );
@@ -80,16 +82,31 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
       return new Date(iso).getTime();
     };
 
-
-
     eventSource.onmessage = (event) => {
       try {
+
         const payload = JSON.parse(event.data);
+
         console.log('[SSE] Evento recebido:', payload);
 
-        const { event: tipo, connection, message, state, deletedMessage } = payload;
+        const { event: tipo, connection, message, state, deletedMessage, error } = payload;
+
+        // ======= CONNECTION ERRORS =======
+        if (error && message === 'Conexao duplicada') {
+
+          toast.error('Este número já está conectado.');
+          setModalState((prev) => ({ ...prev, isOpen: false, step: 1, qrCode: null, isLoading: false }));
+
+          // Remove localmente conexões com status null
+          setConnections((prev) =>
+            prev.filter((conn) => conn.status !== null)
+          );
+
+          return;
+        }
 
         // ======= CONNECTION EVENTS =======
+
         if (tipo === 'connection.update') {
           if (state === 'close') {
             setConnections((prev) => prev.filter((c) => c.id !== connection.id));
@@ -105,7 +122,7 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
             });
           }
           if (state === 'open') {
-            setModalState({ isOpen: false });
+            setModalState((prev) => ({ ...prev, isOpen: false, step: 1 }));
             setConnections((prev) => {
               const exists = prev.find((c) => c.id === connection.id);
               return exists
@@ -128,6 +145,8 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
               [chatId]: exists ? current : [...current, message],
             };
           });
+
+
 
           if (activeChat?.id === chatId) {
             console.log('Scroll to bottom for chat:', chatId);
@@ -241,18 +260,12 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
     };
 
     eventSource.onerror = (err) => {
-      console.warn('[SSE] Erro na conexão:', err);
+      console.log('[SSE] Erro na conexão:', err);
       eventSource.close();
     };
 
     return () => {
       eventSource.close();
     };
-  }, [userId, filters, setChats, setActiveChat, setConnections, setMessagesByChat, setModalState]);
+  }, [userId]);
 };
-
-
-
-
-
-

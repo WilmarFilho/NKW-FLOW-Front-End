@@ -1,8 +1,8 @@
 // Libs
 import { useState, useMemo, useCallback } from 'react';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 // Atom
-import { addConnectionModalState, connectionsState } from '../../state/atom';
+import { addConnectionModalState } from '../../state/atom';
 // Hooks
 import { validateConnectionForm } from '../utils/useValidator';
 import { useConnectionsActions } from '../connections/useConnectionsActions';
@@ -12,10 +12,7 @@ import type { FilterStatus, SortOrder, SortField } from '../../types/table';
 
 export function useConexoesPage() {
 
-  // Carrega Conezões e seus Metodos
-  const connections = useRecoilValue(connectionsState)
-  const setConnections = useSetRecoilState(connectionsState);
-  const { removeConnection, updateConnectionStatus, handleStartSession, handleEditConnection, isLoading, step, qrCode, setStep } = useConnectionsActions();
+  const { connections, removeConnection, updateConnectionStatus, handleStartSession, handleEditConnection, setConnections } = useConnectionsActions();
 
   // Controle de Filtro e Ordenação
   const [activeFilter, setActiveFilter] = useState<FilterStatus>('todos');
@@ -29,9 +26,7 @@ export function useConexoesPage() {
   const [errors, setErrors] = useState<Partial<Record<keyof Connection, string>>>({});
 
   const handleDelete = useCallback(async (id: string | number) => {
-
     await removeConnection(id.toString());
-
   }, [removeConnection]);
 
   const handleStatusToggle = useCallback(async (connection: Connection) => {
@@ -39,16 +34,29 @@ export function useConexoesPage() {
   }, [updateConnectionStatus]);
 
   const openModal = useCallback((conn?: Connection) => {
-
     setErrors({});
-
     setShowErrors(false);
 
     if (conn) {
-      setFormData(conn)
-      setModalState({ isOpen: true, editMode: true });
+      setFormData(conn);
+      setModalState((prev) => ({
+        ...prev,
+        isOpen: true,
+        editMode: true,
+        step: 1,
+        qrCode: null,
+        isLoading: false,
+      }));
     } else {
-      setModalState({ isOpen: true, editMode: false });
+      setFormData(null);
+      setModalState((prev) => ({
+        ...prev,
+        isOpen: true,
+        editMode: false,
+        step: 1,
+        qrCode: null,
+        isLoading: false,
+      }));
     }
   }, [setModalState]);
 
@@ -57,32 +65,34 @@ export function useConexoesPage() {
   }, [openModal]);
 
   const closeModal = useCallback(() => {
-    // Se estiver no passo 2 e houver formData, remover localmente qualquer conexão pendente
-    // que foi criada localmente (status === null) com os mesmos campos básicos.
     try {
-      if (step === 2 && formData) {
-        setConnections(prev => {
-          // procura por pendente que bate com os dados do form (nome e número)
-          const pending = prev.find(c =>
-            c.status === null &&
-            c.nome === formData.nome &&
-            (formData.numero ? c.numero === formData.numero : true)
+      if (modalState.step === 2 && formData) {
+        setConnections((prev) => {
+          const pending = prev.find(
+            (c) =>
+              c.status === null &&
+              c.nome === formData.nome &&
+              (formData.numero ? c.numero === formData.numero : true)
           );
           if (!pending) return prev;
-          return prev.filter(c => c.id !== pending.id);
+          return prev.filter((c) => c.id !== pending.id);
         });
       }
     } catch (err) {
       console.error('Erro ao remover conexão pendente localmente', err);
     } finally {
-      setModalState({ isOpen: false, editMode: false });
+      setModalState({
+        isOpen: false,
+        editMode: false,
+        step: 1,
+        qrCode: null,
+        isLoading: false,
+      });
       setFormData(null);
-      setStep(1);
     }
-  }, [step, formData, setConnections, setModalState, setFormData, setStep]);
+  }, [modalState.step, formData, setConnections, setModalState]);
 
   const handleModalSaveClick = useCallback(async () => {
-
     const foundErrors = validateConnectionForm(formData);
 
     if (Object.keys(foundErrors).length > 0) {
@@ -92,7 +102,6 @@ export function useConexoesPage() {
     }
 
     setErrors({});
-
     setShowErrors(false);
 
     if (formData) {
@@ -103,19 +112,12 @@ export function useConexoesPage() {
         await handleStartSession(formData);
       }
     }
-
-  }, [
-    formData,
-    modalState.editMode,
-    handleEditConnection,
-    closeModal,
-    handleStartSession
-  ]);
+  }, [formData, modalState.editMode, handleEditConnection, closeModal, handleStartSession]);
 
   const filteredConnections = useMemo(() => {
     if (activeFilter === 'todos') return connections;
     const isActive = activeFilter === 'ativo';
-    return connections.filter(c => c.status === isActive);
+    return connections.filter((c) => c.status === isActive);
   }, [connections, activeFilter]);
 
   const sortedConnections = useMemo(() => {
@@ -132,6 +134,9 @@ export function useConexoesPage() {
   }, [filteredConnections, sortField, sortOrder]);
 
   return {
+    isLoading: modalState.isLoading,
+    qrCode: modalState.qrCode,
+    step: modalState.step,
     connections: sortedConnections,
     closeModal,
     activeFilter,
@@ -152,9 +157,5 @@ export function useConexoesPage() {
     openModal,
     setErrors,
     handleModalSaveClick,
-    isLoading,
-    setShowErrors,
-    step,
-    qrCode,
   };
 }

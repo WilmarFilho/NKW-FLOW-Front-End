@@ -6,6 +6,7 @@ import FormStyles from './form.module.css';
 export interface SelectOption {
   value: string;
   label: string;
+  isDisabled?: boolean; 
 }
 
 // --- 2. Exportando o Hook de Media Query ---

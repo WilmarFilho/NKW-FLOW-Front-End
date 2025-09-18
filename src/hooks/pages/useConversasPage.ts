@@ -206,6 +206,7 @@ export function useConversasPage() {
   }, [handleSendMessage]);
 
 return {
+  user,
   chats,
   attendants,
   connections,

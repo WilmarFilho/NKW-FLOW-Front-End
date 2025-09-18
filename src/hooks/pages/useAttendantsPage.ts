@@ -62,9 +62,10 @@ export function useAtendentesPage() {
     if (Object.keys(foundErrors).length > 0) return;
 
     if (editAttendantId) {
-      await editAttendant(editAttendantId, formData.user_id!, formData); //Cannot invoke an object which is possibly 'undefined'.t
+      console.log(formData)
+      await editAttendant(editAttendantId, formData); 
     } else {
-      await addAttendant(formData); //Cannot invoke an object which is possibly 'undefined'.t
+      await addAttendant(formData); 
     }
 
     closeModal();

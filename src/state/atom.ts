@@ -80,10 +80,17 @@ export const messagesState = atom<Record<string, Message[]>>({
   default: {},
 });
 
-export const addConnectionModalState = atom<{ isOpen: boolean; editMode?: boolean }>({
+export const addConnectionModalState = atom<{
+  isOpen: boolean;
+  editMode?: boolean;
+  step: 1 | 2;
+  qrCode: string | null;
+  isLoading: boolean;
+}>({
   key: KEYS.ADD_CONN_MODAL,
-  default: { isOpen: false, editMode: false },
+  default: { isOpen: false, editMode: false, step: 1, qrCode: null, isLoading: false },
 });
+
 
 export const attendantsState = atom<Attendant[]>({
   key: KEYS.ATTENDANTS,

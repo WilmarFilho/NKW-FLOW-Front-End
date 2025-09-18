@@ -5,14 +5,17 @@
   flex-direction: column;
   gap: 12px;
 }
+
 .containerLink h4 {
   font-size: 30px;
   font-family: var(--font-main);
 }
+
 .containerLink p {
   line-height: 20px;
   text-wrap: balance;
 }
+
 .boxLink {
   display: flex;
   justify-content: space-between;
@@ -24,10 +27,12 @@
   padding: 18px 12px;
   margin-top: 8px;
 }
+
 .boxLink span {
   width: 100%;
   color: var(--color-background-red);
 }
+
 .boxLink button {
   background: var(--color-secundaria);
   color: var(--color-text-white);
@@ -38,9 +43,11 @@
   border-radius: 10px;
   cursor: pointer;
 }
+
 .boxLink svg {
   width: 40px;
 }
+
 @media (max-width: 1175.98px) {
   .boxLink span {
     text-align: center;
@@ -49,10 +56,16 @@
     font-size: 12px;
   }
 }
+
 @media (max-width: 599.98px) {
   .boxLink span {
     line-height: 16px;
     font-size: 10px;
+  }
+
+  .containerLink h4 {
+    font-size: 22px;
+    font-family: var(--font-main);
   }
 
   .boxLink {
