@@ -1,4 +1,3 @@
-import React from 'react';
 import Select, { OnChangeValue } from 'react-select';
 import FormStyles from '../../Gerais/Form/form.module.css';
 
