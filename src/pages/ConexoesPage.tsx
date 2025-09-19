@@ -30,6 +30,7 @@ export default function ConexoesPage() {
 
   const {
     connections,
+    agents,
     activeFilter,
     sortField,
     sortOrder,
@@ -86,13 +87,13 @@ export default function ConexoesPage() {
       render: (conn: Connection) => {
         const statusLabel =
           conn.status === true ? 'Ativo' :
-          conn.status === false ? 'Inativo' :
-          'Conectando';
+            conn.status === false ? 'Inativo' :
+              'Conectando';
 
         const statusClass =
           conn.status === true ? TableStyles.active :
-          conn.status === false ? TableStyles.inactive :
-          TableStyles.inactive;
+            conn.status === false ? TableStyles.inactive :
+              TableStyles.inactive;
 
         return (
           <span
@@ -121,8 +122,26 @@ export default function ConexoesPage() {
     {
       key: 'agente',
       label: 'Agente',
-      render: (conn: Connection) => <NavLink to="/agentes">{conn.agente?.tipo_de_agente || 'Nenhum'}</NavLink>,
-    },
+      render: (conn: Connection) => {
+        // tenta usar o objeto que já veio populado
+        let tipoAgente = conn.agente?.tipo_de_agente;
+
+        // se não tiver, tenta buscar pelo agente_id
+        if (!tipoAgente && conn.agente_id && agents.length > 0) {
+          const agente = agents.find(a => a.id === conn.agente_id);
+          if (agente) {
+            tipoAgente = agente.tipo_de_agente;
+          }
+        }
+
+        return (
+          <NavLink to="/agentes">
+            {tipoAgente || 'Nenhum'}
+          </NavLink>
+        );
+      },
+    }
+
   ];
 
   return (

@@ -1,4 +1,3 @@
-// Libs
 import { useState, useRef, useCallback } from 'react';
 
 type AudioRecorderHook = {

@@ -208,7 +208,7 @@ export default function AttendantForm({
           isDisabled={isSubmitting}
           components={{ Menu: AnimatedMenu }}
           styles={customStyles}
-          isOptionDisabled={(option) => option.isDisabled === true} //Property 'isDisabled' does not exist on type 'SelectOption'.
+          isOptionDisabled={(option) => option.isDisabled === true}
         />
 
         {triggerValidation && errors.connection_id && (

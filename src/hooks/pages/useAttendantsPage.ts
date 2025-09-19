@@ -1,13 +1,9 @@
-// Libs
 import { useState, useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
-// Hooks
 import { validateAttendantForm } from '../utils/useValidator';
 import { useAttendantsActions } from '../attendants/useAttendantsActions';
-// Types
 import type { Attendant, AttendantFormData } from '../../types/attendant';
 import type { FilterStatus, SortOrder, SortField } from '../../types/table';
-// Atom
 import { attendantsState, connectionsState } from '../../state/atom';
 
 export function useAtendentesPage() {
@@ -130,6 +126,7 @@ export function useAtendentesPage() {
     handleFormChange,
     setActiveFilter,
     setSortField,
+    setIsSubmitting,
     setSortOrder,
     openModal,
     closeModal,

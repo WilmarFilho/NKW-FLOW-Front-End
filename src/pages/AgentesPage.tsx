@@ -1,15 +1,11 @@
 import { motion } from 'framer-motion';
-// Components
 import Button from '../components/Gerais/Buttons/Button';
 import Modal from '../components/Gerais/Modal/Modal';
 import AgentList from '../components/Agentes/AgentList/AgentList';
 import KnowledgeBaseInfo from '../components/Agentes/KnowledgeBaseInfo/KnowledgeBaseInfo';
-// Hooks
 import { useAgentesPage } from '../hooks/pages/useAgentesPage';
-// CSS
 import GlobalStyles from '../global.module.css';
 import ModalStyles from '../components/Gerais/Modal/Modal.module.css';
-// Types
 import { Connection } from '../types/connection';
 
 export default function AgentesPage() {
@@ -23,10 +19,7 @@ export default function AgentesPage() {
 
     if (!agentConnIds.length) return 0;
 
-    return (state.chats ?? []).reduce(
-      (count, chat) => (chat.connection_id && agentConnIds.includes(String(chat.connection_id)) ? count + 1 : count),
-      0
-    );
+    return (state.chats ?? []).reduce((count, chat) => (chat.connection_id && agentConnIds.includes(String(chat.connection_id)) ? count + 1 : count), 0);
   };
 
   return (

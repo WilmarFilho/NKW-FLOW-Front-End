@@ -15,7 +15,7 @@ export default function LoadingScreen({ message = 'Carregando...', onFinish }: L
       if (onFinish) {
         setTimeout(onFinish, 500);
       }
-    }, 10000); // tempo mínimo do loading
+    }, 10000);
 
     return () => clearTimeout(timer);
   }, [onFinish]);

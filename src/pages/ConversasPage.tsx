@@ -80,7 +80,7 @@ export default function ConversasPage() {
         <Modal
           isOpen={state.isAddChatOpen}
           labelSubmit="Enviar"
-          onSave={state.handleSendMessage}
+          onSave={state.handleCreateChat} 
           onClose={() => state.setIsAddChatOpen(false)}
           title="Começar nova conversa."
         >
@@ -126,3 +126,5 @@ export default function ConversasPage() {
     </div>
   );
 }
+
+

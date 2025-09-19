@@ -1,18 +1,16 @@
-// Libs
 import { useState, useMemo, useCallback } from 'react';
 import { useRecoilState } from 'recoil';
-// Atom
-import { addConnectionModalState } from '../../state/atom';
-// Hooks
+import { addConnectionModalState, agentsState } from '../../state/atom';
 import { validateConnectionForm } from '../utils/useValidator';
-import { useConnectionsActions } from '../connections/useConnectionsActions';
-// Types
+import { useConnectionsActions } from '../connections/useConnectionsActions'
 import type { Connection } from '../../types/connection';
 import type { FilterStatus, SortOrder, SortField } from '../../types/table';
 
 export function useConexoesPage() {
 
   const { connections, removeConnection, updateConnectionStatus, handleStartSession, handleEditConnection, setConnections } = useConnectionsActions();
+
+  const [agents] = useRecoilState(agentsState);
 
   // Controle de Filtro e Ordenação
   const [activeFilter, setActiveFilter] = useState<FilterStatus>('todos');
@@ -138,6 +136,7 @@ export function useConexoesPage() {
     qrCode: modalState.qrCode,
     step: modalState.step,
     connections: sortedConnections,
+    agents,
     closeModal,
     activeFilter,
     sortField,

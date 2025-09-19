@@ -2,7 +2,6 @@ import { useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useMediaQuery } from 'react-responsive';
-
 import Button from '../components/Gerais/Buttons/Button';
 import MetricCard from '../components/Resumo/MetricCard/MetricCard';
 import DropdownPeriod from '../components/Resumo/DropdownPeriod/DropdownPeriod';
@@ -10,7 +9,6 @@ import BarMetricChart from '../components/Resumo/BarMetricChart/BarMetricChart';
 import LineMetricChart from '../components/Resumo/LineMetricChart/LineMetricChart';
 import GaugeMetricChart from '../components/Resumo/GaugeMetricChart/GaugeMetricChart';
 import Icon from '../components/Gerais/Icons/Icons';
-
 import GlobalStyles from '../global.module.css';
 import { useResumoPage } from '../hooks/pages/useResumoPage';
 

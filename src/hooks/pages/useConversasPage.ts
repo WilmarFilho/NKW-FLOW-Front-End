@@ -11,7 +11,6 @@ import {
   connectionsState,
   userState
 } from '../../state/atom';
-import type { Chat } from '../../types/chats';
 import { Message } from '../../types/message';
 
 export function useConversasPage() {
@@ -138,6 +137,13 @@ export function useConversasPage() {
     }
   }, [activeChat, newChatMessage, newChatNumber, sendMessage, setChats, user?.id, replyingTo]);
 
+  const handleCreateChat = useCallback(async () => {
+    setShowErrors(true); 
+    if (!validateForm()) return; 
+
+    await handleSendMessage();
+  }, [validateForm, handleSendMessage]);
+
   const handleToggleIA = useCallback(async () => {
     if (!activeChat) return;
     const updated = await toggleIA(activeChat.id, activeChat.ia_ativa);
@@ -205,53 +211,54 @@ export function useConversasPage() {
     reader.readAsDataURL(file);
   }, [handleSendMessage]);
 
-return {
-  user,
-  chats,
-  attendants,
-  connections,
-  activeChat,
-  setActiveChat,
-  messages,
-  fetchMoreMessages,
-  hasMore,
-  isLoading,
-  fetchImageProfile,
-  fetchChats,
-  fetchMoreChats,
-  hasMoreChats,
-  isLoadingChats,
-  replyingTo,
-  handleSetReplyingTo: setReplyingTo,
-  handleCloseReply,
-  isExiting,
-  setIsExiting,
-  isAddChatOpen,
-  setIsAddChatOpen,
-  openNewChatModal,
-  newChatNumber,
-  setNewChatNumber,
-  newChatMessage,
-  setNewChatMessage,
-  formConnectionId,
-  setFormConnectionId,
-  selectedAttendantId,
-  setSelectedAttendantId,
-  filterConnectionId,
-  setFilterConnectionId,
-  showErrors,
-  errors,
-  handleSendMessage,
-  handleToggleIA,
-  handleDeleteChat,
-  handleToggleChatStatus,
-  handleRenameChat,
-  handleDropFile: handleFileDrop,
-  handleDeleteMessage: deleteMessage,
-  handleReleaseChatOwner,
-  isDeleteDialogOpen,
-  setIsDeleteDialogOpen,
-  cancelRef,
-};
+  return {
+    user,
+    chats,
+    attendants,
+    connections,
+    activeChat,
+    setActiveChat,
+    messages,
+    fetchMoreMessages,
+    hasMore,
+    isLoading,
+    fetchImageProfile,
+    fetchChats,
+    fetchMoreChats,
+    hasMoreChats,
+    isLoadingChats,
+    replyingTo,
+    handleSetReplyingTo: setReplyingTo,
+    handleCloseReply,
+    handleCreateChat,
+    isExiting,
+    setIsExiting,
+    isAddChatOpen,
+    setIsAddChatOpen,
+    openNewChatModal,
+    newChatNumber,
+    setNewChatNumber,
+    newChatMessage,
+    setNewChatMessage,
+    formConnectionId,
+    setFormConnectionId,
+    selectedAttendantId,
+    setSelectedAttendantId,
+    filterConnectionId,
+    setFilterConnectionId,
+    showErrors,
+    errors,
+    handleSendMessage,
+    handleToggleIA,
+    handleDeleteChat,
+    handleToggleChatStatus,
+    handleRenameChat,
+    handleDropFile: handleFileDrop,
+    handleDeleteMessage: deleteMessage,
+    handleReleaseChatOwner,
+    isDeleteDialogOpen,
+    setIsDeleteDialogOpen,
+    cancelRef,
+  };
 
 }

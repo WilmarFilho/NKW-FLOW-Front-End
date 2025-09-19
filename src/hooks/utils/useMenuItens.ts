@@ -4,7 +4,7 @@ export interface MenuItem {
   key: string;
   to: string;
   label: string;
-  icon: IconProps['nome']; // 👈 pega direto do tipo do Icon
+  icon: IconProps['nome']; 
   roles: Array<'admin' | 'atendente'>;
   section: 'principal' | 'suporte';
 }

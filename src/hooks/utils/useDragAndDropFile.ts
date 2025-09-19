@@ -1,4 +1,3 @@
-// Libs
 import { useState, useCallback } from 'react';
 
 interface UseDragAndDropFileProps {

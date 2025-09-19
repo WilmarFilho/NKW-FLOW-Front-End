@@ -1,7 +1,6 @@
-// Libs
 import { userState } from '../../state/atom';
 import { useState, useMemo, useCallback } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 
 export function useRecompensasPage() {
 

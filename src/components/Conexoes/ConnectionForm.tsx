@@ -1,22 +1,16 @@
-// Hooks
 import { useRecoilValue } from 'recoil';
-import Select, { OnChangeValue } from 'react-select'; // Importar o Select
-
-// Type
+import Select, { OnChangeValue } from 'react-select'; 
 import { Connection } from '../../types/connection';
-// Css
 import formStyles from '../Gerais/Form/form.module.css';
 import styles from './ConnectionForm.module.css';
-// State
 import { agentsState } from '../../state/atom';
 
-// Nosso módulo reutilizável
 import {
   useMediaQuery,
   getCustomSelectStyles,
   AnimatedMenu,
   SelectOption,
-} from '../Gerais/Form/CustomSelect'; // Ajuste o caminho conforme necessário
+} from '../Gerais/Form/CustomSelect'; 
 
 interface ConnectionFormProps {
   formData: Partial<Connection> | null;
@@ -39,11 +33,9 @@ export default function ConnectionForm({
 }: ConnectionFormProps) {
   const agents = useRecoilValue(agentsState);
 
-  // Custom select config
   const isMobile = useMediaQuery('(max-width: 600px)');
   const customStyles = getCustomSelectStyles(isMobile);
 
-  // --- AGENTES ---
   const agentOptions: SelectOption[] =
     agents?.map((agent) => ({
       value: agent.id,
@@ -62,7 +54,6 @@ export default function ConnectionForm({
     });
   };
 
-  // --- STATUS (apenas no modo edição) ---
   const statusOptions: SelectOption[] = [
     { value: 'ativo', label: 'Ativo' },
     { value: 'inativo', label: 'Inativo' },

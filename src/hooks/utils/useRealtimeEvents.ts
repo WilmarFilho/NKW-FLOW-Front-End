@@ -1,7 +1,5 @@
-// Libs
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
-// Recoil
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   connectionsState,
@@ -11,7 +9,6 @@ import {
   activeChatState,
   chatFiltersState,
 } from '../../state/atom';
-// Config
 import { apiConfig } from '../../config/api';
 import { Chat, ChatFilters } from '../../types/chats';
 

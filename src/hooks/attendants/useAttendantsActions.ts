@@ -23,8 +23,11 @@ interface CreateUserResponse {
 }
 
 export const useAttendantsActions = () => {
+    
     const [user] = useRecoilState(userState);
+
     const { fetchAttendants } = useAttendants();
+ 
     const { post, del, put, patch } = useApi();
 
     // ✅ Criar atendente (só admins podem)

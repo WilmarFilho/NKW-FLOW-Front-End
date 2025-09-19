@@ -1,7 +1,5 @@
-// Libs
 import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
-// Recoil
 import { agentsState, chatsState, connectionsState } from '../../state/atom';
 
 export function useAgentesPage() {

@@ -14,17 +14,14 @@ import 'react-toastify/dist/ReactToastify.css';
 export default function Layout() {
 
   const user = useRecoilValue(userState);
-
-  // Auth
   const [token] = useRecoilState(authTokenState);
 
-  const modoTela = user?.modo_tela || 'dark';
-
-  const modoSideBar = user?.modo_side_bar || 'Full';
-
-  if(token === null) {
+  if (token === null || user === null) {
     return <></>;
   }
+
+  const modoTela = user.modo_tela || 'dark';
+  const modoSideBar = user.modo_side_bar || 'Full';
 
   useRealtimeEvents(token.userId, token.token);
 
@@ -54,4 +51,3 @@ export default function Layout() {
     </div>
   );
 }
-

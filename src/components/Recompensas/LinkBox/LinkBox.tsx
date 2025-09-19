@@ -6,10 +6,8 @@ interface LinkBoxProps {
 }
 
 /*
-
 <button>Copiar</button>
 <Icon nome="copy" />
-
 */
 
 export default function LinkBox({ onCopy }: LinkBoxProps) {
