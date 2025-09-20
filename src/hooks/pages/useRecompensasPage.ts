@@ -1,8 +1,15 @@
-import { userState } from '../../state/atom';
-import { useState, useMemo, useCallback } from 'react';
-import { useRecoilValue } from 'recoil';
+import { activeChatState, userState } from '../../state/atom';
+import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 export function useRecompensasPage() {
+
+  const setActiveChat = useSetRecoilState(activeChatState);
+
+  // resetar o chat ativo ao entrar na página
+  useEffect(() => {
+    setActiveChat(null);
+  }, []);
 
   const user = useRecoilValue(userState)
 

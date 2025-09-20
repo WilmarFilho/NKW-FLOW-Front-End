@@ -1,12 +1,20 @@
-import { useState, useMemo } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useState, useMemo, useEffect } from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { validateAttendantForm } from '../utils/useValidator';
 import { useAttendantsActions } from '../attendants/useAttendantsActions';
 import type { Attendant, AttendantFormData } from '../../types/attendant';
 import type { FilterStatus, SortOrder, SortField } from '../../types/table';
-import { attendantsState, connectionsState } from '../../state/atom';
+import { activeChatState, attendantsState, connectionsState } from '../../state/atom';
 
 export function useAtendentesPage() {
+
+  const setActiveChat = useSetRecoilState(activeChatState);
+
+  // resetar o chat ativo ao entrar na página
+  useEffect(() => {
+    setActiveChat(null);
+  }, []);
+
   const attendants = useRecoilValue(attendantsState);
   const connections = useRecoilValue(connectionsState);
   const { addAttendant, removeAttendant, editAttendant, updateAttendantStatus } = useAttendantsActions();
@@ -23,11 +31,11 @@ export function useAtendentesPage() {
   const [formData, setFormData] = useState<AttendantFormData | null>(null);
 
   const handleDelete = async (id: string | number) => {
-    await removeAttendant(id.toString()); 
+    await removeAttendant(id.toString());
   };
 
   const handleStatusToggle = async (attendant: Attendant) => {
-    await updateAttendantStatus(attendant); 
+    await updateAttendantStatus(attendant);
   };
 
   const handleEdit = (attendant: Attendant) => {
@@ -40,7 +48,7 @@ export function useAtendentesPage() {
       email: attendant.user.email,
       status: attendant.user.status,
       numero: attendant.user.numero,
-      connection_id: attendant.connection_id || '', 
+      connection_id: attendant.connection_id || '',
     };
 
     setEditData(data);
@@ -59,9 +67,9 @@ export function useAtendentesPage() {
 
     if (editAttendantId) {
       console.log(formData)
-      await editAttendant(editAttendantId, formData); 
+      await editAttendant(editAttendantId, formData);
     } else {
-      await addAttendant(formData); 
+      await addAttendant(formData);
     }
 
     closeModal();
@@ -110,7 +118,7 @@ export function useAtendentesPage() {
 
   return {
     attendants: sortedAttendants,
-    connections, 
+    connections,
     sortField,
     sortOrder,
     activeFilter,

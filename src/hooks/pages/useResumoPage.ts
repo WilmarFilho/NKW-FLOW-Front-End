@@ -1,9 +1,17 @@
-import { useRecoilValue } from 'recoil';
-import { metricsState } from '../../state/atom';
-import { useState } from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { activeChatState, metricsState } from '../../state/atom';
+import { useEffect, useState } from 'react';
 import { ViewType, DropdownId } from '../../components/Resumo/DropdownPeriod/DropdownPeriod';
 
 export function useResumoPage() {
+
+  const setActiveChat = useSetRecoilState(activeChatState);
+
+  // resetar o chat ativo ao entrar na página
+  useEffect(() => {
+    setActiveChat(null);
+  }, []);
+
   const metrics = useRecoilValue(metricsState);
 
   const [viewChatsNovos, setViewChatsNovos] = useState<ViewType>('weekly');

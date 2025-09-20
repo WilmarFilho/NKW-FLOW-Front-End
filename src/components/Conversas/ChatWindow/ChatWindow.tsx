@@ -92,6 +92,7 @@ export default function ChatWindow({
   const chatId = activeChat?.id
 
   const { listRef, topSentinelRef } = useInfiniteScroll({
+    activeChat,
     fetchMoreMessages,
     hasMore,
     isLoading,
@@ -215,10 +216,6 @@ export default function ChatWindow({
       />
     );
   });
-
-
-
-
 
   return (
     <motion.section
@@ -584,4 +581,5 @@ export default function ChatWindow({
 
   );
 }
+
 

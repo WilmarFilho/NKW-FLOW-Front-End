@@ -1,12 +1,14 @@
+import { Chat } from '@/types/chats';
 import { Message } from '../../types/message';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 interface UseInfiniteScrollProps {
+  activeChat: Chat | null;
   fetchMoreMessages: () => void;
   hasMore: boolean;
   isLoading: boolean;
   messages: Message[];
-  chatId?: string | null; 
+  chatId?: string | null;
 }
 
 export function useInfiniteScroll({
@@ -14,37 +16,34 @@ export function useInfiniteScroll({
   hasMore,
   isLoading,
   messages,
-  chatId
+  activeChat
 }: UseInfiniteScrollProps) {
   const listRef = useRef<HTMLDivElement | null>(null);
   const topSentinelRef = useRef<HTMLDivElement | null>(null);
-  const [hasScrolledToBottom, setHasScrolledToBottom] = useState(false);
   const [canFetch, setCanFetch] = useState(false);
+  const [canScrollInitial, setCanScrollInitial] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
-
-  // Reset quando troca de chat
+  
+  // reset flags quando trocar de chat
   useEffect(() => {
-    setHasScrolledToBottom(false);
+    setCanScrollInitial(true);
     setCanFetch(false);
-  }, [chatId]);
+  }, [activeChat]);
 
-  // Scroll inicial apenas ao trocar de chat
-  useEffect(() => {
-    if (hasScrolledToBottom) return;
+  useLayoutEffect(() => {
+    if (!activeChat) return;
+    if (!canScrollInitial) return;
+    if (messages.length === 0) return; // só roda se já carregaram mensagens
+
     const list = listRef.current;
-    if (!list || messages.length === 0) return;
+    if (!list) return;
 
-    list.scrollTo({ top: list.scrollHeight, behavior: 'auto' }); // primeiro auto para colocar no final imediatamente
-    setHasScrolledToBottom(true);
-
-    const onScrollComplete = () => {
+    requestAnimationFrame(() => {
+      list.scrollTo({ top: list.scrollHeight, behavior: 'auto' });
+      setCanScrollInitial(false);
       setCanFetch(true);
-      list.removeEventListener('scroll', onScrollComplete);
-    };
-
-    list.addEventListener('scroll', onScrollComplete);
-    return () => list.removeEventListener('scroll', onScrollComplete);
-  }, [messages]);
+    });
+  }, [activeChat, messages, canScrollInitial]);
 
 
   // Observer
@@ -69,6 +68,8 @@ export function useInfiniteScroll({
             // pega a altura atual do scroll para manter posição
             const previousScrollHeight = list.scrollHeight;
 
+            console.log('Fetching more messages...');
+
             fetchMoreMessages();
 
             // libera fetch quando as novas mensagens forem renderizadas
@@ -89,8 +90,7 @@ export function useInfiniteScroll({
 
     observer.observe(sentinel);
     return () => observer.disconnect();
-  }, [hasMore, isLoading, fetchMoreMessages, canFetch, isFetching]);
-
+  }, [hasMore, isLoading, fetchMoreMessages, canFetch]);
 
   return { listRef, topSentinelRef, };
 }

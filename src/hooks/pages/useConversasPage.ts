@@ -14,6 +14,9 @@ import {
 import { Message } from '../../types/message';
 
 export function useConversasPage() {
+
+  const [activeChat, setActiveChat] = useRecoilState(activeChatState);
+
   const connections = useRecoilValue(connectionsState);
   const chats = useRecoilValue(chatsState);
   const user = useRecoilValue(userState);
@@ -38,7 +41,6 @@ export function useConversasPage() {
   const { sendMessage, deleteMessage } = useMessagesActions();
   const { reOpenChat, deleteChat, renameChat, toggleIA, claimChatOwner, releaseChatOwner } = useChatActions();
 
-  const [activeChat, setActiveChat] = useRecoilState(activeChatState);
   const { messages, fetchMoreMessages, hasMore, isLoading } = useMessages(activeChat?.id || null);
 
   const handleReleaseChatOwner = useCallback(async () => {
@@ -138,8 +140,8 @@ export function useConversasPage() {
   }, [activeChat, newChatMessage, newChatNumber, sendMessage, setChats, user?.id, replyingTo]);
 
   const handleCreateChat = useCallback(async () => {
-    setShowErrors(true); 
-    if (!validateForm()) return; 
+    setShowErrors(true);
+    if (!validateForm()) return;
 
     await handleSendMessage();
   }, [validateForm, handleSendMessage]);

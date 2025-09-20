@@ -1,6 +1,15 @@
-import { useState, useCallback } from 'react';
+import { activeChatState } from '@/state/atom';
+import { useState, useCallback, useEffect } from 'react';
+import { useSetRecoilState } from 'recoil';
 
 export function useConfiguracoesPage() {
+
+  const setActiveChat = useSetRecoilState(activeChatState);
+
+  // resetar o chat ativo ao entrar na página
+  useEffect(() => {
+    setActiveChat(null);
+  }, []);
 
   const tabs = ['Conta', 'Preferências'];
 

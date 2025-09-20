@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import Modal from '../components/Gerais/Modal/Modal';
 import ChatSidebar from '../components/Conversas/ChatSideBar/ChatSideBar';
@@ -80,7 +80,7 @@ export default function ConversasPage() {
         <Modal
           isOpen={state.isAddChatOpen}
           labelSubmit="Enviar"
-          onSave={state.handleCreateChat} 
+          onSave={state.handleCreateChat}
           onClose={() => state.setIsAddChatOpen(false)}
           title="Começar nova conversa."
         >
@@ -126,5 +126,3 @@ export default function ConversasPage() {
     </div>
   );
 }
-
-
