@@ -12,21 +12,19 @@ RUN npm install
 # Copia o restante do código da aplicação
 COPY . .
 
-# Executa o build de produção. Isso cria a pasta /app/build
+# Executa o build de produção. Isso cria a pasta /app/dist
 RUN npm run build
 
 # ---
 
 # Estágio 2: Production - O servidor Nginx que servirá os arquivos
-# Note que estamos usando uma imagem oficial do Nginx, não do Node!
 FROM nginx:stable-alpine
 
-# Copia os arquivos estáticos gerados no estágio de build
-# para a pasta padrão que o Nginx serve
-COPY --from=builder /app/build /usr/share/nginx/html
+# Copia os arquivos estáticos da pasta "dist" para a pasta do Nginx
+# ESTA É A LINHA CORRIGIDA 👇
+COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Precisamos de uma configuração customizada para o Nginx lidar com o React Router
-# (Veja o Passo 2 abaixo)
+# Copia a configuração customizada do Nginx para lidar com o React Router
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expõe a porta 80, que é a porta padrão do Nginx
