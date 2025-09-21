@@ -1,36 +1,36 @@
-# Estágio 1: Build da Aplicação (usando uma imagem Node)
-FROM node:18-alpine as builder
+# Estágio 1: Builder - Onde a aplicação React é construída
+FROM node:18-alpine AS builder
 
-# Define o diretório de trabalho dentro do container
 WORKDIR /app
 
-# Copia o package.json e o package-lock.json (ESSA LINHA MUDOU)
-COPY package.json package-lock.json ./
+# Copia os arquivos de definição de dependências
+COPY package*.json ./
 
-# Instala as dependências do projeto com NPM (ESSA LINHA MUDOU)
-# Usamos 'npm ci' que é mais rápido e seguro para builds automatizados
-RUN npm ci
+# Instala as dependências
+RUN npm install
 
-# Copia o restante dos arquivos da aplicação
+# Copia o restante do código da aplicação
 COPY . .
 
-# Executa o comando de build para gerar os arquivos estáticos (ESSA LINHA MUDOU)
+# Executa o build de produção. Isso cria a pasta /app/build
 RUN npm run build
 
-# Estágio 2: Servidor de Produção (usando uma imagem Nginx)
+# ---
+
+# Estágio 2: Production - O servidor Nginx que servirá os arquivos
+# Note que estamos usando uma imagem oficial do Nginx, não do Node!
 FROM nginx:stable-alpine
 
-# Copia o arquivo de configuração personalizado do Nginx
+# Copia os arquivos estáticos gerados no estágio de build
+# para a pasta padrão que o Nginx serve
+COPY --from=builder /app/build /usr/share/nginx/html
+
+# Precisamos de uma configuração customizada para o Nginx lidar com o React Router
+# (Veja o Passo 2 abaixo)
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Remove a página de boas-vindas padrão do Nginx
-RUN rm /usr/share/nginx/html/index.html
-
-# Copia os arquivos estáticos gerados no estágio de build
-COPY --from=builder /app/dist /usr/share/nginx/html
-
-# Expõe a porta 80
+# Expõe a porta 80, que é a porta padrão do Nginx
 EXPOSE 80
 
-# Comando para iniciar o Nginx
+# Comando padrão para iniciar o Nginx no foreground
 CMD ["nginx", "-g", "daemon off;"]
