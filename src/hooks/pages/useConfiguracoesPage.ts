@@ -1,4 +1,4 @@
-import { activeChatState } from '@/state/atom';
+import { activeChatState } from '../../state/atom';
 import { useState, useCallback, useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
 
