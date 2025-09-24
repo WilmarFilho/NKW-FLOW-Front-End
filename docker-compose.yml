@@ -1,16 +1,30 @@
-# Define a versão do Docker Compose. A versão '3.8' é moderna e recomendada.
 version: '3.8'
 
-# Define a lista de serviços (containers) que compõem sua aplicação.
 services:
-  # O nome do nosso serviço. Pode ser qualquer nome, como 'app', 'client' ou 'frontend'.
   frontend:
-    # Instrução para construir a imagem.
-    # O '.' indica que o Docker Compose deve procurar o 'Dockerfile' no diretório atual.
     build: .
-    # Define um nome para o container para fácil identificação.
     container_name: nkw-flow-frontend
-    # Mapeia a porta 8080 da sua máquina (host) para a porta 80 do container (onde o Nginx está rodando).
-    # O formato é "HOST:CONTAINER"
     ports:
       - "8080:80"
+    depends_on:
+      - backend
+    environment:
+      # Caso use variáveis para comunicar com o back-end
+      - VITE_API_NODE_URL=http://backend:3000
+
+  backend:
+    build:
+      context: ../NKW-FLOW-Node  # Caminho relativo ao Dockerfile do backend
+    container_name: nkw-flow-backend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ../NKW-FLOW-Node:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+
+networks:
+  default:
+    name: nkw-network
