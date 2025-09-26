@@ -72,6 +72,8 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
       `${apiConfig.node}/events/${userId}?token=${encodeURIComponent(token)}`
     );
 
+    console.log(apiConfig.node);
+
     const parseDateBR = (d?: string | null) => {
       if (!d) return 0;
       let iso = d.replace(' ', 'T').replace(/(\.\d{3})\d+/, '$1');
