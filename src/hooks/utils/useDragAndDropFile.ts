@@ -21,7 +21,6 @@ export const useDragAndDropFile = ({ handleDropFile }: UseDragAndDropFileProps) 
     e.preventDefault();
     setIsDragging(false);
     const file = e.dataTransfer.files[0];
-    console.log(file)
     if (file) {
       handleDropFile(file);
     }

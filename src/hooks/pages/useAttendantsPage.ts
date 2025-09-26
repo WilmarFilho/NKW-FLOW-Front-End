@@ -66,7 +66,6 @@ export function useAtendentesPage() {
     if (Object.keys(foundErrors).length > 0) return;
 
     if (editAttendantId) {
-      console.log(formData)
       await editAttendant(editAttendantId, formData);
     } else {
       await addAttendant(formData);

@@ -68,8 +68,6 @@ export function useInfiniteScroll({
             // pega a altura atual do scroll para manter posição
             const previousScrollHeight = list.scrollHeight;
 
-            console.log('Fetching more messages...');
-
             fetchMoreMessages();
 
             // libera fetch quando as novas mensagens forem renderizadas

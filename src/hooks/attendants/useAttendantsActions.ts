@@ -75,8 +75,6 @@ export const useAttendantsActions = () => {
     ) => {
         if (user?.tipo_de_usuario !== 'admin') return;
 
-        console.log(updatedData)
-
         await patch(`/attendants/${attendantId}`, {
             connection_id: updatedData.connection_id,
             nome: updatedData.nome,

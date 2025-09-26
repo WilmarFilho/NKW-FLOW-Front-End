@@ -72,8 +72,6 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
       `${apiConfig.node}/events/${userId}?token=${encodeURIComponent(token)}`
     );
 
-    console.log(apiConfig.node);
-
     const parseDateBR = (d?: string | null) => {
       if (!d) return 0;
       let iso = d.replace(' ', 'T').replace(/(\.\d{3})\d+/, '$1');
@@ -85,8 +83,6 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
       try {
 
         const payload = JSON.parse(event.data);
-
-        console.log('[SSE] Evento recebido:', payload);
 
         const { event: tipo, connection, message, state, deletedMessage, error } = payload;
 
@@ -148,10 +144,8 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
 
 
           if (activeChat?.id === chatId) {
-            console.log('Scroll to bottom for chat:', chatId);
             requestAnimationFrame(() => {
               const list = document.querySelector(`#chat-list-${chatId}`) as HTMLDivElement;
-              console.log('List element:', list);
               if (list) list.scrollTo({ top: list.scrollHeight, behavior: 'smooth' });
             });
           }
@@ -259,7 +253,6 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
     };
 
     eventSource.onerror = (err) => {
-      console.log('[SSE] Erro na conexão:', err);
       eventSource.close();
     };
 

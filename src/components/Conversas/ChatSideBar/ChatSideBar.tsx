@@ -111,7 +111,6 @@ function ChatSidebar({
   }, [setFilters]);
 
   const handleAttendantSelect = useCallback((attendantId: string | null) => {
-    console.log('Selecionou atendente:', attendantId);
     setFilters(prev => ({ ...prev, attendant_id: attendantId, connection_id: undefined }));
   }, [setFilters]);
 
