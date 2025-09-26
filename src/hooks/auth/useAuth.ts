@@ -31,18 +31,6 @@ export const useAuth = () => {
     }
   };
 
-  const loginTeste = async () => {
- 
-      const response = await api.get('/teste');
-
-      if (!response) {
-        throw { message: 'Erro ao realizar login. Tente novamente.', status: 500 };
-      }
-
-      return response;
-
-  };
-
   const logout = () => {
     setToken(null);
     setUser(null);
@@ -50,5 +38,5 @@ export const useAuth = () => {
 
   const isAuthenticated = !!token;
 
-  return { token, isAuthenticated, login, logout, user, loginTeste };
+  return { token, isAuthenticated, login, logout, user };
 };

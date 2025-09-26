@@ -16,7 +16,7 @@ export default function LoginForm() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const { login, loginTeste } = useAuth();
+  const { login } = useAuth();
 
   const handleLogin = async () => {
     setErrorMessage(null);
@@ -49,12 +49,6 @@ export default function LoginForm() {
     }
   };
 
-  const handleLoginTeste = async () => {
-      const teste = await loginTeste();
-      console.log(teste);
-
-  };
-
   return (
     <div className={styles.loginBox}>
       <div className={styles.wrapperLogo}>
@@ -80,10 +74,6 @@ export default function LoginForm() {
 
       <button onClick={handleLogin} disabled={loading}>
         {loading ? 'Entrando...' : 'Entrar'}
-      </button>
-
-      <button onClick={handleLoginTeste} >
-        TESTE
       </button>
     </div>
   );
