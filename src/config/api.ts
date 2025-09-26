@@ -2,7 +2,7 @@ const isDevelopment = import.meta.env.DEV;
 
 const nodeApiUrl = isDevelopment
   ? import.meta.env.VITE_API_NODE_URL // -> LOCAL
-  : '/api';                          // -> VERCEL
+  : 'http://localhost:3000';                          // -> VERCEL
 
 if (isDevelopment && !nodeApiUrl) {
   console.error(
