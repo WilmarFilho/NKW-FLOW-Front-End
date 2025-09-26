@@ -35,6 +35,8 @@ export const useConnectionsActions = () => {
         agente_id: connection.agente_id,
       });
 
+      console.log(qrcode);
+
       if (qrcode) {
         setModalState((prev) => ({ ...prev, qrCode: qrcode, step: 2 }));
       } else {
