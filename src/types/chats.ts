@@ -30,4 +30,5 @@ export interface ChatFilters {
   iaStatus?: 'todos' | 'ativa' | 'desativada';
   status?: 'Open' | 'Close';
   owner?: string;
+  isFetching?: boolean;
 }

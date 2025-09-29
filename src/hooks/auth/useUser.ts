@@ -12,6 +12,7 @@ import { useAttendants } from '../attendants/useAttendants';
 import { useAgents } from '../agents/useAgents';
 import { useConnections } from '../connections/useConnections';
 import { useMetrics } from '../metrics/useMetrics';
+import { useChats } from '../chats/useChats';
 
 export const useUser = () => {
 
@@ -21,6 +22,7 @@ export const useUser = () => {
   // Carrega todos fetch dos modelos do Usuário
   const { fetchAttendants } = useAttendants();
   const { fetchAgents } = useAgents();
+  const { fetchChats } = useChats();
   const { fetchConnections } = useConnections();
   const { fetchMetrics } = useMetrics();
 
@@ -36,20 +38,22 @@ export const useUser = () => {
       if (!opts?.force && user) return user;
 
       const fetchedUser = await get<User>('/users');
-      
+
       if (fetchedUser) {
         setUser(fetchedUser);
+        opts?.onProgress?.('Carregando conversas ...');
+        await fetchChats({}, fetchedUser);
 
-        opts?.onProgress?.('Carregando conversas...');
+        opts?.onProgress?.('Carregando atendentes ...');
         await fetchAttendants(fetchedUser);
 
-        opts?.onProgress?.('Carregando agentes...');
+        opts?.onProgress?.('Carregando agentes ...');
         await fetchAgents(fetchedUser);
 
-        opts?.onProgress?.('Carregando conexões...');
+        opts?.onProgress?.('Carregando conexões ...');
         await fetchConnections(fetchedUser);
 
-        opts?.onProgress?.('Carregando métricas...');
+        opts?.onProgress?.('Carregando métricas ...');
         await fetchMetrics(fetchedUser);
       }
 

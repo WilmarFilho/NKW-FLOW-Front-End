@@ -132,5 +132,6 @@ export const chatFiltersState = atom<ChatFilters>({
     iaStatus: 'todos',
     status: 'Open',
     owner: 'all',
+    isFetching: false,
   } as ChatFilters,
 });

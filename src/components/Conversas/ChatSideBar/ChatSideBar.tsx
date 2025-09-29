@@ -59,22 +59,35 @@ function ChatSidebar({
   // ✨ Substituir múltiplos useStates pelo atom global de filtros
   const [filters, setFilters] = useRecoilState(chatFiltersState);
 
-  // Manter estado local para o input de busca para usar o debounce
-  const [searchQuery, setSearchQuery] = useState('');
-  const debouncedSearch = useDebounce(searchQuery, 300);
-
   const user = useRecoilValue(userState);
   const listRef = useRef<HTMLDivElement | null>(null);
 
-  // ✨ Efeito para atualizar o filtro de busca no estado global
-  useEffect(() => {
-    setFilters(prev => ({ ...prev, search: debouncedSearch }));
-  }, [debouncedSearch, setFilters]);
+  // Dispara fetchChats apenas se os filtros estiverem diferentes do default
+useEffect(() => {
+  // Só dispara se algum filtro estiver diferente do padrão
+  const defaultFilters: ChatFilters = {
+    search: '',
+    status: 'Open',
+    owner: 'all',
+    iaStatus: 'todos',
+    connection_id: undefined,
+    attendant_id: undefined,
+    isFetching: false,
+  };
+  const isDefault =
+    filters.search === defaultFilters.search &&
+    filters.status === defaultFilters.status &&
+    filters.owner === defaultFilters.owner &&
+    filters.iaStatus === defaultFilters.iaStatus &&
+    filters.connection_id === defaultFilters.connection_id &&
+    filters.attendant_id === defaultFilters.attendant_id &&
+    filters.isFetching === defaultFilters.isFetching;
 
-  // Dispara fetchChats sempre que os filtros mudam
-  useEffect(() => {
+  if (!isDefault) {
     fetchChats(filters);
-  }, [filters, fetchChats]);
+    console.log('Fetching chats with filters:', filters);
+  }
+}, [filters, fetchChats]);
 
   // scroll infinito
   useEffect(() => {
@@ -94,24 +107,35 @@ function ChatSidebar({
   }, [isLoadingChats, hasMoreChats, fetchMoreChats, filters]);
 
   // ✨ Funções de manipulação de filtros agora atualizam o estado global
+  const toggleSearchFilter = useCallback((query : string) => {
+    setFilters(prev => ({ ...prev, search: query }));
+    setFilters(prev => ({ ...prev, isFetching: true }));
+  }, [setFilters]);
+
+    // ✨ Funções de manipulação de filtros agora atualizam o estado global
   const toggleStatusFilter = useCallback(() => {
     setFilters(prev => ({ ...prev, status: prev.status === 'Open' ? 'Close' : 'Open' }));
+    setFilters(prev => ({ ...prev, isFetching: true }));
   }, [setFilters]);
 
   const toggleOwnerFilter = useCallback(() => {
     setFilters(prev => ({ ...prev, owner: prev.owner === 'all' ? 'mine' : 'all' }));
+    setFilters(prev => ({ ...prev, isFetching: true }));
   }, [setFilters]);
 
   const setIaStatusFilter = useCallback((status: 'ativa' | 'desativada') => {
     setFilters(prev => ({ ...prev, iaStatus: prev.iaStatus === status ? 'todos' : status }));
+    setFilters(prev => ({ ...prev, isFetching: true }));
   }, [setFilters]);
 
   const handleConnectionSelect = useCallback((connectionId: string | null) => {
     setFilters(prev => ({ ...prev, connection_id: connectionId, attendant_id: undefined }));
+    setFilters(prev => ({ ...prev, isFetching: true }));
   }, [setFilters]);
 
   const handleAttendantSelect = useCallback((attendantId: string | null) => {
     setFilters(prev => ({ ...prev, attendant_id: attendantId, connection_id: undefined }));
+    setFilters(prev => ({ ...prev, isFetching: true }));
   }, [setFilters]);
 
   return (
@@ -122,7 +146,7 @@ function ChatSidebar({
       animate="show"
     >
       <div className={styles.wrapperSearchBar}>
-        <SearchBar onSearch={setSearchQuery} />
+        <SearchBar onSearch={toggleSearchFilter} />
         <button onClick={() => setIsAddChatOpen(true)} className={styles.buttonAddChat}>
           <Icon nome="addchat" />
         </button>

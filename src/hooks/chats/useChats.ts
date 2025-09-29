@@ -4,7 +4,6 @@ import { chatsState, userState, nextCursorState } from '../../state/atom';
 import { useApi } from '../utils/useApi';
 import type { Chat, ChatFilters } from '../../types/chats';
 import { User } from '../../types/user';
-import { filter } from '@chakra-ui/react';
 
 interface UseChatsReturn {
   fetchChats: (filters?: ChatFilters, userParam?: User) => Promise<Chat[] | undefined>;
@@ -107,3 +106,7 @@ export const useChats = (): UseChatsReturn => {
     loading,
   };
 };
+
+
+
+
