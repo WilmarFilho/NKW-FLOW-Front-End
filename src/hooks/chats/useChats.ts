@@ -4,6 +4,7 @@ import { chatsState, userState, nextCursorState } from '../../state/atom';
 import { useApi } from '../utils/useApi';
 import type { Chat, ChatFilters } from '../../types/chats';
 import { User } from '../../types/user';
+import { filter } from '@chakra-ui/react';
 
 interface UseChatsReturn {
   fetchChats: (filters?: ChatFilters, userParam?: User) => Promise<Chat[] | undefined>;
@@ -22,7 +23,7 @@ export const useChats = (): UseChatsReturn => {
   const [hasMore, setHasMore] = useState(true);
 
   const [currentFilters, setCurrentFilters] = useState<ChatFilters>({});
-  const [sessionId, setSessionId] = useState<number>(Date.now());
+  const [, setSessionId] = useState<number>(Date.now());
 
   const { get, put } = useApi();
 
@@ -36,6 +37,8 @@ export const useChats = (): UseChatsReturn => {
     async (filters: ChatFilters = {}, userParam?: User) => {
       const currentUser = userParam ?? user;
       if (!currentUser) return;
+
+      console.log(filters);
 
       setLoading(true);
       setNextCursor(null);
