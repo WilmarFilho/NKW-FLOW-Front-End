@@ -76,7 +76,7 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
     eventSourceRef.current = newEventSource;
 
     newEventSource.onopen = () => {
-      console.log('[SSE] Conexão estabelecida.');
+      //console.log('[SSE] Conexão estabelecida.');
       retryCountRef.current = 0;
     };
 
@@ -216,7 +216,7 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
       const retryCount = retryCountRef.current;
       const delay = Math.min(60000, 2000 * Math.pow(2, retryCount));
 
-      console.log(`[SSE] Próxima tentativa em ${delay / 1000} segundos.`);
+      //console.log(`[SSE] Próxima tentativa em ${delay / 1000} segundos.`);
 
       retryTimeoutRef.current = setTimeout(() => {
         retryCountRef.current += 1;

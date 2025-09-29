@@ -85,7 +85,6 @@ function ChatSidebar({
 
     if (!isDefault) {
       fetchChats(filters);
-      console.log('Fetching chats with filters:', filters);
     }
   }, [filters, fetchChats]);
 
