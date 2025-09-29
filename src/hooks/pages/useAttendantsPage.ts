@@ -4,17 +4,22 @@ import { validateAttendantForm } from '../utils/useValidator';
 import { useAttendantsActions } from '../attendants/useAttendantsActions';
 import type { Attendant, AttendantFormData } from '../../types/attendant';
 import type { FilterStatus, SortOrder, SortField } from '../../types/table';
-import { activeChatState, attendantsState, connectionsState } from '../../state/atom';
+import { activeChatState, attendantsState, chatFiltersState, connectionsState } from '../../state/atom';
 
 export function useAtendentesPage() {
 
   const setActiveChat = useSetRecoilState(activeChatState);
+  const setFilters = useSetRecoilState(chatFiltersState);
 
   // resetar o chat ativo ao entrar na página
   useEffect(() => {
     setActiveChat(null);
+    setFilters(prev => ({
+      ...prev,
+      isFetching: false,
+    }));
   }, []);
-
+  
   const attendants = useRecoilValue(attendantsState);
   const connections = useRecoilValue(connectionsState);
   const { addAttendant, removeAttendant, editAttendant, updateAttendantStatus } = useAttendantsActions();

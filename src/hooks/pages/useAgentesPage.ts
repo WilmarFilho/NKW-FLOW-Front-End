@@ -1,14 +1,19 @@
 import { useEffect, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { activeChatState, agentsState, chatsState, connectionsState } from '../../state/atom';
+import { activeChatState, agentsState, chatFiltersState, chatsState, connectionsState } from '../../state/atom';
 
 export function useAgentesPage() {
 
   const setActiveChat = useSetRecoilState(activeChatState);
+  const setFilters = useSetRecoilState(chatFiltersState);
 
-  // resetar o chat ativo ao entrar na página
+   // resetar o chat ativo ao entrar na página
   useEffect(() => {
     setActiveChat(null);
+    setFilters(prev => ({
+      ...prev,
+      isFetching: false,
+    }));
   }, []);
 
   // Carrega Conexões e Agentes

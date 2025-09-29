@@ -1,15 +1,21 @@
-import { activeChatState, userState } from '../../state/atom';
+import { activeChatState, chatFiltersState, userState } from '../../state/atom';
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 export function useRecompensasPage() {
 
   const setActiveChat = useSetRecoilState(activeChatState);
+  const setFilters = useSetRecoilState(chatFiltersState);
 
-  // resetar o chat ativo ao entrar na página
+   // resetar o chat ativo ao entrar na página
   useEffect(() => {
     setActiveChat(null);
+    setFilters(prev => ({
+      ...prev,
+      isFetching: false,
+    }));
   }, []);
+
 
   const user = useRecoilValue(userState)
 

@@ -58,36 +58,36 @@ function ChatSidebar({
 }: ChatSidebarProps) {
   // ✨ Substituir múltiplos useStates pelo atom global de filtros
   const [filters, setFilters] = useRecoilState(chatFiltersState);
-
+  
   const user = useRecoilValue(userState);
   const listRef = useRef<HTMLDivElement | null>(null);
 
   // Dispara fetchChats apenas se os filtros estiverem diferentes do default
-useEffect(() => {
-  // Só dispara se algum filtro estiver diferente do padrão
-  const defaultFilters: ChatFilters = {
-    search: '',
-    status: 'Open',
-    owner: 'all',
-    iaStatus: 'todos',
-    connection_id: undefined,
-    attendant_id: undefined,
-    isFetching: false,
-  };
-  const isDefault =
-    filters.search === defaultFilters.search &&
-    filters.status === defaultFilters.status &&
-    filters.owner === defaultFilters.owner &&
-    filters.iaStatus === defaultFilters.iaStatus &&
-    filters.connection_id === defaultFilters.connection_id &&
-    filters.attendant_id === defaultFilters.attendant_id &&
-    filters.isFetching === defaultFilters.isFetching;
+  useEffect(() => {
+    // Só dispara se algum filtro estiver diferente do padrão
+    const defaultFilters: ChatFilters = {
+      search: '',
+      status: 'Open',
+      owner: 'all',
+      iaStatus: 'todos',
+      connection_id: undefined,
+      attendant_id: undefined,
+      isFetching: false,
+    };
+    const isDefault =
+      filters.search === defaultFilters.search &&
+      filters.status === defaultFilters.status &&
+      filters.owner === defaultFilters.owner &&
+      filters.iaStatus === defaultFilters.iaStatus &&
+      filters.connection_id === defaultFilters.connection_id &&
+      filters.attendant_id === defaultFilters.attendant_id &&
+      filters.isFetching === defaultFilters.isFetching;
 
-  if (!isDefault) {
-    fetchChats(filters);
-    console.log('Fetching chats with filters:', filters);
-  }
-}, [filters, fetchChats]);
+    if (!isDefault) {
+      fetchChats(filters);
+      console.log('Fetching chats with filters:', filters);
+    }
+  }, [filters, fetchChats]);
 
   // scroll infinito
   useEffect(() => {
@@ -107,35 +107,29 @@ useEffect(() => {
   }, [isLoadingChats, hasMoreChats, fetchMoreChats, filters]);
 
   // ✨ Funções de manipulação de filtros agora atualizam o estado global
-  const toggleSearchFilter = useCallback((query : string) => {
-    setFilters(prev => ({ ...prev, search: query }));
-    setFilters(prev => ({ ...prev, isFetching: true }));
+  const toggleSearchFilter = useCallback((query: string) => {
+    setFilters(prev => ({ ...prev, search: query, isFetching: true }));
   }, [setFilters]);
 
-    // ✨ Funções de manipulação de filtros agora atualizam o estado global
+  // ✨ Funções de manipulação de filtros agora atualizam o estado global
   const toggleStatusFilter = useCallback(() => {
-    setFilters(prev => ({ ...prev, status: prev.status === 'Open' ? 'Close' : 'Open' }));
-    setFilters(prev => ({ ...prev, isFetching: true }));
+    setFilters(prev => ({ ...prev, status: prev.status === 'Open' ? 'Close' : 'Open', isFetching: true }));
   }, [setFilters]);
 
   const toggleOwnerFilter = useCallback(() => {
-    setFilters(prev => ({ ...prev, owner: prev.owner === 'all' ? 'mine' : 'all' }));
-    setFilters(prev => ({ ...prev, isFetching: true }));
+    setFilters(prev => ({ ...prev, owner: prev.owner === 'all' ? 'mine' : 'all', isFetching: true }));
   }, [setFilters]);
 
   const setIaStatusFilter = useCallback((status: 'ativa' | 'desativada') => {
-    setFilters(prev => ({ ...prev, iaStatus: prev.iaStatus === status ? 'todos' : status }));
-    setFilters(prev => ({ ...prev, isFetching: true }));
+    setFilters(prev => ({ ...prev, iaStatus: prev.iaStatus === status ? 'todos' : status, isFetching: true }));
   }, [setFilters]);
 
   const handleConnectionSelect = useCallback((connectionId: string | null) => {
-    setFilters(prev => ({ ...prev, connection_id: connectionId, attendant_id: undefined }));
-    setFilters(prev => ({ ...prev, isFetching: true }));
+    setFilters(prev => ({ ...prev, connection_id: connectionId, attendant_id: undefined, isFetching: true }));
   }, [setFilters]);
 
   const handleAttendantSelect = useCallback((attendantId: string | null) => {
-    setFilters(prev => ({ ...prev, attendant_id: attendantId, connection_id: undefined }));
-    setFilters(prev => ({ ...prev, isFetching: true }));
+    setFilters(prev => ({ ...prev, attendant_id: attendantId, connection_id: undefined, isFetching: true }));
   }, [setFilters]);
 
   return (

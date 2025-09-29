@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { activeChatState, addConnectionModalState, agentsState } from '../../state/atom';
+import { activeChatState, addConnectionModalState, agentsState, chatFiltersState } from '../../state/atom';
 import { validateConnectionForm } from '../utils/useValidator';
 import { useConnectionsActions } from '../connections/useConnectionsActions'
 import type { Connection } from '../../types/connection';
@@ -9,11 +9,17 @@ import type { FilterStatus, SortOrder, SortField } from '../../types/table';
 export function useConexoesPage() {
 
   const setActiveChat = useSetRecoilState(activeChatState);
+  const setFilters = useSetRecoilState(chatFiltersState);
 
   // resetar o chat ativo ao entrar na página
   useEffect(() => {
     setActiveChat(null);
+    setFilters(prev => ({
+      ...prev,
+      isFetching: false,
+    }));
   }, []);
+
 
   const { connections, removeConnection, updateConnectionStatus, handleStartSession, handleEditConnection, setConnections } = useConnectionsActions();
 

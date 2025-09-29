@@ -1,16 +1,22 @@
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { activeChatState, metricsState } from '../../state/atom';
+import { activeChatState, chatFiltersState, metricsState } from '../../state/atom';
 import { useEffect, useState } from 'react';
 import { ViewType, DropdownId } from '../../components/Resumo/DropdownPeriod/DropdownPeriod';
 
 export function useResumoPage() {
 
   const setActiveChat = useSetRecoilState(activeChatState);
+  const setFilters = useSetRecoilState(chatFiltersState);
 
   // resetar o chat ativo ao entrar na página
   useEffect(() => {
     setActiveChat(null);
+    setFilters(prev => ({
+      ...prev,
+      isFetching: false,
+    }));
   }, []);
+
 
   const metrics = useRecoilValue(metricsState);
 
