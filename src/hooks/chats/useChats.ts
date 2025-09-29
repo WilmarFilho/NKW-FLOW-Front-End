@@ -38,8 +38,6 @@ export const useChats = (): UseChatsReturn => {
       const currentUser = userParam ?? user;
       if (!currentUser) return;
 
-      console.log(filters);
-
       setLoading(true);
       setNextCursor(null);
       setHasMore(true);
