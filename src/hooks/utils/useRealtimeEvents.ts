@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react'; // ✨ Importa useRef e useCallback
+import { useEffect, useRef, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
@@ -12,7 +12,6 @@ import {
 import { apiConfig } from '../../config/api';
 import { Chat, ChatFilters } from '../../types/chats';
 
-// A função auxiliar chatMatchesFilters permanece a mesma
 const chatMatchesFilters = (chat: Chat, filters: ChatFilters, userId: string | undefined): boolean => {
   if (!userId) return false;
 
@@ -45,16 +44,25 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
   const filters = useRecoilValue(chatFiltersState);
   const [activeChat, setActiveChat] = useRecoilState(activeChatState);
 
-  // ✨ Refs para gerenciar a conexão e timers sem causar re-renderizações
   const eventSourceRef = useRef<EventSource | null>(null);
   const retryTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const retryCountRef = useRef<number>(0);
 
-  // ✨ A lógica de conexão é encapsulada em uma função `useCallback`
+  // Usamos refs para acessar os valores mais recentes sem causar recriação do useCallback
+  const filtersRef = useRef(filters);
+  const activeChatRef = useRef(activeChat);
+
+  useEffect(() => {
+    filtersRef.current = filters;
+  }, [filters]);
+
+  useEffect(() => {
+    activeChatRef.current = activeChat;
+  }, [activeChat]);
+
   const connect = useCallback(() => {
     if (!userId || !token) return;
 
-    // ✨ Limpa conexões ou tentativas de reconexão anteriores
     if (eventSourceRef.current) {
       eventSourceRef.current.close();
     }
@@ -65,14 +73,10 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
     const newEventSource = new EventSource(
       `${apiConfig.node}/events/${userId}?token=${encodeURIComponent(token)}`
     );
-
-    // ✨ Armazena a nova instância no ref
     eventSourceRef.current = newEventSource;
 
-    // ✨ Evento para quando a conexão é estabelecida com sucesso
     newEventSource.onopen = () => {
-      console.log('[SSE] Conexão estabelecida com sucesso.');
-      // Zera o contador de tentativas após uma conexão bem-sucedida
+      console.log('[SSE] Conexão estabelecida.');
       retryCountRef.current = 0;
     };
 
@@ -83,13 +87,11 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
       return new Date(iso).getTime();
     };
 
-    // ✨ Lógica de recebimento de mensagens
     newEventSource.onmessage = (event) => {
       try {
         const payload = JSON.parse(event.data);
         const { event: tipo, connection, message, state, deletedMessage, error } = payload;
 
-        // ======= CONNECTION ERRORS =======
         if (error && message === 'Conexao duplicada') {
           toast.error('Este número já está conectado.');
           setModalState((prev) => ({ ...prev, isOpen: false, step: 1, qrCode: null, isLoading: false }));
@@ -97,7 +99,6 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
           return;
         }
 
-        // ======= CONNECTION EVENTS =======
         if (tipo === 'connection.update') {
           if (state === 'close') {
             setConnections((prev) => prev.filter((c) => c.id !== connection.id));
@@ -121,7 +122,6 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
           }
         }
 
-        // ======= MESSAGES EVENTS =======
         if ((tipo === 'messages.upsert' || tipo === 'send.message') && message) {
           const chatId = message.chat_id;
 
@@ -134,7 +134,7 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
             };
           });
 
-          if (activeChat?.id === chatId) {
+          if (activeChatRef.current?.id === chatId) {
             requestAnimationFrame(() => {
               const list = document.querySelector(`#chat-list-${chatId}`) as HTMLDivElement;
               if (list) list.scrollTo({ top: list.scrollHeight, behavior: 'smooth' });
@@ -149,7 +149,7 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
           })
             .then((res) => res.json())
             .then((fullChatData: Chat) => {
-              const shouldBeVisible = chatMatchesFilters(fullChatData, filters, userId);
+              const shouldBeVisible = chatMatchesFilters(fullChatData, filtersRef.current, userId);
 
               setChats((prevChats) => {
                 const chatExistsInList = prevChats.some((c) => c.id === chatId);
@@ -182,7 +182,6 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
             .catch((err) => console.error('Erro ao buscar chat para a mensagem recebida:', err));
         }
 
-        // ======= CHAT UPDATES =======
         if (tipo === 'chats.upsert' && payload.chat) {
           const chatId = payload.chat.id;
           setChats((prevChats) => {
@@ -193,7 +192,6 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
           });
         }
 
-        // ======= MESSAGES DELETE =======
         if (tipo === 'messages.delete' && deletedMessage) {
           const chatId = deletedMessage.chat_id;
           if (!chatId) return;
@@ -211,41 +209,32 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
       }
     };
 
-    // ✨ Nova lógica de tratamento de erro para reconexão
     newEventSource.onerror = (err) => {
-      console.error('[SSE] Erro na conexão, tentando reconectar...', err);
-      newEventSource.close(); // Fecha a instância que falhou
+      console.error('[SSE] Erro na conexão. Tentando reconectar...', err);
+      newEventSource.close();
 
       const retryCount = retryCountRef.current;
-      // Calcula o tempo de espera: 2s, 4s, 8s, 16s... com um máximo de 60s
       const delay = Math.min(60000, 2000 * Math.pow(2, retryCount));
 
-      console.log(`[SSE] Próxima tentativa de reconexão em ${delay / 1000} segundos.`);
+      console.log(`[SSE] Próxima tentativa em ${delay / 1000} segundos.`);
 
       retryTimeoutRef.current = setTimeout(() => {
-        retryCountRef.current += 1; // Incrementa para a próxima possível falha
-        connect(); // Tenta reconectar
+        retryCountRef.current += 1;
+        connect();
       }, delay);
     };
-    // ✨ As dependências do useCallback devem incluir todas as variáveis e funções externas que ele utiliza
-  }, [userId, token, setConnections, setModalState, setChats, setMessagesByChat, filters, activeChat, setActiveChat]);
+  }, [userId, token, setConnections, setModalState, setChats, setMessagesByChat, setActiveChat]);
 
-  // ✨ O useEffect agora gerencia o ciclo de vida da conexão
   useEffect(() => {
-    // Inicia a primeira conexão quando o componente montar
     connect();
 
-    // ✨ Função de limpeza para quando o componente for desmontado
     return () => {
-      console.log('[SSE] Limpando e fechando conexão ativa.');
-      // Cancela qualquer tentativa de reconexão agendada
       if (retryTimeoutRef.current) {
         clearTimeout(retryTimeoutRef.current);
       }
-      // Fecha a conexão SSE ativa
       if (eventSourceRef.current) {
         eventSourceRef.current.close();
       }
     };
-  }, [connect]); // O efeito depende da função `connect` memoizada
+  }, [connect]);
 };
