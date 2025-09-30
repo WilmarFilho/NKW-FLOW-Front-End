@@ -214,15 +214,32 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
       newEventSource.close();
 
       const retryCount = retryCountRef.current;
+
+      if (retryCount >= 5) { // limite de tentativas
+        console.warn('[SSE] Limite de tentativas atingido. Aguardando o usuário voltar.');
+
+        // Escuta quando o usuário volta para a aba
+        const handleVisibility = () => {
+          if (document.visibilityState === 'visible') {
+            console.log('[SSE] Usuário voltou, tentando reconectar...');
+            retryCountRef.current = 0;
+            connect();
+            document.removeEventListener('visibilitychange', handleVisibility);
+          }
+        };
+
+        document.addEventListener('visibilitychange', handleVisibility);
+        return;
+      }
+
+      // Retry exponencial normal
       const delay = Math.min(60000, 2000 * Math.pow(2, retryCount));
-
-      //console.log(`[SSE] Próxima tentativa em ${delay / 1000} segundos.`);
-
       retryTimeoutRef.current = setTimeout(() => {
         retryCountRef.current += 1;
         connect();
       }, delay);
     };
+
   }, [userId, token, setConnections, setModalState, setChats, setMessagesByChat, setActiveChat]);
 
   useEffect(() => {

@@ -43,6 +43,13 @@ function App() {
                 </ProtectedRouteByRole>
               }
             >
+
+              {/* Rota padrão ao acessar "/" */}
+              <Route
+                index
+                element={<Navigate to="conversas" replace />}
+              />
+
               {/* ATENDENTES */}
               <Route
                 path="conversas"
