@@ -593,6 +593,10 @@
     text-align: center;
   }
 
+  .chatHeader {
+    gap: 0;
+  }
+
   .chatDetails h3 {
     font-size: 14px;
   }

@@ -116,21 +116,7 @@
   background-color: var(--color-background-dark);
 }
 
-@media (max-width: 599.98px) {
-  .messageAudio {
-    min-width: 190px;
-  }
-}
 
-@media (max-width: 399.98px) {
-  .messageAudio {
-    min-width: 140px;
-  }
-
-  .messageBubble {
-    max-width: 70%;
-  }
-}
 
 
 /* MessageBubble.module.css */
@@ -324,4 +310,36 @@
   width: 38px;
   height: 32px;
   padding-bottom: 6px;
+}
+
+
+@media (max-width: 599.98px) {
+  .messageAudio {
+    min-width: 190px;
+  }
+  .waveWrapper {
+    min-width: 80px;
+  }
+}
+
+@media (max-width: 399.98px) {
+  .messageAudio {
+    min-width: 140px;
+  }
+
+  .messageBubble {
+    max-width: 85%;
+  }
+
+  .audioAvatar {
+    display: none;
+  }
+
+  .documentBody {
+    width: 40%;
+  }
+
+  .documentMeta {
+    display: none;
+  }
 }

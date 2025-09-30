@@ -130,8 +130,12 @@
 
 
 @media (max-width: 400.98px) {
-   .menuLeft {
+  .menuLeft {
     left: -100px;
   }
-}
 
+  .menu button {
+    font-size: 12px;
+    padding: 12px;
+  }
+}

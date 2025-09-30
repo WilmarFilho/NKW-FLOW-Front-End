@@ -423,4 +423,8 @@
   .settingsContentAccount {
     gap: 16px;
   }
+  .editButton {
+    padding: 14px 24px;
+    font-size: 12px;    
+  }
 }
