@@ -17,7 +17,7 @@ import { useResumoPage } from '../hooks/pages/useResumoPage';
 
 export default function ResumoPage() {
   const navigate = useNavigate();
-  const isMobile = useMediaQuery({ maxWidth: 429.98 });
+  const isMobile = useMediaQuery({ maxWidth: 595.98 });
 
   const {
     viewChatsNovos,
@@ -113,23 +113,31 @@ export default function ResumoPage() {
       <motion.div className={GlobalStyles.pageRowVariant}>
         <MetricCard title="Chats por Atendentes" icon={<Icon nome="userlist" />} small isMobile={isMobile}>
           <div style={{ height: 200, overflowY: 'auto', paddingRight: 8, width: '100%', scrollbarWidth: 'none' }}>
-            <BarMetricChart
-              data={getMobileData(dataAtendentes)}
-              dataKey="chats"
-              vertical
-              barSize={36}
-              height={heightAtedentes}
-            />
+        <BarMetricChart
+          data={getMobileData(dataAtendentes)}
+          dataKey="chats"
+          vertical
+          barSize={56}
+          height={heightAtedentes}
+        />
           </div>
         </MetricCard>
 
         <MetricCard title="Chats por Conexões" icon={<Icon nome="connect" />} small isMobile={isMobile}>
           <div className={GlobalStyles.chartContainer}>
-            <LineMetricChart data={getMobileData(dataConexoes)} dataKey="value" width={widthConexoes} />
+        {(isMobile || (Array.isArray(dataConexoes) && dataConexoes.length > 3)) ? (
+          <BarMetricChart
+            data={getMobileData(dataConexoes)}
+            dataKey="value"
+            vertical
+            barSize={56}
+            height={200}
+          />
+        ) : (
+          <LineMetricChart data={getMobileData(dataConexoes)} dataKey="value" width={widthConexoes} />
+        )}
           </div>
         </MetricCard>
-
-        
       </motion.div>
     </div>
   );

@@ -49,7 +49,7 @@
     height: 38px;
   }
 }
-@media (max-width: 427.98px) {
+@media (max-width: 595.98px) {
   .dropdownSelectButton, .dropdownSelect {
     width: 100%;
     display: flex;

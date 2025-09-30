@@ -25,7 +25,7 @@ export default function BarMetricChart({
         data={data}
         layout={vertical ? 'vertical' : 'horizontal'}
         barSize={barSize}
-        margin={vertical ? { top: 0, right: 60, left: 0, bottom: 0 } : undefined}
+        margin={vertical ? { top: 0, right: 20, left: 0, bottom: 0 } : undefined}
       >
         {vertical ? (
           <>
@@ -39,7 +39,7 @@ export default function BarMetricChart({
         <Bar dataKey={dataKey} className={Styles.chartBarPrimary} radius={[8, 8, 0, 0]}>
           {vertical && (
             <>
-              <LabelList dataKey="name" position="insideLeft" offset={30} className={Styles.chartLabelAttendantName} />
+              <LabelList dataKey="name" position="insideLeft" offset={12} className={Styles.chartLabelAttendantName} />
               <LabelList dataKey={dataKey} position="right" offset={8} className={Styles.chartLabelChatCount} />
             </>
           )}

@@ -15,9 +15,19 @@ export default function LineMetricChart({
   width = 400
 }: LineMetricChartProps) {
   return (
-    <ResponsiveContainer width={width} height="100%">
+    <ResponsiveContainer className={Styles.chartContainer} height="100%">
       <LineChart data={data} margin={{ top: 60, right: 50, left: 50, bottom: 5 }}>
-        <XAxis interval={0} dataKey="name" axisLine={false} tickLine={false} dy={10} />
+        <XAxis
+          dataKey="name"
+          type="category"
+          scale="point"          // coloca os pontos exatamente nas extremidades
+          interval={0}
+          axisLine={false}
+          tickLine={false}
+          dy={10}
+          padding={{ left: 30, right: 30 }} // garante que use 100% da largura
+        />
+
         <YAxis hide />
         <Line
           type="natural"

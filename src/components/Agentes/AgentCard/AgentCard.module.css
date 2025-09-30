@@ -72,13 +72,18 @@
     display: block;
   }
 }
+@media (max-width: 599.98px) {
+  .buttonCard, .description {
+    display: none;
+  }
+}
 @media (max-width: 499.98px) {
   .card {
     min-height: 0;
     padding: 22px;
     gap: 12px;
   }
-  .buttonCard {
-    display: none;
+  .title {
+    gap: 0 ;
   }
 }
