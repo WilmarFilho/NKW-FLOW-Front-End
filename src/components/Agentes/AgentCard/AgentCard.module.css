@@ -74,6 +74,11 @@
 }
 @media (max-width: 499.98px) {
   .card {
-    min-height: 300px;
+    min-height: 0;
+    padding: 22px;
+    gap: 12px;
+  }
+  .buttonCard {
+    display: none;
   }
 }

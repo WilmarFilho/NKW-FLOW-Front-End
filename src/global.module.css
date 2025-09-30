@@ -140,7 +140,7 @@
   .filterControls { flex-direction: column; }
   .pageHeaderTitles { gap: 0.5rem; text-align: center; }
   .filterControls .button { font-size: 0.75rem; padding: 0.6rem 0; }
-  .conversasContainer {
+  .conversasContainer, .pageContainer {
     height: 90%;
   }
 }
