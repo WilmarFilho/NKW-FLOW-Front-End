@@ -184,6 +184,14 @@
   .ChatFilterButton::after {
     content: attr(data-label-short);
   }
+  .chatList {
+    height: 55%;
+  }
+  .statusToggleContainer {
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 8px;
+  }
 }
 @media (max-width: 464.98px) {
   .chatSidebar {

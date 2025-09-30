@@ -7,10 +7,13 @@ import MetricCard from '../components/Resumo/MetricCard/MetricCard';
 import DropdownPeriod from '../components/Resumo/DropdownPeriod/DropdownPeriod';
 import BarMetricChart from '../components/Resumo/BarMetricChart/BarMetricChart';
 import LineMetricChart from '../components/Resumo/LineMetricChart/LineMetricChart';
-import GaugeMetricChart from '../components/Resumo/GaugeMetricChart/GaugeMetricChart';
 import Icon from '../components/Gerais/Icons/Icons';
 import GlobalStyles from '../global.module.css';
 import { useResumoPage } from '../hooks/pages/useResumoPage';
+
+        //<MetricCard title="Convidados na Semana" icon={<Icon nome="money" />} value="+0" small isMobile={isMobile}>
+          //<GaugeMetricChart filled={0} empty={100} valueText="+ 0" labelText="Para ganhar recompensas" />
+        //</MetricCard>
 
 export default function ResumoPage() {
   const navigate = useNavigate();
@@ -126,9 +129,7 @@ export default function ResumoPage() {
           </div>
         </MetricCard>
 
-        <MetricCard title="Convidados na Semana" icon={<Icon nome="money" />} value="+0" small isMobile={isMobile}>
-          <GaugeMetricChart filled={0} empty={100} valueText="+ 0" labelText="Para ganhar recompensas" />
-        </MetricCard>
+        
       </motion.div>
     </div>
   );
