@@ -34,6 +34,10 @@ export function validateConnectionForm(data: Partial<Connection> | null) {
     errors.nome = 'O nome da conexão deve ter ao menos 3 caracteres.';
   }
 
+  if (!data?.nome || data.nome.trim().length > 20) {
+    errors.nome = 'O nome da conexão deve ter no máximo 20 caracteres.';
+  }
+
   if (!data?.agente_id || data.agente_id.trim() === '') {
     errors.agente_id = 'Selecione um agente.';
   }
