@@ -7,6 +7,9 @@ export function validateAttendantForm(data: AttendantFormData, editMode = false)
   if (!data.nome.trim() || data.nome.trim().length < 3) {
     errors.nome = 'O nome deve ter pelo menos 3 caracteres.';
   }
+  if (!data.nome.trim() || data.nome.trim().length > 20) {
+    errors.nome = 'O nome deve ter no máximo 20 caracteres.';
+  }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) {
     errors.email = 'E-mail inválido.';
   }

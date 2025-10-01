@@ -48,6 +48,9 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
   const retryTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const retryCountRef = useRef<number>(0);
 
+  // Heartbeat para detectar SSE morto
+  const lastPingRef = useRef<number>(Date.now());
+
   // Usamos refs para acessar os valores mais recentes sem causar recriação do useCallback
   const filtersRef = useRef(filters);
   const activeChatRef = useRef(activeChat);
@@ -76,8 +79,8 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
     eventSourceRef.current = newEventSource;
 
     newEventSource.onopen = () => {
-      //console.log('[SSE] Conexão estabelecida.');
       retryCountRef.current = 0;
+      lastPingRef.current = Date.now();
     };
 
     const parseDateBR = (d?: string | null) => {
@@ -86,6 +89,10 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
       if (!iso.endsWith('Z') && !iso.includes('+')) iso += 'Z';
       return new Date(iso).getTime();
     };
+
+    newEventSource.addEventListener('ping', () => {
+      lastPingRef.current = Date.now();
+    });
 
     newEventSource.onmessage = (event) => {
       try {
@@ -176,7 +183,9 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
 
               if (message.remetente === 'Contato' && fullChatData.ia_ativa === false) {
                 const audio = new Audio('/sounds/ding.mp3');
-                audio.play().catch((err) => console.warn('Erro ao tocar notificação', err));
+                audio.play().catch(() => {
+                  // Silencia o erro sem logar nada
+                });
               }
             })
             .catch((err) => console.error('Erro ao buscar chat para a mensagem recebida:', err));
@@ -209,41 +218,46 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
       }
     };
 
-    newEventSource.onerror = (err) => {
-      console.error('[SSE] Erro na conexão. Tentando reconectar...', err);
+    newEventSource.onerror = () => {
       newEventSource.close();
 
       const retryCount = retryCountRef.current;
-
-      if (retryCount >= 5) { // limite de tentativas
-        console.warn('[SSE] Limite de tentativas atingido. Aguardando o usuário voltar.');
-
-        // Escuta quando o usuário volta para a aba
-        const handleVisibility = () => {
-          if (document.visibilityState === 'visible') {
-            console.log('[SSE] Usuário voltou, tentando reconectar...');
-            retryCountRef.current = 0;
-            connect();
-            document.removeEventListener('visibilitychange', handleVisibility);
-          }
-        };
-
-        document.addEventListener('visibilitychange', handleVisibility);
-        return;
-      }
-
-      // Retry exponencial normal
       const delay = Math.min(60000, 2000 * Math.pow(2, retryCount));
+
       retryTimeoutRef.current = setTimeout(() => {
         retryCountRef.current += 1;
         connect();
       }, delay);
     };
-
   }, [userId, token, setConnections, setModalState, setChats, setMessagesByChat, setActiveChat]);
 
   useEffect(() => {
     connect();
+
+    // reconecta quando a internet volta
+    const handleOnline = () => {
+      retryCountRef.current = 0;
+      connect();
+    };
+
+    // reconecta quando volta para a aba/tela
+    const handleFocus = () => {
+      if (!eventSourceRef.current || eventSourceRef.current.readyState === EventSource.CLOSED) {
+        retryCountRef.current = 0;
+        connect();
+      }
+    };
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('focus', handleFocus);
+    document.addEventListener('visibilitychange', handleFocus);
+
+    // watchdog do ping
+    const watchdog = setInterval(() => {
+      if (Date.now() - lastPingRef.current > 30000) {
+        connect();
+      }
+    }, 10000);
 
     return () => {
       if (retryTimeoutRef.current) {
@@ -252,6 +266,10 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
       if (eventSourceRef.current) {
         eventSourceRef.current.close();
       }
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('focus', handleFocus);
+      document.removeEventListener('visibilitychange', handleFocus);
+      clearInterval(watchdog);
     };
   }, [connect]);
 };

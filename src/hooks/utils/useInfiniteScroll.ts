@@ -23,7 +23,7 @@ export function useInfiniteScroll({
   const [canFetch, setCanFetch] = useState(false);
   const [canScrollInitial, setCanScrollInitial] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
-  
+
   // reset flags quando trocar de chat
   useEffect(() => {
     setCanScrollInitial(true);
@@ -38,10 +38,14 @@ export function useInfiniteScroll({
     const list = listRef.current;
     if (!list) return;
 
+    // espera 2 frames
     requestAnimationFrame(() => {
-      list.scrollTo({ top: list.scrollHeight, behavior: 'auto' });
-      setCanScrollInitial(false);
-      setCanFetch(true);
+      requestAnimationFrame(() => {
+        list.scrollTo({ top: list.scrollHeight, behavior: 'auto' });
+        console.log('scroll to bottom');
+        setCanScrollInitial(false);
+        setCanFetch(true);
+      });
     });
   }, [activeChat, messages, canScrollInitial]);
 
