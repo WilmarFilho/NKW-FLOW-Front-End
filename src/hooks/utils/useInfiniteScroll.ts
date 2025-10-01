@@ -42,7 +42,6 @@ export function useInfiniteScroll({
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         list.scrollTo({ top: list.scrollHeight, behavior: 'auto' });
-        console.log('scroll to bottom');
         setCanScrollInitial(false);
         setCanFetch(true);
       });
