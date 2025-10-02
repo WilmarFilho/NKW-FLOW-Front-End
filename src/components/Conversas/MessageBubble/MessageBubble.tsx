@@ -147,6 +147,18 @@ export default function MessageBubble(props: MessageBubbleProps) {
   const renderMessageContent = () => {
     const type = mimetype || 'text';
 
+    if (type === 'image/webp' && base64) {
+      return (
+        <img
+          src={base64}
+          alt="Sticker"
+          className={styles.stickerImage}
+          loading="lazy"
+        />
+      );
+    }
+
+
     if (type.startsWith('image') && base64) {
       return (
         <>
@@ -165,16 +177,7 @@ export default function MessageBubble(props: MessageBubbleProps) {
       );
     }
 
-    if (type === 'image/webp' && base64) {
-      return (
-        <img
-          src={base64}
-          alt="Sticker"
-          className={styles.stickerImage}
-          loading="lazy"
-        />
-      );
-    }
+
 
     if (type.startsWith('video') && base64) {
       return (
