@@ -162,6 +162,8 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
                 const chatExistsInList = prevChats.some((c) => c.id === chatId);
                 let newChats: Chat[];
 
+                console.log(fullChatData)
+
                 if (shouldBeVisible) {
                   const updatedChat = { ...fullChatData, mensagem_data: message.created_at || fullChatData.mensagem_data };
                   newChats = chatExistsInList
