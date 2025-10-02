@@ -33,8 +33,8 @@ export const useMetrics = () => {
         atendentes: atendentes || [],
         conexoes: conexoes || []
       });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
-      console.error('Erro ao carregar métricas:', err);
       setMetrics({
         novos: null,
         fechados: null,

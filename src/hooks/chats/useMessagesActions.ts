@@ -22,8 +22,8 @@ export default function useMessagesActions() {
     try {
       const result = await del(`/messages/${id}`);
       return result;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
-      console.error('Erro ao deletar mensagem', err);
       return null;
     }
   };

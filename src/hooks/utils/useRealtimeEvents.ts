@@ -162,8 +162,6 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
                 const chatExistsInList = prevChats.some((c) => c.id === chatId);
                 let newChats: Chat[];
 
-                console.log(fullChatData)
-
                 if (shouldBeVisible) {
                   const updatedChat = { ...fullChatData, mensagem_data: message.created_at || fullChatData.mensagem_data };
                   newChats = chatExistsInList
@@ -190,7 +188,7 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
                 });
               }
             })
-            .catch((err) => console.error('Erro ao buscar chat para a mensagem recebida:', err));
+            
         }
 
         if (tipo === 'chats.upsert' && payload.chat) {
@@ -215,8 +213,9 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
             };
           });
         }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (err) {
-        console.error('[SSE] Erro ao processar evento:', err);
+        // 
       }
     };
 

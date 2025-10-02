@@ -40,8 +40,8 @@ export const useConnectionsActions = () => {
       } else {
         setModalState((prev) => ({ ...prev, qrCode: null, step: 1, isOpen: false }));
       }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
-      console.error('Erro ao iniciar sessão de conexão', err);
       setModalState((prev) => ({ ...prev, qrCode: null, step: 1, isOpen: false }));
     }
   };

@@ -42,8 +42,6 @@ export default function LoginForm() {
       } else {
         setErrorMessage('Erro ao fazer login. Tente novamente.');
       }
-
-      console.error(err);
     } finally {
       setLoading(false);
     }

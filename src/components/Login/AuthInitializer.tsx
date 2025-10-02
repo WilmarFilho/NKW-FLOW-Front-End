@@ -39,8 +39,8 @@ export const AuthInitializer = ({ children }: AuthInitializerProps) => {
             if (mounted) setProgressMessage(msg);
           },
         });
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
-        console.error('Falha ao inicializar a sessão do usuário', error);
         localStorage.removeItem('authTokenState');
         setToken(null);
       } finally {

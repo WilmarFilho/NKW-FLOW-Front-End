@@ -23,8 +23,6 @@ export const useApi = () => {
   ): Promise<T> => {
     const url = `${apiConfig.node}${path}`;
 
-    //console.log(`[API] ${method.toUpperCase()} ${url}`, requestData || '');
-
     const headers = {
       ...(config?.headers || {}),
       ...(token ? { Authorization: `Bearer ${token}` } : {}),

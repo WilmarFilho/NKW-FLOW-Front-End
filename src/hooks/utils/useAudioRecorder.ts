@@ -36,8 +36,8 @@ export const useAudioRecorder = (
     let stream: MediaStream | null = null;
     try {
       stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
-      console.error('Erro ao obter permissão do microfone:', err);
       alert('A permissão para acessar o microfone foi negada ou não está disponível.');
       return;
     }

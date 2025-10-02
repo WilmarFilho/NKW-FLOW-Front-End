@@ -89,8 +89,9 @@ export function useConexoesPage() {
           return prev.filter((c) => c.id !== pending.id);
         });
       }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
-      console.error('Erro ao remover conexão pendente localmente', err);
+      // console.error('Erro ao fechar modal de conexão', err);
     } finally {
       setModalState({
         isOpen: false,
