@@ -13,6 +13,7 @@ import { useFormatDate } from '../../../hooks/utils/useFormatDate';
 
 interface ChatListItemProps {
   name: string;
+  type?: string;
   message: string;
   avatar?: string;
   chatId: string;
@@ -38,6 +39,7 @@ function ChatListItem({
   fetchImageProfile,
   mensagemData,
   unreadCount,
+  type,
 }: ChatListItemProps) {
   const [avatarUrl, setAvatarUrl] = useState(avatar || defaultAvatar);
   const [hasError, setHasError] = useState(false);
@@ -56,9 +58,18 @@ function ChatListItem({
   };
 
   const nameInMessageRegex = /^\*.*?\*\s?/;
-  const cleanedMessage = message
-    ? message.replace(nameInMessageRegex, '').trim()
-    : 'Arquivo de mídia 📎';
+
+  const isMediaType = (type?: string) => {
+    if (!type) return false;
+    return /^(video|image|application|audio)/.test(type);
+  };
+
+  const cleanedMessage =
+    isMediaType(type)
+      ? 'Arquivo de mídia 📎'
+      : message
+        ? message.replace(nameInMessageRegex, '').trim()
+        : '';
 
   const containerClasses = `${styles.chatListItem} ${isActive ? styles.active : ''}`;
 

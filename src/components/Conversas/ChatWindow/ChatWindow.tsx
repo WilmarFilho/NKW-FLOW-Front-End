@@ -197,6 +197,7 @@ export default function ChatWindow({
         senderName={activeChat.contato_nome}
         text={msg.mensagem}
         mimetype={msg.mimetype}
+        filename={msg.file_name}
         base64={msg.base64}
         sender={msg.remetente === 'Usuário' ? 'me' : 'other'}
         createdAt={msg.criado_em}

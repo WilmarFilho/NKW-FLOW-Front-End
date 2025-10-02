@@ -223,6 +223,7 @@ function ChatSidebar({
             unreadCount={chat.unread_count}
             mensagemData={chat.mensagem_data}
             chatId={chat.id}
+            type={chat.ultima_mensagem_type}
             isActive={activeChat?.id === chat.id}
             name={chat.contato_nome}
             message={chat.ultima_mensagem}

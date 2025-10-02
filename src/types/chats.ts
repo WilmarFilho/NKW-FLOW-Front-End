@@ -11,6 +11,7 @@ export interface Chat {
   ia_ativa: boolean;
   ultima_atualizacao: string;
   mensagem_data?: string | null;
+  ultima_mensagem_type?: string;
   ultima_mensagem: string,
   connection: {
     agente: Agent,

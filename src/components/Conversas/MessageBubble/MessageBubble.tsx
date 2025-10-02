@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
 import styles from './MessageBubble.module.css';
 import Icon from '../../../components/Gerais/Icons/Icons';
 import { DropdownMenu } from '../../../components/Gerais/Dropdown/DropdownMenu';
@@ -13,6 +12,7 @@ interface MessageBubbleProps {
   sender: 'me' | 'other';
   mimetype?: string;
   base64?: string;
+  filename?: string;
   quote?: { mensagem?: string | null; mimetype?: string; remetente: 'Usuário' | 'Contato' | 'IA' };
   onReply?: () => void;
   createdAt: string;
@@ -23,7 +23,7 @@ interface MessageBubbleProps {
 }
 
 export default function MessageBubble(props: MessageBubbleProps) {
-  const { id, sender, mimetype, onReply, quote, senderName, createdAt, excluded, avatarUrl, base64, text } = props;
+  const { id, sender, mimetype, filename, onReply, quote, senderName, createdAt, excluded, avatarUrl, base64, text } = props;
 
   const parseToLocalDate = (utcTimestamp: string): Date => {
     if (utcTimestamp && !utcTimestamp.endsWith('Z')) {
@@ -147,7 +147,7 @@ export default function MessageBubble(props: MessageBubbleProps) {
   const renderMessageContent = () => {
     const type = mimetype || 'text';
 
-    if (type === 'image/png' && base64) {
+    if (type.startsWith('image') && base64) {
       return (
         <>
           <img
@@ -176,42 +176,47 @@ export default function MessageBubble(props: MessageBubbleProps) {
       );
     }
 
-    if (type === 'video/mp4' && base64) {
+    if (type.startsWith('video') && base64) {
       return (
-        <video
-          src={base64}
-          className={styles.messageImage}
-          preload="metadata"
-          playsInline
-          muted
-          onClick={() => {
-            setExpandedMedia(base64);
-            setExpandedType('video');
-          }}
-        />
+        <>
+          <video
+            src={base64}
+            className={styles.messageImage}
+            preload="metadata"
+            playsInline
+            muted
+            onClick={() => {
+              setExpandedMedia(base64);
+              setExpandedType('video');
+            }}
+          />
+          {text && <p>{text}</p>}
+        </>
       );
     }
 
     if (type !== 'text' && base64) {
       const fileMime = inferMime(base64, type);
-      const filename = text || `arquivo.${fileMime.split('/').pop() || 'bin'}`;
       const sizeLabel = fileSizeText ?? '—';
 
       return (
-        <div className={styles.documentContainer}>
-          <div className={styles.documentLeft}>
-            <Icon nome='document' />
+        <>
+          <div className={styles.documentContainer}>
+            <div className={styles.documentLeft}>
+              <Icon nome='document' />
+            </div>
+            <div className={styles.documentBody}>
+              <div className={styles.documentName}>{filename}</div>
+              <div className={styles.documentMeta}>{fileMime} • {sizeLabel}</div>
+            </div>
+            <div className={styles.documentRight}>
+              <a href={base64} download={filename} aria-label={`Baixar ${filename}`}>
+                <Icon nome='arrowdownload' />
+              </a>
+            </div>
           </div>
-          <div className={styles.documentBody}>
-            <div className={styles.documentName}>{filename}</div>
-            <div className={styles.documentMeta}>{fileMime} • {sizeLabel}</div>
-          </div>
-          <div className={styles.documentRight}>
-            <a href={base64} download={filename} aria-label={`Baixar ${filename}`}>
-              <Icon nome='arrowdownload' />
-            </a>
-          </div>
-        </div>
+          {text && <p>{text}</p>}
+        </>
       );
     }
 
