@@ -69,7 +69,7 @@ function ChatListItem({
       ? 'Arquivo de mídia 📎'
       : message
         ? message.replace(nameInMessageRegex, '').trim()
-        : '';
+        : 'Arquivo de mídia 📎';
 
   const containerClasses = `${styles.chatListItem} ${isActive ? styles.active : ''}`;
 
