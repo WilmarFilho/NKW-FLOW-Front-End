@@ -102,29 +102,31 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
         if (error && message === 'Conexao duplicada') {
           toast.error('Este número já está conectado.');
           setModalState((prev) => ({ ...prev, isOpen: false, step: 1, qrCode: null, isLoading: false }));
-          setConnections((prev) => prev.filter((conn) => conn.status !== null));
+          setConnections((prev) => (prev ?? []).filter((conn) => conn.status !== null));
           return;
         }
 
         if (tipo === 'connection.update') {
           if (state === 'close') {
-            setConnections((prev) => prev.filter((c) => c.id !== connection.id));
+            setConnections((prev) => (prev ?? []).filter((c) => c.id !== connection.id));
           }
           if (state === 'connecting') {
             setConnections((prev) => {
-              const exists = prev.find((c) => c.id === connection.id);
+              const safePrev = prev ?? [];
+              const exists = safePrev.find((c) => c.id === connection.id);
               return exists
-                ? prev.map((c) => (c.id === connection.id ? { ...c, state: 'connecting' } : c))
-                : [...prev, { ...connection, state: 'connecting' }];
+                ? safePrev.map((c) => (c.id === connection.id ? { ...c, state: 'connecting' } : c))
+                : [...safePrev, { ...connection, state: 'connecting' }];
             });
           }
           if (state === 'open') {
             setModalState((prev) => ({ ...prev, isOpen: false, step: 1 }));
             setConnections((prev) => {
-              const exists = prev.find((c) => c.id === connection.id);
+              const safePrev = prev ?? [];
+              const exists = safePrev.find((c) => c.id === connection.id);
               return exists
-                ? prev.map((c) => (c.id === connection.id ? connection : c))
-                : [...prev, connection];
+                ? safePrev.map((c) => (c.id === connection.id ? connection : c))
+                : [...safePrev, connection];
             });
           }
         }
@@ -133,7 +135,8 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
           const chatId = message.chat_id;
 
           setMessagesByChat((prev) => {
-            const current = prev[chatId] || [];
+            const safePrev = prev ?? {};
+            const current = safePrev[chatId] || [];
             const exists = current.find((m) => m.id === message.id);
             return {
               ...prev,
@@ -159,16 +162,18 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
               const shouldBeVisible = chatMatchesFilters(fullChatData, filtersRef.current, userId);
 
               setChats((prevChats) => {
-                const chatExistsInList = prevChats.some((c) => c.id === chatId);
+                const chatExistsInList = (prevChats ?? []).some((c) => c.id === chatId);
                 let newChats: Chat[];
 
                 if (shouldBeVisible) {
                   const updatedChat = { ...fullChatData, mensagem_data: message.created_at || fullChatData.mensagem_data };
+                  const safePrevChats = prevChats ?? [];
                   newChats = chatExistsInList
-                    ? prevChats.map((c) => (c.id === chatId ? updatedChat : c))
-                    : [...prevChats, updatedChat];
+                    ? safePrevChats.map((c) => (c.id === chatId ? updatedChat : c))
+                    : [...safePrevChats, updatedChat];
                 } else {
-                  newChats = prevChats.filter((c) => c.id !== chatId);
+                  const safePrevChats = prevChats ?? [];
+                  newChats = safePrevChats.filter((c) => c.id !== chatId);
                 }
 
                 if (message.remetente === 'Contato') {
@@ -194,7 +199,8 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
         if (tipo === 'chats.upsert' && payload.chat) {
           const chatId = payload.chat.id;
           setChats((prevChats) => {
-            const updatedChats = prevChats.map((c) => (c.id === chatId ? { ...c, unread_count: 0 } : c));
+            const safePrevChats = prevChats ?? [];
+            const updatedChats = safePrevChats.map((c) => (c.id === chatId ? { ...c, unread_count: 0 } : c));
             const unreadCount = updatedChats.filter((c) => c.unread_count > 0).length;
             document.title = unreadCount > 0 ? `(${unreadCount}) WhatsApp - NKW FLOW` : 'WhatsApp - NKW FLOW';
             return updatedChats;
@@ -206,9 +212,10 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
           if (!chatId) return;
 
           setMessagesByChat((prev) => {
-            const current = prev[chatId] || [];
+            const safePrev = prev ?? {};
+            const current = safePrev[chatId] || [];
             return {
-              ...prev,
+              ...safePrev,
               [chatId]: current.map((m) => (m.id === deletedMessage.id ? { ...m, excluded: true } : m)),
             };
           });

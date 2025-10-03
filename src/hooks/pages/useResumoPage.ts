@@ -24,8 +24,8 @@ export function useResumoPage() {
   const [viewChatsFechados, setViewChatsFechados] = useState<ViewType>('weekly');
   const [openDropdown, setOpenDropdown] = useState<DropdownId>(null);
 
-  const heightAtedentes = metrics.atendentes.length * 50;
-  const widthConexoes = Math.max(metrics.conexoes.length * 120, 300);
+  const heightAtedentes = metrics ? metrics.atendentes.length * 50 : 0;
+  const widthConexoes = Math.max(metrics ? metrics.conexoes.length * 120 : 0, 300);
 
   return {
     viewChatsNovos,
@@ -34,10 +34,10 @@ export function useResumoPage() {
     setViewChatsFechados,
     openDropdown,
     setOpenDropdown,
-    dataNovos: metrics.novos,
-    dataFechados: metrics.fechados,
-    dataConexoes: metrics.conexoes,
-    dataAtendentes: metrics.atendentes,
+    dataNovos: metrics?.novos,
+    dataFechados: metrics?.fechados,
+    dataConexoes: metrics?.conexoes,
+    dataAtendentes: metrics?.atendentes,
     heightAtedentes,
     widthConexoes,
   };

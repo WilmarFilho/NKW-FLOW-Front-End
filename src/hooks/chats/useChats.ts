@@ -75,11 +75,12 @@ export const useChats = (): UseChatsReturn => {
 
       if (fetchedData?.chats.length) {
         setChats(prev => {
+          const safePrev = prev ?? [];
           // Evita duplicação
           const newChats = fetchedData.chats.filter(
-            chat => !prev.some(c => c.id === chat.id)
+            chat => !safePrev.some(c => c.id === chat.id)
           );
-          return [...prev, ...newChats];
+          return [...safePrev, ...newChats];
         });
         setNextCursor(fetchedData.nextCursor);
         setHasMore(!!fetchedData.nextCursor);

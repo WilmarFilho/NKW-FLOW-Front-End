@@ -21,7 +21,7 @@ export default function useChatActions() {
     const result = await del(`/chats/${chatId}`);
 
     if (result) {
-      setChats((prev) => prev.filter((chat) => chat.id !== chatId));
+      setChats((prev) => prev ? prev.filter((chat) => chat.id !== chatId) : []);
     }
 
     return result;
@@ -34,7 +34,7 @@ export default function useChatActions() {
 
     if (result) {
       setChats((prev) =>
-        prev.map((chat) => (chat.id === chatId ? { ...chat, contato_nome: newName } : chat))
+        prev ? prev.map((chat) => (chat.id === chatId ? { ...chat, contato_nome: newName } : chat)) : []
       );
     }
 
@@ -48,7 +48,7 @@ export default function useChatActions() {
 
     if (result) {
       setChats((prev) =>
-        prev.map((chat) => (chat.id === chatId ? { ...chat, status: status } : chat))
+        prev ? prev.map((chat) => (chat.id === chatId ? { ...chat, status: status } : chat)) : []
       );
     }
 
@@ -78,7 +78,7 @@ export default function useChatActions() {
     const result = await put(`/chats/${chatId}`, { user_id: userId });
     if (result) {
       setChats((prev) =>
-        prev.map((chat) => (chat.id === chatId ? { ...chat, user_id: userId } : chat))
+        prev ? prev.map((chat) => (chat.id === chatId ? { ...chat, user_id: userId } : chat)) : []  
       );
     }
     return result;
@@ -88,7 +88,7 @@ export default function useChatActions() {
     const result = await put(`/chats/${chatId}`, { user_id: null });
     if (result) {
       setChats((prev) =>
-        prev.map((chat) => (chat.id === chatId ? { ...chat, user_id: null } : chat))
+        prev ? prev.map((chat) => (chat.id === chatId ? { ...chat, user_id: null } : chat)) : []
       );
     }
     return result;

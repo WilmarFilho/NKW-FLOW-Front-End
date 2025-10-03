@@ -40,10 +40,10 @@ export const useMessages = (chatId: string | null) => {
         setNextCursor(data.nextCursor || null);
         // --- Marca como lido ---
         setChats((currentChats) => {
-          const chat = currentChats.find((c) => c.id === chatId);
+          const chat = currentChats ? currentChats.find((c) => c.id === chatId) : null;
           if (chat && chat.unread_count > 0) {
 
-            const totalUnreadChats = currentChats.filter((c) => c.unread_count > 0).length;
+            const totalUnreadChats = currentChats ? currentChats.filter((c) => c.unread_count > 0).length : 0;
 
 
             const unreadCount = totalUnreadChats - 1;
@@ -57,9 +57,9 @@ export const useMessages = (chatId: string | null) => {
           }
 
           // zera o contador do chat atual
-          return currentChats.map((c) =>
+          return currentChats ? currentChats.map((c) =>
             c.id === chatId ? { ...c, unread_count: 0 } : c
-          );
+          ) : [];
         });
 
       }
@@ -79,13 +79,16 @@ export const useMessages = (chatId: string | null) => {
     );
 
     if (data && data.messages.length > 0) {
-      setMessagesByChat((prev) => ({
-        ...prev,
-        [chatId]: [
-          ...data.messages.reverse(),
-          ...(prev[chatId] || []),
-        ],
-      }));
+      setMessagesByChat((prevRaw) => {
+        const prev = prevRaw ?? {};
+        return {
+          ...prev,
+          [chatId]: [
+            ...data.messages.reverse(),
+            ...(prev[chatId] || []),
+          ],
+        };
+      });
       setNextCursor(data.nextCursor || null);
     } else if (data) {
       setNextCursor(null);
@@ -95,7 +98,7 @@ export const useMessages = (chatId: string | null) => {
 
   // Mensagens só do chat atual
   const messages = useMemo(() => {
-    return chatId ? messagesByChat[chatId] ?? [] : [];
+    return chatId ? (messagesByChat ? messagesByChat[chatId] ?? [] : []) : [];
   }, [messagesByChat, chatId]);
 
   return {

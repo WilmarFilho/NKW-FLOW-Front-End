@@ -79,6 +79,7 @@ export function useConexoesPage() {
     try {
       if (modalState.step === 2 && formData) {
         setConnections((prev) => {
+          if (!prev) return prev;
           const pending = prev.find(
             (c) =>
               c.status === null &&
@@ -129,13 +130,13 @@ export function useConexoesPage() {
   const filteredConnections = useMemo(() => {
     if (activeFilter === 'todos') return connections;
     const isActive = activeFilter === 'ativo';
-    return connections.filter((c) => c.status === isActive);
+    return connections?.filter((c) => c.status === isActive);
   }, [connections, activeFilter]);
 
   const sortedConnections = useMemo(() => {
     if (!sortField) return filteredConnections;
 
-    return [...filteredConnections].sort((a, b) => {
+    return [...(filteredConnections ?? [])].sort((a, b) => {
       const aValue = a[sortField]?.toString().toLowerCase() ?? '';
       const bValue = b[sortField]?.toString().toLowerCase() ?? '';
 

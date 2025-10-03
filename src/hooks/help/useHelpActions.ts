@@ -27,7 +27,7 @@ export function useHelpActions() {
       content: { text },
     };
     
-    setMessages(prev => [...prev, userMessage]);
+    setMessages(prev => [ ...(prev ?? []), userMessage ]);
 
     const data = await post<HelpChatResponse>('/api/help/chat', { message: text });
 
@@ -36,7 +36,7 @@ export function useHelpActions() {
         from: 'system',
         content: { text: data.reply },
       };
-      setMessages(prev => [...prev, systemMessage]);
+      setMessages(prev => [ ...(prev ?? []), systemMessage ]);
     }
   };
 

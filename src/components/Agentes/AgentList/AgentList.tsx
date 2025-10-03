@@ -7,7 +7,7 @@ import type { Agent } from '../../../types/agent';
 
 interface AgentListProps {
   agents: Agent[] | null;
-  onSelectAgent: (agent: Agent) => void;
+  onSelectAgent: (agent: Agent | null) => void;
 }
 
 export default function AgentList({ agents, onSelectAgent }: AgentListProps) {

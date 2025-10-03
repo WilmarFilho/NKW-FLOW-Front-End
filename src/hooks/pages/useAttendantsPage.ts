@@ -95,11 +95,11 @@ export function useAtendentesPage() {
   const filteredAttendants = useMemo(() => {
     if (activeFilter === 'todos') return attendants;
     const isActive = activeFilter === 'ativo';
-    return attendants.filter(a => a.user.status === isActive);
+    return attendants?.filter(a => a.user.status === isActive);
   }, [attendants, activeFilter]);
 
   const sortedAttendants = useMemo(() => {
-    const data = [...filteredAttendants];
+    const data = filteredAttendants ? [...filteredAttendants] : [];
     if (!sortField) return data;
     return data.sort((a, b) => {
       const valA = getValue(a);

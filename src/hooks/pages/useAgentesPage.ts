@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { activeChatState, agentsState, chatFiltersState, chatsState, connectionsState } from '../../state/atom';
+import { Agent } from '../../types/agent';
 
 export function useAgentesPage() {
 
@@ -24,10 +25,10 @@ export function useAgentesPage() {
   const chats = useRecoilValue(chatsState);
 
   // Controle de modal de detalhes do agente
-  const [selectedAgent, setSelectedAgent] = useState<typeof agents[0] | null>(null);
+  const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const openModal = (agent: typeof agents[0]) => {
+  const openModal = (agent: Agent | null) => {
     setSelectedAgent(agent);
     setIsModalOpen(true);
   };
@@ -50,3 +51,4 @@ export function useAgentesPage() {
     status,
   };
 }
+

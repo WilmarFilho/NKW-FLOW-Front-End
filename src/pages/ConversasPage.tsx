@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import Modal from '../components/Gerais/Modal/Modal';
 import ChatSidebar from '../components/Conversas/ChatSideBar/ChatSideBar';

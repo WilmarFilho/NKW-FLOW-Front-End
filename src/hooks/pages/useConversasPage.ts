@@ -158,7 +158,7 @@ export function useConversasPage() {
       user_id: updated.user_id ?? prev.user_id
     } : prev);
 
-    setChats(prev => prev.map(c => c.id === updated.id ? {
+    setChats(prev => (prev ?? []).map(c => c.id === updated.id ? {
       ...c,
       ia_ativa: updated.ia_ativa,
       ia_desligada_em: updated.ia_desligada_em,
@@ -193,7 +193,7 @@ export function useConversasPage() {
     if (result) {
       const updatedChat = { ...activeChat, status: newStatus };
       setActiveChat(updatedChat);
-      setChats(prev => prev.map(chat => chat.id === updatedChat.id ? updatedChat : chat));
+      setChats(prev => (prev ?? []).map(chat => chat.id === updatedChat.id ? updatedChat : chat));
     }
   }, [activeChat, reOpenChat, setChats, user?.id]);
 
