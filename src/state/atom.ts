@@ -9,6 +9,8 @@ import type { Message } from '../types/message';
 import type { User } from '../types/user';
 import type { MetricsState } from '../types/metric';
 
+import { localStorageEffect, readLocalStorage } from '../utils/storage';
+
 const KEYS = {
   CONNECTIONS: 'connectionsState',
   ACTIVE_CHAT: 'activeChatState',
@@ -25,34 +27,9 @@ const KEYS = {
   CHAT_FILTERS: 'chatFiltersState',
 };
 
-const localStorageEffect =
-  <T,>(key: string) =>
-  ({ onSet }: { onSet: (callback: (newValue: T) => void) => void }) => {
-    onSet((newValue) => {
-      try {
-        if (newValue === null || newValue === undefined) {
-          localStorage.removeItem(key);
-        } else {
-          localStorage.setItem(key, JSON.stringify(newValue));
-        }
-      } catch {
-        // silent
-      }
-    });
-  };
-
-const readLocalStorage = <T,>(key: string): T | null => {
-  try {
-    const raw = localStorage.getItem(key);
-    return raw ? (JSON.parse(raw) as T) : null;
-  } catch {
-    return null;
-  }
-};
-
-export const connectionsState = atom<Connection[]>({
+export const connectionsState = atom<Connection[] | null>({
   key: KEYS.CONNECTIONS,
-  default: [],
+  default: null,
 });
 
 export const activeChatState = atom<Chat | null>({
@@ -60,24 +37,19 @@ export const activeChatState = atom<Chat | null>({
   default: null,
 });
 
-export const metricsState = atom<MetricsState>({
+export const metricsState = atom<MetricsState | null>({
   key: KEYS.METRICS,
-  default: {
-    novos: null,
-    fechados: null,
-    atendentes: [],
-    conexoes: [],
-  },
+  default: null,
 });
 
-export const chatsState = atom<Chat[]>({
+export const chatsState = atom<Chat[] | null>({
   key: KEYS.CHATS,
-  default: [],
+  default: null,
 });
 
-export const messagesState = atom<Record<string, Message[]>>({
+export const messagesState = atom<Record<string, Message[]> | null>({
   key: KEYS.MESSAGES,
-  default: {},
+  default: null,
 });
 
 export const addConnectionModalState = atom<{
@@ -88,23 +60,28 @@ export const addConnectionModalState = atom<{
   isLoading: boolean;
 }>({
   key: KEYS.ADD_CONN_MODAL,
-  default: { isOpen: false, editMode: false, step: 1, qrCode: null, isLoading: false },
+  default: {
+    isOpen: false,
+    editMode: false,
+    step: 1,
+    qrCode: null,
+    isLoading: false,
+  },
 });
 
-
-export const attendantsState = atom<Attendant[]>({
+export const attendantsState = atom<Attendant[] | null>({
   key: KEYS.ATTENDANTS,
-  default: [],
+  default: null,
 });
 
-export const agentsState = atom<Agent[]>({
+export const agentsState = atom<Agent[] | null>({
   key: KEYS.AGENTS,
-  default: [],
+  default: null,
 });
 
-export const helpChatState = atom<HelpChat[]>({
+export const helpChatState = atom<HelpChat[] | null>({
   key: KEYS.HELP_CHAT,
-  default: [],
+  default: null,
 });
 
 export const userState = atom<User | null>({
@@ -114,7 +91,7 @@ export const userState = atom<User | null>({
 
 export const authTokenState = atom<{ token: string; userId: string } | null>({
   key: KEYS.AUTH_TOKEN,
-  default: (() => readLocalStorage<{ token: string; userId: string }>(KEYS.AUTH_TOKEN))(),
+  default: readLocalStorage<{ token: string; userId: string }>(KEYS.AUTH_TOKEN),
   effects_UNSTABLE: [localStorageEffect<{ token: string; userId: string } | null>(KEYS.AUTH_TOKEN)],
 });
 
@@ -133,5 +110,5 @@ export const chatFiltersState = atom<ChatFilters>({
     status: 'Open',
     owner: 'all',
     isFetching: false,
-  } as ChatFilters,
+  },
 });

@@ -6,7 +6,7 @@ import GlobalStyles from '../../../global.module.css';
 interface FilterModalProps<T> {
   isOpen: boolean;
   title: string;
-  items: T[];
+  items: T[] | null;
   labelSelector: (item: T) => string;
   onSelect: (item: T) => void;
   onClose: () => void;
@@ -22,7 +22,7 @@ export function FilterModal<T>({
 }: FilterModalProps<T>) {
   const [search, setSearch] = useState('');
 
-  const filteredItems = items.filter((item) =>
+  const filteredItems = items?.filter((item) =>
     labelSelector(item).toLowerCase().includes(search.toLowerCase())
   );
 
@@ -31,7 +31,7 @@ export function FilterModal<T>({
       <div className={GlobalStyles.wrapperModalFilter}>
         <SearchBar onSearch={setSearch} placeholder={`Buscar ${title.toLowerCase()}...`} />
         <div className={GlobalStyles.wrapperFilterItens}>
-          {filteredItems.map((item, idx) => (
+          {filteredItems?.map((item, idx) => (
             <div
               className={GlobalStyles.filterItens}
               key={idx}

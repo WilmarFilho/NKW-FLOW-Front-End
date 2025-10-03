@@ -1,18 +1,14 @@
-// Libs
 import { motion } from 'framer-motion';
-// Css
 import GlobalStyles from '../global.module.css';
 import TableStyles from '../components/Gerais/Tables/TableStyles.module.css';
-// Components
 import GenericEntityRow from '../components/Gerais/Tables/GenericEntityRow';
 import GenericTable from '../components/Gerais/Tables/GenericTable';
 import Modal from '../components/Gerais/Modal/Modal';
 import AttendantForm from '../components/Atendentes/AttendantForm';
 import Button from '../components/Gerais/Buttons/Button';
-// Hooks
 import { useAtendentesPage } from '../hooks/pages/useAttendantsPage';
-// Type
 import type { Attendant } from '../types/attendant';
+import { useRef, useState } from 'react';
 
 import {
   AlertDialog,
@@ -23,30 +19,10 @@ import {
   AlertDialogOverlay,
   Button as ChakraButton,
 } from '@chakra-ui/react';
-import { useRef, useState } from 'react';
 
 export default function AtendentesPage() {
-  const {
-    attendants,
-    isModalOpen,
-    connections,
-    editData,
-    isSubmitting,
-    showErrors,
-    handleDelete,
-    handleEdit,
-    handleSave,
-    handleStatusToggle,
-    handleFormChange,
-    openModal,
-    closeModal,
-    sortField,
-    sortOrder,
-    setSortField,
-    setSortOrder,
-    activeFilter,
-    setActiveFilter,
-  } = useAtendentesPage();
+
+  const state = useAtendentesPage();
 
   // --- INÍCIO: estado para confirmação de exclusão via Chakra AlertDialog ---
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -61,7 +37,7 @@ export default function AtendentesPage() {
   const confirmDelete = async () => {
     if (!attendantToDelete) return;
     try {
-      await handleDelete(attendantToDelete.id);
+      await state.handleDelete(attendantToDelete.id);
     } finally {
       setIsDeleteDialogOpen(false);
       setAttendantToDelete(null);
@@ -82,15 +58,15 @@ export default function AtendentesPage() {
       render: (item: Attendant) => (
         <span
           className={`${TableStyles.statusChip} ${item.user.status ? TableStyles.active : TableStyles.inactive}`}
-          onClick={() => handleStatusToggle(item)}
+          onClick={() => state.handleStatusToggle(item)}
         >
           {item.user.status ? 'Ativo' : 'Inativo'}
         </span>
       ),
     },
-    { key: 'user', label: 'Nome', render: (item: Attendant) => item.user.nome, onClick: handleEdit },
-    { key: 'user', label: 'Email', render: (item: Attendant) => item.user.email, onClick: handleEdit },
-    { key: 'user', label: 'Conexão', render: (item: Attendant) => item.connection.nome, onClick: handleEdit },
+    { key: 'user', label: 'Nome', render: (item: Attendant) => item.user.nome, onClick: state.handleEdit },
+    { key: 'user', label: 'Email', render: (item: Attendant) => item.user.email, onClick: state.handleEdit },
+    { key: 'user', label: 'Conexão', render: (item: Attendant) => item.connection.nome, onClick: state.handleEdit },
   ];
 
   return (
@@ -100,26 +76,26 @@ export default function AtendentesPage() {
           <h2>Seus atendentes humanos</h2>
           <h3>Cadastre e gerencie os atendentes que podem interagir com seus clientes.</h3>
         </div>
-        <Button label="Adicionar Atendente" onClick={openModal} />
+        <Button label="Adicionar Atendente" onClick={state.openModal} />
       </motion.header>
 
       <div className={GlobalStyles.pageContent}>
         <GenericTable
           columns={columns.map(c => c.label || '')}
-          data={attendants}
+          data={state.attendants}
           renderRow={(attendant) => (
             <GenericEntityRow
               key={attendant.id}
               item={attendant}
               columns={columns}
               columnTemplate={columnTemplate}
-              onEdit={handleEdit}
+              onEdit={state.handleEdit}
               onDelete={() => openDeleteDialog(attendant)}
             />
           )}
           gridTemplateColumns={columnTemplate}
-          sortField={sortField}
-          sortOrder={sortOrder}
+          sortField={state.sortField}
+          sortOrder={state.sortOrder}
           onSortClick={(col) => {
             const fieldMap: Record<string, 'nome' | 'email' | 'numero' | 'status'> = {
               Nome: 'nome',
@@ -129,22 +105,22 @@ export default function AtendentesPage() {
             };
             const selectedField = fieldMap[col];
             if (!selectedField) return;
-            if (selectedField === sortField) setSortOrder(prev => (prev === 'asc' ? 'desc' : 'asc'));
-            else { setSortField(selectedField); setSortOrder('asc'); }
+            if (selectedField === state.sortField) state.setSortOrder(prev => (prev === 'asc' ? 'desc' : 'asc'));
+            else { state.setSortField(selectedField); state.setSortOrder('asc'); }
           }}
         />
 
         <div className={GlobalStyles.filterControls}>
           <button
-            className={`${GlobalStyles.button} ${activeFilter === 'ativo' ? GlobalStyles.buttonActive : ''}`}
-            onClick={() => setActiveFilter(prev => prev === 'ativo' ? 'todos' : 'ativo')}
+            className={`${GlobalStyles.button} ${state.activeFilter === 'ativo' ? GlobalStyles.buttonActive : ''}`}
+            onClick={() => state.setActiveFilter(prev => prev === 'ativo' ? 'todos' : 'ativo')}
           >
             <span>Ver atendentes ativos</span>
           </button>
 
           <button
-            className={`${GlobalStyles.button} ${activeFilter === 'inativo' ? GlobalStyles.buttonActive : ''}`}
-            onClick={() => setActiveFilter(prev => prev === 'inativo' ? 'todos' : 'inativo')}
+            className={`${GlobalStyles.button} ${state.activeFilter === 'inativo' ? GlobalStyles.buttonActive : ''}`}
+            onClick={() => state.setActiveFilter(prev => prev === 'inativo' ? 'todos' : 'inativo')}
           >
             <span>Ver atendentes inativos</span>
           </button>
@@ -186,20 +162,20 @@ export default function AtendentesPage() {
       </AlertDialog>
 
       <Modal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        title={editData ? 'Editar Atendente' : 'Cadastrar Novo Atendente'}
-        labelSubmit={editData ? 'Editar Atendente' : 'Cadastrar Atendente'}
-        isSubmitting={isSubmitting}
-        onSave={handleSave}
+        isOpen={state.isModalOpen}
+        onClose={state.closeModal}
+        title={state.editData ? 'Editar Atendente' : 'Cadastrar Novo Atendente'}
+        labelSubmit={state.editData ? 'Editar Atendente' : 'Cadastrar Atendente'}
+        isSubmitting={state.isSubmitting}
+        onSave={state.handleSave}
       >
         <AttendantForm
-          connections={connections}
-          initialData={editData || undefined}
-          editMode={!!editData}
-          onChange={handleFormChange}
-          isSubmitting={isSubmitting}
-          triggerValidation={showErrors}
+          connections={state.connections}
+          initialData={state.editData || undefined}
+          editMode={!!state.editData}
+          onChange={state.handleFormChange}
+          isSubmitting={state.isSubmitting}
+          triggerValidation={state.showErrors}
         />
       </Modal>
     </div>

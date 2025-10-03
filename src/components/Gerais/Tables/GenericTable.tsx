@@ -8,7 +8,7 @@ import Icon from '../Icons/Icons';
 
 interface GenericTableProps<T> {
   columns: string[];
-  data: T[];
+  data: T[] | null;
   renderRow: (item: T, index: number) => React.ReactNode;
   gridTemplateColumns: string;
   onSortClick?: (col: string) => void;
@@ -69,7 +69,7 @@ export default function GenericTable<T>({
       </header>
 
       <div className={styles.tableBody}>
-        {data.map((item, index) => renderRow(item, index))}
+        {data ? data.map((item, index) => renderRow(item, index)) : null}
       </div>
 
     </motion.section>

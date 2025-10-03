@@ -127,7 +127,7 @@ export default function ConexoesPage() {
         let tipoAgente = conn.agente?.tipo_de_agente;
 
         // se não tiver, tenta buscar pelo agente_id
-        if (!tipoAgente && conn.agente_id && agents.length > 0) {
+        if (!tipoAgente && conn.agente_id && agents && agents.length > 0) {
           const agente = agents.find(a => a.id === conn.agente_id);
           if (agente) {
             tipoAgente = agente.tipo_de_agente;

@@ -1,9 +1,7 @@
 // Libs
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useRef, useEffect, useCallback } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { motion } from 'framer-motion';
-// Hooks
-import { useDebounce } from '../../../hooks/utils/useDebounce';
 // Components
 import SearchBar from '../SearchBar/Searchbar';
 import Tag from '../Tags/Tag';
@@ -19,9 +17,9 @@ import { chatFiltersState, userState } from '../../../state/atom';
 import Icon from '../../../components/Gerais/Icons/Icons';
 
 interface ChatSidebarProps {
-  chats: Chat[];
-  attendants: Attendant[];
-  connections: { id: string; nome?: string }[];
+  chats: Chat[] | null;
+  attendants: Attendant[] | null;
+  connections: { id: string; nome?: string }[] | null;
   isMobileLayout: boolean;
   activeChat: Chat | null;
   setActiveChat: (chat: Chat) => void;
@@ -174,7 +172,7 @@ function ChatSidebar({
         (() => {
           // ... (lógica de exibição da conexão)
           const connectionLabel = filters.connection_id
-            ? connections.find(c => c.id === filters.connection_id)?.nome || 'Conexão selecionada'
+            ? connections?.find(c => c.id === filters.connection_id)?.nome || 'Conexão selecionada'
             : 'Escolha uma conexão';
 
           return (
@@ -203,7 +201,7 @@ function ChatSidebar({
               handleAttendantSelect(null);
             }}
           />
-          {connections.map((connection) => (
+          {connections?.map((connection) => (
             <Tag
               key={connection.id}
               label={connection.nome}
@@ -217,7 +215,7 @@ function ChatSidebar({
 
       {/* Lista de chats */}
       <div ref={listRef} className={styles.chatList}>
-        {chats.map((chat) => (
+        {chats?.map((chat) => (
           <ChatListItem
             key={chat.id}
             unreadCount={chat.unread_count}
@@ -257,6 +255,7 @@ function ChatSidebar({
       {!isMobileLayout &&
         !filters.connection_id &&
         user?.tipo_de_usuario === 'admin' &&
+        attendants &&
         attendants.length > 0 &&
         filters.owner === 'all' && (
           (() => {
@@ -286,6 +285,7 @@ function ChatSidebar({
       {/* Atendentes tags mobile/admin */}
       {isMobileLayout &&
         user?.tipo_de_usuario === 'admin' &&
+        attendants &&
         attendants.length > 0 &&
         filters.owner === 'all' && (
           <div className={styles.tagsContainer}>

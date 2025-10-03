@@ -80,9 +80,9 @@ export default function AgentesPage() {
               {/* Conexões vinculadas */}
               <div className={ModalStyles.agentConnections}>
                 <h3>Conexões vinculadas:</h3>
-                {state.connections.some((c) => c.agente_id === state.selectedAgent!.id) ? (
+                {(state.connections ?? []).some((c) => c.agente_id === state.selectedAgent!.id) ? (
                   <ul className={ModalStyles.ulConnections}>
-                    {state.connections
+                    {(state.connections ?? [])
                       .filter((c) => c.agente_id === state.selectedAgent!.id)
                       .map((c) => (
                         <li key={c.id} className={ModalStyles.liConnection}>

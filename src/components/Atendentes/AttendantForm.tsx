@@ -1,13 +1,9 @@
-// Libs
 import { useState, useEffect } from 'react';
 import Select, { OnChangeValue } from 'react-select';
 import Icon from '../../components/Gerais/Icons/Icons';
-
-// Types
 import type { AttendantFormData } from '../../types/attendant';
-// Hooks
 import { validateAttendantForm } from '../../hooks/utils/useValidator';
-// Componentes Customizados do Select
+
 import {
   useMediaQuery,
   getCustomSelectStyles,
@@ -24,7 +20,7 @@ interface AttendantFormProps {
   onChange: (data: AttendantFormData) => void;
   isSubmitting: boolean;
   triggerValidation?: boolean;
-  connections: { id: string; nome: string }[];
+  connections: { id: string; nome: string }[] | null;
 }
 
 export default function AttendantForm({
@@ -53,7 +49,7 @@ export default function AttendantForm({
   const customStyles = getCustomSelectStyles(isMobile);
 
   const connectionOptions: SelectOption[] =
-    connections.length > 0
+    connections && connections.length > 0
       ? connections.map((conn) => ({
         value: conn.id,
         label: conn.nome,

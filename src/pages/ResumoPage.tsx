@@ -11,10 +11,6 @@ import Icon from '../components/Gerais/Icons/Icons';
 import GlobalStyles from '../global.module.css';
 import { useResumoPage } from '../hooks/pages/useResumoPage';
 
-        //<MetricCard title="Convidados na Semana" icon={<Icon nome="money" />} value="+0" small isMobile={isMobile}>
-          //<GaugeMetricChart filled={0} empty={100} valueText="+ 0" labelText="Para ganhar recompensas" />
-        //</MetricCard>
-
 export default function ResumoPage() {
   const navigate = useNavigate();
   const isMobile = useMediaQuery({ maxWidth: 595.98 });

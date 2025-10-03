@@ -10,7 +10,7 @@ import {
 } from '../../Gerais/Form/CustomSelect'; // Ajuste o caminho conforme necessário
 
 interface NewChatFormProps {
-  connections: { id: string; nome?: string }[];
+  connections: { id: string; nome?: string }[] | null;
   selectedConnectionId: string | null;
   setSelectedConnectionId: (id: string) => void;
   newChatNumber: string;
@@ -26,7 +26,7 @@ interface NewChatFormProps {
 }
 
 export default function NewChatForm({
-  connections,
+  connections ,
   selectedConnectionId,
   setSelectedConnectionId,
   newChatNumber,
@@ -40,10 +40,10 @@ export default function NewChatForm({
   const isMobile = useMediaQuery('(max-width: 600px)');
   const customStyles = getCustomSelectStyles(isMobile);
 
-  const selectOptions: SelectOption[] = connections.map((conn) => ({
+  const selectOptions: SelectOption[] = connections ? connections.map((conn) => ({
     value: conn.id,
     label: conn.nome || conn.id,
-  }));
+  })) : [];
 
   const selectedValue = selectOptions.find(
     (option) => option.value === selectedConnectionId

@@ -1,5 +1,3 @@
-// Libs
-import { motion } from 'framer-motion';
 // Component
 import AgentCard from '../AgentCard/AgentCard';
 // Css
@@ -8,19 +6,14 @@ import Style from './AgentList.module.css';
 import type { Agent } from '../../../types/agent';
 
 interface AgentListProps {
-  agents: Agent[];
+  agents: Agent[] | null;
   onSelectAgent: (agent: Agent) => void;
 }
 
 export default function AgentList({ agents, onSelectAgent }: AgentListProps) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 0 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
-      className={Style.agentsList}
-    >
-      {agents.map((agent) => (
+    <div className={Style.agentsList}>
+      {agents && agents.map((agent) => (
         <AgentCard
           key={agent.id}
           tipo={agent.tipo_de_agente}
@@ -28,6 +21,6 @@ export default function AgentList({ agents, onSelectAgent }: AgentListProps) {
           onViewDetails={() => onSelectAgent(agent)}
         />
       ))}
-    </motion.div>
+    </div>
   );
 }
