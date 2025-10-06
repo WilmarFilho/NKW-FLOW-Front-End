@@ -19,6 +19,7 @@ import Modal from '../../Gerais/Modal/Modal';
 // Types
 import { User } from '../../../types/user';
 import { useRecoilValue } from 'recoil';
+import { useAuth } from '../../../hooks/auth/useAuth';
 
 type Props = {
   tabIndex: number;
@@ -27,6 +28,7 @@ type Props = {
 export default function SettingsContent({ tabIndex }: Props) {
   const user = useRecoilValue(userState);
   const { updateUser, uploadProfileImage } = useUserAction();
+  const { logout } = useAuth();
 
   const [isDesktop, setIsDesktop] = useState(true);
 
@@ -233,19 +235,6 @@ export default function SettingsContent({ tabIndex }: Props) {
                 <div className={styles.infoGrid}>
 
                   <div className={styles.headerAccountWrapper}>
-                    <div className={styles.userInfo}><h1>E-mail</h1><h2>{user.email}</h2></div>
-                    <div className={styles.userInfo}><h1>Senha</h1><h2>*******</h2></div>
-
-                    {isDesktop && (
-                      <div className={styles.userInfo}>
-                        <h1>Plano Contradado</h1>
-                        <h2>Premium</h2>
-                      </div>
-                    )}
-
-                  </div>
-
-                  <div className={styles.headerAccountWrapper}>
                     <div className={styles.userInfo}>
                       <h1>Cidade</h1>
                       <h2>{user.cidade ?? '------'}</h2>
@@ -258,6 +247,24 @@ export default function SettingsContent({ tabIndex }: Props) {
                       <h1>Número</h1>
                       <h2>{user.numero ?? '------'}</h2>
                     </div>
+                  </div>
+
+                  <div className={styles.headerAccountWrapper}>
+                    <div className={styles.userInfo}><h1>E-mail</h1><h2>{user.email}</h2></div>
+
+
+                    <div className={styles.userInfo}>
+                      <h1>Plano Contratado</h1>
+                      <h2>{user.plano ?? '------'}</h2>
+                    </div>
+
+                    <div className={styles.userInfo}>
+                        <button className={styles.linkButtonGreen} onClick={() => window.open('https://billing.stripe.com/p/login/dRm00j8Eo4xGfAo6Lygbm00', '_blank')}>
+                        Gerenciar Assinatura
+                        </button>
+                      <button className={styles.linkButtonRed} onClick={logout}>Logout</button>
+                    </div>
+
                   </div>
 
                 </div>

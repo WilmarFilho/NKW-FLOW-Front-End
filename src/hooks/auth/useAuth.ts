@@ -34,6 +34,7 @@ export const useAuth = () => {
   const logout = () => {
     setToken(null);
     setUser(null);
+    localStorage.removeItem('authTokenState');
   };
 
   const isAuthenticated = !!token;

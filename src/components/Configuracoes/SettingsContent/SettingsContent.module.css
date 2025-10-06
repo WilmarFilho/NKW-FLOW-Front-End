@@ -278,6 +278,18 @@
   gap: 24px;
 }
 
+.linkButtonGreen {
+  background: var(--color-secundaria);
+  padding: 10px 0;
+  border-radius: 12px;
+}
+
+.linkButtonRed {
+  background: var(--color-background-red);
+  padding: 10px 0;
+  border-radius: 12px;
+}
+
 @media (max-width: 1175.98px) {
   .headerAccountWrapper {
     padding: 38px 24px;

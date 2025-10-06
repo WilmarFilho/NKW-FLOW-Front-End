@@ -36,6 +36,12 @@
   background-color: var(--color-secundaria) !important;
 }
 
+.linkButtonGreen {
+  background: var(--color-secundaria);
+  padding: 10px 12px;
+  border-radius: 8px;
+}
+
 @media (max-width: 1175.98px) {
 
   .contentArea,

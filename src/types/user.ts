@@ -30,4 +30,6 @@ export interface User {
   referrals_count: number | null;
   discount_percent: number;
   ai_trigger_word: string | null;
+  plano?: string | null;
+  subscription_status?: string | null;
 }
