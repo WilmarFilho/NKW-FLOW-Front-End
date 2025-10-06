@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import Icon from '../../../components/Gerais/Icons/Icons';
+import { validateUserForm } from '../../../hooks/utils/useValidator';
 
 // Hooks
 import { userState } from '../../../state/atom';
@@ -30,16 +31,7 @@ export default function SettingsContent({ tabIndex }: Props) {
   const { updateUser, uploadProfileImage } = useUserAction();
   const { logout } = useAuth();
 
-  const [isDesktop, setIsDesktop] = useState(true);
-
   const [showPassword, setShowPassword] = useState(false);
-
-  useEffect(() => {
-    const checkScreen = () => setIsDesktop(window.innerWidth >= 992);
-    checkScreen(); // checa no load
-    window.addEventListener('resize', checkScreen);
-    return () => window.removeEventListener('resize', checkScreen);
-  }, []);
 
   // Nomes de estado mais descritivos
   const [showNameInMessages, setShowNameInMessages] = useState(false);
@@ -55,6 +47,9 @@ export default function SettingsContent({ tabIndex }: Props) {
   // Modal para editar informações da conta
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editForm, setEditForm] = useState<Partial<User> | null>(null);
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+  const [showErrors, setShowErrors] = useState(false);
+
   const [isEditSubmitting, setIsEditSubmitting] = useState(false);
 
   useEffect(() => {
@@ -114,7 +109,28 @@ export default function SettingsContent({ tabIndex }: Props) {
   };
 
   const handleEditSave = async () => {
-    if (!editForm) return;
+    if (!editForm || !user) return;
+
+    setShowErrors(true);
+
+    // Preencha todos os campos obrigatórios de AttendantFormData
+    const formData = {
+      nome: editForm.nome ?? '',
+      email: editForm.email ?? user.email ?? '',
+      numero: editForm.numero ?? '',
+      password: editForm.password ?? user.password,
+      cidade: editForm.cidade ?? '',
+      endereco: editForm.endereco ?? '',
+    };
+  
+    const errors = validateUserForm(formData);
+    setFormErrors(errors);
+
+    if (Object.keys(errors).length > 0) {
+      toast.error('Verifique os campos antes de salvar.');
+      return;
+    }
+
     setIsEditSubmitting(true);
     try {
       const success = await handleSettingsUpdate(editForm);
@@ -123,6 +139,7 @@ export default function SettingsContent({ tabIndex }: Props) {
       setIsEditSubmitting(false);
     }
   };
+
 
   // when IA keyword changes, persist immediately (on blur)
   const persistIaKeyword = async (value: string | null) => {
@@ -259,17 +276,23 @@ export default function SettingsContent({ tabIndex }: Props) {
                     </div>
 
                     <div className={styles.userInfo}>
-                        <button className={styles.linkButtonGreen} onClick={() => window.open('https://billing.stripe.com/p/login/dRm00j8Eo4xGfAo6Lygbm00', '_blank')}>
-                        Gerenciar Assinatura
-                        </button>
-                      <button className={styles.linkButtonRed} onClick={logout}>Logout</button>
+
                     </div>
 
                   </div>
 
                 </div>
                 {isAdmin && (
-                  <button className={styles.editButton} onClick={openEditModal}>Editar Informações</button>
+                  <>
+                    <div className={styles.buttonGroup}>
+                      <button className={styles.editButton} onClick={openEditModal}>Editar Informações</button>
+                      <button className={styles.editButton} onClick={() => window.open('https://billing.stripe.com/p/login/dRm00j8Eo4xGfAo6Lygbm00', '_blank')}>
+                        Gerenciar Assinatura
+                      </button>
+                      <button className={styles.editButton} onClick={logout}>Logout</button>
+                    </div>
+
+                  </>
                 )}
               </div>
             </motion.div>
@@ -478,6 +501,9 @@ export default function SettingsContent({ tabIndex }: Props) {
                 value={editForm?.nome ?? ''}
                 onChange={(e) => setEditForm(prev => ({ ...(prev ?? {}), nome: e.target.value }))}
               />
+              {showErrors && formErrors.nome && (
+                <span className={styles.errorText}>{formErrors.nome}</span>
+              )}
             </div>
 
             <div className={styles.formGroup}>
@@ -487,6 +513,9 @@ export default function SettingsContent({ tabIndex }: Props) {
                 value={editForm?.numero ?? ''}
                 onChange={(e) => setEditForm(prev => ({ ...(prev ?? {}), numero: e.target.value }))}
               />
+              {showErrors && formErrors.numero && (
+                <span className={styles.errorText}>{formErrors.numero}</span>
+              )}
             </div>
           </div>
 
@@ -523,7 +552,7 @@ export default function SettingsContent({ tabIndex }: Props) {
                     setEditForm(prev => ({ ...(prev ?? {}), password: e.target.value }))
                   }
                   className={styles.textInput}
-                  style={{ paddingRight: '2.5rem' }} // espaço pro ícone
+                  style={{ paddingRight: '2.5rem' }}
                 />
                 <button
                   type='button'
@@ -539,6 +568,9 @@ export default function SettingsContent({ tabIndex }: Props) {
                   {showPassword ? <Icon nome="eyeoff" /> : <Icon nome="eye" />}
                 </button>
               </div>
+              {showErrors && formErrors.password && (
+                <span className={styles.errorText}>{formErrors.password}</span>
+              )}
             </div>
           </div>
 

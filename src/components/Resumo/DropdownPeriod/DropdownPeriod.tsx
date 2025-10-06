@@ -18,7 +18,6 @@ interface DropdownPeriodProps {
 
 const options = [
   { value: 'weekly', label: 'Semanal' },
-  { value: 'monthly', label: 'Mensal' },
 ];
 
 export default function DropdownPeriod({

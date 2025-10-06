@@ -64,6 +64,13 @@
   min-height: 0;
 }
 
+.pageContentResumo {
+  flex-direction: column;
+  display: flex;
+  gap: 32px;
+  overflow: auto;
+}
+
 .pageRow {
   flex: 1 1 auto;
   display: flex;

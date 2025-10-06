@@ -47,6 +47,13 @@ export default function LoginForm() {
     }
   };
 
+  // Permite submit com Enter
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleLogin();
+    }
+  };
+
   return (
     <div className={styles.loginBox}>
       <div className={styles.wrapperLogo}>
@@ -59,6 +66,7 @@ export default function LoginForm() {
         onChange={(e) => setEmail(e.target.value)}
         placeholder="E-mail"
         disabled={loading}
+        onKeyDown={handleKeyDown}
       />
       <input
         type="password"
@@ -66,6 +74,7 @@ export default function LoginForm() {
         onChange={(e) => setSenha(e.target.value)}
         placeholder="Senha"
         disabled={loading}
+        onKeyDown={handleKeyDown}
       />
 
       {errorMessage && <span className={styles.error}>{errorMessage}</span>}

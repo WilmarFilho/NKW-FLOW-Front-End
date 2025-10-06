@@ -62,79 +62,84 @@ export default function ResumoPage() {
         <Button onClick={() => navigate('/ajuda')} label="Quero Ajuda" />
       </motion.div>
 
-      {/* Chats Novos / Fechados */}
-      <motion.div className={GlobalStyles.pageRow}>
-        <MetricCard
-          title="Chats Novos"
-          icon={<Icon nome="chaton" />}
-          value={novos.value}
-          variation={novos.percent}
-          variationText={novos.variationText}
-          dropdown={
-            <DropdownPeriod
-              value={viewChatsNovos}
-              onChange={setViewChatsNovos}
-              id="novos"
-              openId={openDropdown}
-              setOpenId={setOpenDropdown}
-            />
-          }
-          isMobile={isMobile}
-        >
-          <BarMetricChart data={getMobileData(dataNovos?.labels)} dataKey="chats" />
-        </MetricCard>
+      <div className={GlobalStyles.pageContentResumo}>
 
-        <MetricCard
-          title="Chats Fechados"
-          icon={<Icon nome="chatoff" />}
-          value={fechados.value}
-          variation={fechados.percent}
-          variationText={fechados.variationText}
-          dropdown={
-            <DropdownPeriod
-              value={viewChatsFechados}
-              onChange={setViewChatsFechados}
-              id="fechados"
-              openId={openDropdown}
-              setOpenId={setOpenDropdown}
-            />
-          }
-          isMobile={isMobile}
-        >
-          <BarMetricChart data={getMobileData(dataFechados?.labels)} dataKey="chats" />
-        </MetricCard>
-      </motion.div>
+        {/* Chats Novos / Fechados */}
+        <motion.div className={GlobalStyles.pageRow}>
+          <MetricCard
+            title="Chats Novos"
+            icon={<Icon nome="chaton" />}
+            value={novos.value}
+            variation={novos.percent}
+            variationText={novos.variationText}
+            dropdown={
+              <DropdownPeriod
+                value={viewChatsNovos}
+                onChange={setViewChatsNovos}
+                id="novos"
+                openId={openDropdown}
+                setOpenId={setOpenDropdown}
+              />
+            }
+            isMobile={isMobile}
+          >
+            <BarMetricChart data={getMobileData(dataNovos?.labels)} dataKey="chats" />
+          </MetricCard>
 
-      {/* Chats por Atendentes / Conexões / Convidados */}
-      <motion.div className={GlobalStyles.pageRowVariant}>
-        <MetricCard title="Chats por Atendentes" icon={<Icon nome="userlist" />} small isMobile={isMobile}>
-          <div style={{ height: 200, overflowY: 'auto', paddingRight: 8, width: '100%', scrollbarWidth: 'none' }}>
-        <BarMetricChart
-          data={getMobileData(dataAtendentes)}
-          dataKey="chats"
-          vertical
-          barSize={56}
-          height={heightAtedentes}
-        />
-          </div>
-        </MetricCard>
+          <MetricCard
+            title="Chats Fechados"
+            icon={<Icon nome="chatoff" />}
+            value={fechados.value}
+            variation={fechados.percent}
+            variationText={fechados.variationText}
+            dropdown={
+              <DropdownPeriod
+                value={viewChatsFechados}
+                onChange={setViewChatsFechados}
+                id="fechados"
+                openId={openDropdown}
+                setOpenId={setOpenDropdown}
+              />
+            }
+            isMobile={isMobile}
+          >
+            <BarMetricChart data={getMobileData(dataFechados?.labels)} dataKey="chats" />
+          </MetricCard>
+        </motion.div>
 
-        <MetricCard title="Chats por Conexões" icon={<Icon nome="connect" />} small isMobile={isMobile}>
-          <div className={GlobalStyles.chartContainer}>
-        {(isMobile || (Array.isArray(dataConexoes) && dataConexoes.length > 3)) ? (
-          <BarMetricChart
-            data={getMobileData(dataConexoes)}
-            dataKey="value"
-            vertical
-            barSize={56}
-            height={200}
-          />
-        ) : (
-          <LineMetricChart data={getMobileData(dataConexoes)} dataKey="value" width={widthConexoes} />
-        )}
-          </div>
-        </MetricCard>
-      </motion.div>
+        {/* Chats por Atendentes / Conexões / Convidados */}
+        <motion.div className={GlobalStyles.pageRowVariant}>
+          <MetricCard title="Chats por Atendentes" icon={<Icon nome="userlist" />} small isMobile={isMobile}>
+            <div style={{ height: 200, overflowY: 'auto', paddingRight: 8, width: '100%', scrollbarWidth: 'none' }}>
+              <BarMetricChart
+                data={getMobileData(dataAtendentes)}
+                dataKey="chats"
+                vertical
+                barSize={56}
+                height={heightAtedentes}
+              />
+            </div>
+          </MetricCard>
+
+          <MetricCard title="Chats por Conexões" icon={<Icon nome="connect" />} small isMobile={isMobile}>
+            <div className={GlobalStyles.chartContainer}>
+              {(isMobile || (Array.isArray(dataConexoes) && dataConexoes.length > 3)) ? (
+                <BarMetricChart
+                  data={getMobileData(dataConexoes)}
+                  dataKey="value"
+                  vertical
+                  barSize={56}
+                  height={200}
+                />
+              ) : (
+                <LineMetricChart data={getMobileData(dataConexoes)} dataKey="value" width={widthConexoes} />
+              )}
+            </div>
+          </MetricCard>
+        </motion.div>
+
+      </div>
+
     </div>
   );
 }

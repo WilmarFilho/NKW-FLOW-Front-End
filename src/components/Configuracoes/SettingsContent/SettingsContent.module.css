@@ -135,14 +135,19 @@
   flex-direction: column;
   justify-content: space-between;
   gap: 18px;
+  overflow-y: scroll;
 }
 
 .infoGrid {
   display: flex;
   flex-direction: column;
   height: 100%;
-  gap: 24px;
-  justify-content: space-between;
+  gap: 44px;
+  justify-content: center;
+}
+
+.errorText {
+  color: var(--color-background-red);
 }
 
 .headerAccountWrapper {
@@ -152,7 +157,7 @@
   gap: 80px;
   border-bottom: 1px solid var(--color-borders);
   width: 100%;
-  padding: 50px 24px;
+  padding: 20px 24px;
   border-radius: 12px;
 }
 
@@ -278,16 +283,10 @@
   gap: 24px;
 }
 
-.linkButtonGreen {
-  background: var(--color-secundaria);
-  padding: 10px 0;
-  border-radius: 12px;
-}
-
-.linkButtonRed {
-  background: var(--color-background-red);
-  padding: 10px 0;
-  border-radius: 12px;
+.buttonGroup {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
 }
 
 @media (max-width: 1175.98px) {
@@ -344,6 +343,10 @@
     overflow-y: scroll;
     padding: 0;
     scrollbar-width: none;
+  }
+
+  .editButton {
+   display: none;
   }
 
   .settingDescription {
@@ -435,8 +438,9 @@
   .settingsContentAccount {
     gap: 16px;
   }
+
   .editButton {
     padding: 14px 24px;
-    font-size: 12px;    
+    font-size: 12px;
   }
 }
