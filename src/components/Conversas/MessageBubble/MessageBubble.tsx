@@ -276,6 +276,7 @@ export default function MessageBubble(props: MessageBubbleProps) {
         {/* Conteúdo principal */}
         {mimetype?.startsWith('audio') && base64 ? (
           <CustomAudioPlayer
+            sender={sender}
             src={base64}
             avatarUrl={avatarUrl}
             time={createdAtLocal.toLocaleTimeString('pt-BR', {

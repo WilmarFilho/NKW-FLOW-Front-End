@@ -38,7 +38,7 @@ export const useUser = () => {
       if (!opts?.force && user) return user;
 
       const fetchedUser = await get<User>('/users');
-
+      
       if (fetchedUser) {
         setUser(fetchedUser);
         opts?.onProgress?.('Carregando conversas ...');

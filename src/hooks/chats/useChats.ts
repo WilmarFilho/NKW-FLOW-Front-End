@@ -49,6 +49,8 @@ export const useChats = (): UseChatsReturn => {
         const params = { user_id: currentUser.id, auth_id: currentUser.auth_id, ...filters };
         const fetchedData = await get<{ chats: Chat[]; nextCursor: string | null }>('/chats', { params });
 
+         console.log('Fetched more chats:', fetchedData);
+
         if (fetchedData) {
           setChats(fetchedData.chats);
           updateDocumentTitle(fetchedData.chats)
@@ -72,7 +74,7 @@ export const useChats = (): UseChatsReturn => {
     try {
       const params = { user_id: user.id, cursor: nextCursor, ...currentFilters };
       const fetchedData = await get<{ chats: Chat[]; nextCursor: string | null }>('/chats', { params });
-
+     
       if (fetchedData?.chats.length) {
         setChats(prev => {
           const safePrev = prev ?? [];

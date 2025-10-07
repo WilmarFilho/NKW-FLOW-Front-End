@@ -5,6 +5,7 @@ import defaultAvatar from '../assets/default.webp';
 import Icon from '../../../components/Gerais/Icons/Icons';
 
 interface Props {
+  sender: 'me' | 'other';
   src: string;
   avatarUrl?: string;
   time?: string;
@@ -22,7 +23,7 @@ const waveOptions = {
   normalize: true,
 };
 
-export function CustomAudioPlayer({ src, avatarUrl, time }: Props) {
+export function CustomAudioPlayer({ src, avatarUrl, time, sender }: Props) {
   const waveformRef = useRef<HTMLDivElement>(null);
   const wavesurferRef = useRef<WaveSurfer | null>(null);
   const waveWrapperRef = useRef<HTMLDivElement>(null);
@@ -65,8 +66,8 @@ export function CustomAudioPlayer({ src, avatarUrl, time }: Props) {
     return () => {
       wavesurfer.destroy();
     };
-  // SOLUÇÃO: Remover 'isDragging' do array de dependências
-  }, [src]); 
+    // SOLUÇÃO: Remover 'isDragging' do array de dependências
+  }, [src]);
 
   const togglePlay = () => {
     wavesurferRef.current?.playPause();
@@ -103,7 +104,7 @@ export function CustomAudioPlayer({ src, avatarUrl, time }: Props) {
     // SOLUÇÃO: Atualiza o valor do ref
     isDraggingRef.current = false;
   };
-  
+
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   return (
@@ -112,7 +113,7 @@ export function CustomAudioPlayer({ src, avatarUrl, time }: Props) {
         {isPlaying ? <Icon nome="pause" /> : <Icon nome="playaudio" />}
       </button>
 
-      <div 
+      <div
         className={styles.waveWrapper}
         ref={waveWrapperRef}
         onMouseDown={handleMouseDown}
@@ -135,12 +136,13 @@ export function CustomAudioPlayer({ src, avatarUrl, time }: Props) {
           {time && <span className={styles.messageTime}>{time}</span>}
         </div>
       </div>
-
-      <img
-        src={avatarUrl || defaultAvatar}
-        alt="Avatar"
-        className={styles.audioAvatar}
-      />
+      {sender === 'other' && (
+        <img
+          src={avatarUrl || defaultAvatar}
+          alt="Avatar"
+          className={styles.audioAvatar}
+        />
+      )}
     </div>
   );
 }

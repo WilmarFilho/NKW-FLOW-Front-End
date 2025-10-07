@@ -242,9 +242,6 @@ export default function ChatWindow({
             />
             <div className={styles.contactText}>
               <h1 title={activeChat.contato_nome}>{activeChat.contato_nome}</h1>
-              <span>
-                Agente - {activeChat.connection.agente.tipo_de_agente}
-              </span>
             </div>
           </div>
 
@@ -320,9 +317,6 @@ export default function ChatWindow({
             />
             <div className={styles.contactText}>
               <h1>{activeChat.contato_nome}</h1>
-              <NavLink to='/agentes'>
-                <span>Agente - {activeChat.connection.agente.tipo_de_agente}</span>
-              </NavLink>
             </div>
           </div>
 
