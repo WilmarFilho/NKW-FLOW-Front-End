@@ -78,6 +78,7 @@ export default function ConversasPage() {
       {/* Modal Nova Conversa */}
       {state.isAddChatOpen && (
         <Modal
+          isSubmitting={state.isSubmitting}
           isOpen={state.isAddChatOpen}
           labelSubmit="Enviar"
           onSave={state.handleCreateChat}

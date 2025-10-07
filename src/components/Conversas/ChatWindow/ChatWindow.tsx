@@ -27,6 +27,7 @@ import {
 import { useInfiniteScroll } from '../../../hooks/utils/useInfiniteScroll';
 
 interface ChatWindowProps {
+  isSubmitting: boolean;
   activeChat: Chat | null;
   messages: Message[];
   handleSendMessage: (text?: string, mimetype?: string, base64?: string) => void;
@@ -54,6 +55,7 @@ interface ChatWindowProps {
 
 export default function ChatWindow({
   isDeleteDialogOpen,
+  isSubmitting,
   fetchMoreMessages,
   cancelRef,
   setIsDeleteDialogOpen,
@@ -428,6 +430,7 @@ export default function ChatWindow({
       </Modal>
 
       <Modal
+        isSubmitting={isSubmitting}
         onSave={handleRenameClick}
         labelSubmit='Salvar'
         transparent

@@ -15,7 +15,7 @@ export const useConnectionsActions = () => {
   // Carrega conexões e seus Métodos
   const [connections, setConnections] = useRecoilState(connectionsState);
   const { fetchConnections } = useConnections();
-  const { fetchAttendants } = useAttendants();  
+  const { fetchAttendants } = useAttendants();
 
   // Recoil
   const [user] = useRecoilState(userState);
@@ -40,7 +40,7 @@ export const useConnectionsActions = () => {
       } else {
         setModalState((prev) => ({ ...prev, qrCode: null, step: 1, isOpen: false }));
       }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
       setModalState((prev) => ({ ...prev, qrCode: null, step: 1, isOpen: false }));
     }
@@ -49,6 +49,8 @@ export const useConnectionsActions = () => {
   const handleEditConnection = async (connection: Partial<Connection>) => {
 
     if (!user) return;
+
+    setModalState((prev) => ({ ...prev, isLoading: true }));
 
     const result = await put<Connection>(`/connections/${connection.id}`, {
       nome: connection.nome,

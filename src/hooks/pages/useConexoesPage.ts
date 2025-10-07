@@ -11,6 +11,9 @@ export function useConexoesPage() {
   const setActiveChat = useSetRecoilState(activeChatState);
   const setFilters = useSetRecoilState(chatFiltersState);
 
+  const [submittingId, setSubmittingId] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   // resetar o chat ativo ao entrar na página
   useEffect(() => {
     setActiveChat(null);
@@ -37,11 +40,21 @@ export function useConexoesPage() {
   const [errors, setErrors] = useState<Partial<Record<keyof Connection, string>>>({});
 
   const handleDelete = useCallback(async (id: string | number) => {
-    await removeConnection(id.toString());
+    setIsSubmitting(true);
+    try {
+      await removeConnection(id.toString());
+    } finally {
+      setIsSubmitting(false);
+    }
   }, [removeConnection]);
 
   const handleStatusToggle = useCallback(async (connection: Connection) => {
-    await updateConnectionStatus(connection);
+    setSubmittingId(connection.id);
+    try {
+      await updateConnectionStatus(connection);
+    } finally {
+      setSubmittingId(null);
+    }
   }, [updateConnectionStatus]);
 
   const openModal = useCallback((conn?: Connection) => {
@@ -90,7 +103,7 @@ export function useConexoesPage() {
           return prev.filter((c) => c.id !== pending.id);
         });
       }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
       // console.error('Erro ao fechar modal de conexão', err);
     } finally {
@@ -148,6 +161,7 @@ export function useConexoesPage() {
 
   return {
     isLoading: modalState.isLoading,
+    submittingId,
     qrCode: modalState.qrCode,
     step: modalState.step,
     connections: sortedConnections,
@@ -162,6 +176,7 @@ export function useConexoesPage() {
     showErrors,
     setFormData,
     setModalState,
+    isSubmitting,
     setActiveFilter,
     setSortField,
     setSortOrder,

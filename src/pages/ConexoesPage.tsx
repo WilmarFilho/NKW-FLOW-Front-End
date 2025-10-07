@@ -51,6 +51,8 @@ export default function ConexoesPage() {
     isLoading,
     step,
     qrCode,
+    submittingId,
+    isSubmitting
   } = useConexoesPage();
 
   // --- INÍCIO: estado e handlers para confirmação de exclusão via Chakra ---
@@ -101,7 +103,9 @@ export default function ConexoesPage() {
             // opcional: só disparar toggle se não for estado "aguardando"
             onClick={() => conn.status !== null && handleStatusToggle(conn)}
           >
-            {statusLabel}
+            {submittingId === conn.id
+              ? <div className={TableStyles.spinner}></div>
+              : statusLabel}
           </span>
         );
       },
@@ -226,13 +230,20 @@ export default function ConexoesPage() {
             </AlertDialogBody>
 
             <AlertDialogFooter>
-              <ChakraButton ref={cancelDeleteRef} onClick={closeDeleteDialog}>
-                Cancelar
-              </ChakraButton>
-              <ChakraButton colorScheme="red" onClick={confirmDelete} ml={3}>
-                Excluir
-              </ChakraButton>
+              {isSubmitting ? (
+                <div className={TableStyles.spinnerRed} style={{ marginRight: '10px' }}></div>
+              ) : (
+                <>
+                  <ChakraButton ref={cancelDeleteRef} onClick={closeDeleteDialog}>
+                    Cancelar
+                  </ChakraButton>
+                  <ChakraButton colorScheme="red" onClick={confirmDelete} ml={3}>
+                    Excluir
+                  </ChakraButton>
+                </>
+              )}
             </AlertDialogFooter>
+
           </AlertDialogContent>
         </AlertDialogOverlay>
       </AlertDialog>

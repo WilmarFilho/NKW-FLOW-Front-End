@@ -19,7 +19,7 @@ export function useAtendentesPage() {
       isFetching: false,
     }));
   }, []);
-  
+
   const attendants = useRecoilValue(attendantsState);
   const connections = useRecoilValue(connectionsState);
   const { addAttendant, removeAttendant, editAttendant, updateAttendantStatus } = useAttendantsActions();
@@ -33,14 +33,25 @@ export function useAtendentesPage() {
   const [editData, setEditData] = useState<AttendantFormData | null>(null);
   const [editAttendantId, setEditAttendantId] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submittingId, setSubmittingId] = useState<string | null>(null);
   const [formData, setFormData] = useState<AttendantFormData | null>(null);
 
   const handleDelete = async (id: string | number) => {
-    await removeAttendant(id.toString());
+    setIsSubmitting(true);
+    try {
+      await removeAttendant(id.toString());
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleStatusToggle = async (attendant: Attendant) => {
-    await updateAttendantStatus(attendant);
+    setSubmittingId(attendant.id);
+    try {
+      await updateAttendantStatus(attendant);
+    } finally {
+      setSubmittingId(null);
+    }
   };
 
   const handleEdit = (attendant: Attendant) => {
@@ -70,13 +81,17 @@ export function useAtendentesPage() {
     const foundErrors = validateAttendantForm(formData, !!editData);
     if (Object.keys(foundErrors).length > 0) return;
 
-    if (editAttendantId) {
-      await editAttendant(editAttendantId, formData);
-    } else {
-      await addAttendant(formData);
+    setIsSubmitting(true);
+    try {
+      if (editAttendantId) {
+        await editAttendant(editAttendantId, formData);
+      } else {
+        await addAttendant(formData);
+      }
+      closeModal();
+    } finally {
+      setIsSubmitting(false);
     }
-
-    closeModal();
   };
 
   const openModal = () => {
@@ -142,5 +157,6 @@ export function useAtendentesPage() {
     setSortOrder,
     openModal,
     closeModal,
+    submittingId
   };
 }

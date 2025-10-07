@@ -60,7 +60,7 @@ export default function AtendentesPage() {
           className={`${TableStyles.statusChip} ${item.user.status ? TableStyles.active : TableStyles.inactive}`}
           onClick={() => state.handleStatusToggle(item)}
         >
-          {item.user.status ? 'Ativo' : 'Inativo'}
+          {state.submittingId === item.id ? <div className={TableStyles.spinner}></div> : item.user.status ? 'Ativo' : 'Inativo'}
         </span>
       ),
     },
@@ -150,12 +150,18 @@ export default function AtendentesPage() {
             </AlertDialogBody>
 
             <AlertDialogFooter>
-              <ChakraButton ref={cancelDeleteRef} onClick={closeDeleteDialog}>
-                Cancelar
-              </ChakraButton>
-              <ChakraButton colorScheme="red" onClick={confirmDelete} ml={3}>
-                Excluir
-              </ChakraButton>
+              {state.isSubmitting? (
+                <div className={TableStyles.spinnerRed} style={{ marginRight: '10px' }}></div>
+              ) : (
+                <>
+                  <ChakraButton ref={cancelDeleteRef} onClick={closeDeleteDialog}>
+                    Cancelar
+                  </ChakraButton>
+                  <ChakraButton colorScheme="red" onClick={confirmDelete} ml={3}>
+                    Excluir
+                </ChakraButton>
+                </>
+              )}
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialogOverlay>

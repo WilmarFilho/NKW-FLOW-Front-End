@@ -52,6 +52,7 @@ export function useConversasPage() {
   // Estado e funções para criar novo chat
   const [isAddChatOpen, setIsAddChatOpen] = useState(false);
   const [newChatNumber, setNewChatNumber] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [newChatMessage, setNewChatMessage] = useState('');
   const [filterConnectionId, setFilterConnectionId] = useState<string | null>(null);
   const [formConnectionId, setFormConnectionId] = useState<string | null>(null);
@@ -76,66 +77,71 @@ export function useConversasPage() {
   }, [formConnectionId, newChatNumber, newChatMessage]);
 
   const handleSendMessage = useCallback(async (text?: string, mimetype?: string, base64?: string) => {
-    const messageText = text ?? newChatMessage;
+    setIsSubmitting(true);
+    try {
+      const messageText = text ?? newChatMessage;
 
-    if (!activeChat) {
-      if (!formConnectionId) {
-        setErrors({ selectedConnectionId: 'Selecione uma conexão.' });
+      if (!activeChat) {
+        if (!formConnectionId) {
+          setErrors({ selectedConnectionId: 'Selecione uma conexão.' });
+          return;
+        }
+
+        const result = await sendMessage({
+          mensagem: newChatMessage,
+          number: newChatNumber,
+          connection_id: formConnectionId
+        });
+
+        if (result) {
+          setIsAddChatOpen(false);
+          setNewChatNumber('');
+          setNewChatMessage('');
+          setFormConnectionId(null);
+        }
         return;
+      }
+
+      if (activeChat.ia_ativa) {
+        alert('⚠️ Não é possível enviar mensagem enquanto a IA está ativa.');
+        return;
+      }
+
+      const cooldownMin = 1;
+      if (activeChat.ia_desligada_em) {
+        let iso = activeChat.ia_desligada_em;
+        if (!iso.endsWith('Z') && !iso.includes('+')) iso += 'Z';
+        const desligadaEm = new Date(iso).getTime();
+        if (Date.now() - desligadaEm < cooldownMin * 60 * 1000) {
+          alert('⚠️ Aguarde alguns minutos antes de assumir o chat após desligar a IA.');
+          return;
+        }
       }
 
       const result = await sendMessage({
-        mensagem: newChatMessage,
-        number: newChatNumber,
-        connection_id: formConnectionId
+        chat_id: activeChat.id,
+        mensagem: messageText,
+        user_id: user?.id,
+        mimetype,
+        base64,
+        quote_id: replyingTo?.id
       });
 
       if (result) {
-        setIsAddChatOpen(false);
-        setNewChatNumber('');
-        setNewChatMessage('');
-        setFormConnectionId(null);
+        if (!activeChat.user_id && user?.id) {
+          await claimChatOwner(activeChat.id, user.id);
+          setActiveChat(prev => prev ? { ...prev, user_id: user.id } : prev);
+        }
+        if (replyingTo) {
+          setIsExiting(true);
+          setTimeout(() => {
+            setReplyingTo(undefined);
+            setIsExiting(false);
+          }, 900);
+        }
       }
-      return;
-    }
-
-    if (activeChat.ia_ativa) {
-      alert('⚠️ Não é possível enviar mensagem enquanto a IA está ativa.');
-      return;
-    }
-
-    const cooldownMin = 1;
-    if (activeChat.ia_desligada_em) {
-      let iso = activeChat.ia_desligada_em;
-      if (!iso.endsWith('Z') && !iso.includes('+')) iso += 'Z';
-      const desligadaEm = new Date(iso).getTime();
-      if (Date.now() - desligadaEm < cooldownMin * 60 * 1000) {
-        alert('⚠️ Aguarde alguns minutos antes de assumir o chat após desligar a IA.');
-        return;
-      }
-    }
-
-    const result = await sendMessage({
-      chat_id: activeChat.id,
-      mensagem: messageText,
-      user_id: user?.id,
-      mimetype,
-      base64,
-      quote_id: replyingTo?.id
-    });
-
-    if (result) {
-      if (!activeChat.user_id && user?.id) {
-        await claimChatOwner(activeChat.id, user.id);
-        setActiveChat(prev => prev ? { ...prev, user_id: user.id } : prev);
-      }
-      if (replyingTo) {
-        setIsExiting(true);
-        setTimeout(() => {
-          setReplyingTo(undefined);
-          setIsExiting(false);
-        }, 900);
-      }
+    } finally {
+      setIsSubmitting(false);
     }
   }, [activeChat, newChatMessage, newChatNumber, sendMessage, setChats, user?.id, replyingTo]);
 
@@ -199,7 +205,9 @@ export function useConversasPage() {
 
   const handleRenameChat = useCallback((newName: string) => {
     if (!activeChat || !newName.trim()) return;
-    renameChat(activeChat.id, newName.trim());
+    setIsSubmitting(true);
+    renameChat(activeChat.id, newName.trim())
+      .finally(() => setIsSubmitting(false));
     setActiveChat({ ...activeChat, contato_nome: newName.trim() });
   }, [activeChat, renameChat]);
 
@@ -214,6 +222,7 @@ export function useConversasPage() {
   }, [handleSendMessage]);
 
   return {
+    isSubmitting,
     user,
     chats,
     attendants,
