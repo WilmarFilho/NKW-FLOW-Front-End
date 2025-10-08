@@ -15,83 +15,52 @@ export function useInfiniteScroll({
   fetchMoreMessages,
   hasMore,
   isLoading,
-  messages,
   activeChat
 }: UseInfiniteScrollProps) {
   const listRef = useRef<HTMLDivElement | null>(null);
   const topSentinelRef = useRef<HTMLDivElement | null>(null);
+
   const [canFetch, setCanFetch] = useState(false);
-  const [canScrollInitial, setCanScrollInitial] = useState(true);
-  const [isFetching, setIsFetching] = useState(false);
+  const [lock, setLock] = useState(false); // lock para evitar múltiplos fetches
 
-  // reset flags quando trocar de chat
-  useEffect(() => {
-    setCanScrollInitial(true);
-    setCanFetch(false);
-  }, [activeChat]);
-
+  // scroll inicial para o final
   useLayoutEffect(() => {
     if (!activeChat) return;
-    if (!canScrollInitial) return;
-    if (messages.length === 0) return; // só roda se já carregaram mensagens
 
     const list = listRef.current;
     if (!list) return;
 
-    // espera 2 frames
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         list.scrollTo({ top: list.scrollHeight, behavior: 'auto' });
-        setCanScrollInitial(false);
         setCanFetch(true);
       });
     });
-  }, [activeChat, messages, canScrollInitial]);
+  }, [activeChat?.id]);
 
-
-  // Observer
+  // Observer para scroll no topo
   useEffect(() => {
     const list = listRef.current;
     const sentinel = topSentinelRef.current;
-    if (!list || !sentinel) return;
-    if (!canFetch) return;
+    if (!list || !sentinel || !canFetch) return;
 
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (
-            entry.isIntersecting &&
-            hasMore &&
-            !isLoading &&
-            !isFetching &&
-            canFetch
-          ) {
-            setIsFetching(true);
-
-            // pega a altura atual do scroll para manter posição
-            const previousScrollHeight = list.scrollHeight;
-
-            fetchMoreMessages();
-
-            // libera fetch quando as novas mensagens forem renderizadas
-            const timeout = setTimeout(() => {
-              if (list.scrollHeight > previousScrollHeight) {
-                // mantém o scroll na posição visual original
-                list.scrollTop += list.scrollHeight - previousScrollHeight;
-              }
-              setIsFetching(false);
-            }, 100); // 100ms costuma ser suficiente
-
-            return () => clearTimeout(timeout);
+      async (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting && hasMore && !isLoading && !lock) {
+            setLock(true); // bloqueia novos fetches
+            await fetchMoreMessages();
+            setLock(false); // libera após completar
           }
-        });
+        }
       },
-      { root: list, rootMargin: '300px', threshold: 0.2 }
+      { root: list, rootMargin: '350px', threshold: 0.2 }
     );
 
     observer.observe(sentinel);
     return () => observer.disconnect();
-  }, [hasMore, isLoading, fetchMoreMessages, canFetch]);
+  }, [hasMore, isLoading, fetchMoreMessages, canFetch, lock]);
 
-  return { listRef, topSentinelRef, };
+  return { listRef, topSentinelRef };
 }
+

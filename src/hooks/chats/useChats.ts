@@ -4,6 +4,9 @@ import { chatsState, userState, nextCursorState } from '../../state/atom';
 import { useApi } from '../utils/useApi';
 import type { Chat, ChatFilters } from '../../types/chats';
 import { User } from '../../types/user';
+import { messagesState } from '../../state/atom';
+// Types
+import type { Message } from '../../types/message';
 
 interface UseChatsReturn {
   fetchChats: (filters?: ChatFilters, userParam?: User) => Promise<Chat[] | undefined>;
@@ -14,6 +17,7 @@ interface UseChatsReturn {
 }
 
 export const useChats = (): UseChatsReturn => {
+  const [messagesByChat, setMessagesByChat] = useRecoilState(messagesState);
   const [user] = useRecoilState(userState);
   const setChats = useSetRecoilState(chatsState);
   const [nextCursor, setNextCursor] = useRecoilState(nextCursorState);
@@ -49,15 +53,24 @@ export const useChats = (): UseChatsReturn => {
         const params = { user_id: currentUser.id, auth_id: currentUser.auth_id, ...filters };
         const fetchedData = await get<{ chats: Chat[]; nextCursor: string | null }>('/chats', { params });
 
-         console.log('Fetched more chats:', fetchedData);
-
         if (fetchedData) {
           setChats(fetchedData.chats);
-          updateDocumentTitle(fetchedData.chats)
+          updateDocumentTitle(fetchedData.chats);
+
+          // Preenche o estado de mensagens com as últimas mensagens de cada chat
+          const initialMessages: Record<string, Message[]> = {};
+          fetchedData.chats.forEach(chat => {
+            if (chat.ultimas_mensagens?.length) {
+              initialMessages[chat.id] = [...chat.ultimas_mensagens].reverse();
+            }
+          });
+          setMessagesByChat(prev => ({ ...prev, ...initialMessages }));
+
           setNextCursor(fetchedData.nextCursor);
           setHasMore(!!fetchedData.nextCursor);
           return fetchedData.chats;
         }
+
       } finally {
         setLoading(false);
       }
@@ -74,7 +87,7 @@ export const useChats = (): UseChatsReturn => {
     try {
       const params = { user_id: user.id, cursor: nextCursor, ...currentFilters };
       const fetchedData = await get<{ chats: Chat[]; nextCursor: string | null }>('/chats', { params });
-     
+
       if (fetchedData?.chats.length) {
         setChats(prev => {
           const safePrev = prev ?? [];
@@ -84,6 +97,18 @@ export const useChats = (): UseChatsReturn => {
           );
           return [...safePrev, ...newChats];
         });
+
+        updateDocumentTitle(fetchedData.chats);
+
+        // Preenche o estado de mensagens com as últimas mensagens de cada chat
+        const initialMessages: Record<string, Message[]> = {};
+        fetchedData.chats.forEach(chat => {
+          if (chat.ultimas_mensagens?.length) {
+            initialMessages[chat.id] = [...chat.ultimas_mensagens].reverse();
+          }
+        });
+        setMessagesByChat(prev => ({ ...prev, ...initialMessages }));
+
         setNextCursor(fetchedData.nextCursor);
         setHasMore(!!fetchedData.nextCursor);
       } else {
@@ -109,6 +134,10 @@ export const useChats = (): UseChatsReturn => {
     loading,
   };
 };
+
+
+
+
 
 
 

@@ -231,7 +231,7 @@ function ChatSidebar({
           />
         ))}
 
-        {hasMoreChats && isLoadingChats && <div className={styles.loadMore}><span>Carregando mais conversas...</span></div>}
+        {hasMoreChats && isLoadingChats && <div className={styles.loadMore}> <div className={styles.spinner}></div> <span>Carregando conversas...</span></div>}
       </div>
 
       <div className={styles.statusToggleContainer}>

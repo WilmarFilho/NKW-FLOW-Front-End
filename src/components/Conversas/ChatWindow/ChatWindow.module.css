@@ -10,30 +10,6 @@
   position: relative;
 }
 
-@keyframes fadeInContent {
-  from {
-    height: 0px;
-  }
-
-  to {
-    height: 100px;
-    /* padrão desktop */
-  }
-}
-
-@media (max-width: 991.98px) {
-  @keyframes fadeInContent {
-    from {
-      height: 0px;
-    }
-
-    to {
-      height: 65px;
-      /* altura reduzida para telas menores */
-    }
-  }
-}
-
 @keyframes animateRow {
 
   /* Estado inicial: transparente e 15px abaixo */
@@ -77,7 +53,6 @@
 
 .inputAreaWrapper {
   display: grid;
-  animation: animateRow .1s;
   padding: 12px 20px;
   border-top: 1px solid var(--color-borders);
 }
@@ -113,8 +88,7 @@
   display: flex;
   margin-top: 12px;
   gap: 12px;
-  height: 0;
-  animation: fadeInContent .3s forwards;
+  height: 100px;
 }
 
 .replyPreview button {

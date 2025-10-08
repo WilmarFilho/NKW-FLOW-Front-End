@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { NavLink } from 'react-router-dom';
 import { Chat } from '../../../types/chats';
 import { Message } from '../../../types/message';
 import { useDragAndDropFile } from '../../../hooks/utils/useDragAndDropFile';
@@ -221,11 +220,8 @@ export default function ChatWindow({
   });
 
   return (
-    <motion.section
+    <section
       className={styles.chatWindow}
-      initial={isMobileLayout ? { opacity: 0 } : { opacity: 0, x: 30 }}
-      animate={isMobileLayout ? { opacity: 1 } : { opacity: 1, x: 0 }}
-      transition={{ delay: 0.4, duration: 0.6 }}
     >
       {/* Header MOBILE (<= 991.98px) */}
       {isMobileLayout && (
@@ -575,9 +571,11 @@ export default function ChatWindow({
         </AlertDialogOverlay>
       </AlertDialog>
 
-    </motion.section>
+    </section>
 
   );
 }
+
+
 
 

@@ -1,4 +1,4 @@
-import { Agent } from './agent';
+import { Message } from './message';
 
 export interface Chat {
   status: string;
@@ -13,12 +13,7 @@ export interface Chat {
   mensagem_data?: string | null;
   ultima_mensagem_type?: string;
   ultima_mensagem: string,
-  connection: {
-    agente: Agent,
-    agente_id: string,
-    id: string,
-    nome: string
-  };
+  ultimas_mensagens?: Message[];
   unread_count: number;
   ia_desligada_em?: string | null;
   user_nome?: string | null;
