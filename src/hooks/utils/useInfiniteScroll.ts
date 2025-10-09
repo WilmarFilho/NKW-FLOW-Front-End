@@ -53,7 +53,6 @@ export function useInfiniteScroll({
       if (loadedCount === medias.length) {
         // todas as mídias carregadas, espera um pouco para garantir layout
         setTimeout(() => {
-          console.log('Todas as mídias carregadas');
           scrollToBottom();
         }, 150);
       }
