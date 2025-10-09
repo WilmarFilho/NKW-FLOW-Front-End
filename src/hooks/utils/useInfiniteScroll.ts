@@ -24,7 +24,7 @@ export function useInfiniteScroll({
   const lockRef = useRef(false); // lock para evitar múltiplos fetches
 
   // scroll inicial para o final do chat
- useLayoutEffect(() => {
+useLayoutEffect(() => {
   if (!activeChat) return;
   const list = listRef.current;
   if (!list) return;
@@ -34,38 +34,50 @@ export function useInfiniteScroll({
     setCanFetch(true); // habilita fetch após scroll inicial
   };
 
-  // Pega todas as imagens dentro do container
-  const images = list.querySelectorAll('img');
+  // Pega todas as imagens e vídeos dentro do container
+  const medias = list.querySelectorAll('img, video');
 
-  if (images.length === 0) {
-    // Se não houver imagens, faz scroll imediatamente
+  if (medias.length === 0) {
+    // Se não houver mídias, faz scroll imediatamente
     scrollToBottom();
     return;
   }
 
   let loadedCount = 0;
 
-  const handleImageLoad = () => {
+  const handleMediaLoad = () => {
     loadedCount += 1;
-    if (loadedCount === images.length) {
-      // todas as imagens carregadas, faz scroll
-      scrollToBottom();
+    if (loadedCount === medias.length) {
+      // todas as mídias carregadas, espera um pouco para garantir layout
+      setTimeout(() => {
+        console.log('Todas as mídias carregadas');
+        scrollToBottom();
+      }, 150);
     }
   };
 
-  images.forEach((img) => {
-    if (img.complete) {
-      handleImageLoad();
+  medias.forEach((media) => {
+    if (
+      (media.tagName === 'img' && (media as HTMLImageElement).complete) ||
+      (media.tagName === 'video' && (media as HTMLVideoElement).readyState >= 2)
+    ) {
+      handleMediaLoad();
     } else {
-      img.addEventListener('load', handleImageLoad);
-      img.addEventListener('error', handleImageLoad); // mesmo se der erro, conta
+      media.addEventListener('load', handleMediaLoad);
+      media.addEventListener('error', handleMediaLoad);
+      if (media.tagName === 'video') {
+        media.addEventListener('loadeddata', handleMediaLoad);
+      }
     }
   });
 
   return () => {
-    images.forEach((img) => {
-      img.removeEventListener('load', handleImageLoad);
-      img.removeEventListener('error', handleImageLoad);
+    medias.forEach((media) => {
+      media.removeEventListener('load', handleMediaLoad);
+      media.removeEventListener('error', handleMediaLoad);
+      if (media.tagName === 'VIDEO') {
+        media.removeEventListener('loadeddata', handleMediaLoad);
+      }
     });
   };
 }, [activeChat?.id]);
