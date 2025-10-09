@@ -24,63 +24,66 @@ export function useInfiniteScroll({
   const lockRef = useRef(false); // lock para evitar múltiplos fetches
 
   // scroll inicial para o final do chat
-useLayoutEffect(() => {
-  if (!activeChat) return;
-  const list = listRef.current;
-  if (!list) return;
+  useLayoutEffect(() => {
+    if (!activeChat) return;
+    const list = listRef.current;
+    if (!list) return;
 
-  const scrollToBottom = () => {
-    list.scrollTo({ top: list.scrollHeight, behavior: 'auto' });
-    setCanFetch(true); // habilita fetch após scroll inicial
-  };
-
-  // Pega todas as imagens e vídeos dentro do container
-  const medias = list.querySelectorAll('img, video');
-
-  if (medias.length === 0) {
-    // Se não houver mídias, faz scroll imediatamente
-    scrollToBottom();
-    return;
-  }
-
-  let loadedCount = 0;
-
-  const handleMediaLoad = () => {
-    loadedCount += 1;
-    if (loadedCount === medias.length) {
-      // todas as mídias carregadas, espera um pouco para garantir layout
+    const scrollToBottom = () => {
+      list.scrollTo({ top: list.scrollHeight, behavior: 'auto' });
       setTimeout(() => {
-        console.log('Todas as mídias carregadas');
-        scrollToBottom();
-      }, 150);
-    }
-  };
+        setCanFetch(true); // habilita fetch após scroll inicial
+      }, 100);
 
-  medias.forEach((media) => {
-    if (
-      (media.tagName === 'img' && (media as HTMLImageElement).complete) ||
-      (media.tagName === 'video' && (media as HTMLVideoElement).readyState >= 2)
-    ) {
-      handleMediaLoad();
-    } else {
-      media.addEventListener('load', handleMediaLoad);
-      media.addEventListener('error', handleMediaLoad);
-      if (media.tagName === 'video') {
-        media.addEventListener('loadeddata', handleMediaLoad);
+    };
+
+    // Pega todas as imagens e vídeos dentro do container
+    const medias = list.querySelectorAll('img, video');
+
+    if (medias.length === 0) {
+      // Se não houver mídias, faz scroll imediatamente
+      scrollToBottom();
+      return;
+    }
+
+    let loadedCount = 0;
+
+    const handleMediaLoad = () => {
+      loadedCount += 1;
+      if (loadedCount === medias.length) {
+        // todas as mídias carregadas, espera um pouco para garantir layout
+        setTimeout(() => {
+          console.log('Todas as mídias carregadas');
+          scrollToBottom();
+        }, 150);
       }
-    }
-  });
+    };
 
-  return () => {
     medias.forEach((media) => {
-      media.removeEventListener('load', handleMediaLoad);
-      media.removeEventListener('error', handleMediaLoad);
-      if (media.tagName === 'VIDEO') {
-        media.removeEventListener('loadeddata', handleMediaLoad);
+      if (
+        (media.tagName === 'img' && (media as HTMLImageElement).complete) ||
+        (media.tagName === 'video' && (media as HTMLVideoElement).readyState >= 2)
+      ) {
+        handleMediaLoad();
+      } else {
+        media.addEventListener('load', handleMediaLoad);
+        media.addEventListener('error', handleMediaLoad);
+        if (media.tagName === 'video') {
+          media.addEventListener('loadeddata', handleMediaLoad);
+        }
       }
     });
-  };
-}, [activeChat?.id]);
+
+    return () => {
+      medias.forEach((media) => {
+        media.removeEventListener('load', handleMediaLoad);
+        media.removeEventListener('error', handleMediaLoad);
+        if (media.tagName === 'VIDEO') {
+          media.removeEventListener('loadeddata', handleMediaLoad);
+        }
+      });
+    };
+  }, [activeChat?.id]);
 
 
   // Observer para scroll no topo
