@@ -23,7 +23,11 @@ interface MessageBubbleProps {
 }
 
 export default function MessageBubble(props: MessageBubbleProps) {
-  const { id, sender, mimetype, filename, onReply, quote, senderName, createdAt, excluded, avatarUrl, base64, text } = props;
+  const {
+    id, sender, mimetype, filename, onReply,
+    quote, senderName, createdAt, excluded,
+    avatarUrl, base64, text
+  } = props;
 
   const parseToLocalDate = (utcTimestamp: string): Date => {
     if (utcTimestamp && !utcTimestamp.endsWith('Z')) {
@@ -34,31 +38,27 @@ export default function MessageBubble(props: MessageBubbleProps) {
   };
 
   const createdAtLocal = parseToLocalDate(createdAt);
-
   const [isHovered, setIsHovered] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [menuPosition, setMenuPosition] = useState<'top' | 'bottom'>('bottom');
-
-  // ✅ Estado para o lightbox
   const [expandedMedia, setExpandedMedia] = useState<string | null>(null);
   const [expandedType, setExpandedType] = useState<'image' | 'video' | null>(null);
-
-  // estado para tamanho do arquivo exibido no documento
   const [fileSizeText, setFileSizeText] = useState<string | null>(null);
+  const [loadedImage, setLoadedImage] = useState(false);
+  const [loadedVideo, setLoadedVideo] = useState(false);
 
   const bubbleRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
-
   const { openMenuId } = useDropdownMenu();
   const menuHeightRef = useRef<number>(0);
 
-  // 📌 Função auxiliar para descobrir o mimeType a partir do base64 (fallback)
+  // 🔍 MIME fallback
   const inferMime = (dataUrl: string, fallback: string): string => {
     const match = dataUrl.match(/^data:([^;]+);/);
     return match ? match[1] : fallback;
   };
 
-  // 📌 Função auxiliar para calcular o tamanho aproximado do arquivo
+  // 🧮 Tamanho do arquivo
   const calculateFileSize = (base64Data: string): string => {
     try {
       const sizeInBytes = (base64Data.length * 3) / 4;
@@ -71,11 +71,10 @@ export default function MessageBubble(props: MessageBubbleProps) {
   };
 
   useEffect(() => {
-    if (base64) {
-      setFileSizeText(calculateFileSize(base64));
-    }
+    if (base64) setFileSizeText(calculateFileSize(base64));
   }, [base64]);
 
+  // 🧭 Posição do menu
   const computePosition = () => {
     if (!bubbleRef.current) return;
     const bubbleRect = bubbleRef.current.getBoundingClientRect();
@@ -87,12 +86,12 @@ export default function MessageBubble(props: MessageBubbleProps) {
         ? ({ top: 0, bottom: window.innerHeight } as unknown as DOMRect)
         : (scroller as HTMLElement).getBoundingClientRect();
 
-    if (menuRef.current && !menuHeightRef.current) menuHeightRef.current = menuRef.current.offsetHeight;
+    if (menuRef.current && !menuHeightRef.current)
+      menuHeightRef.current = menuRef.current.offsetHeight;
 
     const estimatedMenuHeight = menuHeightRef.current || 200;
     const spaceBelow = scrollerRect.bottom - bubbleRect.bottom;
     const spaceAbove = bubbleRect.top - scrollerRect.top;
-
     const shouldUseTop = spaceBelow < estimatedMenuHeight && spaceAbove > spaceBelow;
     setMenuPosition(shouldUseTop ? 'top' : 'bottom');
   };
@@ -113,8 +112,7 @@ export default function MessageBubble(props: MessageBubbleProps) {
     const onScrollOrResize = () => requestAnimationFrame(computePosition);
 
     window.addEventListener('resize', onScrollOrResize);
-    if (scroller instanceof Window) scroller.addEventListener('scroll', onScrollOrResize, { passive: true });
-    else scroller.addEventListener('scroll', onScrollOrResize, { passive: true });
+    scroller.addEventListener('scroll', onScrollOrResize, { passive: true });
 
     const ro = new ResizeObserver(() => requestAnimationFrame(computePosition));
     if (menuRef.current) ro.observe(menuRef.current);
@@ -122,8 +120,7 @@ export default function MessageBubble(props: MessageBubbleProps) {
     return () => {
       clearTimeout(t);
       window.removeEventListener('resize', onScrollOrResize);
-      if (scroller instanceof Window) scroller.removeEventListener('scroll', onScrollOrResize);
-      else (scroller as HTMLElement).removeEventListener('scroll', onScrollOrResize);
+      scroller.removeEventListener('scroll', onScrollOrResize);
       ro.disconnect();
     };
   }, [openMenuId, id]);
@@ -143,78 +140,63 @@ export default function MessageBubble(props: MessageBubbleProps) {
     excluded ? styles.isExcluded : '',
   ].join(' ');
 
-  // 👉 Render do conteúdo da mensagem
+  // 💬 Render principal
   const renderMessageContent = () => {
     const type = mimetype || 'text';
 
     if (type === 'image/webp' && base64) {
-      return (
-        <img
-          src={base64}
-          alt="Sticker"
-          className={styles.stickerImage}
-          loading="lazy"
-        />
-      );
+      return <img src={base64} alt="Sticker" className={styles.stickerImage} loading="lazy" />;
     }
-
 
     if (type.startsWith('image') && base64) {
       return (
-        <>
+        <div className={styles.imageWrapper}>
+          {!loadedImage && <div className={styles.placeholder} />}
           <img
             src={base64}
             alt="Imagem enviada"
-            className={styles.messageImage}
+            className={`${styles.messageImage} ${loadedImage ? styles.visible : styles.hidden}`}
             loading="lazy"
-            onClick={() => {
-              setExpandedMedia(base64);
-              setExpandedType('image');
-            }}
+            onLoad={() => setLoadedImage(true)}
+            onClick={() => { setExpandedMedia(base64); setExpandedType('image'); }}
           />
           {text && <p>{text}</p>}
-        </>
+        </div>
       );
     }
 
-
-
     if (type.startsWith('video') && base64) {
       return (
-        <>
+        <div className={styles.imageWrapper}>
+          {!loadedVideo && <div className={styles.placeholder} />}
           <video
             src={base64}
             className={styles.messageImage}
             preload="metadata"
             playsInline
             muted
-            onClick={() => {
-              setExpandedMedia(base64);
-              setExpandedType('video');
-            }}
+            onLoadedData={() => setLoadedVideo(true)}
+            onClick={() => { setExpandedMedia(base64); setExpandedType('video'); }}
           />
           {text && <p>{text}</p>}
-        </>
+        </div>
       );
     }
 
     if (type !== 'text' && base64) {
       const fileMime = inferMime(base64, type);
       const sizeLabel = fileSizeText ?? '—';
-
       return (
         <>
           <div className={styles.documentContainer}>
-            <div className={styles.documentLeft}>
-              <Icon nome='document' />
-            </div>
+            <div className={styles.documentLeft}><Icon nome="document" /></div>
             <div className={styles.documentBody}>
               <div className={styles.documentName}>{filename}</div>
               <div className={styles.documentMeta}>{fileMime} • {sizeLabel}</div>
             </div>
             <div className={styles.documentRight}>
               <a href={base64} download={filename} aria-label={`Baixar ${filename}`}>
-                <Icon nome='arrowdownload' />
+                <Icon nome="arrowdownload" />
               </a>
             </div>
           </div>
@@ -223,24 +205,21 @@ export default function MessageBubble(props: MessageBubbleProps) {
       );
     }
 
-    if (type !== 'texto' && !base64) {
+    if (type !== 'texto' && !base64)
       return <div className={styles.documentContainer}>🚫 Tipo de mensagem não suportado.</div>;
-    }
 
     if (!text) return null;
+
     return (
       <p className={styles.messageText}>
         {text.split('\n').map((line, idx) => (
-          <span key={idx}>
-            {line.trim()}
-            <br />
-          </span>
+          <span key={idx}>{line.trim()}<br /></span>
         ))}
       </p>
     );
   };
 
-  // 🔒 UX: trava scroll do body e fecha com ESC quando lightbox ativo
+  // 🖼 Lightbox (trava scroll e fecha com ESC)
   useEffect(() => {
     if (!expandedMedia) return;
     const prev = document.body.style.overflow;
@@ -273,17 +252,12 @@ export default function MessageBubble(props: MessageBubbleProps) {
           </div>
         )}
 
-        {/* Conteúdo principal */}
         {mimetype?.startsWith('audio') && base64 ? (
           <CustomAudioPlayer
             sender={sender}
             src={base64}
             avatarUrl={avatarUrl}
-            time={createdAtLocal.toLocaleTimeString('pt-BR', {
-              hour: '2-digit',
-              minute: '2-digit',
-              hour12: false,
-            })}
+            time={createdAtLocal.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', hour12: false })}
           />
         ) : (
           renderMessageContent()
@@ -297,11 +271,7 @@ export default function MessageBubble(props: MessageBubbleProps) {
 
         {!mimetype?.startsWith('audio') && (
           <span className={styles.time}>
-            {createdAtLocal.toLocaleTimeString('pt-BR', {
-              hour: '2-digit',
-              minute: '2-digit',
-              hour12: false,
-            })}
+            {createdAtLocal.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', hour12: false })}
           </span>
         )}
 
@@ -312,29 +282,20 @@ export default function MessageBubble(props: MessageBubbleProps) {
             variant="message"
             position={menuPosition}
             direction={sender === 'me' ? 'right' : 'left'}
-            trigger={
-              <button className={styles.actionButton} onClick={handleTriggerClick}>
-                <Icon nome="arrowdown" />
-              </button>
-            }
+            trigger={<button className={styles.actionButton} onClick={handleTriggerClick}><Icon nome="arrowdown" /></button>}
             className={`${styles.messageMenu} ${sender === 'me' ? styles.menuRight : styles.menuLeft}`}
           >
-            <button onClick={() => onReply?.()}>
-              <Icon nome="arrow" /> {props.isMobileLayout ? 'Responder' : 'Responder Mensagem'}
-            </button>
-
+            <button onClick={() => onReply?.()}><Icon nome="arrow" /> {props.isMobileLayout ? 'Responder' : 'Responder Mensagem'}</button>
             {props.text && (
               <button onClick={() => navigator.clipboard.writeText(props.text || '')}>
                 <Icon nome="copy" /> {props.isMobileLayout ? 'Copiar' : 'Copiar mensagem'}
               </button>
             )}
-
-            {sender === 'me' &&
-              (Date.now() - createdAtLocal.getTime() <= 5 * 60 * 1000) && (
-                <button onClick={() => props.onDelete?.(id)}>
-                  <Icon nome="trash" /> {props.isMobileLayout ? 'Apagar' : 'Apagar mensagem'}
-                </button>
-              )}
+            {sender === 'me' && (Date.now() - createdAtLocal.getTime() <= 5 * 60 * 1000) && (
+              <button onClick={() => props.onDelete?.(id)}>
+                <Icon nome="trash" /> {props.isMobileLayout ? 'Apagar' : 'Apagar mensagem'}
+              </button>
+            )}
           </DropdownMenu>
         )}
       </div>
@@ -342,14 +303,12 @@ export default function MessageBubble(props: MessageBubbleProps) {
       {expandedMedia && (
         <div className={styles.mediaOverlay} onClick={() => setExpandedMedia(null)}>
           <button className={styles.closeButton} onClick={() => setExpandedMedia(null)}>
-            <Icon nome='close' />
+            <Icon nome="close" />
           </button>
           <div className={styles.mediaContainer} onClick={(e) => e.stopPropagation()}>
-            {expandedType === 'image' ? (
-              <img src={expandedMedia} alt="Visualização" className={styles.mediaFull} />
-            ) : (
-              <video src={expandedMedia} className={styles.mediaFull} controls autoPlay />
-            )}
+            {expandedType === 'image'
+              ? <img src={expandedMedia} alt="Visualização" className={styles.mediaFull} />
+              : <video src={expandedMedia} className={styles.mediaFull} controls autoPlay />}
           </div>
         </div>
       )}

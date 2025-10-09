@@ -17,7 +17,7 @@ interface UseChatsReturn {
 }
 
 export const useChats = (): UseChatsReturn => {
-  const [messagesByChat, setMessagesByChat] = useRecoilState(messagesState);
+  const setMessagesByChat = useSetRecoilState(messagesState);
   const [user] = useRecoilState(userState);
   const setChats = useSetRecoilState(chatsState);
   const [nextCursor, setNextCursor] = useRecoilState(nextCursorState);
