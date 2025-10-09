@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { Chat } from '../../../types/chats';
 import { Message } from '../../../types/message';
 import { useDragAndDropFile } from '../../../hooks/utils/useDragAndDropFile';
@@ -575,6 +574,9 @@ export default function ChatWindow({
 
   );
 }
+
+
+
 
 
 
