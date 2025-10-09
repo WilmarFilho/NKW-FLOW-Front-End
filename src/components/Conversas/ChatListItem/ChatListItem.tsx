@@ -10,17 +10,17 @@ import React from 'react';
 import { Chat } from '../../../types/chats';
 // Utils
 import { useFormatDate } from '../../../hooks/utils/useFormatDate';
+import { Message } from '@/types/message';
 
 interface ChatListItemProps {
   name: string;
-  type?: string;
-  message: string;
-  avatar?: string;
+  avatar: string | null;
   chatId: string;
   isActive: boolean;
   onClick: () => void;
-  unreadCount: number;
-  mensagemData?: string | null;
+  unreadCount: boolean;
+  ultimaMensagem?: Partial<Message>;
+  mensagemData: string;
   fetchImageProfile: (chatId: string) => Promise<Chat | null>;
 }
 
@@ -31,16 +31,16 @@ const itemVariants = {
 
 function ChatListItem({
   name,
-  message,
   avatar,
   isActive,
   onClick,
   chatId,
   fetchImageProfile,
-  mensagemData,
   unreadCount,
-  type,
+  ultimaMensagem,
+  mensagemData,
 }: ChatListItemProps) {
+
   const [avatarUrl, setAvatarUrl] = useState(avatar || defaultAvatar);
   const [hasError, setHasError] = useState(false);
 
@@ -59,17 +59,11 @@ function ChatListItem({
 
   const nameInMessageRegex = /^\*.*?\*\s?/;
 
-  const isMediaType = (type?: string) => {
-    if (!type) return false;
-    return /^(video|image|application|audio)/.test(type);
-  };
+  let lastMessage = ultimaMensagem?.mensagem?.replace(nameInMessageRegex, '').trim();
 
-  const cleanedMessage =
-    isMediaType(type)
-      ? 'Arquivo de mídia 📎'
-      : message
-        ? message.replace(nameInMessageRegex, '').trim()
-        : 'Arquivo de mídia 📎';
+  if(ultimaMensagem?.mimetype !== 'texto') {
+    lastMessage = 'Arquivo de mídia 📎';
+  }
 
   const containerClasses = `${styles.chatListItem} ${isActive ? styles.active : ''}`;
 
@@ -92,7 +86,7 @@ function ChatListItem({
         {/* Linha superior: nome + data */}
         <div className={styles.columnLeft}>
           <strong>{name}</strong>
-          <p className={styles.message}>{cleanedMessage}</p>
+          <p className={styles.message}>{lastMessage}</p>
 
         </div>
 
@@ -101,7 +95,7 @@ function ChatListItem({
           {mensagemData && (
             <span
               className={
-                unreadCount > 0
+                unreadCount
                   ? styles.headerActiveCount
                   : styles.headerCount
               }
@@ -109,8 +103,8 @@ function ChatListItem({
               {useFormatDate(mensagemData)}
             </span>
           )}
-          {unreadCount > 0 && (
-            <span className={styles.countUnread}>{unreadCount}</span>
+          {unreadCount && (
+            <span className={styles.countUnread}>*</span>
           )}
         </div>
 

@@ -42,7 +42,7 @@ export function useConversasPage() {
   const { reOpenChat, deleteChat, renameChat, toggleIA, claimChatOwner, releaseChatOwner } = useChatActions();
 
   const { messages, fetchMoreMessages, hasMore, isLoading } = useMessages(activeChat?.id || null);
-
+  
   const handleReleaseChatOwner = useCallback(async () => {
     if (!activeChat || !activeChat.user_id) return;
     const updated = await releaseChatOwner(activeChat.id);
@@ -197,9 +197,9 @@ export function useConversasPage() {
 
     const result = await reOpenChat(activeChat.id, newStatus);
     if (result) {
-      const updatedChat = { ...activeChat, status: newStatus };
+      const updatedChat = { ...activeChat, status: newStatus as 'Open' | 'Close' };
       setActiveChat(updatedChat);
-      setChats(prev => (prev ?? []).map(chat => chat.id === updatedChat.id ? updatedChat : chat));
+      setChats(prev => (prev ?? []).map(chat => chat.id === updatedChat.id ? { ...chat, status: newStatus as 'Open' | 'Close' } : chat));
     }
   }, [activeChat, reOpenChat, setChats, user?.id]);
 

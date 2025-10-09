@@ -19,7 +19,7 @@ interface MessageBubbleProps {
   excluded: boolean;
   onDelete?: (id: string) => void;
   isMobileLayout?: boolean;
-  avatarUrl?: string;
+  avatarUrl: string | null;
 }
 
 export default function MessageBubble(props: MessageBubbleProps) {

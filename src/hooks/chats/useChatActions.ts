@@ -42,13 +42,13 @@ export default function useChatActions() {
 
   };
 
-  const reOpenChat = async (chatId: string, status: string) => {
+  const reOpenChat = async (chatId: string, status: 'Open' | 'Close') => {
 
-    const result = await put(`/chats/${chatId}`, { status: status });
+    const result = await put(`/chats/${chatId}`, { status });
 
     if (result) {
       setChats((prev) =>
-        prev ? prev.map((chat) => (chat.id === chatId ? { ...chat, status: status } : chat)) : []
+        prev ? prev.map((chat) => (chat.id === chatId ? { ...chat, status } : chat)) : []
       );
     }
 

@@ -193,7 +193,7 @@ export default function ChatWindow({
       <MessageBubble
         key={msg.id}
         id={msg.id}
-        avatarUrl={msg.remetente === 'Usuário' ? user?.foto_perfil : activeChat.foto_perfil}
+        avatarUrl={activeChat.foto_perfil}
         senderName={activeChat.contato_nome}
         text={msg.mensagem}
         mimetype={msg.mimetype}
@@ -574,12 +574,3 @@ export default function ChatWindow({
 
   );
 }
-
-
-
-
-
-
-
-
-

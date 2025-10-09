@@ -1,30 +1,27 @@
 import { Message } from './message';
 
 export interface Chat {
-  status: string;
-  user_id: string | null;
   connection_id: string;
   contato_nome: string;
   contato_numero: string;
-  foto_perfil?: string;
-  id: string;
+  foto_perfil: string | null;
   ia_ativa: boolean;
+  ia_desligada_em: string | null;
+  id: string;
+  status: 'Close' | 'Open';
   ultima_atualizacao: string;
-  mensagem_data?: string | null;
-  ultima_mensagem_type?: string;
-  ultima_mensagem: string,
-  ultimas_mensagens?: Message[];
-  unread_count: number;
-  ia_desligada_em?: string | null;
-  user_nome?: string | null;
+  ultima_mensagem: Partial<Message>;
+  unread_count: boolean;
+  user_id: string | null;
+  user_nome: string | null;
 }
 
 export interface ChatFilters {
-  search?: string | null;
-  connection_id?: string | null;
-  attendant_id?: string | null;
-  iaStatus?: 'todos' | 'ativa' | 'desativada';
-  status?: 'Open' | 'Close';
-  owner?: string;
-  isFetching?: boolean;
+  search: string | null;
+  connection_id: string | null;
+  attendant_id: string | null;
+  iaStatus: 'todos' | 'ativa' | 'desativada';
+  status: 'Open' | 'Close';
+  owner: 'all' | 'mine';
+  isFetching: boolean;
 }

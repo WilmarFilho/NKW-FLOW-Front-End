@@ -4,9 +4,6 @@ import { chatsState, userState, nextCursorState } from '../../state/atom';
 import { useApi } from '../utils/useApi';
 import type { Chat, ChatFilters } from '../../types/chats';
 import { User } from '../../types/user';
-import { messagesState } from '../../state/atom';
-// Types
-import type { Message } from '../../types/message';
 
 interface UseChatsReturn {
   fetchChats: (filters?: ChatFilters, userParam?: User) => Promise<Chat[] | undefined>;
@@ -17,27 +14,53 @@ interface UseChatsReturn {
 }
 
 export const useChats = (): UseChatsReturn => {
-  const setMessagesByChat = useSetRecoilState(messagesState);
+
   const [user] = useRecoilState(userState);
   const setChats = useSetRecoilState(chatsState);
   const [nextCursor, setNextCursor] = useRecoilState(nextCursorState);
+  const [unreadCountTitle, setUnreadCountTitle] = useState(0);
 
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
-  const [currentFilters, setCurrentFilters] = useState<ChatFilters>({});
+  const [currentFilters, setCurrentFilters] = useState<ChatFilters>({
+    search: null,
+    connection_id: null,
+    attendant_id: null,
+    iaStatus: 'todos',
+    status: 'Open',
+    owner: 'all',
+    isFetching: false,
+  });
+  
   const [, setSessionId] = useState<number>(Date.now());
 
   const { get, put } = useApi();
 
   const updateDocumentTitle = (chats: Chat[]) => {
-    const unreadCount = chats.filter(c => c.unread_count > 0).length;
-    document.title = unreadCount > 0 ? `(${unreadCount}) WhatsApp - NKW FLOW` : 'WhatsApp - NKW FLOW';
+    chats.map((chat) => {
+      if (chat.unread_count) {
+        setUnreadCountTitle((prev) => prev + 1);
+      }
+    });
+
+    document.title = unreadCountTitle > 0 ? `(${unreadCountTitle}) WhatsApp - NKW FLOW` : 'WhatsApp - NKW FLOW';
   };
 
   // 🔹 Função para carregar chats com filtros (resetando a lista)
   const fetchChats = useCallback(
-    async (filters: ChatFilters = {}, userParam?: User) => {
+    async (
+      filters: ChatFilters = {
+        search: null,
+        connection_id: null,
+        attendant_id: null,
+        iaStatus: 'todos',
+        status: 'Open',
+        owner: 'all',
+        isFetching: false,
+      },
+      userParam?: User
+    ) => {
       const currentUser = userParam ?? user;
       if (!currentUser) return;
 
@@ -56,16 +79,6 @@ export const useChats = (): UseChatsReturn => {
         if (fetchedData) {
           setChats(fetchedData.chats);
           updateDocumentTitle(fetchedData.chats);
-
-          // Preenche o estado de mensagens com as últimas mensagens de cada chat
-          const initialMessages: Record<string, Message[]> = {};
-          fetchedData.chats.forEach(chat => {
-            if (chat.ultimas_mensagens?.length) {
-              initialMessages[chat.id] = [...chat.ultimas_mensagens].reverse();
-            }
-          });
-          setMessagesByChat(prev => ({ ...prev, ...initialMessages }));
-
           setNextCursor(fetchedData.nextCursor);
           setHasMore(!!fetchedData.nextCursor);
           return fetchedData.chats;
@@ -99,16 +112,6 @@ export const useChats = (): UseChatsReturn => {
         });
 
         updateDocumentTitle(fetchedData.chats);
-
-        // Preenche o estado de mensagens com as últimas mensagens de cada chat
-        const initialMessages: Record<string, Message[]> = {};
-        fetchedData.chats.forEach(chat => {
-          if (chat.ultimas_mensagens?.length) {
-            initialMessages[chat.id] = [...chat.ultimas_mensagens].reverse();
-          }
-        });
-        setMessagesByChat(prev => ({ ...prev, ...initialMessages }));
-
         setNextCursor(fetchedData.nextCursor);
         setHasMore(!!fetchedData.nextCursor);
       } else {
@@ -134,11 +137,3 @@ export const useChats = (): UseChatsReturn => {
     loading,
   };
 };
-
-
-
-
-
-
-
-

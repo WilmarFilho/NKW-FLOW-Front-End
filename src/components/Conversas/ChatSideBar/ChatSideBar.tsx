@@ -64,12 +64,12 @@ function ChatSidebar({
   useEffect(() => {
     // Só dispara se algum filtro estiver diferente do padrão
     const defaultFilters: ChatFilters = {
-      search: '',
+      search: null,
       status: 'Open',
       owner: 'all',
       iaStatus: 'todos',
-      connection_id: undefined,
-      attendant_id: undefined,
+      connection_id: null,
+      attendant_id: null,
       isFetching: false,
     };
     const isDefault =
@@ -122,11 +122,11 @@ function ChatSidebar({
   }, [setFilters]);
 
   const handleConnectionSelect = useCallback((connectionId: string | null) => {
-    setFilters(prev => ({ ...prev, connection_id: connectionId, attendant_id: undefined, isFetching: true }));
+    setFilters(prev => ({ ...prev, connection_id: connectionId, attendant_id: null, isFetching: true }));
   }, [setFilters]);
 
   const handleAttendantSelect = useCallback((attendantId: string | null) => {
-    setFilters(prev => ({ ...prev, attendant_id: attendantId, connection_id: undefined, isFetching: true }));
+    setFilters(prev => ({ ...prev, attendant_id: attendantId, connection_id: null, isFetching: true }));
   }, [setFilters]);
 
   return (
@@ -219,12 +219,11 @@ function ChatSidebar({
           <ChatListItem
             key={chat.id}
             unreadCount={chat.unread_count}
-            mensagemData={chat.mensagem_data}
+            ultimaMensagem={chat.ultima_mensagem}
+            mensagemData={chat.ultima_atualizacao}
             chatId={chat.id}
-            type={chat.ultima_mensagem_type}
             isActive={activeChat?.id === chat.id}
             name={chat.contato_nome}
-            message={chat.ultima_mensagem}
             avatar={chat.foto_perfil}
             fetchImageProfile={fetchImageProfile}
             onClick={() => setActiveChat(chat)}

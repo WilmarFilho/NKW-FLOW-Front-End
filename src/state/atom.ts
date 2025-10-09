@@ -103,9 +103,9 @@ export const nextCursorState = atom<string | null>({
 export const chatFiltersState = atom<ChatFilters>({
   key: KEYS.CHAT_FILTERS,
   default: {
-    search: '',
-    connection_id: undefined,
-    attendant_id: undefined,
+    search: null,
+    connection_id: null,
+    attendant_id: null,
     iaStatus: 'todos',
     status: 'Open',
     owner: 'all',

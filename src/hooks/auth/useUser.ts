@@ -38,11 +38,22 @@ export const useUser = () => {
       if (!opts?.force && user) return user;
 
       const fetchedUser = await get<User>('/users');
-      
+
       if (fetchedUser) {
         setUser(fetchedUser);
         opts?.onProgress?.('Carregando conversas ...');
-        await fetchChats({}, fetchedUser);
+        await fetchChats(
+          {
+            search: null,
+            connection_id: null,
+            attendant_id: null,
+            iaStatus: 'todos',
+            status: 'Open',
+            owner: 'all',
+            isFetching: false,
+          },
+          fetchedUser
+        );
 
         opts?.onProgress?.('Carregando atendentes ...');
         await fetchAttendants(fetchedUser);

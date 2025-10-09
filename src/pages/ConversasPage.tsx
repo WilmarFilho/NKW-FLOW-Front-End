@@ -106,7 +106,7 @@ export default function ConversasPage() {
         items={state.connections}
         labelSelector={(conn) => conn.nome || ''}
         onSelect={(conn) => {
-          setFilters(prev => ({ ...prev, connection_id: conn?.id, attendant_id: undefined }));
+          setFilters(prev => ({ ...prev, connection_id: conn?.id, attendant_id: null }));
           setIsConnectionsModalOpen(false);
         }}
         onClose={() => setIsConnectionsModalOpen(false)}
@@ -118,7 +118,7 @@ export default function ConversasPage() {
         items={state.attendants}
         labelSelector={(att) => att.user.nome}
         onSelect={(att) => {
-          setFilters(prev => ({ ...prev, attendant_id: att?.user_id, connection_id: undefined }));
+          setFilters(prev => ({ ...prev, attendant_id: att?.user_id, connection_id: null }));
           setIsAttendantsModalOpen(false);
         }}
         onClose={() => setIsAttendantsModalOpen(false)}

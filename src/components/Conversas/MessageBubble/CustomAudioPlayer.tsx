@@ -7,7 +7,7 @@ import Icon from '../../../components/Gerais/Icons/Icons';
 interface Props {
   sender: 'me' | 'other';
   src: string;
-  avatarUrl?: string;
+  avatarUrl: string | null;
   time?: string;
 }
 

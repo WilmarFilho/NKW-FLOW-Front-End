@@ -25,16 +25,21 @@ export function useInfiniteScroll({
 
   // scroll inicial para o final do chat
   useLayoutEffect(() => {
-    if (!activeChat) return;
+    if (!activeChat || isLoading) return;
+    
     const list = listRef.current;
     if (!list) return;
 
     const scrollToBottom = () => {
-      list.scrollTo({ top: list.scrollHeight, behavior: 'auto' });
       setTimeout(() => {
-        setCanFetch(true); // habilita fetch após scroll inicial
-      }, 100);
 
+        list.scrollTo({ top: list.scrollHeight, behavior: 'auto' });
+        
+        setTimeout(() => {
+          setCanFetch(true); // habilita fetch após scroll inicial
+        }, 100);
+
+      }, 200);
     };
 
     // Pega todas as imagens e vídeos dentro do container
@@ -60,14 +65,14 @@ export function useInfiniteScroll({
 
     medias.forEach((media) => {
       if (
-        (media.tagName === 'img' && (media as HTMLImageElement).complete) ||
-        (media.tagName === 'video' && (media as HTMLVideoElement).readyState >= 2)
+        (media.tagName === 'IMG' && (media as HTMLImageElement).complete) ||
+        (media.tagName === 'VIDEO' && (media as HTMLVideoElement).readyState >= 2)
       ) {
         handleMediaLoad();
       } else {
         media.addEventListener('load', handleMediaLoad);
         media.addEventListener('error', handleMediaLoad);
-        if (media.tagName === 'video') {
+        if (media.tagName === 'VIDEO') {
           media.addEventListener('loadeddata', handleMediaLoad);
         }
       }
@@ -82,14 +87,15 @@ export function useInfiniteScroll({
         }
       });
     };
-  }, [activeChat?.id]);
+  }, [activeChat?.id, isLoading]);
 
 
   // Observer para scroll no topo
   useEffect(() => {
     const list = listRef.current;
     const sentinel = topSentinelRef.current;
-    if (!list || !sentinel || !canFetch) return;
+  
+    if (!list || !sentinel || !canFetch || isLoading) return;
 
     const observer = new IntersectionObserver(
       async (entries) => {
