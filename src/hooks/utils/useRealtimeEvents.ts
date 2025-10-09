@@ -166,7 +166,7 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
                 let newChats: Chat[];
 
                 if (shouldBeVisible) {
-                  const updatedChat = { ...fullChatData, mensagem_data: message.created_at || fullChatData.mensagem_data };
+                  const updatedChat = { ...fullChatData };
                   const safePrevChats = prevChats ?? [];
                   newChats = chatExistsInList
                     ? safePrevChats.map((c) => (c.id === chatId ? updatedChat : c))
@@ -177,11 +177,11 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
                 }
 
                 if (message.remetente === 'Contato') {
-                  const unreadCount = newChats.filter((c) => c.unread_count > 0).length;
+                  const unreadCount = newChats.filter((c) => !!c.unread_count).length;
                   document.title = unreadCount > 0 ? `(${unreadCount}) WhatsApp - NKW FLOW` : 'WhatsApp - NKW FLOW';
                 }
 
-                return newChats.sort((a, b) => parseDateBR(b.mensagem_data) - parseDateBR(a.mensagem_data));
+                return newChats.sort((a, b) => parseDateBR(b.ultima_atualizacao) - parseDateBR(a.ultima_atualizacao));
               });
 
               setActiveChat((prevActive) => (prevActive && prevActive.id === chatId ? fullChatData : prevActive));
@@ -198,13 +198,15 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
 
         if (tipo === 'chats.upsert' && payload.chat) {
           const chatId = payload.chat.id;
-          setChats((prevChats) => {
+            setChats((prevChats) => {
             const safePrevChats = prevChats ?? [];
-            const updatedChats = safePrevChats.map((c) => (c.id === chatId ? { ...c, unread_count: 0 } : c));
-            const unreadCount = updatedChats.filter((c) => c.unread_count > 0).length;
+            const updatedChats = safePrevChats.map((c) =>
+              c.id === chatId ? { ...c, unread_count: false } : c
+            );
+            const unreadCount = updatedChats.filter((c) => c.unread_count).length;
             document.title = unreadCount > 0 ? `(${unreadCount}) WhatsApp - NKW FLOW` : 'WhatsApp - NKW FLOW';
             return updatedChats;
-          });
+            });
         }
 
         if (tipo === 'messages.delete' && deletedMessage) {

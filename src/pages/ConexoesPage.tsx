@@ -25,6 +25,19 @@ import {
   AlertDialogOverlay,
   Button as ChakraButton,
 } from '@chakra-ui/react';
+import { User } from '@/types/user';
+
+// Função utilitária para checar limite de conexões por plano
+function atingiuLimiteDeConexoes(user: User | null, connections: Connection[] | null | undefined) {
+  if (!user || !connections) return false;
+  const plano = (user.plano);
+  const total = connections.length;
+
+  if (plano === 'basico' && total >= 2) return true;
+  if (plano === 'intermediario' && total >= 4) return true;
+  if (plano === 'premium' && total >= 6) return true;
+  return false;
+}
 
 export default function ConexoesPage() {
 
@@ -52,6 +65,7 @@ export default function ConexoesPage() {
     step,
     qrCode,
     submittingId,
+    user,
     isSubmitting
   } = useConexoesPage();
 
@@ -155,7 +169,10 @@ export default function ConexoesPage() {
           <h2>Suas conexões do WhatsApp</h2>
           <h3>Verifique, adicione ou desative suas conexões do WhatsApp.</h3>
         </div>
-        <Button label="Adicionar Conexão" onClick={() => openModal()} />
+        {/* Só exibe o botão se não atingiu o limite do plano */}
+        {!atingiuLimiteDeConexoes(user, connections) ? (
+          <Button label="Adicionar Conexão" onClick={() => openModal()} />
+        ) : <p className={GlobalStyles.textMuted}>Limite de conexões atingido para o seu plano.</p>}
       </motion.header>
 
       <div className={GlobalStyles.pageContent}>

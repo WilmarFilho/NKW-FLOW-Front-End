@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import Icon from '../../../components/Gerais/Icons/Icons';
 import { validateUserForm } from '../../../hooks/utils/useValidator';
+import DefaultImage from '../assets/default.webp'
 
 // Hooks
 import { userState } from '../../../state/atom';
@@ -222,7 +223,7 @@ export default function SettingsContent({ tabIndex }: Props) {
                 {isAdmin && (
                   <div className={styles.profileImageWrapper}>
                     <img
-                      src={user.foto_perfil || '/default-avatar.png'}
+                      src={user.foto_perfil || DefaultImage}
                       alt='Foto de Perfil'
                       className={styles.profileImage}
                       onClick={() => document.getElementById('profileImageInput')?.click()}

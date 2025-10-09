@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { activeChatState, addConnectionModalState, agentsState, chatFiltersState } from '../../state/atom';
+import { activeChatState, addConnectionModalState, agentsState, chatFiltersState, userState } from '../../state/atom';
 import { validateConnectionForm } from '../utils/useValidator';
 import { useConnectionsActions } from '../connections/useConnectionsActions'
 import type { Connection } from '../../types/connection';
@@ -23,6 +23,7 @@ export function useConexoesPage() {
     }));
   }, []);
 
+  const [user] = useRecoilState(userState);
 
   const { connections, removeConnection, updateConnectionStatus, handleStartSession, handleEditConnection, setConnections } = useConnectionsActions();
 
@@ -160,6 +161,7 @@ export function useConexoesPage() {
   }, [filteredConnections, sortField, sortOrder]);
 
   return {
+    user,
     isLoading: modalState.isLoading,
     submittingId,
     qrCode: modalState.qrCode,
