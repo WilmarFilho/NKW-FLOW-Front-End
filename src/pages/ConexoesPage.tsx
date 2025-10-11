@@ -172,7 +172,7 @@ export default function ConexoesPage() {
         {/* Só exibe o botão se não atingiu o limite do plano */}
         {!atingiuLimiteDeConexoes(user, connections) ? (
           <Button label="Adicionar Conexão" onClick={() => openModal()} />
-        ) : <p className={GlobalStyles.textMuted}>Limite de conexões atingido para o seu plano.</p>}
+        ) : <p className={GlobalStyles.textMuted}>Limite de conexões <br /> atingido para o seu plano.</p>}
       </motion.header>
 
       <div className={GlobalStyles.pageContent}>

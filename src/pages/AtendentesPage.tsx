@@ -19,10 +19,26 @@ import {
   AlertDialogOverlay,
   Button as ChakraButton,
 } from '@chakra-ui/react';
+import { User } from '@/types/user';
+
+
+// Função utilitária para checar limite de atendentes por plano
+function atingiuLimiteDeAtendentes(user: User, attendants: Attendant[]) {
+  if (!user || !attendants) return false;
+  const plano = (user.plano || '').toLowerCase();
+  const total = attendants.length;
+
+  if (plano === 'basico' && total >= 2) return true;
+  if (plano === 'intermediario' && total >= 4) return true;
+  if (plano === 'premium' && total >= 6) return true;
+  return false;
+}
 
 export default function AtendentesPage() {
 
   const state = useAtendentesPage();
+
+  if (!state.user) return null;
 
   // --- INÍCIO: estado para confirmação de exclusão via Chakra AlertDialog ---
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -76,7 +92,12 @@ export default function AtendentesPage() {
           <h2>Seus atendentes humanos</h2>
           <h3>Cadastre e gerencie os atendentes que podem interagir com seus clientes.</h3>
         </div>
-        <Button label="Adicionar Atendente" onClick={state.openModal} />
+        {/* Só exibe o botão se não atingiu o limite do plano */}
+        {!atingiuLimiteDeAtendentes(state.user, state.attendants) ? (
+          <Button label="Adicionar Atendente" onClick={state.openModal} />
+        ) : (
+          <p className={GlobalStyles.textMuted}>Limite de atendentes <br /> atingido para o seu plano.</p>
+        )}
       </motion.header>
 
       <div className={GlobalStyles.pageContent}>

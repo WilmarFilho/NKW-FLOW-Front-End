@@ -4,7 +4,7 @@ import { validateAttendantForm } from '../utils/useValidator';
 import { useAttendantsActions } from '../attendants/useAttendantsActions';
 import type { Attendant, AttendantFormData } from '../../types/attendant';
 import type { FilterStatus, SortOrder, SortField } from '../../types/table';
-import { activeChatState, attendantsState, chatFiltersState, connectionsState } from '../../state/atom';
+import { activeChatState, attendantsState, chatFiltersState, connectionsState, userState } from '../../state/atom';
 
 export function useAtendentesPage() {
 
@@ -19,6 +19,8 @@ export function useAtendentesPage() {
       isFetching: false,
     }));
   }, []);
+
+  const user = useRecoilValue(userState);
 
   const attendants = useRecoilValue(attendantsState);
   const connections = useRecoilValue(connectionsState);
@@ -138,6 +140,7 @@ export function useAtendentesPage() {
   }
 
   return {
+    user,
     attendants: sortedAttendants,
     connections,
     sortField,
