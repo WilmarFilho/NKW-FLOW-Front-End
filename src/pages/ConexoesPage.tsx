@@ -275,6 +275,7 @@ export default function ConexoesPage() {
         step={step}
       >
         <ConnectionForm
+          user={user}
           onChange={setFormData}
           formData={formData}
           editMode={modalState.editMode}

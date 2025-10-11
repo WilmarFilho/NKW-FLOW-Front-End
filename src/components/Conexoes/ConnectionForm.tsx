@@ -1,5 +1,5 @@
 import { useRecoilValue } from 'recoil';
-import Select, { OnChangeValue } from 'react-select'; 
+import Select, { OnChangeValue } from 'react-select';
 import { Connection } from '../../types/connection';
 import formStyles from '../Gerais/Form/form.module.css';
 import styles from './ConnectionForm.module.css';
@@ -10,7 +10,8 @@ import {
   getCustomSelectStyles,
   AnimatedMenu,
   SelectOption,
-} from '../Gerais/Form/CustomSelect'; 
+} from '../Gerais/Form/CustomSelect';
+import { User } from '@/types/user';
 
 interface ConnectionFormProps {
   formData: Partial<Connection> | null;
@@ -20,9 +21,11 @@ interface ConnectionFormProps {
   editMode?: boolean;
   errors?: Partial<Record<keyof Connection, string>>;
   showErrors?: boolean;
+  user: User | null;
 }
 
 export default function ConnectionForm({
+  user,
   formData,
   onChange,
   step,
@@ -96,22 +99,24 @@ export default function ConnectionForm({
           </div>
 
           {/* Select customizado para Agente */}
-          <div className={formStyles.formGroup}>
-            <label>Agente IA</label>
-            <Select<SelectOption>
-              inputId="agent"
-              options={agentOptions}
-              value={selectedAgent}
-              onChange={handleAgentChange}
-              placeholder="Selecione"
-              isClearable
-              components={{ Menu: AnimatedMenu }}
-              styles={customStyles}
-            />
-            {showErrors && errors.agente_id && (
-              <span className={formStyles.errorText}>{errors.agente_id}</span>
-            )}
-          </div>
+          {user && user.plano !== 'basico' && (
+            <div className={formStyles.formGroup}>
+              <label>Agente IA</label>
+              <Select<SelectOption>
+                inputId="agent"
+                options={agentOptions}
+                value={selectedAgent}
+                onChange={handleAgentChange}
+                placeholder="Selecione"
+                isClearable
+                components={{ Menu: AnimatedMenu }}
+                styles={customStyles}
+              />
+              {showErrors && errors.agente_id && (
+                <span className={formStyles.errorText}>{errors.agente_id}</span>
+              )}
+            </div>
+          )}
         </div>
 
         {editMode && (

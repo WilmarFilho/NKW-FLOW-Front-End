@@ -506,18 +506,6 @@ export default function SettingsContent({ tabIndex }: Props) {
                 <span className={styles.errorText}>{formErrors.nome}</span>
               )}
             </div>
-
-            <div className={styles.formGroup}>
-              <label htmlFor='numero'>Número</label>
-              <input
-                id='numero'
-                value={editForm?.numero ?? ''}
-                onChange={(e) => setEditForm(prev => ({ ...(prev ?? {}), numero: e.target.value }))}
-              />
-              {showErrors && formErrors.numero && (
-                <span className={styles.errorText}>{formErrors.numero}</span>
-              )}
-            </div>
           </div>
 
           <div className={styles.formRow}>

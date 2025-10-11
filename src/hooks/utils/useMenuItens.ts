@@ -4,9 +4,10 @@ export interface MenuItem {
   key: string;
   to: string;
   label: string;
-  icon: IconProps['nome']; 
+  icon: IconProps['nome'];
   roles: Array<'admin' | 'atendente'>;
   section: 'principal' | 'suporte';
+  planos?: Array<'basico' | 'intermediario' | 'premium'>; // planos permitidos
 }
 
 export const menuItems: MenuItem[] = [
@@ -17,6 +18,7 @@ export const menuItems: MenuItem[] = [
     icon: 'resumopage',
     roles: ['admin'],
     section: 'principal',
+    planos: ['basico', 'intermediario', 'premium'],
   },
   {
     key: 'conversas',
@@ -25,6 +27,7 @@ export const menuItems: MenuItem[] = [
     icon: 'conversaspage',
     roles: ['admin', 'atendente'],
     section: 'principal',
+    planos: ['basico', 'intermediario', 'premium'],
   },
   {
     key: 'atendentes',
@@ -33,6 +36,7 @@ export const menuItems: MenuItem[] = [
     icon: 'atendentespage',
     roles: ['admin'],
     section: 'principal',
+    planos: ['basico', 'intermediario', 'premium'],
   },
   {
     key: 'agentes',
@@ -41,6 +45,7 @@ export const menuItems: MenuItem[] = [
     icon: 'agentespage',
     roles: ['admin'],
     section: 'principal',
+    planos: ['intermediario', 'premium'], // não disponível para basico
   },
   {
     key: 'conexoes',
@@ -49,6 +54,7 @@ export const menuItems: MenuItem[] = [
     icon: 'conexaopage',
     roles: ['admin'],
     section: 'principal',
+    planos: ['basico', 'intermediario', 'premium'],
   },
   {
     key: 'configuracoes',
@@ -57,6 +63,7 @@ export const menuItems: MenuItem[] = [
     icon: 'configpage',
     roles: ['admin', 'atendente'],
     section: 'suporte',
+    planos: ['basico', 'intermediario', 'premium'],
   },
   {
     key: 'cashback',
@@ -65,6 +72,7 @@ export const menuItems: MenuItem[] = [
     icon: 'recompensapage',
     roles: ['admin'],
     section: 'suporte',
+    planos: ['basico', 'intermediario', 'premium'],
   },
   {
     key: 'ajuda',
@@ -73,5 +81,6 @@ export const menuItems: MenuItem[] = [
     icon: 'ajudapage',
     roles: ['admin', 'atendente'],
     section: 'suporte',
+    planos: ['basico', 'intermediario', 'premium'],
   },
 ];

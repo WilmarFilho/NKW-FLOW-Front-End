@@ -6,7 +6,10 @@ import { menuItems } from '../../../hooks/utils/useMenuItens';
 
 const SidebarClosed = () => {
   const user = useRecoilValue(userState);
-  if(!user) return
+  
+  if (!user) return null;
+
+  const userPlano = (user.plano || '').toLowerCase() as 'basico' | 'intermediario' | 'premium';
 
   const MenuItem = ({ to, children }: { to: string; children: React.ReactNode }) => (
     <NavLink to={to} className={({ isActive }) => `MenuItem ${isActive ? 'active-link' : ''}`}>
@@ -14,8 +17,10 @@ const SidebarClosed = () => {
     </NavLink>
   );
 
-  const visibleItems = menuItems.filter((item) =>
-    item.roles.includes(user?.tipo_de_usuario)
+  const visibleItems = menuItems.filter(
+    (item) =>
+      item.roles.includes(user.tipo_de_usuario) &&
+      (!item.planos || item.planos.includes(userPlano))
   );
 
   return (
@@ -23,7 +28,7 @@ const SidebarClosed = () => {
       <div className='itens-list-menu'>
         {visibleItems.map((item) => (
           <MenuItem key={item.key} to={item.to}>
-            <Icon nome={item.icon} /> 
+            <Icon nome={item.icon} />
           </MenuItem>
         ))}
       </div>

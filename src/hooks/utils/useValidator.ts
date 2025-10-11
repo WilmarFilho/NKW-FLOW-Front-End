@@ -56,7 +56,7 @@ export function validateUserForm(data: Partial<User>) {
   return errors;
 }
 
-export function validateConnectionForm(data: Partial<Connection> | null) {
+export function validateConnectionForm(data: Partial<Connection> | null, userPlan?: string | null) {
   const errors: Partial<Record<keyof Connection, string>> = {};
 
   if (!data?.nome || data.nome.trim().length < 3) {
@@ -67,7 +67,7 @@ export function validateConnectionForm(data: Partial<Connection> | null) {
     errors.nome = 'O nome da conexão deve ter no máximo 20 caracteres.';
   }
 
-  if (!data?.agente_id || data.agente_id.trim() === '') {
+  if (userPlan !== 'basico' && (!data?.agente_id || data.agente_id.trim() === '')) {
     errors.agente_id = 'Selecione um agente.';
   }
 

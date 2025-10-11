@@ -7,8 +7,10 @@ import DefaultImage from '../assets/default.webp'
 
 const Sidebar = () => {
   const user = useRecoilValue(userState);
-  if (!user) return
+  if (!user) return null;
 
+  const userPlano = (user.plano || '').toLowerCase() as 'basico' | 'intermediario' | 'premium';
+  
   const MenuItem = ({ to, children }: { to: string; children: React.ReactNode }) => (
     <NavLink to={to} className={({ isActive }) => `MenuItem ${isActive ? 'active-link' : ''}`}>
       {children}
@@ -16,11 +18,17 @@ const Sidebar = () => {
   );
 
   const principalItems = menuItems.filter(
-    (item) => item.section === 'principal' && item.roles.includes(user?.tipo_de_usuario)
+    (item) =>
+      item.section === 'principal' &&
+      item.roles.includes(user.tipo_de_usuario) &&
+      (!item.planos || item.planos.includes(userPlano))
   );
 
   const suporteItems = menuItems.filter(
-    (item) => item.section === 'suporte' && item.roles.includes(user?.tipo_de_usuario)
+    (item) =>
+      item.section === 'suporte' &&
+      item.roles.includes(user.tipo_de_usuario) &&
+      (!item.planos || item.planos.includes(userPlano))
   );
 
   const fotoPerfil = user.foto_perfil || DefaultImage
@@ -69,3 +77,4 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
+// filepath: c:\dev\NKW-FLOW-Front-End\src\components\Layout\Sidebars\Sidebar.tsx

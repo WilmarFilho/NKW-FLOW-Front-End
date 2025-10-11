@@ -1,6 +1,6 @@
 // Recoil
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { userState, authTokenState } from '../../state/atom'; 
+import { userState, authTokenState } from '../../state/atom';
 // Hooks
 import { useApi } from '../utils/useApi';
 // Types
@@ -19,20 +19,35 @@ export function useUserAction() {
     const updateUser = async (updates: Partial<User>): Promise<User | null> => {
         if (!user) return null;
 
-        // 🔑 Agora tratamos token que pode vir junto
-        const response = await put<{ user: User[]; token?: string }>(`/users/${user.id}`, updates);
+        // Chamada para atualizar usuário
+        const response = await put<{
+            id: string;
+            nome: string;
+            email: string;
+            // ...outros campos do usuário...
+            plano?: string;
+            subscription_status?: string;
+            token?: string;
+        }>(`/users/${user.id}`, updates);
 
         if (!response) return null;
 
         // Se a API retornou um token novo, salva
         if (response.token) {
-            setToken({ token: response.token, userId: response.user[0].auth_id });
-            localStorage.setItem('authTokenState', JSON.stringify({ token: response.token, userId: response.user[0].auth_id }));
+            setToken({ token: response.token, userId: response.id });
+            localStorage.setItem('authTokenState', JSON.stringify({ token: response.token, userId: response.id }));
         }
 
-        setUser(response.user[0]);
+        // Faz merge do user antigo com o novo, preservando campos não enviados
+        const updatedUser: User = {
+            ...user,
+            ...updates,
+            ...response, // sobrescreve com dados vindos do backend (inclui plano, subscription_status, etc)
+        };
 
-        return response.user[0];
+        setUser(updatedUser);
+
+        return updatedUser;
     };
 
     const uploadProfileImage = async (file: File): Promise<string | null> => {
