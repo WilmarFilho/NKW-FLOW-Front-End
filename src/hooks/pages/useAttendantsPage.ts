@@ -50,7 +50,9 @@ export function useAtendentesPage() {
     try {
       await updateAttendantStatus(attendant);
     } finally {
-      setSubmittingId(null);
+      setTimeout(() => {
+        setSubmittingId(null);
+      }, 400);
     }
   };
 

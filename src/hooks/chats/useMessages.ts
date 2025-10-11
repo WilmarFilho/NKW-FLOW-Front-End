@@ -39,32 +39,6 @@ export const useMessages = (chatId: string | null) => {
 
         setNextCursor(data.nextCursor || null);
 
-        // --- Marca como lido ---
-
-        setChats((currentChats) => {
-          const chat = currentChats ? currentChats.find((c) => c.id === chatId) : null;
-          if (chat && chat.unread_count === true) {
-            // Conta quantos chats estão com unread_count true
-            const totalUnreadChats = currentChats ? currentChats.filter((c) => c.unread_count === true).length : 0;
-
-            const unreadCount = totalUnreadChats - 1;
-
-            document.title =
-              unreadCount > 0
-          ? `(${unreadCount}) WhatsApp - NKW FLOW`
-          : 'WhatsApp - NKW FLOW';
-
-            post(`/chats_reads/${chatId}`);
-          }
-
-          // zera o unread_count do chat atual para false
-          return currentChats
-            ? currentChats.map((c) =>
-          c.id === chatId ? { ...c, unread_count: false } : c
-              )
-            : [];
-        });
-
       }
 
       setIsLoading(false);

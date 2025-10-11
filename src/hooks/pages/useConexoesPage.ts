@@ -54,7 +54,9 @@ export function useConexoesPage() {
     try {
       await updateConnectionStatus(connection);
     } finally {
-      setSubmittingId(null);
+      setTimeout(() => {
+        setSubmittingId(null);
+      }, 400);
     }
   }, [updateConnectionStatus]);
 

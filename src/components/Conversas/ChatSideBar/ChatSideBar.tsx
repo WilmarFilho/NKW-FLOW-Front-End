@@ -218,12 +218,12 @@ function ChatSidebar({
         {chats?.map((chat) => (
           <ChatListItem
             key={chat.id}
-            unreadCount={chat.unread_count}
             ultimaMensagem={chat.ultima_mensagem}
             mensagemData={chat.ultima_atualizacao}
             chatId={chat.id}
             isActive={activeChat?.id === chat.id}
             name={chat.contato_nome}
+            status={chat.status}
             avatar={chat.foto_perfil}
             fetchImageProfile={fetchImageProfile}
             onClick={() => setActiveChat(chat)}

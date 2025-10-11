@@ -18,7 +18,7 @@ export const useChats = (): UseChatsReturn => {
   const [user] = useRecoilState(userState);
   const setChats = useSetRecoilState(chatsState);
   const [nextCursor, setNextCursor] = useRecoilState(nextCursorState);
-  const [unreadCountTitle, setUnreadCountTitle] = useState(0);
+  const [_unreadCountTitle, setUnreadCountTitle] = useState(0);
 
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -38,13 +38,13 @@ export const useChats = (): UseChatsReturn => {
   const { get, put } = useApi();
 
   const updateDocumentTitle = (chats: Chat[]) => {
-    chats.map((chat) => {
-      if (chat.unread_count) {
-        setUnreadCountTitle((prev) => prev + 1);
-      }
-    });
+    const unreadCount = chats.filter(
+      (chat) => chat.ultima_mensagem.remetente === 'Contato' && chat.status === 'Open'
+    ).length;
 
-    document.title = unreadCountTitle > 0 ? `(${unreadCountTitle}) WhatsApp - NKW FLOW` : 'WhatsApp - NKW FLOW';
+    setUnreadCountTitle(unreadCount);
+
+    document.title = unreadCount > 0 ? `(${unreadCount}) WhatsApp - NKW FLOW` : 'WhatsApp - NKW FLOW';
   };
 
   // 🔹 Função para carregar chats com filtros (resetando a lista)
@@ -78,7 +78,7 @@ export const useChats = (): UseChatsReturn => {
 
         if (fetchedData) {
           setChats(fetchedData.chats);
-          updateDocumentTitle(fetchedData.chats);
+          updateDocumentTitle(fetchedData.chats); 
           setNextCursor(fetchedData.nextCursor);
           setHasMore(!!fetchedData.nextCursor);
           return fetchedData.chats;

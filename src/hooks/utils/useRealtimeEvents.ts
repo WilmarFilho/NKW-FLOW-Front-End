@@ -177,8 +177,23 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
                 }
 
                 if (message.remetente === 'Contato') {
-                  const unreadCount = newChats.filter((c) => !!c.unread_count).length;
-                  document.title = unreadCount > 0 ? `(${unreadCount}) WhatsApp - NKW FLOW` : 'WhatsApp - NKW FLOW';
+                    const currentUnreadCount = document.title.match(/\((\d+)\)/)?.[1] ? parseInt(document.title.match(/\((\d+)\)/)?.[1] || '0') : 0;
+                    const prevChat = (prevChats ?? []).find(c => c.id === chatId);
+                    
+                    let newUnreadCount = currentUnreadCount;
+                    
+                    if (fullChatData.status === 'Open') {
+                  
+                    if (!prevChat) {
+                      newUnreadCount = currentUnreadCount + 1;
+                    }
+                    } else {
+                    // Se o chat existia antes e tinha mensagens não lidas, decrementa
+                    if (prevChat?.ultima_mensagem.remetente === 'Contato') {
+                      newUnreadCount = Math.max(0, currentUnreadCount - 1);
+                    }
+                    }
+                  document.title = newUnreadCount > 0 ? `(${newUnreadCount}) WhatsApp - NKW FLOW` : 'WhatsApp - NKW FLOW';
                 }
 
                 return newChats.sort((a, b) => parseDateBR(b.ultima_atualizacao) - parseDateBR(a.ultima_atualizacao));
@@ -194,19 +209,6 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
               }
             })
             
-        }
-
-        if (tipo === 'chats.upsert' && payload.chat) {
-          const chatId = payload.chat.id;
-            setChats((prevChats) => {
-            const safePrevChats = prevChats ?? [];
-            const updatedChats = safePrevChats.map((c) =>
-              c.id === chatId ? { ...c, unread_count: false } : c
-            );
-            const unreadCount = updatedChats.filter((c) => c.unread_count).length;
-            document.title = unreadCount > 0 ? `(${unreadCount}) WhatsApp - NKW FLOW` : 'WhatsApp - NKW FLOW';
-            return updatedChats;
-            });
         }
 
         if (tipo === 'messages.delete' && deletedMessage) {

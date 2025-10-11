@@ -11,7 +11,6 @@ export interface Chat {
   status: 'Close' | 'Open';
   ultima_atualizacao: string;
   ultima_mensagem: Partial<Message>;
-  unread_count: boolean;
   user_id: string | null;
   user_nome: string | null;
 }

@@ -14,11 +14,11 @@ import { Message } from '@/types/message';
 
 interface ChatListItemProps {
   name: string;
+  status: string;
   avatar: string | null;
   chatId: string;
   isActive: boolean;
   onClick: () => void;
-  unreadCount: boolean;
   ultimaMensagem?: Partial<Message>;
   mensagemData: string;
   fetchImageProfile: (chatId: string) => Promise<Chat | null>;
@@ -36,8 +36,8 @@ function ChatListItem({
   onClick,
   chatId,
   fetchImageProfile,
-  unreadCount,
   ultimaMensagem,
+  status,
   mensagemData,
 }: ChatListItemProps) {
 
@@ -95,7 +95,7 @@ function ChatListItem({
           {mensagemData && (
             <span
               className={
-                unreadCount
+                ultimaMensagem?.remetente === 'Contato' && status === 'Open'
                   ? styles.headerActiveCount
                   : styles.headerCount
               }
@@ -103,7 +103,7 @@ function ChatListItem({
               {useFormatDate(mensagemData)}
             </span>
           )}
-          {unreadCount && (
+          {ultimaMensagem?.remetente === 'Contato' && status === 'Open' && (
             <span className={styles.countUnread}>*</span>
           )}
         </div>
