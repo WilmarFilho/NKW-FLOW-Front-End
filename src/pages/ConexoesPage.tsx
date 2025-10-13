@@ -66,7 +66,8 @@ export default function ConexoesPage() {
     qrCode,
     submittingId,
     user,
-    isSubmitting
+    isSubmitting,
+    pairingCode
   } = useConexoesPage();
 
   // --- INÍCIO: estado e handlers para confirmação de exclusão via Chakra ---
@@ -281,6 +282,7 @@ export default function ConexoesPage() {
           editMode={modalState.editMode}
           step={step}
           qrCode={qrCode}
+          pairingCode={pairingCode}
           errors={errors}
           showErrors={showErrors}
         />

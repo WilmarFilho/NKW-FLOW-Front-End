@@ -5,6 +5,7 @@ import { validateConnectionForm } from '../utils/useValidator';
 import { useConnectionsActions } from '../connections/useConnectionsActions'
 import type { Connection } from '../../types/connection';
 import type { FilterStatus, SortOrder, SortField } from '../../types/table';
+import { P } from 'framer-motion/dist/types.d-Cjd591yU';
 
 export function useConexoesPage() {
 
@@ -167,6 +168,7 @@ export function useConexoesPage() {
     isLoading: modalState.isLoading,
     submittingId,
     qrCode: modalState.qrCode,
+    pairingCode: modalState.pairingCode,
     step: modalState.step,
     connections: sortedConnections,
     agents,

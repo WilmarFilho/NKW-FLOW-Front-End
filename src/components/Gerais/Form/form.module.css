@@ -91,12 +91,15 @@ option {
   animation: slideDownFadeIn 0.2s ease-out;
  
 }
-@media (max-width: 499.98px) {
+@media (max-width: 599.98px) {
   .formGroup input, .formGroup select {
-    font-size: 14px;
+    font-size: 12px;
   }
   .formGroup label {
     line-height: 22px;
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
   }
   .formRow {
     gap: 8px;

@@ -300,7 +300,7 @@
 
 }
 
-@media (max-width: 591.98px) {
+@media (max-width: 599.98px) {
 
   .modalHeader h2 {
     font-size: 18px;
@@ -316,8 +316,7 @@
   }
 
   .cancelButton {
-    font-size: 12px;
-    width: 30%;
+    display: none;
   }
 
   .submitButton {

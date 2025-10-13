@@ -30,13 +30,14 @@ export const useConnectionsActions = () => {
     setModalState((prev) => ({ ...prev, isLoading: true }));
 
     try {
-      const qrcode = await post<string>('/connections', {
+      const qrcode = await post<{ base64: string | null, pairingCode: string | null }>('/connections', {
         nome: connection.nome,
         agente_id: connection.agente_id,
+        numero: connection.numero || null,
       });
 
       if (qrcode) {
-        setModalState((prev) => ({ ...prev, qrCode: qrcode, step: 2 }));
+        setModalState((prev) => ({ ...prev, qrCode: qrcode.base64, pairingCode: qrcode.pairingCode, step: 2 }));
       } else {
         setModalState((prev) => ({ ...prev, qrCode: null, step: 1, isOpen: false }));
       }

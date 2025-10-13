@@ -57,6 +57,7 @@ export const addConnectionModalState = atom<{
   editMode?: boolean;
   step: 1 | 2;
   qrCode: string | null;
+  pairingCode?: string | null;
   isLoading: boolean;
 }>({
   key: KEYS.ADD_CONN_MODAL,
@@ -65,6 +66,7 @@ export const addConnectionModalState = atom<{
     editMode: false,
     step: 1,
     qrCode: null,
+    pairingCode: null,
     isLoading: false,
   },
 });

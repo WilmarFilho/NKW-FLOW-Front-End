@@ -55,6 +55,6 @@
 }
 @media (max-width: 599.98px) {
   .button {
-    display: none;
+    height: 54px;
   }
 }

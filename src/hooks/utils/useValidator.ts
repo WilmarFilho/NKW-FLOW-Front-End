@@ -67,6 +67,12 @@ export function validateConnectionForm(data: Partial<Connection> | null, userPla
     errors.nome = 'O nome da conexão deve ter no máximo 20 caracteres.';
   }
 
+  if (data?.numero && data.numero.trim() !== '') {
+    if (!/^\d{10}$/.test(data.numero.trim())) {
+      errors.numero = 'Número deve ter exatamente 10 dígitos.';
+    }
+  }
+
   if (userPlan !== 'basico' && (!data?.agente_id || data.agente_id.trim() === '')) {
     errors.agente_id = 'Selecione um agente.';
   }

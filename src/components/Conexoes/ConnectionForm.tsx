@@ -18,6 +18,7 @@ interface ConnectionFormProps {
   onChange: (data: Partial<Connection> | null) => void;
   step: 1 | 2;
   qrCode: string | null;
+  pairingCode?: string | null;
   editMode?: boolean;
   errors?: Partial<Record<keyof Connection, string>>;
   showErrors?: boolean;
@@ -30,6 +31,7 @@ export default function ConnectionForm({
   onChange,
   step,
   qrCode,
+  pairingCode,
   editMode,
   errors = {},
   showErrors = false,
@@ -119,6 +121,37 @@ export default function ConnectionForm({
           )}
         </div>
 
+         <div className={formStyles.formRow}>
+          {/* Campo opcional de número */}
+          <div className={formStyles.formGroup}>
+            <label>
+              Número (opcional para conectar via código)
+              <span style={{ fontWeight: 400, fontSize: 12, color: '#888', marginLeft: 4 }}>
+                (Formato: 6492434104)
+              </span>
+            </label>
+            <input
+              id="numero"
+              type="text"
+              placeholder="Ex: 6492434104"
+              value={formData?.numero || ''}
+              onChange={(e) =>
+                onChange({
+                  ...formData,
+                  numero: e.target.value,
+                })
+              }
+              pattern="^\d{10,11}$"
+              inputMode="numeric"
+            />
+            {showErrors && errors.numero && (
+              <span className={formStyles.errorText}>{errors.numero}</span>
+            )}
+          </div>
+
+  
+        </div>
+
         {editMode && (
           <div className={formStyles.formGroup}>
             <label>Status</label>
@@ -143,6 +176,12 @@ export default function ConnectionForm({
       <div className={styles.qrCodeStep}>
         <h2>Escaneie o qr code com seu WhatsApp</h2>
         {qrCode ? <img src={qrCode} alt="QR Code" /> : ''}
+        {pairingCode ? (
+          <div className={styles.pairingCode}>
+            <p>Código de pareamento:</p>
+            <span>{pairingCode}</span>
+          </div>
+        ) : null}
       </div>
     );
   }

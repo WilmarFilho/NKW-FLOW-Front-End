@@ -5,10 +5,28 @@
     text-align: center;
 }
 
+.qrCodeStep {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .qrCodeStep img {
     width: 250px;
     height: 250px;
     margin: 20px auto;
     display: block;
     border-radius: var(--radius-default);
+}
+
+.pairingCode {
+    display: flex;
+    gap: 8px;
+    text-align: center;
+    justify-content: center;
+    background-color: var(--color-background-white);
+    padding: 12px 0;
+    color: var(--color-text);
+    border-radius: var(--radius-default);
+    width: 70%;
 }
