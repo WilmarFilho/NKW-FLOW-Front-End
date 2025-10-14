@@ -36,9 +36,7 @@ export default function SettingsContent({ tabIndex }: Props) {
 
   // Nomes de estado mais descritivos
   const [showNameInMessages, setShowNameInMessages] = useState(false);
-  const [notifyAttendant, setNotifyAttendant] = useState(false);
   const [notifyOnEnterConversation, setNotifyOnEnterConversation] = useState(false);
-  const [notifyOnNewChat, setNotifyOnNewChat] = useState(false);
   const [screenMode, setScreenMode] = useState<'Black' | 'White'>('Black');
   const [sidebarMode, setSidebarMode] = useState<'Full' | 'Minimal'>('Full');
 
@@ -56,9 +54,7 @@ export default function SettingsContent({ tabIndex }: Props) {
   useEffect(() => {
     if (user) {
       setShowNameInMessages(user.mostra_nome_mensagens);
-      setNotifyAttendant(user.modo_notificacao_atendente);
       setNotifyOnEnterConversation(user.notificacao_para_entrar_conversa);
-      setNotifyOnNewChat(user.notificacao_novo_chat);
       setScreenMode(user.modo_tela);
       setSidebarMode(user.modo_side_bar);
       setIaKeyword(user.ai_trigger_word);
@@ -313,17 +309,6 @@ export default function SettingsContent({ tabIndex }: Props) {
                 {renderSwitchSetting(
                   'Notificação para atendente',
                   'Envia um alerta ao atendente quando é necessário entrar em uma conversa.',
-                  notifyAttendant,
-                  () => {
-                    const newValue = !notifyAttendant;
-                    setNotifyAttendant(newValue);
-                    handleSettingsUpdate({ modo_notificacao_atendente: newValue });
-                  }
-                )}
-
-                {renderSwitchSetting(
-                  'Notificação ao entrar na conversa',
-                  'Informa você quando entrar em uma conversa ativa.',
                   notifyOnEnterConversation,
                   () => {
                     const newValue = !notifyOnEnterConversation;
@@ -331,18 +316,6 @@ export default function SettingsContent({ tabIndex }: Props) {
                     handleSettingsUpdate({ notificacao_para_entrar_conversa: newValue });
                   }
                 )}
-
-                {renderSwitchSetting(
-                  'Notificação de novo chat',
-                  'Você será notificado sempre que um novo chat for iniciado.',
-                  notifyOnNewChat,
-                  () => {
-                    const newValue = !notifyOnNewChat;
-                    setNotifyOnNewChat(newValue);
-                    handleSettingsUpdate({ notificacao_novo_chat: newValue });
-                  }
-                )}
-
                 {renderSwitchSetting(
                   'Mostrar nome nas mensagens',
                   'Exibe seu nome junto das mensagens enviadas no chat.',
@@ -389,88 +362,6 @@ export default function SettingsContent({ tabIndex }: Props) {
               ['Full', 'Minimal']
             )}
           </motion.div>
-        );
-
-        return (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4, duration: 0.4, ease: 'easeOut' }}
-              className={styles.settingsContent}
-            >
-
-              {renderSwitchSetting(
-                'Notificação para atendente',
-                'Envia um alerta ao atendente quando é necessário entrar em uma conversa.',
-                notifyAttendant,
-                () => {
-                  const newValue = !notifyAttendant;
-                  setNotifyAttendant(newValue);
-                  handleSettingsUpdate({ modo_notificacao_atendente: newValue });
-                }
-              )}
-              {renderSwitchSetting(
-                'Notificação ao entrar na conversa',
-                'Informa você quando entrar em uma conversa ativa.',
-                notifyOnEnterConversation,
-                () => {
-                  const newValue = !notifyOnEnterConversation;
-                  setNotifyOnEnterConversation(newValue);
-                  handleSettingsUpdate({ notificacao_para_entrar_conversa: newValue });
-                }
-              )}
-              {renderSwitchSetting(
-                'Notificação de novo chat',
-                'Você será notificado sempre que um novo chat for iniciado.',
-                notifyOnNewChat,
-                () => {
-                  const newValue = !notifyOnNewChat;
-                  setNotifyOnNewChat(newValue);
-                  handleSettingsUpdate({ notificacao_novo_chat: newValue });
-                }
-              )}
-              {renderSelectSetting(
-                'Modo de Tela',
-                'Altere entre modo escuro (Black) e claro (White).',
-                screenMode,
-                (val) => {
-                  const newValue = val as 'Black' | 'White';
-                  setScreenMode(newValue);
-                  handleSettingsUpdate({ modo_tela: newValue });
-                },
-                ['Black', 'White']
-              )}
-              {renderSelectSetting(
-                'Modo de Sidebar',
-                'Completa com nomes e ícones ou minimalista apenas com ícones.',
-                sidebarMode,
-                (val) => {
-                  const newValue = val as 'Full' | 'Minimal';
-                  setSidebarMode(newValue);
-                  handleSettingsUpdate({ modo_side_bar: newValue });
-                },
-                ['Full', 'Minimal']
-              )}
-              {renderSwitchSetting(
-                'Mostrar nome nas mensagens',
-                'Exibe seu nome junto das mensagens enviadas no chat.',
-                showNameInMessages,
-                () => {
-                  const newValue = !showNameInMessages;
-                  setShowNameInMessages(newValue);
-                  handleSettingsUpdate({ mostra_nome_mensagens: newValue });
-                }
-              )}
-              {renderInputSetting(
-                'Palavra-chave da IA',
-                'Defina uma palavra que, quando enviada pelo usuário, ativa a IA automaticamente.',
-                iaKeyword,
-                (v) => setIaKeyword(v),
-                () => persistIaKeyword(iaKeyword)
-              )}
-            </motion.div>
-          </>
         );
 
       default:
