@@ -121,36 +121,36 @@ export default function ConnectionForm({
           )}
         </div>
 
-         <div className={formStyles.formRow}>
-          {/* Campo opcional de número */}
-          <div className={formStyles.formGroup}>
-            <label>
-              Número (opcional para conectar via código)
-              <span style={{ fontWeight: 400, fontSize: 12, color: '#888', marginLeft: 4 }}>
-                (Formato: 6492434104)
-              </span>
-            </label>
-            <input
-              id="numero"
-              type="text"
-              placeholder="Ex: 6492434104"
-              value={formData?.numero || ''}
-              onChange={(e) =>
-                onChange({
-                  ...formData,
-                  numero: e.target.value,
-                })
-              }
-              pattern="^\d{10,11}$"
-              inputMode="numeric"
-            />
-            {showErrors && errors.numero && (
-              <span className={formStyles.errorText}>{errors.numero}</span>
-            )}
+        {!editMode && (
+          <div className={formStyles.formRow}>
+            {/* Campo opcional de número */}
+            <div className={formStyles.formGroup}>
+              <label>
+                Número (opcional para conectar via código)
+                <span style={{ fontWeight: 400, fontSize: 12, color: '#888', marginLeft: 4 }}>
+                  (Formato: 6492434104)
+                </span>
+              </label>
+              <input
+                id="numero"
+                type="text"
+                placeholder="Ex: 6492434104"
+                value={formData?.numero || ''}
+                onChange={(e) =>
+                  onChange({
+                    ...formData,
+                    numero: e.target.value,
+                  })
+                }
+                pattern="^\d{10,11}$"
+                inputMode="numeric"
+              />
+              {showErrors && errors.numero && (
+                <span className={formStyles.errorText}>{errors.numero}</span>
+              )}
+            </div>
           </div>
-
-  
-        </div>
+        )}
 
         {editMode && (
           <div className={formStyles.formGroup}>

@@ -233,7 +233,7 @@
   padding: 0 1rem;
   overflow: hidden;
   background-color: var(--color-background-white);
-  color: var(--color-text-table);
+  color: var(--color-text);
 }
 
 .fallbackContainer {

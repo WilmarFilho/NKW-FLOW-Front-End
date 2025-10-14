@@ -90,7 +90,7 @@ export default function AtendentesPage() {
       <motion.header initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className={GlobalStyles.pageHeader}>
         <div className={GlobalStyles.pageHeaderTitles}>
           <h2>Seus atendentes humanos</h2>
-          <h3>Cadastre e gerencie os atendentes que podem interagir com seus clientes.</h3>
+          <h3>Cadastre e gerencie os atendentes que podem interagir com seus clientes e serão notificados quando precisarem assumir a conversa.</h3>
         </div>
         {/* Só exibe o botão se não atingiu o limite do plano */}
         {!atingiuLimiteDeAtendentes(state.user, state.attendants) ? (

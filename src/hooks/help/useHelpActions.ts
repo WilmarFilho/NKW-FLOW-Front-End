@@ -5,7 +5,8 @@ import { helpChatState, userState } from '../../state/atom';
 // Hooks
 import { useApi } from '../utils/useApi';
 // Types
-import type { HelpChat, HelpChatResponse } from '../../types/helpChat';
+import type { MessagesHelpChat } from '../../types/helpChat';
+import { use } from 'react';
 
 export function useHelpActions() {
 
@@ -19,24 +20,24 @@ export function useHelpActions() {
   const { post } = useApi();
 
   const sendMessage = async (text: string) => {
+    if (!user) return;
 
-    if(!user) return;
-
-    const userMessage: HelpChat = {
+    const userMessage: MessagesHelpChat = {
       from: 'user',
-      content: { text },
+      content: text,
     };
-    
+
     setMessages(prev => [ ...(prev ?? []), userMessage ]);
 
-    const data = await post<HelpChatResponse>('/api/help/chat', { message: text });
+    // Agora espera um array de respostas
+    const data = await post<{ respostas: string[] }>('/messages/help', { mensagem: text });
 
-    if (data && data.reply) {
-      const systemMessage: HelpChat = {
+    if (data && Array.isArray(data.respostas)) {
+      const novasMensagens: MessagesHelpChat[] = data.respostas.map(resposta => ({
         from: 'system',
-        content: { text: data.reply },
-      };
-      setMessages(prev => [ ...(prev ?? []), systemMessage ]);
+        content: resposta,
+      }));
+      setMessages(prev => [ ...(prev ?? []), ...novasMensagens ]);
     }
   };
 

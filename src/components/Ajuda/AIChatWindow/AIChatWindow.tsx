@@ -1,9 +1,9 @@
 import ReactMarkdown from 'react-markdown';
 import AiChatWindow from './AIChatWindow.module.css';
-import { HelpChat } from '../../../types/helpChat';
+import { MessagesHelpChat } from '../../../types/helpChat';
 
 interface AIChatWindowProps {
-  messages: HelpChat[] | null;
+  messages: MessagesHelpChat[] | null;
 }
 
 export default function AIChatWindow({ messages }: AIChatWindowProps) {
@@ -16,7 +16,7 @@ export default function AIChatWindow({ messages }: AIChatWindowProps) {
             msg.from === 'user' ? AiChatWindow.user : AiChatWindow.bot
           }`}
         >
-          <ReactMarkdown>{msg.content.text}</ReactMarkdown>
+          <ReactMarkdown>{msg.content}</ReactMarkdown>
         </div>
       ))}
     </div>

@@ -269,7 +269,7 @@ export default function SettingsContent({ tabIndex }: Props) {
 
                     <div className={styles.userInfo}>
                       <h1>Plano Contratado</h1>
-                      <h2>{user.plano ?? '------'}</h2>
+                      <h2>{user.plano?.toLocaleUpperCase() ?? '------'}</h2>
                     </div>
 
                     <div className={styles.userInfo}>
@@ -308,7 +308,7 @@ export default function SettingsContent({ tabIndex }: Props) {
               <>
                 {renderSwitchSetting(
                   'Notificação para atendente',
-                  'Envia um alerta ao atendente quando é necessário entrar em uma conversa.',
+                  'Envia um alerta ao atendente no número cadastrado dele quando é necessário assumir uma conversa.',
                   notifyOnEnterConversation,
                   () => {
                     const newValue = !notifyOnEnterConversation;
@@ -318,7 +318,7 @@ export default function SettingsContent({ tabIndex }: Props) {
                 )}
                 {renderSwitchSetting(
                   'Mostrar nome nas mensagens',
-                  'Exibe seu nome junto das mensagens enviadas no chat.',
+                  'Exibe seu nome junto das mensagens enviadas dentro da plataforma.',
                   showNameInMessages,
                   () => {
                     const newValue = !showNameInMessages;
@@ -329,7 +329,7 @@ export default function SettingsContent({ tabIndex }: Props) {
 
                 {renderInputSetting(
                   'Palavra-chave da IA',
-                  'Defina uma palavra que, quando enviada pelo usuário, ativa a IA automaticamente.',
+                  'Defina uma palavra que, quando enviada pelo próprio WhatsApp ou WhatsApp Web, ativa a IA automaticamente.',
                   iaKeyword,
                   (v) => setIaKeyword(v),
                   () => persistIaKeyword(iaKeyword)

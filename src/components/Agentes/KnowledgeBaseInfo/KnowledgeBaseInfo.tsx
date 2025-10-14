@@ -32,7 +32,6 @@ export default function KnowledgeBaseInfo({ status }: KnowledgeBaseInfoProps) {
 
         <div className={Styles.contentActions}>
           <button><Icon nome='downloadtext' /></button>
-          <button><Icon nome='download' /></button>
         </div>
       </div>
 

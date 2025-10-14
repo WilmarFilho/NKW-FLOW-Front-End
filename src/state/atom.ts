@@ -3,7 +3,7 @@ import { atom } from 'recoil';
 import type { Connection } from '../types/connection';
 import type { Attendant } from '../types/attendant';
 import type { Agent } from '../types/agent';
-import type { HelpChat } from '../types/helpChat';
+import type { MessagesHelpChat } from '../types/helpChat';
 import type { Chat, ChatFilters } from '../types/chats';
 import type { Message } from '../types/message';
 import type { User } from '../types/user';
@@ -81,7 +81,7 @@ export const agentsState = atom<Agent[] | null>({
   default: null,
 });
 
-export const helpChatState = atom<HelpChat[] | null>({
+export const helpChatState = atom<MessagesHelpChat[] | null>({
   key: KEYS.HELP_CHAT,
   default: null,
 });
