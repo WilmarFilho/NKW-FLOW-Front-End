@@ -63,7 +63,7 @@ export default function AgentesPage() {
           padding: '26px 20px',
         }}
       >
-        <KnowledgeBaseInfo status={state.status} />
+        <KnowledgeBaseInfo status={state.ragStatus} />
       </motion.div>
 
       {/* Modal de Detalhes do Agente */}

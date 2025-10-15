@@ -1,28 +1,34 @@
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { useCallback } from 'react';
-import { agentsState, userState } from '../../state/atom';
+import { agentsState, userState, ragStatusState } from '../../state/atom';
 import { useApi } from '../utils/useApi';
-import type { Agent } from '../../types/agent';
+import type { Agent, Rag } from '../../types/agent';
 import { User } from '../../types/user';
+
+type AgentsApiResponse = {
+  agents: Agent[];
+  rag_status: Rag;
+};
 
 export const useAgents = () => {
   const [user] = useRecoilState(userState);
   const setAgents = useSetRecoilState(agentsState);
+  const setRagStatus = useSetRecoilState(ragStatusState);
   const { get } = useApi();
 
   const fetchAgents = useCallback(async (userParam?: User) => {
-
     const currentUser = userParam ?? user;
     if (!currentUser) return;
 
-    if (currentUser.tipo_de_usuario !== 'admin') return
+    if (currentUser.tipo_de_usuario !== 'admin') return;
 
-    const fetchedData = await get<Agent[]>('/agents');
+    const fetchedData = await get<AgentsApiResponse>('/agents');
 
-    if (fetchedData) {
-      setAgents(fetchedData);
+    if (fetchedData && Array.isArray(fetchedData.agents)) {
+      setAgents(fetchedData.agents);
+      setRagStatus(fetchedData.rag_status);
     }
-  }, [get, user, setAgents]);
+  }, [get, user, setAgents, setRagStatus]);
 
   return { fetchAgents };
 };

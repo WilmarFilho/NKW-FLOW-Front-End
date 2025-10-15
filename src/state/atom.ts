@@ -114,3 +114,8 @@ export const chatFiltersState = atom<ChatFilters>({
     isFetching: false,
   },
 });
+
+export const ragStatusState = atom<{ status_conhecimento: string; resumo: string } | null>({
+  key: 'ragStatusState',
+  default: null,
+});

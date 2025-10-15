@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { activeChatState, agentsState, chatFiltersState, chatsState, connectionsState } from '../../state/atom';
+import { activeChatState, agentsState, chatFiltersState, chatsState, connectionsState, ragStatusState } from '../../state/atom';
 import { Agent } from '../../types/agent';
 
 export function useAgentesPage() {
@@ -20,6 +20,7 @@ export function useAgentesPage() {
   // Carrega Conexões e Agentes
   const connections = useRecoilValue(connectionsState);
   const agents = useRecoilValue(agentsState);
+  const ragStatus = useRecoilValue(ragStatusState);
 
   // Carrega Chats
   const chats = useRecoilValue(chatsState);
@@ -38,17 +39,15 @@ export function useAgentesPage() {
     setIsModalOpen(false);
   };
 
-  const status: 'Boa' | 'Média' | 'Ruim' = 'Boa';
-
   return {
     connections,
     agents,
+    ragStatus,
     chats,
     selectedAgent,
     isModalOpen,
     openModal,
     closeModal,
-    status,
   };
 }
 

@@ -5,3 +5,8 @@ export interface Agent {
   descricao: string;
   criado_em: string;
 }
+
+export interface Rag {
+  status_conhecimento: string;
+  resumo: string;
+}
