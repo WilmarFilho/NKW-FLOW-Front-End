@@ -20,9 +20,10 @@ export function useAjudaPage() {
 
   const messages = useRecoilValue(helpChatState);
 
-  const { sendMessage } = useHelpActions();
+  const { sendMessage, isSubmitting } = useHelpActions();
 
   return {
+    isSubmitting,
     messages,
     sendMessage,
   };

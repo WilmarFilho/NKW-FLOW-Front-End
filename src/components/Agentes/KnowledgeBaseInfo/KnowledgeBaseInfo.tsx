@@ -10,13 +10,13 @@ interface KnowledgeBaseInfoProps {
 
 export default function KnowledgeBaseInfo({ status }: KnowledgeBaseInfoProps) {
   // Define progresso: Ótimo = 100%, Vazio = 0%
-  console.log(status?.status_conhecimento);
+
   const progresso =
     status?.status_conhecimento === 'Ótimo'
       ? 100
       : status?.status_conhecimento === 'Vazio'
-      ? 0
-      : 0;
+        ? 100
+        : 0;
 
   // Função para baixar o resumo como .txt
   const handleDownloadResumo = () => {
@@ -39,10 +39,22 @@ export default function KnowledgeBaseInfo({ status }: KnowledgeBaseInfoProps) {
       <div className={Styles.wrapperBody}>
         <div className={Styles.progressBarAgent}>
           <div
-            className={`${Styles.progressFill} ${Styles[status?.status_conhecimento?.toLowerCase() ?? '']}`}
-            style={{ width: `${progresso}%` }}
+            className={`${Styles.progressFill} ${status?.status_conhecimento === 'Ótimo'
+                ? Styles.otimo
+                : status?.status_conhecimento === 'Vazio'
+                  ? Styles.vazio
+                  : ''
+              }`}
+            style={{ width: '100%' }}
           >
-            <span className={Styles.progressPercent}>{progresso}% completa</span>
+            <span className={Styles.progressPercent}>
+              {status?.status_conhecimento === 'Ótimo'
+                ? `${progresso}% completa`
+                : status?.status_conhecimento === 'Vazio'
+                  ? 'Base vazia, contacte o suporte'
+                  : `${progresso}% completa`
+              }
+            </span>
           </div>
         </div>
 

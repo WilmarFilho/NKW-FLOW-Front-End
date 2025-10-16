@@ -5,7 +5,6 @@ import { validateConnectionForm } from '../utils/useValidator';
 import { useConnectionsActions } from '../connections/useConnectionsActions'
 import type { Connection } from '../../types/connection';
 import type { FilterStatus, SortOrder, SortField } from '../../types/table';
-import { P } from 'framer-motion/dist/types.d-Cjd591yU';
 
 export function useConexoesPage() {
 

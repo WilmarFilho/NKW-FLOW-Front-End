@@ -6,12 +6,13 @@ import { helpChatState, userState } from '../../state/atom';
 import { useApi } from '../utils/useApi';
 // Types
 import type { MessagesHelpChat } from '../../types/helpChat';
-import { use } from 'react';
+import { useState } from 'react';
 
 export function useHelpActions() {
 
   // Carrega o estado do chat de ajuda
   const setMessages = useSetRecoilState(helpChatState);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Carrega o usuário
   const [user] = useRecoilState(userState);
@@ -29,6 +30,8 @@ export function useHelpActions() {
 
     setMessages(prev => [ ...(prev ?? []), userMessage ]);
 
+    setIsSubmitting(true);
+
     // Agora espera um array de respostas
     const data = await post<{ respostas: string[] }>('/messages/help', { mensagem: text });
 
@@ -38,8 +41,9 @@ export function useHelpActions() {
         content: resposta,
       }));
       setMessages(prev => [ ...(prev ?? []), ...novasMensagens ]);
+      setIsSubmitting(false);
     }
   };
 
-  return { sendMessage };
+  return { sendMessage, isSubmitting };
 }

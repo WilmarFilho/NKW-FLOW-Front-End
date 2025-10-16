@@ -81,7 +81,7 @@ export function useConversasPage() {
     try {
       const messageText = text ?? newChatMessage;
 
-      if (!activeChat) {
+      if (isAddChatOpen) {
         if (!formConnectionId) {
           setErrors({ selectedConnectionId: 'Selecione uma conexão.' });
           return;
@@ -102,13 +102,13 @@ export function useConversasPage() {
         return;
       }
 
-      if (activeChat.ia_ativa) {
+      if (activeChat && activeChat.ia_ativa) {
         alert('⚠️ Não é possível enviar mensagem enquanto a IA está ativa.');
         return;
       }
 
       const cooldownMin = 1;
-      if (activeChat.ia_desligada_em) {
+      if (activeChat && activeChat.ia_desligada_em) {
         let iso = activeChat.ia_desligada_em;
         if (!iso.endsWith('Z') && !iso.includes('+')) iso += 'Z';
         const desligadaEm = new Date(iso).getTime();
@@ -119,7 +119,7 @@ export function useConversasPage() {
       }
 
       const result = await sendMessage({
-        chat_id: activeChat.id,
+        chat_id: activeChat?.id,
         mensagem: messageText,
         user_id: user?.id,
         mimetype,
@@ -127,8 +127,8 @@ export function useConversasPage() {
         quote_id: replyingTo?.id
       });
 
-      if (result) {
-        if (!activeChat.user_id && user?.id) {
+      if (result && activeChat) {
+        if (!activeChat?.user_id && user?.id) {
           await claimChatOwner(activeChat.id, user.id);
           setActiveChat(prev => prev ? { ...prev, user_id: user.id } : prev);
         }

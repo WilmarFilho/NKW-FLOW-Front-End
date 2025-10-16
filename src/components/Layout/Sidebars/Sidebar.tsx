@@ -67,7 +67,7 @@ const Sidebar = () => {
             </NavLink>
           }
           <div className='user-info'>
-            <p className='user-name'>{user?.nome}</p>
+            <p className='user-name'>{user?.nome.split(' ')[0]}</p>
             <p className='user-email'>{user?.email}</p>
           </div>
         </div>

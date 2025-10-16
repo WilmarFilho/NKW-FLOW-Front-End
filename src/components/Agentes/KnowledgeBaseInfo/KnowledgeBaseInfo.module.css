@@ -57,15 +57,11 @@
   transition: width 0.4s ease;
 }
 
-.progressFill.boa {
+.progressFill.otimo {
   background: var(--color-secundaria);
 }
 
-.progressFill.média {
-  background: #facc15;
-}
-
-.progressFill.ruim {
+.progressFill.vazio {
   background: var(--color-background-red);
 }
 
