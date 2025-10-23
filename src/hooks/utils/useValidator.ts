@@ -14,9 +14,11 @@ export function validateAttendantForm(data: AttendantFormData, editMode = false)
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) {
     errors.email = 'E-mail inválido.';
   }
-  if (!/^\d{10,15}$/.test(data.numero)) {
-    errors.numero = 'Número deve ter entre 10 e 15 dígitos.';
+ 
+  if (!/^\d{10}$/.test(data.numero.trim())) {
+    errors.numero = 'Número deve ter exatamente 10 dígitos.';
   }
+
   if (!editMode && (!data.password || data.password.length < 6)) {
     errors.password = 'A senha deve ter pelo menos 6 caracteres.';
   }
@@ -56,7 +58,7 @@ export function validateUserForm(data: Partial<User>) {
   return errors;
 }
 
-export function validateConnectionForm(data: Partial<Connection> | null, userPlan?: string | null) {
+export function validateConnectionForm(data: Partial<Connection> | null, userPlan?: string | null, editMode = false) {
   const errors: Partial<Record<keyof Connection, string>> = {};
 
   if (!data?.nome || data.nome.trim().length < 3) {
@@ -67,7 +69,7 @@ export function validateConnectionForm(data: Partial<Connection> | null, userPla
     errors.nome = 'O nome da conexão deve ter no máximo 20 caracteres.';
   }
 
-  if (data?.numero && data.numero.trim() !== '') {
+  if (!editMode && data?.numero && data.numero.trim() !== '') {
     if (!/^\d{10}$/.test(data.numero.trim())) {
       errors.numero = 'Número deve ter exatamente 10 dígitos.';
     }

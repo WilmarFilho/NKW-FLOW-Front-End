@@ -122,7 +122,7 @@ export function useConexoesPage() {
   }, [modalState.step, formData, setConnections, setModalState]);
 
   const handleModalSaveClick = useCallback(async () => {
-    const foundErrors = validateConnectionForm(formData, user?.plano);
+    const foundErrors = validateConnectionForm(formData, user?.plano, modalState.editMode);
 
     if (Object.keys(foundErrors).length > 0) {
       setErrors(foundErrors);
