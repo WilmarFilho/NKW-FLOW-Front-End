@@ -97,7 +97,7 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
     newEventSource.onmessage = (event) => {
       try {
         const payload = JSON.parse(event.data);
-        console.log(payload)
+  
         const { event: tipo, connection, message, state, deletedMessage, error } = payload;
 
         if (error && message === 'Conexao duplicada') {
