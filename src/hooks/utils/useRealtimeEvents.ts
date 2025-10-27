@@ -39,7 +39,7 @@ const chatMatchesFilters = (chat: Chat, filters: ChatFilters, userId: string | u
 export const useRealtimeEvents = (userId: string | undefined, token: string) => {
   const setConnections = useSetRecoilState(connectionsState);
   const setModalState = useSetRecoilState(addConnectionModalState);
-  const setChats = useSetRecoilState(chatsState);
+  const [chats, setChats] = useRecoilState(chatsState);
   const setMessagesByChat = useSetRecoilState(messagesState);
   const filters = useRecoilValue(chatFiltersState);
   const [activeChat, setActiveChat] = useRecoilState(activeChatState);
@@ -54,6 +54,7 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
   // Usamos refs para acessar os valores mais recentes sem causar recriação do useCallback
   const filtersRef = useRef(filters);
   const activeChatRef = useRef(activeChat);
+  const chatsRef = useRef(chats);
 
   useEffect(() => {
     filtersRef.current = filters;
@@ -62,6 +63,10 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
   useEffect(() => {
     activeChatRef.current = activeChat;
   }, [activeChat]);
+
+  useEffect(() => {
+    chatsRef.current = chats;
+  }, [chats]);
 
   const connect = useCallback(() => {
     if (!userId || !token) return;
@@ -97,7 +102,7 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
     newEventSource.onmessage = (event) => {
       try {
         const payload = JSON.parse(event.data);
-  
+
         const { event: tipo, connection, message, state, deletedMessage, error } = payload;
 
         if (error && message === 'Conexao duplicada') {
@@ -108,9 +113,38 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
         }
 
         if (tipo === 'connection.update') {
+         
           if (state === 'close') {
-            setConnections((prev) => (prev ?? []).filter((c) => c.id !== connection.id));
+            const connectionId = connection.id;
+
+            // Busca os IDs dos chats a remover ANTES de atualizar os estados
+            const chatIdsToRemove = (chatsRef.current ?? [])
+              .filter(chat => chat.connection_id === connectionId)
+              .map(chat => chat.id);
+
+            // 1. Remove a conexão
+            setConnections((prev) => (prev ?? []).filter((c) => c.id !== connectionId));
+
+            // 2. Remove os chats associados
+            setChats((prevChats) => (prevChats ?? []).filter((chat) => chat.connection_id !== connectionId));
+
+            // 3. Remove as mensagens desses chats
+            if (chatIdsToRemove.length > 0) {
+              setMessagesByChat((prevMessages) => {
+                const newMessages = { ...(prevMessages ?? {}) };
+                chatIdsToRemove.forEach(chatId => {
+                  delete newMessages[chatId];
+                });
+                return newMessages;
+              });
+            }
+
+            // 4. Se o chat ativo for um dos removidos, limpa ele
+            if (activeChatRef.current && chatIdsToRemove.includes(activeChatRef.current.id)) {
+              setActiveChat(null);
+            }
           }
+          
           if (state === 'connecting') {
             setConnections((prev) => {
               const safePrev = prev ?? [];
@@ -178,22 +212,22 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
                 }
 
                 if (message.remetente === 'Contato') {
-                    const currentUnreadCount = document.title.match(/\((\d+)\)/)?.[1] ? parseInt(document.title.match(/\((\d+)\)/)?.[1] || '0') : 0;
-                    const prevChat = (prevChats ?? []).find(c => c.id === chatId);
-                    
-                    let newUnreadCount = currentUnreadCount;
-                    
-                    if (fullChatData.status === 'Open') {
-                  
+                  const currentUnreadCount = document.title.match(/\((\d+)\)/)?.[1] ? parseInt(document.title.match(/\((\d+)\)/)?.[1] || '0') : 0;
+                  const prevChat = (prevChats ?? []).find(c => c.id === chatId);
+
+                  let newUnreadCount = currentUnreadCount;
+
+                  if (fullChatData.status === 'Open') {
+
                     if (!prevChat) {
                       newUnreadCount = currentUnreadCount + 1;
                     }
-                    } else {
+                  } else {
                     // Se o chat existia antes e tinha mensagens não lidas, decrementa
                     if (prevChat?.ultima_mensagem.remetente === 'Contato') {
                       newUnreadCount = Math.max(0, currentUnreadCount - 1);
                     }
-                    }
+                  }
                   document.title = newUnreadCount > 0 ? `(${newUnreadCount}) WhatsApp - NKW FLOW` : 'WhatsApp - NKW FLOW';
                 }
 
@@ -209,7 +243,7 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
                 });
               }
             })
-            
+
         }
 
         if (tipo === 'messages.delete' && deletedMessage) {
@@ -225,7 +259,7 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
             };
           });
         }
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (err) {
         // 
       }

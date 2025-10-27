@@ -14,9 +14,9 @@ export function validateAttendantForm(data: AttendantFormData, editMode = false)
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) {
     errors.email = 'E-mail inválido.';
   }
- 
-  if (!/^\d{10}$/.test(data.numero.trim())) {
-    errors.numero = 'Número deve ter exatamente 10 dígitos.';
+
+  if (!/^\d{10,11}$/.test(data.numero.trim())) {
+    errors.numero = 'Número deve ter 10 ou 11 dígitos.';
   }
 
   if (!editMode && (!data.password || data.password.length < 6)) {
@@ -48,8 +48,8 @@ export function validateUserForm(data: Partial<User>) {
   if (!data.email?.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) {
     errors.email = 'E-mail inválido.';
   }
-  if (!data.numero?.trim() || !/^\d{10,15}$/.test(data.numero.trim())) {
-    errors.numero = 'Número deve ter entre 10 e 15 dígitos.';
+  if (!data.numero?.trim() || !/^\d{10,11}$/.test(data.numero.trim())) {
+    errors.numero = 'Número deve ter 10 ou 11 dígitos.';
   }
   if (!data.password || data.password.length < 6) {
     errors.password = 'A senha deve ter pelo menos 6 caracteres.';
@@ -70,8 +70,8 @@ export function validateConnectionForm(data: Partial<Connection> | null, userPla
   }
 
   if (!editMode && data?.numero && data.numero.trim() !== '') {
-    if (!/^\d{10}$/.test(data.numero.trim())) {
-      errors.numero = 'Número deve ter exatamente 10 dígitos.';
+    if (!/^\d{10,11}$/.test(data.numero.trim())) {
+      errors.numero = 'Número deve ter 10 ou 11 dígitos.';
     }
   }
 
