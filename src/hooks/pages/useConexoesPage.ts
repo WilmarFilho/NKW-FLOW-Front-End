@@ -37,8 +37,14 @@ export function useConexoesPage() {
   // Controle de Erros e Modal
   const [modalState, setModalState] = useRecoilState(addConnectionModalState);
   const [formData, setFormData] = useState<Partial<Connection> | null>(null);
+  const [showQR, setShowQr] = useState(false);
   const [showErrors, setShowErrors] = useState(false);
   const [errors, setErrors] = useState<Partial<Record<keyof Connection, string>>>({});
+
+  const handleShowQR = useCallback(async (isShow: boolean) => {
+    setShowQr(isShow);
+    setModalState((prev) => ({ ...prev, step: 2 }));
+  }, [setShowQr, setModalState]); // <-- Dependências corretas
 
   const handleDelete = useCallback(async (id: string | number) => {
     setIsSubmitting(true);
@@ -122,7 +128,8 @@ export function useConexoesPage() {
   }, [modalState.step, formData, setConnections, setModalState]);
 
   const handleModalSaveClick = useCallback(async () => {
-    const foundErrors = validateConnectionForm(formData, user?.plano, modalState.editMode);
+   
+    const foundErrors = validateConnectionForm(formData, user?.plano, modalState.editMode, showQR);
 
     if (Object.keys(foundErrors).length > 0) {
       setErrors(foundErrors);
@@ -191,5 +198,8 @@ export function useConexoesPage() {
     openModal,
     setErrors,
     handleModalSaveClick,
+    handleShowQR,
+    showQR
   };
 }
+

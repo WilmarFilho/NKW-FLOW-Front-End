@@ -16,9 +16,11 @@ import { User } from '@/types/user';
 interface ConnectionFormProps {
   formData: Partial<Connection> | null;
   onChange: (data: Partial<Connection> | null) => void;
-  step: 1 | 2;
+  step: 1 | 2 | 3;
   qrCode: string | null;
   pairingCode?: string | null;
+  showQR?: boolean;
+  handleShowQR: (data: boolean) => void;
   editMode?: boolean;
   errors?: Partial<Record<keyof Connection, string>>;
   showErrors?: boolean;
@@ -35,6 +37,8 @@ export default function ConnectionForm({
   editMode,
   errors = {},
   showErrors = false,
+  showQR,
+  handleShowQR
 }: ConnectionFormProps) {
   const agents = useRecoilValue(agentsState);
 
@@ -81,6 +85,37 @@ export default function ConnectionForm({
   if (step === 1) {
     return (
       <div className={formStyles.formContainer}>
+
+        <div className={formStyles.formRow}>
+
+          <button
+            onClick={() => handleShowQR(true)} 
+            className={styles.submitButton}
+          >
+            Conectar escaneando QR
+          </button>
+
+        </div>
+
+        <div className={formStyles.formRow}>
+
+          <button
+            onClick={() => handleShowQR(false)} 
+            className={styles.submitButton}
+          >
+            Conectar via código
+          </button>
+
+        </div>
+
+      </div>
+    );
+  }
+
+
+  if (step === 2) {
+    return (
+      <div className={formStyles.formContainer}>
         <div className={formStyles.formRow}>
           <div className={formStyles.formGroup}>
             <label>Nome da Conexão</label>
@@ -121,7 +156,7 @@ export default function ConnectionForm({
           )}
         </div>
 
-        {!editMode && (
+        {!editMode && !showQR && (
           <div className={formStyles.formRow}>
             {/* Campo opcional de número */}
             <div className={formStyles.formGroup}>
@@ -171,7 +206,7 @@ export default function ConnectionForm({
     );
   }
 
-  if (step === 2) {
+  if (step === 3) {
     return (
       <div className={styles.qrCodeStep}>
         <h2>Escaneie o qr code com seu WhatsApp</h2>

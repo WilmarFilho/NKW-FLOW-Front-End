@@ -30,3 +30,24 @@
     border-radius: var(--radius-default);
     width: 70%;
 }
+
+.submitButton {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--color-secundaria);
+  opacity: .6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: .5s;
+  outline: none;
+  font-family: var(--font-main);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}

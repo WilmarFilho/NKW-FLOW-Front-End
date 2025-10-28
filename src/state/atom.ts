@@ -55,7 +55,7 @@ export const messagesState = atom<Record<string, Message[]> | null>({
 export const addConnectionModalState = atom<{
   isOpen: boolean;
   editMode?: boolean;
-  step: 1 | 2;
+  step: 1 | 2 | 3;
   qrCode: string | null;
   pairingCode?: string | null;
   isLoading: boolean;

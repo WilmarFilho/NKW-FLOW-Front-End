@@ -58,7 +58,7 @@ export function validateUserForm(data: Partial<User>) {
   return errors;
 }
 
-export function validateConnectionForm(data: Partial<Connection> | null, userPlan?: string | null, editMode = false) {
+export function validateConnectionForm(data: Partial<Connection> | null, userPlan?: string | null, editMode = false, showQR = false) {
   const errors: Partial<Record<keyof Connection, string>> = {};
 
   if (!data?.nome || data.nome.trim().length < 3) {
@@ -69,9 +69,12 @@ export function validateConnectionForm(data: Partial<Connection> | null, userPla
     errors.nome = 'O nome da conexão deve ter no máximo 20 caracteres.';
   }
 
-  if (!editMode && data?.numero && data.numero.trim() !== '') {
-    if (!/^\d{10,11}$/.test(data.numero.trim())) {
+  if (!editMode && !showQR) {
+    if (data?.numero && !/^\d{10,11}$/.test(data.numero.trim())) {
       errors.numero = 'Número deve ter 10 ou 11 dígitos.';
+    }
+    if (!(data?.numero)) {
+      errors.numero = 'Número deve ser preenchido para conexão via código.';
     }
   }
 

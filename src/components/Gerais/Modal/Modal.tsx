@@ -13,7 +13,7 @@ interface ModalProps {
   onClose: () => void;
   title: string;
   labelSubmit?: string;
-  step?: 1 | 2 | undefined;
+  step?: 1 | 2 | 3 | undefined;
 }
 
 export default function Modal({
@@ -64,7 +64,7 @@ export default function Modal({
         </header>
 
         <div className={styles.modalBody}>{children}</div>
-        {step !== 2 && labelSubmit && (
+        {step === 2 && labelSubmit && (
           <footer className={styles.modalFooter}>
             <button
               disabled={isSubmitting}

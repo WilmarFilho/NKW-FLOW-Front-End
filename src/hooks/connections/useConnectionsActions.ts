@@ -37,7 +37,7 @@ export const useConnectionsActions = () => {
       });
 
       if (qrcode) {
-        setModalState((prev) => ({ ...prev, qrCode: qrcode.base64, pairingCode: qrcode.pairingCode, step: 2 }));
+        setModalState((prev) => ({ ...prev, qrCode: qrcode.base64, pairingCode: qrcode.pairingCode, step: 3 }));
       } else {
         setModalState((prev) => ({ ...prev, qrCode: null, step: 1, isOpen: false }));
       }

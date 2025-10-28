@@ -67,7 +67,9 @@ export default function ConexoesPage() {
     submittingId,
     user,
     isSubmitting,
-    pairingCode
+    pairingCode,
+    showQR,
+    handleShowQR
   } = useConexoesPage();
 
   // --- INÍCIO: estado e handlers para confirmação de exclusão via Chakra ---
@@ -270,7 +272,7 @@ export default function ConexoesPage() {
         isOpen={modalState.isOpen}
         onClose={closeModal}
         title={modalState.editMode ? 'Editar Conexão' : 'Cadastrar Conexão'}
-        labelSubmit={modalState.editMode ? 'Salvar Alterações' : 'Gerar QR Code'}
+        labelSubmit={modalState.editMode ? 'Salvar Alterações' : 'Gerar Conexão'}
         isSubmitting={isLoading}
         onSave={handleModalSaveClick}
         step={step}
@@ -282,6 +284,8 @@ export default function ConexoesPage() {
           editMode={modalState.editMode}
           step={step}
           qrCode={qrCode}
+          showQR={showQR}
+          handleShowQR={handleShowQR}
           pairingCode={pairingCode}
           errors={errors}
           showErrors={showErrors}
@@ -290,3 +294,4 @@ export default function ConexoesPage() {
     </div>
   );
 }
+
