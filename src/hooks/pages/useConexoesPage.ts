@@ -76,7 +76,7 @@ export function useConexoesPage() {
         ...prev,
         isOpen: true,
         editMode: true,
-        step: 1,
+        step: 2,
         qrCode: null,
         isLoading: false,
       }));
