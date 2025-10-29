@@ -2,6 +2,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { activeChatState, chatFiltersState, metricsState } from '../../state/atom';
 import { useEffect, useState } from 'react';
 import { ViewType, DropdownId } from '../../components/Resumo/DropdownPeriod/DropdownPeriod';
+import { useMetrics } from '../metrics/useMetrics';
 
 export function useResumoPage() {
 
@@ -17,6 +18,10 @@ export function useResumoPage() {
     }));
   }, []);
 
+
+  const { fetchMetrics } = useMetrics();
+
+  fetchMetrics();
 
   const metrics = useRecoilValue(metricsState);
 

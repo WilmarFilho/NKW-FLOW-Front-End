@@ -119,3 +119,6 @@ export const ragStatusState = atom<{ status_conhecimento: string; resumo: string
   key: 'ragStatusState',
   default: null,
 });
+
+
+

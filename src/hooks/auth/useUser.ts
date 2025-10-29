@@ -11,7 +11,6 @@ import type { User } from '../../types/user';
 import { useAttendants } from '../attendants/useAttendants';
 import { useAgents } from '../agents/useAgents';
 import { useConnections } from '../connections/useConnections';
-import { useMetrics } from '../metrics/useMetrics';
 import { useChats } from '../chats/useChats';
 
 export const useUser = () => {
@@ -24,7 +23,6 @@ export const useUser = () => {
   const { fetchAgents } = useAgents();
   const { fetchChats } = useChats();
   const { fetchConnections } = useConnections();
-  const { fetchMetrics } = useMetrics();
 
   // Carrega Metodos do hook da api
   const { get } = useApi();
@@ -65,8 +63,6 @@ export const useUser = () => {
         opts?.onProgress?.('Carregando conexões ...');
         await fetchConnections(fetchedUser);
 
-        opts?.onProgress?.('Carregando métricas ...');
-        await fetchMetrics(fetchedUser);
       }
 
       return fetchedUser;
