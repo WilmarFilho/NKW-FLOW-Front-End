@@ -64,7 +64,7 @@ export default function Modal({
         </header>
 
         <div className={styles.modalBody}>{children}</div>
-        {step === 2 && labelSubmit && (
+        {( step === 2 || step === undefined ) && labelSubmit && (
           <footer className={styles.modalFooter}>
             <button
               disabled={isSubmitting}

@@ -10,7 +10,7 @@ const Sidebar = () => {
   if (!user) return null;
 
   const userPlano = (user.plano || '').toLowerCase() as 'basico' | 'intermediario' | 'premium';
-  
+
   const MenuItem = ({ to, children }: { to: string; children: React.ReactNode }) => (
     <NavLink to={to} className={({ isActive }) => `MenuItem ${isActive ? 'active-link' : ''}`}>
       {children}
@@ -66,10 +66,12 @@ const Sidebar = () => {
               </div>
             </NavLink>
           }
-          <div className='user-info'>
-            <p className='user-name'>{user?.nome.split(' ')[0]}</p>
-            <p className='user-email'>{user?.email}</p>
-          </div>
+          <NavLink to='/configuracoes'>
+            <div className='user-info'>
+              <p className='user-name'>{user?.nome.split(' ')[0]}</p>
+              <p className='user-email'>{user?.email}</p>
+            </div>
+          </NavLink>
         </div>
       </div>
     </>

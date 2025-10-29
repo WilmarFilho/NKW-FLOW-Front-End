@@ -161,7 +161,7 @@ export default function ConnectionForm({
             {/* Campo opcional de número */}
             <div className={formStyles.formGroup}>
               <label>
-                Número (opcional para conectar via código)
+                Número do WhatsApp
                 <span style={{ fontWeight: 400, fontSize: 12, color: '#888', marginLeft: 4 }}>
                   (Formato: 6492434104)
                 </span>
