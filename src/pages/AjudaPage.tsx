@@ -10,7 +10,7 @@ export default function AjudaPage() {
     <div className={GlobalStyles.pageContainer}>
       <HelpHeader />
       <AIChatWindow messages={messages} isSubmitting={isSubmitting} />
-      <input placeholder="Pergunte qualquer coisa" className={GlobalStyles.InputForm} onKeyDown={(e) => {
+      <input disabled={isSubmitting} placeholder="Pergunte qualquer coisa" className={GlobalStyles.InputForm} onKeyDown={(e) => {
         if (e.key === 'Enter') {
           sendMessage(e.currentTarget.value);
           e.currentTarget.value = '';
