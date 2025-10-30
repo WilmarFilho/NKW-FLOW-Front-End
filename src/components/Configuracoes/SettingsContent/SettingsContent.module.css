@@ -9,6 +9,7 @@
   color: var(--color-text);
   overflow-y: auto;
   scrollbar-width: none;
+  position: relative;
 }
 
 .settingsContentAccount {
@@ -346,7 +347,7 @@
   }
 
   .editButton {
-   display: none;
+    display: none;
   }
 
   .settingDescription {
@@ -442,5 +443,28 @@
   .editButton {
     padding: 14px 24px;
     font-size: 12px;
+  }
+}
+
+.settingsContent .buttonIcon svg {
+  width: 32px;
+  height: 32px;
+  fill: var(--color-text);
+}
+
+.settingsContent .buttonIcon {
+  display: none;
+  background-color: var(--color-background-white);
+  padding: 12px;
+  width: fit-content;
+  position: fixed;
+  top: 96px;
+  border-radius: 100px;
+  right: 12px;
+}
+
+@media (max-height: 899.98px) {
+  .settingsContent .buttonIcon {
+    display: block;
   }
 }

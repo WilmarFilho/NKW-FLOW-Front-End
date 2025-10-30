@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import GlobalStyles from '../../../global.module.css'
+import Button from '../../../components/Gerais/Buttons/Button';
 
 export default function HelpHeader() {
   return (
@@ -13,7 +14,12 @@ export default function HelpHeader() {
         <h2>Página de Ajuda</h2>
         <h3>Pergunte qualquer coisa que estiver com dúvidas sobre o NKW FLOW.</h3>
       </div>
-     
+
+      <Button
+        onClick={() => window.open('https://www.instagram.com/nkw_tech/', '_blank')}
+        label="Entre em Contato"
+      />
+
     </motion.div>
   );
 }

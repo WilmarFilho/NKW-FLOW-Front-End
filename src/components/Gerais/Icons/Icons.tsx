@@ -51,8 +51,11 @@ import AjudaIcon from './assets/ajuda.svg';
 import DashIcon from './assets/dash.svg'
 import GiftIcon from './assets/gift.svg'
 
+import ScroolIcon from './assets/mouse-scroll.svg'
+
 const iconMap = {
   eye: Eye,
+  scroll: ScroolIcon,
   eyeoff: EyeOff,
   document: DocumentIcon,
   arrowdownload: ArrowDownload,

@@ -40,10 +40,10 @@ export default function KnowledgeBaseInfo({ status }: KnowledgeBaseInfoProps) {
         <div className={Styles.progressBarAgent}>
           <div
             className={`${Styles.progressFill} ${status?.status_conhecimento === 'Ótimo'
-                ? Styles.otimo
-                : status?.status_conhecimento === 'Vazio'
-                  ? Styles.vazio
-                  : ''
+              ? Styles.otimo
+              : status?.status_conhecimento === 'Vazio'
+                ? Styles.vazio
+                : ''
               }`}
             style={{ width: '100%' }}
           >
@@ -58,18 +58,23 @@ export default function KnowledgeBaseInfo({ status }: KnowledgeBaseInfoProps) {
           </div>
         </div>
 
+
+      </div>
+
+      <div className={Styles.wrapperDownload}>
         <div className={Styles.contentActions}>
           <button onClick={handleDownloadResumo}>
             <Icon nome='downloadtext' />
           </button>
         </div>
+
+        <p>
+          Aqui reunimos tudo que a nossa IA sabe sobre o seu negócio. É a partir dessas
+          informações que ela responde com precisão aos seus clientes. Mantenha-a atualizada
+          para garantir que cada interação seja fiel à sua marca.
+        </p>
       </div>
 
-      <p>
-        Aqui reunimos tudo que a nossa IA sabe sobre o seu negócio. É a partir dessas
-        informações que ela responde com precisão aos seus clientes. Mantenha-a atualizada
-        para garantir que cada interação seja fiel à sua marca.
-      </p>
     </div>
   );
 }

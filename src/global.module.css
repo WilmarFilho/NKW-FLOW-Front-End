@@ -56,6 +56,37 @@
   word-break: break-word;
 }
 
+.InputContainer {
+  display: flex;
+  align-items: center;
+  gap: 0rem;
+  width: 100%;
+  min-height: 84px;
+  padding: 0 1rem;
+  overflow: hidden;
+  background-color: var(--color-background-white);
+  color: var(--color-text);
+  border-radius: 12px;
+}
+
+.InputContainer button svg {
+  fill: white;
+}
+
+.InputForm {
+  display: flex;
+  align-items: center;
+  gap: 0rem;
+  width: 100%;
+  border: none;
+  outline: none;
+  min-height: 84px;
+  overflow: hidden;
+  background-color: transparent;
+  color: var(--color-text);
+}
+
+
 .pageContent {
   background-color: var(--color-background-dark);
   display: flex;
@@ -221,20 +252,6 @@
 }
 
 /* ========================== */
-.InputForm {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  border-radius: 12px;
-  width: 100%;
-  border: none;
-  outline: none;
-  min-height: 84px;
-  padding: 0 1rem;
-  overflow: hidden;
-  background-color: var(--color-background-white);
-  color: var(--color-text);
-}
 
 .fallbackContainer {
   flex: 1;

@@ -119,7 +119,7 @@ export default function SettingsContent({ tabIndex }: Props) {
       cidade: editForm.cidade ?? '',
       endereco: editForm.endereco ?? '',
     };
-  
+
     const errors = validateUserForm(formData);
     setFormErrors(errors);
 
@@ -304,6 +304,11 @@ export default function SettingsContent({ tabIndex }: Props) {
             transition={{ delay: 0.4, duration: 0.4, ease: 'easeOut' }}
             className={styles.settingsContent}
           >
+            
+            <button className={styles.buttonIcon}>
+              <Icon nome='scroll' />
+            </button>
+
             {isAdmin && (
               <>
                 {renderSwitchSetting(
