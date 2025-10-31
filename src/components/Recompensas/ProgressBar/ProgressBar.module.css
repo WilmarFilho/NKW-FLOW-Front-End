@@ -5,11 +5,13 @@
     border-radius: 60px;
     margin: 20px 0;
 }
+
 .progressFillReward {
     background-color: var(--color-primary);
     height: 100%;
     border-radius: 200px;
 }
+
 .progressCheckpoint {
     position: absolute;
     top: -10px;
@@ -31,6 +33,7 @@
     outline: 2px solid var(--color-background-messages);
     outline-offset: -10px;
 }
+
 .progressCheckpoint.completed {
     background: var(--color-progress-checkpoint);
     border: none;
@@ -39,7 +42,14 @@
     outline-offset: -10px;
     color: var(--color-text-white);
 }
+
 @media (max-width: 991.98px) {
+    .progressBar {
+        display: none;
+    }
+}
+
+@media (max-height: 799.98px) {
     .progressBar {
         display: none;
     }

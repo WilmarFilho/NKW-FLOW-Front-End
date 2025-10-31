@@ -76,3 +76,10 @@
     font-size: 12px;
   }
 }
+
+
+@media (max-height: 699.98px) {
+    .boxLink {
+        display: none;
+    }
+}

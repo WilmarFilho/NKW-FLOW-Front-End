@@ -114,7 +114,7 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
 
         if (tipo === 'connection.update') {
          
-          if (state === 'close' || (state === 'connecting' && connection.status) ) {
+          if (state === 'close' ) { //|| (state === 'connecting' && connection.status)
             const connectionId = connection.id;
 
             // Busca os IDs dos chats a remover ANTES de atualizar os estados
