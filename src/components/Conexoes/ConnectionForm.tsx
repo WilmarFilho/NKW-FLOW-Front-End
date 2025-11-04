@@ -63,25 +63,6 @@ export default function ConnectionForm({
     });
   };
 
-  const statusOptions: SelectOption[] = [
-    { value: 'ativo', label: 'Ativo' },
-    { value: 'inativo', label: 'Inativo' },
-  ];
-
-  const selectedStatus =
-    statusOptions.find(
-      (opt) => opt.value === (formData?.status ? 'ativo' : 'inativo')
-    ) || null;
-
-  const handleStatusChange = (
-    selectedOption: OnChangeValue<SelectOption, false>
-  ) => {
-    onChange({
-      ...formData,
-      status: selectedOption?.value === 'ativo',
-    });
-  };
-
   if (step === 1) {
     return (
       <div className={formStyles.formContainer}>
@@ -184,22 +165,6 @@ export default function ConnectionForm({
                 <span className={formStyles.errorText}>{errors.numero}</span>
               )}
             </div>
-          </div>
-        )}
-
-        {editMode && (
-          <div className={formStyles.formGroup}>
-            <label>Status</label>
-            <Select<SelectOption>
-              inputId="status"
-              options={statusOptions}
-              value={selectedStatus}
-              onChange={handleStatusChange}
-              placeholder="Selecione"
-              isClearable={false}
-              components={{ Menu: AnimatedMenu }}
-              styles={customStyles}
-            />
           </div>
         )}
       </div>

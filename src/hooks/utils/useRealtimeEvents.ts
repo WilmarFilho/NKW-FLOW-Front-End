@@ -113,10 +113,17 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
         }
 
         if (tipo === 'connection.update') {
-         
-          if (state === 'close' ) { //|| (state === 'connecting' && connection.status)
+
+          if (state === 'close') { //|| (state === 'connecting' && connection.status)
             const connectionId = connection.id;
 
+            // Atualiza a conexão para inativa (sem removê-la)
+            setConnections((prev) =>
+              (prev ?? []).map((c) =>
+                c.id === connectionId ? { ...c, status: false } : c
+              )
+            );
+            /*
             // Busca os IDs dos chats a remover ANTES de atualizar os estados
             const chatIdsToRemove = (chatsRef.current ?? [])
               .filter(chat => chat.connection_id === connectionId)
@@ -143,8 +150,9 @@ export const useRealtimeEvents = (userId: string | undefined, token: string) => 
             if (activeChatRef.current && chatIdsToRemove.includes(activeChatRef.current.id)) {
               setActiveChat(null);
             }
+              */
           }
-          
+
           if (state === 'connecting') {
             setConnections((prev) => {
               const safePrev = prev ?? [];

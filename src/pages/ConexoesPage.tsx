@@ -56,7 +56,6 @@ export default function ConexoesPage() {
     setSortField,
     setSortOrder,
     handleDelete,
-    handleStatusToggle,
     handleEdit,
     openModal,
     closeModal,
@@ -117,8 +116,6 @@ export default function ConexoesPage() {
         return (
           <span
             className={`${TableStyles.statusChip} ${statusClass}`}
-            // opcional: só disparar toggle se não for estado "aguardando"
-            onClick={() => conn.status !== null && handleStatusToggle(conn)}
           >
             {submittingId === conn.id
               ? <div className={TableStyles.spinner}></div>
@@ -126,7 +123,6 @@ export default function ConexoesPage() {
           </span>
         );
       },
-      onClick: handleStatusToggle, // só status
     },
     {
       key: 'nome',

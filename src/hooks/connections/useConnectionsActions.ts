@@ -56,7 +56,6 @@ export const useConnectionsActions = () => {
     const result = await put<Connection>(`/connections/${connection.id}`, {
       nome: connection.nome,
       agente_id: connection.agente_id,
-      status: connection.status,
     });
 
     if (result) {
