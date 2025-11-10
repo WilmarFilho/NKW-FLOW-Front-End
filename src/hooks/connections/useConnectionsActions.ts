@@ -29,6 +29,8 @@ export const useConnectionsActions = () => {
 
     setModalState((prev) => ({ ...prev, isLoading: true }));
 
+    console.log(connection)
+
     try {
       const qrcode = await post<{ base64: string | null, pairingCode: string | null }>('/connections', {
         nome: connection.nome,

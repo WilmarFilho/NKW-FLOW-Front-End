@@ -52,14 +52,25 @@
   outline: none;
   padding: 10px 20px;
   background-color: var(--color-background-messages);
+  border: 2px solid var(--color-background-messages);
   cursor: pointer;
   border-radius: var(--radius-default);
+  transition: .2s;
+}
+
+.contentActions button:hover {
+  background-color: var(--color-text-white);
 }
 
 .contentActions button svg {
   width: 30px;
   fill: var(--color-text-white);
   color: var(--color-text-white);
+  transition: .2s;
+}
+
+.contentActions button:hover svg {
+  color: var(--color-text-black);
 }
 
 .progressFill {

@@ -48,9 +48,6 @@ export function validateUserForm(data: Partial<User>) {
   if (!data.email?.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) {
     errors.email = 'E-mail inválido.';
   }
-  if (!data.numero?.trim() || !/^\d{10,11}$/.test(data.numero.trim())) {
-    errors.numero = 'Número deve ter 10 ou 11 dígitos.';
-  }
   if (!data.password || data.password.length < 6) {
     errors.password = 'A senha deve ter pelo menos 6 caracteres.';
   }
@@ -70,7 +67,7 @@ export function validateConnectionForm(data: Partial<Connection> | null, userPla
   }
 
   if (!editMode && !showQR) {
-    if (data?.numero && !/^\d{10,11}$/.test(data.numero.trim())) {
+    if (data?.numero && !/^\d{10,12}$/.test(data.numero.trim())) {
       errors.numero = 'Número deve ter 10 ou 11 dígitos.';
     }
     if (!(data?.numero)) {

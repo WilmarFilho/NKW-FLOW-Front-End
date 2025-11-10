@@ -1,12 +1,14 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { activeChatState, addConnectionModalState, agentsState, chatFiltersState, userState } from '../../state/atom';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { activeChatState, addConnectionModalState, agentsState, chatFiltersState, ragStatusState, userState } from '../../state/atom';
 import { validateConnectionForm } from '../utils/useValidator';
 import { useConnectionsActions } from '../connections/useConnectionsActions'
 import type { Connection } from '../../types/connection';
 import type { FilterStatus, SortOrder, SortField } from '../../types/table';
 
 export function useConexoesPage() {
+
+  const ragStatus = useRecoilValue(ragStatusState);
 
   const setActiveChat = useSetRecoilState(activeChatState);
   const setFilters = useSetRecoilState(chatFiltersState);
@@ -199,7 +201,8 @@ export function useConexoesPage() {
     setErrors,
     handleModalSaveClick,
     handleShowQR,
-    showQR
+    showQR,
+    ragStatus
   };
 }
 

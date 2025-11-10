@@ -51,3 +51,8 @@
   text-transform: uppercase;
   letter-spacing: 1px;
 }
+
+.submitButton:hover {
+    background-color: var(--color-text-white);
+    color: var(--color-text-black);
+}
