@@ -50,13 +50,13 @@ export default function GenericEntityRow<T extends { id: string | number }>({
                                 <div className={TableStyles.statusChipMobile}>
                                     {col.render?.(item)}
                                 </div>
-
+                        
                                 {onEdit && (
                                     <button
                                         className={TableStyles.actionButtonEdit}
                                         onClick={() => onEdit(item)}
                                     >
-                                        <Icon nome="arrow" />
+                                        <Icon nome="configpage" />
                                     </button>
                                 )}
                                 {onDelete && (
@@ -86,7 +86,7 @@ export default function GenericEntityRow<T extends { id: string | number }>({
                         className={TableStyles.actionButtonEdit}
                         onClick={() => onEdit(item)}
                     >
-                        <Icon nome='arrow' />
+                        <Icon nome='configpage' />
                     </button>
                 )}
                 {onDelete && (

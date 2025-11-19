@@ -39,6 +39,8 @@ export const useUser = () => {
 
       if (fetchedUser) {
         setUser(fetchedUser);
+
+        console.log(fetchedUser)
        
         opts?.onProgress?.('Carregando conversas ...');
         await fetchChats(

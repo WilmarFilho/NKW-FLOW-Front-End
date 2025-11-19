@@ -304,7 +304,7 @@ export default function SettingsContent({ tabIndex }: Props) {
             transition={{ delay: 0.4, duration: 0.4, ease: 'easeOut' }}
             className={styles.settingsContent}
           >
-            
+
             <button className={styles.buttonIcon}>
               <Icon nome='scroll' />
             </button>
@@ -321,17 +321,6 @@ export default function SettingsContent({ tabIndex }: Props) {
                     handleSettingsUpdate({ notificacao_para_entrar_conversa: newValue });
                   }
                 )}
-                {renderSwitchSetting(
-                  'Mostrar nome nas mensagens',
-                  'Exibe seu nome junto das mensagens enviadas dentro da plataforma.',
-                  showNameInMessages,
-                  () => {
-                    const newValue = !showNameInMessages;
-                    setShowNameInMessages(newValue);
-                    handleSettingsUpdate({ mostra_nome_mensagens: newValue });
-                  }
-                )}
-
                 {renderInputSetting(
                   'Palavra-chave da IA',
                   'Defina uma palavra que, quando enviada pelo próprio WhatsApp ou WhatsApp Web, ativa a IA automaticamente.',
@@ -343,6 +332,17 @@ export default function SettingsContent({ tabIndex }: Props) {
             )}
 
             {/* Opções que todos podem ver */}
+            {renderSwitchSetting(
+              'Mostrar nome nas mensagens',
+              'Exibe seu nome junto das mensagens enviadas dentro da plataforma.',
+              showNameInMessages,
+              () => {
+                const newValue = !showNameInMessages;
+                setShowNameInMessages(newValue);
+                handleSettingsUpdate({ mostra_nome_mensagens: newValue });
+              }
+            )}
+
             {renderSelectSetting(
               'Modo de Tela',
               'Altere entre modo escuro (Black) e claro (White).',
