@@ -313,7 +313,7 @@ export default function SettingsContent({ tabIndex }: Props) {
               <>
                 {renderSwitchSetting(
                   'Notificação para atendente',
-                  'Envia um alerta ao atendente no número cadastrado dele quando é necessário assumir uma conversa.',
+                  'Envia um alerta aos atendentes nos números cadastrado deles quando é necessário assumir uma conversa da conexão que eles foram associados.',
                   notifyOnEnterConversation,
                   () => {
                     const newValue = !notifyOnEnterConversation;
