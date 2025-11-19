@@ -330,13 +330,16 @@
 }
 
 .teste {
-  position: absolute; /* ou relative, dependendo do layout */
-  bottom: 0; /* define o final do container */
+  position: absolute;
+  /* ou relative, dependendo do layout */
+  bottom: 0;
+  /* define o final do container */
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
-  overflow-y: auto; /* scroll se conteúdo exceder */
+  overflow-y: auto;
+  /* scroll se conteúdo exceder */
   padding: 20px;
   scrollbar-width: none;
 }
@@ -490,9 +493,11 @@
     width: 120px;
     height: 120px;
   }
+
   .detailsColumn span {
     font-size: 16px;
   }
+
   .detailsColumn p {
     font-size: 14px;
   }
@@ -508,15 +513,13 @@
   }
 
   .toggleIaButton {
-    flex-direction: row;
-    width: 200px;
+    width: 100%;
     padding: 10px 24px;
   }
 }
 
 @media (max-width: 767.98px) {
   .toggleIaButton {
-    width: 120px;
     padding: 6px 12px;
   }
 
@@ -536,7 +539,7 @@
     display: none;
   }
 
-   .detailsColumnMobile {
+  .detailsColumnMobile {
     display: none;
   }
 
@@ -562,6 +565,7 @@
 }
 
 @media (max-width: 499.98px) {
+
   .chatDetails h2 {
     font-size: 18px;
     text-align: center;

@@ -260,6 +260,14 @@ export default function ChatWindow({
               </button>
             }
           >
+
+            <div className={styles.toggleIaButton}>
+              <div className={styles.headerToggleIa}>
+                <Icon nome='agentespage' /> {activeChat.ia_ativa ? 'Ativado' : 'Desativado'}
+              </div>
+              <ToggleSwitch variant='secondary' isOn={activeChat.ia_ativa} onToggle={handleToggleIA} />
+            </div>
+
             {isOwner && (
               <>
                 <button
