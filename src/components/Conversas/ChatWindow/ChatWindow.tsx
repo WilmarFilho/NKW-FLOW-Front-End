@@ -261,12 +261,19 @@ export default function ChatWindow({
             }
           >
 
-            <div className={styles.toggleIaButton}>
-              <div className={styles.headerToggleIa}>
-                <Icon nome='agentespage' /> {activeChat.ia_ativa ? 'Ativado' : 'Desativado'}
+            {user?.plano !== 'basico' && (
+              <div className={styles.toggleIaButton}>
+                <div className={styles.headerToggleIa}>
+                  <Icon nome="agentespage" /> {activeChat.ia_ativa ? 'Ativado' : 'Desativado'}
+                </div>
+
+                <ToggleSwitch
+                  variant="secondary"
+                  isOn={activeChat.ia_ativa}
+                  onToggle={handleToggleIA}
+                />
               </div>
-              <ToggleSwitch variant='secondary' isOn={activeChat.ia_ativa} onToggle={handleToggleIA} />
-            </div>
+            )}
 
             {isOwner && (
               <>
@@ -304,75 +311,78 @@ export default function ChatWindow({
 
 
         </header>
-      )}
+      )
+      }
 
       {/* Header DESKTOP/TABLET (> 991.98px) */}
-      {!isMobileLayout && (
-        <header className={styles.chatHeader}>
-          <div
-            className={styles.contactInfo}
-            onClick={() => setDetailsOpen(true)}
-            style={{ cursor: 'pointer' }}
-          >
-            <img
-              src={activeChat.foto_perfil || defaultAvatar}
-              alt={`Avatar de ${activeChat.contato_nome}`}
-            />
-            <div className={styles.contactText}>
-              <h1>{activeChat.contato_nome}</h1>
+      {
+        !isMobileLayout && (
+          <header className={styles.chatHeader}>
+            <div
+              className={styles.contactInfo}
+              onClick={() => setDetailsOpen(true)}
+              style={{ cursor: 'pointer' }}
+            >
+              <img
+                src={activeChat.foto_perfil || defaultAvatar}
+                alt={`Avatar de ${activeChat.contato_nome}`}
+              />
+              <div className={styles.contactText}>
+                <h1>{activeChat.contato_nome}</h1>
+              </div>
             </div>
-          </div>
 
-          {activeChat.user_id === user?.id && (
-            <div className={styles.ownerBadge}>
-              <Icon nome='userlist' /> SEU CHAT
-            </div>
-          )}
-
-
-          <DropdownMenu
-            id='chat-header'
-            trigger={
-              <button className={styles.optionsButton}>
-                <Icon nome='dots' />
-              </button>
-            }
-          >
-            {isOwner && (
-              <>
-                <button
-                  onClick={() => {
-                    setNewName(activeChat.contato_nome || '');
-                    setRenameOpen(true);
-                  }}
-                >
-                  <Icon nome='pencil' /> Renomear Chat
-                </button>
-
-
-                {activeChat.user_id === user?.id && (
-                  <>
-                    <button onClick={handleReleaseChatOwner}>
-                      <Icon nome='unlock' /> Liberar Chat
-                    </button>
-                    <button onClick={handleToggleChatStatus}>
-                      <Icon nome='close' />{' '}
-                      {activeChat.status === 'Open' ? 'Fechar Chat' : 'Reabrir Chat'}
-                    </button>
-                    <button onClick={() => setIsDeleteDialogOpen(true)}>
-                      <Icon nome='trash' /> Apagar Chat
-                    </button>
-                  </>
-                )}
-
-              </>
+            {activeChat.user_id === user?.id && (
+              <div className={styles.ownerBadge}>
+                <Icon nome='userlist' /> SEU CHAT
+              </div>
             )}
-            <button onClick={() => setDetailsOpen(true)}>
-              <Icon nome='info' /> Detalhes do Chat
-            </button>
-          </DropdownMenu>
-        </header>
-      )}
+
+
+            <DropdownMenu
+              id='chat-header'
+              trigger={
+                <button className={styles.optionsButton}>
+                  <Icon nome='dots' />
+                </button>
+              }
+            >
+              {isOwner && (
+                <>
+                  <button
+                    onClick={() => {
+                      setNewName(activeChat.contato_nome || '');
+                      setRenameOpen(true);
+                    }}
+                  >
+                    <Icon nome='pencil' /> Renomear Chat
+                  </button>
+
+
+                  {activeChat.user_id === user?.id && (
+                    <>
+                      <button onClick={handleReleaseChatOwner}>
+                        <Icon nome='unlock' /> Liberar Chat
+                      </button>
+                      <button onClick={handleToggleChatStatus}>
+                        <Icon nome='close' />{' '}
+                        {activeChat.status === 'Open' ? 'Fechar Chat' : 'Reabrir Chat'}
+                      </button>
+                      <button onClick={() => setIsDeleteDialogOpen(true)}>
+                        <Icon nome='trash' /> Apagar Chat
+                      </button>
+                    </>
+                  )}
+
+                </>
+              )}
+              <button onClick={() => setDetailsOpen(true)}>
+                <Icon nome='info' /> Detalhes do Chat
+              </button>
+            </DropdownMenu>
+          </header>
+        )
+      }
 
       <Modal transparent isOpen={isDetailsOpen} onClose={() => setDetailsOpen(false)} title='Detalhes do Chat'>
         <div className={styles.chatDetails}>
@@ -447,11 +457,13 @@ export default function ChatWindow({
         </div>
       </Modal>
 
-      {isDragging && (
-        <div className={styles.dragOverlay}>
-          <p>📄 Solte o arquivo para enviar</p>
-        </div>
-      )}
+      {
+        isDragging && (
+          <div className={styles.dragOverlay}>
+            <p>📄 Solte o arquivo para enviar</p>
+          </div>
+        )
+      }
 
 
       <div
@@ -493,14 +505,20 @@ export default function ChatWindow({
 
               <div className={styles.inputArea}>
 
-                {!isMobileLayout && (
+                {!isMobileLayout && user?.plano !== 'basico' && (
                   <div className={styles.toggleIaButton}>
                     <div className={styles.headerToggleIa}>
                       <Icon nome='agentespage' /> {activeChat.ia_ativa ? 'Ativado' : 'Desativado'}
                     </div>
-                    <ToggleSwitch variant='secondary' isOn={activeChat.ia_ativa} onToggle={handleToggleIA} />
+
+                    <ToggleSwitch
+                      variant="secondary"
+                      isOn={activeChat.ia_ativa}
+                      onToggle={handleToggleIA}
+                    />
                   </div>
                 )}
+
 
                 <ChatInput
                   ref={inputRef}
@@ -578,7 +596,7 @@ export default function ChatWindow({
         </AlertDialogOverlay>
       </AlertDialog>
 
-    </section>
+    </section >
 
   );
 }

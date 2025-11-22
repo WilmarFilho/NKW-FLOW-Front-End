@@ -70,7 +70,7 @@ export default function Layout() {
           >
             <h2 style={{ color: '#d32f2f', marginBottom: 16 }}>Assinatura em atraso</h2>
             <p style={{ color: '#222', marginBottom: 24 }}>
-              Sua assinatura está em atraso. Entre em contato com o suporte ou regularize seu pagamento para evitar a exclusão da sua conta do sistema.
+              Sua assinatura está em atraso. Entre em contato com o suporte ou regularize seu pagamento para evitar a exclusão da sua conta do sistema em 7 dias.
             </p>
             <button
               style={{

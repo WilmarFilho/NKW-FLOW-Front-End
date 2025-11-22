@@ -279,18 +279,21 @@ export default function SettingsContent({ tabIndex }: Props) {
                   </div>
 
                 </div>
-                {isAdmin && (
-                  <>
-                    <div className={styles.buttonGroup}>
+
+                <div className={styles.buttonGroup}>
+                  {isAdmin && (
+                    <>
                       <button className={styles.editButton} onClick={openEditModal}>Editar Informações</button>
                       <button className={styles.editButton} onClick={() => window.open('https://billing.stripe.com/p/login/dRm00j8Eo4xGfAo6Lygbm00', '_blank')}>
                         Gerenciar Assinatura
                       </button>
-                      <button className={styles.editButton} onClick={logout}>Logout</button>
-                    </div>
+                    </>
+                  )}
+                  <button className={styles.editButton} onClick={logout}>Logout</button>
+                </div>
 
-                  </>
-                )}
+
+
               </div>
             </motion.div>
           </>

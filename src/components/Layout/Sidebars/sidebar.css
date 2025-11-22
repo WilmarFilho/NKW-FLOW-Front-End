@@ -86,6 +86,14 @@ MenuItem.active-link:focus {
   font-family: var(--font-main);
   color: #ffffff88;
 }
+
+
+@media (max-height: 860.98px) {
+  .user-menu {
+    display: none;
+  }
+}
+
 @media (max-width: 1399.98px) {
   .user-menu {
     display: none;
