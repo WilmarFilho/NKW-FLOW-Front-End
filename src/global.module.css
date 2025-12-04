@@ -215,6 +215,8 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
+    gap: 22px;
+    padding: 0 1em;
   }
 
   .chartContainer {
@@ -223,7 +225,7 @@
   }
 
   .pageContent {
-    padding: 1.25rem;
+    padding: 1.25rem 1.25rem 2rem 1.25rem;
     gap: 2rem;
   }
 
@@ -234,6 +236,14 @@
   .pageHeaderTitles {
     gap: 0.5rem;
     text-align: center;
+  }
+
+  .pageHeaderTitles h3 {
+    font-size: 16px;
+  }
+
+  .pageHeaderTitles h2 {
+    font-size: 22px;
   }
 
   .filterControls .button {
@@ -248,6 +258,16 @@
 
   .pageRowVariant {
     padding-bottom: 32px;
+  }
+}
+
+@media (max-width: 399.98px) {
+  .pageHeaderTitles h3 {
+    font-size: 14px;
+  }
+
+  .pageHeaderTitles h2 {
+    font-size: 20px;
   }
 }
 

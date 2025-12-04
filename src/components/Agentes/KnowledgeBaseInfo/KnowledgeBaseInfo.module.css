@@ -171,4 +171,9 @@
     font-size: 16px;
     line-height: 20px;
   }
+
+  .progressPercent {
+    font-size: 12px;
+    line-height: 14px;
+  }
 }

@@ -78,8 +78,8 @@
 }
 
 
-@media (max-height: 699.98px) {
-    .boxLink {
+@media (max-height: 799.98px) {
+    .containerLink p, .containerLink h4 {
         display: none;
     }
 }

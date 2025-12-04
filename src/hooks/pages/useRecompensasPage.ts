@@ -29,7 +29,7 @@ export function useRecompensasPage() {
         name: 'Lenda do FLOW',
         goal: 25,
         casbackPercentual: 40,
-        rewardBonus: 'desconto em outros serviços'
+       
       }
     ],
     []

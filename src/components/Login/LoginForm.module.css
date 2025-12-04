@@ -5,7 +5,7 @@
   padding: 2rem;
   border-radius: 12px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-  width: 100%;
+  width: 85%;
   max-width: 750px;
   height: 600px;
   text-align: center;
@@ -56,4 +56,32 @@
   text-align: start;
   color: #ff55559c;
   width: 70%;
+}
+
+
+
+
+@media (max-width: 999.98px) {
+  .loginBox {
+    height: 500px;
+    padding: 1em;
+  }
+
+  .loginBox button,
+  .loginBox input,
+  .wrapperLogo {
+    width: 80%;
+  }
+}
+
+@media (max-width: 599.98px) {
+  .loginBox {
+    padding: 1em;
+  }
+
+  .loginBox button,
+  .loginBox input,
+  .wrapperLogo {
+    width: 90%;
+  }
 }

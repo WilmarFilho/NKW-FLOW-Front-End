@@ -98,7 +98,6 @@
   gap: 16px;
   width: 100%;
   height: 100%;
-  justify-content: space-between;
 }
 
 .userInfo h1 {
@@ -290,10 +289,16 @@
   gap: 16px;
 }
 
-@media (max-height: 799.98px) {
-    .headerAccountWrapper:nth-child(1) {
-        display: none;
-    }
+@media (max-height: 899.98px) {
+  .headerAccountWrapper:nth-child(1) {
+    display: none;
+  }
+}
+
+@media (max-height: 699.98px) {
+  .headerAccountWrapper:nth-child(2) {
+    display: none;
+  }
 }
 
 @media (max-width: 1175.98px) {
@@ -371,7 +376,8 @@
   }
 
   .mainHeaderAccountWrapper {
-    gap: 0;
+    flex-direction: column;
+    gap: 18px;
   }
 
   .infoGrid {
@@ -409,7 +415,6 @@
 
   .mainHeaderAccountWrapper {
     padding: 6px;
-    flex-direction: column;
     gap: 12px;
     padding-bottom: 18px;
     padding-right: 60px;
