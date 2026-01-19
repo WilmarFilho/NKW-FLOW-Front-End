@@ -9,6 +9,8 @@ const Sidebar = () => {
   const user = useRecoilValue(userState);
   if (!user) return null;
 
+  console.log(user)
+
   const userPlano = (user.plano || '').toLowerCase() as 'basico' | 'intermediario' | 'premium';
 
   const MenuItem = ({ to, children }: { to: string; children: React.ReactNode }) => (
