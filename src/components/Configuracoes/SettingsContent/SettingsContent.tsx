@@ -284,7 +284,7 @@ export default function SettingsContent({ tabIndex }: Props) {
                   {isAdmin && (
                     <>
                       <button className={styles.editButton} onClick={openEditModal}>Editar Informações</button>
-                      <button className={styles.editButton} onClick={() => window.open('https://billing.stripe.com/p/login/dRm00j8Eo4xGfAo6Lygbm00', '_blank')}>
+                      <button className={styles.editButton} onClick={() => window.open('https://billing.stripe.com/p/login/8x2bJ01EV60M8iZ0BraIM00', '_blank')}>
                         Gerenciar Assinatura
                       </button>
                     </>
